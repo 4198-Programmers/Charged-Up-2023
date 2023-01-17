@@ -5,8 +5,15 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.Constants;
+import frc.robot.Maths;
 
 public class SwerveModule {
     private CANSparkMax driveMotor; // motor that drives the wheel
@@ -16,27 +23,80 @@ public class SwerveModule {
     private double spinOffset; // distance from our zero to the magnetic 0 in the cancoders
     private double spinPos; // output of the cancoder, from 0-360
     private Rotation2d rotation; // turns cancoder value to valid rotation value for later use
+    private double encoderDistance; // distance in meters that the drive motor has moved
+    double maxSpinAcceleration = 0.002; // in meters per second
+    double maxSpinVelocity = 0.4667056958; // in meters per second
+    double maxDriveVelocity = 0.4667056958; // in meters per second
+    double maxDriveAcceleration = 0.002; // in meters per second
+    double spinkP = 0.0005;
+    double spinkI = 0.000001;
+    double spinkD = 0;
+    double drivekP = 0.00001;
+    double drivekI = 0.00000001;
+    double drivekD = 0;
+    private ProfiledPIDController spinPID = new ProfiledPIDController(spinkP, spinkI, spinkD,
+            new TrapezoidProfile.Constraints(maxSpinVelocity, maxSpinAcceleration));
+    private PIDController drivePID = new PIDController(drivekP, drivekI, drivekD);
 
-    public SwerveModule(int driveID, int spinID, int CANCoderID, int driveEncoderID, double CANCoderZeroOffset) {
-        driveMotor = new CANSparkMax(driveID, MotorType.kBrushless);
+    public SwerveModule(CANSparkMax driveMotorArg, int spinID, int CANCoderID, double CANCoderZeroOffset) {
+        driveMotor = driveMotorArg;
         spinMotor = new CANSparkMax(spinID, MotorType.kBrushless);
         spinEncoder = new CANCoder(CANCoderID);
         driveEncoder = driveMotor.getEncoder();
         spinOffset = CANCoderZeroOffset;
+        driveEncoder.setPositionConversionFactor(8.14);
+    }
 
+    public void PIDStart() {
+        drivePID.reset();
+        spinPID.reset(null);
+    }
+
+    public void setDesiredState(SwerveModuleState desiredState) {
         if (spinPos < 0) {
             spinPos = 360 + spinEncoder.getAbsolutePosition() - spinOffset; // makes sure that the number stays between
                                                                             // 0-360 instead of going negative
         } else {
             spinPos = spinEncoder.getAbsolutePosition() - spinOffset;
         }
-        rotation = Rotation2d.fromDegrees(spinPos);
+        // spinPID.enableContinuousInput(0, 360);
+        // allows for optimization (so the wheels don't spin further than they need to)
+        SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(spinPos));
+        double driveOut = drivePID.calculate(driveMotor.get(),
+                state.speedMetersPerSecond);
+        driveMotor.set(driveOut / maxDriveVelocity);
+        // double turnOut = spinPID.calculate(spinPos,
+        // state.angle.getDegrees());
+        // spinMotor.set(turnOut / maxSpinVelocity);
 
+        if (spinPos < (state.angle.getDegrees())) {
+            spinMotor.set(-0.02);
+        } else if (spinPos > (state.angle.getDegrees())) {
+            spinMotor.set(0.02);
+        } else {
+            spinMotor.set(0);
+        }
+
+        // System.out.println(spinPos + "Spin");
+        // System.out.println(state.angle.getDegrees() + "angle");
+        // driveMotor.set((state.speedMetersPerSecond/maxDriveVelocity)/8);
+        // System.out.println(state.angle.getDegrees());
+        // System.out.println("degrees");
     }
 
-    public void setDesiredState(SwerveModuleState desiredState) {
-        // allows for optimization
-        SwerveModuleState state = SwerveModuleState.optimize(desiredState, rotation);
+    public SwerveModulePosition getPosition() {
+        if (spinPos < 0) {
+            spinPos = 360 + spinEncoder.getAbsolutePosition() - spinOffset; // makes sure that the number stays between
+                                                                            // 0-360 instead of going negative
+        } else if (spinPos >= 0) {
+            spinPos = spinEncoder.getAbsolutePosition() - spinOffset;
+        } else {
+            System.out.println("xdr");
+        }
+        rotation = Rotation2d.fromDegrees(spinPos);
+        encoderDistance = Maths.positionConversion(driveEncoder.getPosition());
+        return new SwerveModulePosition(encoderDistance, rotation);
+
     }
 
 }
