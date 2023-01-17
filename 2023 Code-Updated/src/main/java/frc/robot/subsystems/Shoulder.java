@@ -13,15 +13,15 @@ public class Shoulder extends SubsystemBase{
     public void setSpeed(double speed){
         shoulderMotor.set(speed);
     }
-    public double location(){
+    public double setLocation(){
         return shoulderEncoder.getPosition();
     }
-    public void boundaries(double speed){
+    public void setSpeedWithLimits(double speed){
         double expectedSpeed = speed;
-        if(speed > 0 && location() >= Constants.SHOULDER_UPPER_LIMIT){
+        if(speed > 0 && setLocation() >= Constants.SHOULDER_UPPER_LIMIT){
             expectedSpeed = 0;
         }
-        else if(speed < 0 && location() <= Constants.SHOULDER_LOWER_LIMIT){
+        else if(speed < 0 && setLocation() <= Constants.SHOULDER_LOWER_LIMIT){
             expectedSpeed = 0;
         }
         shoulderMotor.set(expectedSpeed);

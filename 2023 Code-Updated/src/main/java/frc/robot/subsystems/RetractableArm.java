@@ -10,18 +10,18 @@ import frc.robot.Constants;
 public class RetractableArm extends SubsystemBase{
     CANSparkMax retractableMotor = new CANSparkMax(Constants.RETRACTABLE_ARM_MOTOR, MotorType.kBrushless);
     RelativeEncoder retractableEncoder = retractableMotor.getEncoder();
-    public double location(){
+    public double getLocation(){
         return retractableEncoder.getPosition();
     }
     public void setSpeed(double speed){
         retractableMotor.set(speed);
     }
-    public void boundaries(double speed){
+    public void setSpeedWithLimits(double speed){
         double expectedSpeed = speed;
-        if(speed > 0 && location() >= Constants.ARM_UPPER_LIMIT){
+        if(speed > 0 && getLocation() >= Constants.ARM_UPPER_LIMIT){
             expectedSpeed = 0;
         }
-        else if(speed < 0 && location() <= Constants.ARM_LOWER_LIMIT){
+        else if(speed < 0 && getLocation() <= Constants.ARM_LOWER_LIMIT){
             expectedSpeed = 0;
         }
         

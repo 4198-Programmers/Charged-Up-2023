@@ -14,15 +14,15 @@ public class Elbow extends SubsystemBase{
     public void setSpeed(double speed){
         elbowMotor.set(speed);
     }
-    public double getPosition(){
+    public double getLocation(){
         return elbowEncoder.getPosition();
     }
     public void setSpeedWithLimits(double speed){
         double expectedSpeed = speed;
-        if(speed > 0 && getPosition() > Constants.ELBOW_UPPER_LIMIT){
+        if(speed > 0 && getLocation() > Constants.ELBOW_UPPER_LIMIT){
             expectedSpeed = 0;
         }
-        else if(speed < 0 && getPosition() < Constants.ELBOW_LOWER_LIMIT){
+        else if(speed < 0 && getLocation() < Constants.ELBOW_LOWER_LIMIT){
             expectedSpeed = 0;
         }
         elbowMotor.set(expectedSpeed);
