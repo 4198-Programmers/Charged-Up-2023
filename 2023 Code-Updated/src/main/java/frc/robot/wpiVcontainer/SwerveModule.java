@@ -1,5 +1,6 @@
 package frc.robot.wpiVcontainer;
 
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -11,8 +12,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Joystick;
-import frc.robot.Constants;
 import frc.robot.Maths;
 
 public class SwerveModule {
@@ -40,11 +39,14 @@ public class SwerveModule {
 
     public SwerveModule(CANSparkMax driveMotorArg, int spinID, int CANCoderID, double CANCoderZeroOffset) {
         driveMotor = driveMotorArg;
+        spinOffset = -CANCoderZeroOffset;
         spinMotor = new CANSparkMax(spinID, MotorType.kBrushless);
         spinEncoder = new CANCoder(CANCoderID);
         driveEncoder = driveMotor.getEncoder();
-        spinOffset = CANCoderZeroOffset;
         driveEncoder.setPositionConversionFactor(8.14);
+        spinEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+        spinEncoder.configMagnetOffset(spinOffset);
+        spinPID.enableContinuousInput(-180, 180);
     }
 
     public void PIDStart() {
@@ -53,35 +55,36 @@ public class SwerveModule {
     }
 
     public void setDesiredState(SwerveModuleState desiredState) {
-        if (spinPos < 0) {
-            spinPos = 360 + spinEncoder.getAbsolutePosition() - spinOffset; // makes sure that the number stays between
-                                                                            // 0-360 instead of going negative
-        } else {
-            spinPos = spinEncoder.getAbsolutePosition() - spinOffset;
-        }
-        // spinPID.enableContinuousInput(0, 360);
+        // if (spinPos < 0) {
+        // spinPos = 360 + spinEncoder.getAbsolutePosition() - spinOffset; // makes sure
+        // that the number stays between
+        // // 0-360 instead of going negative
+        // } else if(spinPos >= 0){
+        // spinPos = spinEncoder.getAbsolutePosition() - spinOffset;
+        // }
         // allows for optimization (so the wheels don't spin further than they need to)
-        SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(spinPos));
+        spinPos = spinEncoder.getAbsolutePosition();
+        // SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(spinPos));
         double driveOut = drivePID.calculate(driveMotor.get(),
-                state.speedMetersPerSecond);
+                desiredState.speedMetersPerSecond);
         driveMotor.set(driveOut / maxDriveVelocity);
-        // double turnOut = spinPID.calculate(spinPos,
-        // state.angle.getDegrees());
+        // double turnOut = spinPID.calculate(spinPos, state.angle.getDegrees());
         // spinMotor.set(turnOut / maxSpinVelocity);
 
-        if (spinPos < (state.angle.getDegrees())) {
-            spinMotor.set(-0.02);
-        } else if (spinPos > (state.angle.getDegrees())) {
-            spinMotor.set(0.02);
+        if (spinPos < desiredState.angle.getDegrees()) {
+        spinMotor.set(-0.03);
+        } else if (spinPos > desiredState.angle.getDegrees()) {
+        spinMotor.set(0.03);
         } else {
-            spinMotor.set(0);
+        spinMotor.set(0);
         }
+        
+        System.out.println(driveMotor.getDeviceId());
+        System.out.println(desiredState.angle.getDegrees() + "want");
+        System.out.println(spinPos + "pos");
 
-        // System.out.println(spinPos + "Spin");
-        // System.out.println(state.angle.getDegrees() + "angle");
         // driveMotor.set((state.speedMetersPerSecond/maxDriveVelocity)/8);
-        // System.out.println(state.angle.getDegrees());
-        // System.out.println("degrees");
+
     }
 
     public SwerveModulePosition getPosition() {

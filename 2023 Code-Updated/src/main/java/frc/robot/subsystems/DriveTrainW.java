@@ -48,7 +48,7 @@ public class DriveTrainW extends SubsystemBase {
 
   public void drive(double xSpeed, double ySpeed, double zSpeed, boolean fieldRelative) {
     var swerveModuleStatesList = kinematic
-        .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(-ySpeed,
+        .toSwerveModuleStates(fieldRelative? ChassisSpeeds.fromFieldRelativeSpeeds(-ySpeed,
             -xSpeed, zSpeed, m_gyro.getRotation2d()) : new ChassisSpeeds(-ySpeed, -xSpeed, zSpeed));
     // like this so that the front of the controller is the front of the robot cause
     // joysticks are weird

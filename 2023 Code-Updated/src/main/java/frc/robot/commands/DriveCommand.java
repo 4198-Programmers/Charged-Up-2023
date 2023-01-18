@@ -4,24 +4,31 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrainW;
 
-public class DriveCommand extends CommandBase{
-    DriveTrainW drive;
+public class DriveCommand extends CommandBase {
+    DriveTrainW driveTrain;
     Joystick joystick;
+    double xAxis;
+    double yAxis;
+    double zAxis;
+    double maxMPS = 0.4667056958;
 
-    public DriveCommand(DriveTrainW driveArg, Joystick joystickArg){
-        this.drive = driveArg;
-        this.joystick = joystickArg;
-        addRequirements(drive);
+    public DriveCommand(DriveTrainW driveArg, Joystick joystickArg) {
+        driveTrain = driveArg;
+        joystick = joystickArg;
+        addRequirements(driveTrain);
     }
 
     @Override
     public void initialize() {
-        drive.reset();
+        driveTrain.reset();
     }
 
     @Override
     public void execute() {
-        drive.drive(joystick.getRawAxis(0), joystick.getRawAxis(1), joystick.getRawAxis(2), false);
+        xAxis = joystick.getX() * maxMPS;
+        yAxis = joystick.getY() * maxMPS;
+        zAxis = joystick.getZ() * maxMPS;
+        driveTrain.drive(xAxis, yAxis, zAxis, false);
     }
-    
+
 }
