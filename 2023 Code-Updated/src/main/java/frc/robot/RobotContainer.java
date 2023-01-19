@@ -1,14 +1,25 @@
 package frc.robot;
 
 import frc.robot.commands.AutoCommand;
+import frc.robot.commands.CheckPhotonTarget;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.PhotonVision;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
   private final DriveTrain driveTrain = new DriveTrain();
   private final AutoCommand m_autoCommand = new AutoCommand(driveTrain);
+  private final Joystick leftJoystick = new Joystick(Constants.LEFT_JOYSTICK);
+  private final PhotonVision photonVision = new PhotonVision();
 
+  
+  private final Trigger trigger = new JoystickButton(leftJoystick, 1);
+  
   public RobotContainer() {
+    
   }
 
   public void initialize() {
@@ -16,6 +27,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    trigger.whileTrue(new CheckPhotonTarget(photonVision));    
   }
 
   public Command getAutonomousCommand() {
