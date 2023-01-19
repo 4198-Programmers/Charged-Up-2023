@@ -5,4 +5,8 @@ import frc.robot.wpiVcontainer.SwerveModule;
 
 public class DriveTrain extends SubsystemBase {
   SwerveModule frontL = new SwerveModule(1,3,4,2,8);
+
+  public void Move(double angle, double speed){
+    
+  }
 }
