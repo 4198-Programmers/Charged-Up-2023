@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.wpiVcontainer;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -9,19 +9,19 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.wpiVcontainer.SwerveModule;
 
 public class DriveTrainW extends SubsystemBase {
   CANSparkMax FRdriveMotor = new CANSparkMax(4, MotorType.kBrushless);
   CANSparkMax FLdriveMotor = new CANSparkMax(2, MotorType.kBrushless);
   CANSparkMax BRdriveMotor = new CANSparkMax(6, MotorType.kBrushless);
   CANSparkMax BLdriveMotor = new CANSparkMax(8, MotorType.kBrushless);
-  private final SwerveModule frontR = new SwerveModule(FRdriveMotor, 3, 10, 17.9296875);
-  private final SwerveModule frontL = new SwerveModule(FLdriveMotor, 1, 9, 92.109375);
-  private final SwerveModule backR = new SwerveModule(BRdriveMotor, 5, 11, 332.05078125);
-  private final SwerveModule backL = new SwerveModule(BLdriveMotor, 7, 12, 291.181640625);
+  private final SwerveModule frontRSwerve = new SwerveModule(FRdriveMotor, 3, 10, 17.9296875);
+  private final SwerveModule frontLSwerve = new SwerveModule(FLdriveMotor, 1, 9, 92.109375);
+  private final SwerveModule backRSwerve = new SwerveModule(BRdriveMotor, 5, 11, 332.05078125);
+  private final SwerveModule backLSwerve = new SwerveModule(BLdriveMotor, 7, 12, 291.181640625);
   RelativeEncoder FRdriveENC = FRdriveMotor.getEncoder();
   RelativeEncoder FLdriveENC = FLdriveMotor.getEncoder();
   RelativeEncoder BRdriveENC = BRdriveMotor.getEncoder();
@@ -35,8 +35,8 @@ public class DriveTrainW extends SubsystemBase {
   SwerveDriveKinematics kinematic = new SwerveDriveKinematics(frontRLocation, frontLLocation, backRLocation,
       backLLocation);
   SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematic, m_gyro.getRotation2d(), new SwerveModulePosition[] {
-      frontR.getPosition(), frontL.getPosition(), backR.getPosition(),
-      backL.getPosition() });
+      frontRSwerve.getPosition(), frontLSwerve.getPosition(), backRSwerve.getPosition(),
+      backLSwerve.getPosition() });
 
   double maxMPS = 0.4667056958; // val MotorRPM/GR to get wheel rotations per minute, div
                                 // by 60 for
@@ -47,16 +47,18 @@ public class DriveTrainW extends SubsystemBase {
   }
 
   public void drive(double xSpeed, double ySpeed, double zSpeed, boolean fieldRelative) {
-    var swerveModuleStatesList = kinematic
+    SwerveModuleState[] swerveModuleStatesArray = kinematic
         .toSwerveModuleStates(fieldRelative? ChassisSpeeds.fromFieldRelativeSpeeds(-ySpeed,
-            -xSpeed, zSpeed, m_gyro.getRotation2d()) : new ChassisSpeeds(-ySpeed, -xSpeed, zSpeed));
+            -xSpeed, zSpeed, m_gyro.getRotation2d()) : new ChassisSpeeds(-ySpeed, -xSpeed, zSpeed)); //test 1
+    // SwerveModuleState[] swerveModuleStatesArray = kinematic
+    // .toSwerveModuleStates(new ChassisSpeeds(-ySpeed, -xSpeed, zSpeed)); //test 2
     // like this so that the front of the controller is the front of the robot cause
     // joysticks are weird
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStatesList, maxMPS);
-    frontR.setDesiredState(swerveModuleStatesList[0]);// array order FR0, FL1, BR2, BL3
-    frontL.setDesiredState(swerveModuleStatesList[1]);
-    backR.setDesiredState(swerveModuleStatesList[2]);
-    backL.setDesiredState(swerveModuleStatesList[3]);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStatesArray, maxMPS);
+    frontRSwerve.setDesiredState(swerveModuleStatesArray[0]);// array order FR0, FL1, BR2, BL3
+    frontLSwerve.setDesiredState(swerveModuleStatesArray[1]);
+    backRSwerve.setDesiredState(swerveModuleStatesArray[2]);
+    backLSwerve.setDesiredState(swerveModuleStatesArray[3]);
   }
 
   public void reset() {
@@ -67,8 +69,8 @@ public class DriveTrainW extends SubsystemBase {
   }
 
   public void updateOdometry() {
-    odometry.update(m_gyro.getRotation2d(), new SwerveModulePosition[] { frontR.getPosition(), frontL.getPosition(),
-        backR.getPosition(), backL.getPosition() });
+    odometry.update(m_gyro.getRotation2d(), new SwerveModulePosition[] { frontRSwerve.getPosition(), frontLSwerve.getPosition(),
+        backRSwerve.getPosition(), backLSwerve.getPosition() });
   }
 
 }

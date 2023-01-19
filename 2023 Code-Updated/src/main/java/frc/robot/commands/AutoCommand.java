@@ -4,8 +4,8 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.DriveTrainW;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.wpiVcontainer.DriveTrainW;
 
 /** An example command that uses an example subsystem. */
 public class AutoCommand extends CommandBase {
