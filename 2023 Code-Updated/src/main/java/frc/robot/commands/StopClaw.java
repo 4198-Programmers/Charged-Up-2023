@@ -13,6 +13,6 @@ public class StopClaw extends CommandBase{
 
     @Override
     public void execute() {
-        claw.StopClawSolenoid();
+        // claw.StopClawSolenoid();
     }
 }

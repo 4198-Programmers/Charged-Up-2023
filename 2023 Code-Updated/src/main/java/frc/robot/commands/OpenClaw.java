@@ -13,7 +13,7 @@ public class OpenClaw extends CommandBase{
 
     @Override
     public void execute() {
-        claw.OpenClawInSolenoid();
+        // claw.OpenClawInSolenoid();
     }
     
 }

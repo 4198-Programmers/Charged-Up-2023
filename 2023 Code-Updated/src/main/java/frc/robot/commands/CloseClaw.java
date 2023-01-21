@@ -13,7 +13,7 @@ public class CloseClaw extends CommandBase{
 
     @Override
     public void execute() {
-        claw.CloseClawOutSolenoid();
+        // claw.CloseClawOutSolenoid();
     }
     
 }
