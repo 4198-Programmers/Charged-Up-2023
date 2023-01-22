@@ -9,6 +9,7 @@ public class MathSwerveModule {
     CANSparkMax driveMotor;
     CANSparkMax spinMotor;
     CANCoder spinEncoder;
+    byte spinOptimize;
 
     public MathSwerveModule(int driveMotorID, int spinMotorID, int CANcoderID, double abosluteOffset) {
         driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
@@ -21,33 +22,42 @@ public class MathSwerveModule {
 
     public void setDesiredState(double angle, double speed) {
         double spinPos;
-        byte spinOptimize;
         double wantedAngle = angle;
-        double conditionArr[] = { 15, 10, 6, 3, 1 };
-        double speedArr[] = { 0.14, 0.10, 0.08, 0.05, 0.02 };
+        double angleToGive;
+        double conditionArr[] = { 10, 5, 3, 2, 1 };
+        double speedArr[] = { 0.3, 0.2, 0.1, 0.05, 0.02 };
         double speedToGive;
         double conditionAmount;
+        double driveSpeed = speed;
         spinPos = spinEncoder.getAbsolutePosition();
 
-        if (Math.abs(spinPos - wantedAngle) > 90) {
+        if (Math.abs(spinPos - wantedAngle) > 90 && wantedAngle > spinPos) {
             spinOptimize = -1;
+            angleToGive = Math.abs(wantedAngle - 180);
+        } else if (Math.abs(spinPos - wantedAngle) > 90 && wantedAngle < spinPos) {
+            spinOptimize = -1;
+            angleToGive = Math.abs(wantedAngle + 180);
+        } else if (Math.abs(spinPos - wantedAngle) < 90) {
+            angleToGive = wantedAngle;
+            spinOptimize = 1;
         } else {
             spinOptimize = 1;
+            angleToGive = 0;
         }
 
         for (int i = 0; i < 5; i++) {
-            speedToGive = speedArr[i];
+            speedToGive = 0.05;
             conditionAmount = conditionArr[i];
-            if (spinPos > wantedAngle + conditionAmount && wantedAngle < 361) {
-                spinMotor.set(speedToGive * spinOptimize);
-            } else if (spinPos < wantedAngle - conditionAmount && wantedAngle < 361) {
-                spinMotor.set(-speedToGive * spinOptimize);
+            if (spinPos > angleToGive + conditionAmount && angleToGive < 361) {
+                spinMotor.set(speedToGive);
+            } else if (spinPos < angleToGive - conditionAmount && angleToGive < 361) {
+                spinMotor.set(-speedToGive);
             } else {
                 spinMotor.set(0);
             }
         }
-        System.out.println(wantedAngle + "watnedAngle");
-        driveMotor.set(speed);
+        System.out.println(angleToGive + " wantedAngle");
+        driveMotor.set(driveSpeed * spinOptimize);
     }
 
 }
