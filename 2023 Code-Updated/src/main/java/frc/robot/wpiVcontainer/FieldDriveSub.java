@@ -1,5 +1,6 @@
 package frc.robot.wpiVcontainer;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -12,16 +13,21 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.GyroSub;
 
 public class FieldDriveSub extends SubsystemBase {
   CANSparkMax FRdriveMotor = new CANSparkMax(4, MotorType.kBrushless);
   CANSparkMax FLdriveMotor = new CANSparkMax(2, MotorType.kBrushless);
   CANSparkMax BRdriveMotor = new CANSparkMax(6, MotorType.kBrushless);
   CANSparkMax BLdriveMotor = new CANSparkMax(8, MotorType.kBrushless);
-  private final FieldSwerveModule frontRSwerve = new FieldSwerveModule(FRdriveMotor, 3, 10, -15.01171875); //+27 -42.01171875
-  private final FieldSwerveModule frontLSwerve = new FieldSwerveModule(FLdriveMotor, 1, 9, 89.12890625);// +32 57.12890625
-  private final FieldSwerveModule backRSwerve = new FieldSwerveModule(BRdriveMotor, 5, 11, 30.24804688);//+33.5 -3.251953125
-  private final FieldSwerveModule backLSwerve = new FieldSwerveModule(BLdriveMotor, 7, 12, 70.149921875);//+35 35.149921875
+  private final FieldSwerveModule frontRSwerve = new FieldSwerveModule(FRdriveMotor, 3, 10, -15.01171875); // +27
+                                                                                                           // -42.01171875
+  private final FieldSwerveModule frontLSwerve = new FieldSwerveModule(FLdriveMotor, 1, 9, 89.12890625);// +32
+                                                                                                        // 57.12890625
+  private final FieldSwerveModule backRSwerve = new FieldSwerveModule(BRdriveMotor, 5, 11, 30.24804688);// +33.5
+                                                                                                        // -3.251953125
+  private final FieldSwerveModule backLSwerve = new FieldSwerveModule(BLdriveMotor, 7, 12, 70.149921875);// +35
+                                                                                                         // 35.149921875
   RelativeEncoder FRdriveENC = FRdriveMotor.getEncoder();
   RelativeEncoder FLdriveENC = FLdriveMotor.getEncoder();
   RelativeEncoder BRdriveENC = BRdriveMotor.getEncoder();
@@ -30,26 +36,30 @@ public class FieldDriveSub extends SubsystemBase {
   Translation2d frontLLocation = new Translation2d(0.381, 0.381);
   Translation2d backRLocation = new Translation2d(-0.381, -0.381);
   Translation2d backLLocation = new Translation2d(-0.381, 0.381);
-  AnalogGyro m_gyro = new AnalogGyro(0);
+  GyroSub gyroSub;
+
+  public FieldDriveSub(GyroSub gyroSubArg) {
+    gyroSub = gyroSubArg;
+  }
 
   SwerveDriveKinematics kinematic = new SwerveDriveKinematics(frontRLocation, frontLLocation, backRLocation,
       backLLocation);
-  SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematic, m_gyro.getRotation2d(), new SwerveModulePosition[] {
-      frontRSwerve.getPosition(), frontLSwerve.getPosition(), backRSwerve.getPosition(),
-      backLSwerve.getPosition() });
+  SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematic, gyroSub.getRotation2dManual(),
+      new SwerveModulePosition[] {
+          frontRSwerve.getPosition(), frontLSwerve.getPosition(), backRSwerve.getPosition(),
+          backLSwerve.getPosition() });
 
   double maxMPS = 0.4667056958; // max Meters per second of the drive motors (relative to the wheels)
 
-  public FieldDriveSub() {
-    m_gyro.reset();
-  }
 
   public void drive(double xSpeed, double ySpeed, double zSpeed, boolean fieldRelative) {
     // SwerveModuleState[] swerveModuleStatesArray = kinematic
-    //     .toSwerveModuleStates(fieldRelative? ChassisSpeeds.fromFieldRelativeSpeeds(-ySpeed,
-    //         -xSpeed, zSpeed, m_gyro.getRotation2d()) : new ChassisSpeeds(-ySpeed, -xSpeed, zSpeed));
+    // .toSwerveModuleStates(fieldRelative?
+    // ChassisSpeeds.fromFieldRelativeSpeeds(-ySpeed,
+    // -xSpeed, zSpeed, m_gyro.getRotation2d()) : new ChassisSpeeds(-ySpeed,
+    // -xSpeed, zSpeed));
     SwerveModuleState[] swerveModuleStatesArray = kinematic
-    .toSwerveModuleStates(new ChassisSpeeds(-ySpeed, -xSpeed, zSpeed));
+        .toSwerveModuleStates(new ChassisSpeeds(-ySpeed, -xSpeed, zSpeed));
     // like this so that the front of the controller is the front of the robot cause
     // joysticks are weird
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStatesArray, maxMPS);
@@ -67,8 +77,9 @@ public class FieldDriveSub extends SubsystemBase {
   }
 
   public void updateOdometry() {
-    odometry.update(m_gyro.getRotation2d(), new SwerveModulePosition[] { frontRSwerve.getPosition(), frontLSwerve.getPosition(),
-        backRSwerve.getPosition(), backLSwerve.getPosition() });
+    odometry.update(gyroSub.getRotation2dManual(),
+        new SwerveModulePosition[] { frontRSwerve.getPosition(), frontLSwerve.getPosition(),
+            backRSwerve.getPosition(), backLSwerve.getPosition() });
   }
 
 }

@@ -31,7 +31,7 @@ public class Maths {
         } else if (wantedSpeed <= -1) {
             wantedSpeed = -1;
         } else {
-            System.out.println("Something went wrong with speeds");
+            // System.out.println("within bounds");
         }
         setSpeed = (wantedSpeed / 2) + (z / 2);
 
@@ -49,10 +49,9 @@ public class Maths {
             wantedAngle = 0;
             System.out.println("Something went wrong");
         }
-        System.out.println(wantedAngle + " angle " + spinAngle);
         double[] outArr = new double[2];
         outArr[0] = wantedAngle;
-        outArr[1] = (setSpeed * 0.15);
+        outArr[1] = (setSpeed * 0.25);
         return outArr;
 
     }

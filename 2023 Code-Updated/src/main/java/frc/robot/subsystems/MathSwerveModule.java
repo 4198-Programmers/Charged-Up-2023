@@ -10,6 +10,7 @@ public class MathSwerveModule {
     CANSparkMax spinMotor;
     CANCoder spinEncoder;
     byte spinOptimize;
+    byte i = 0;
 
     public MathSwerveModule(int driveMotorID, int spinMotorID, int CANcoderID, double abosluteOffset) {
         driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
@@ -24,20 +25,43 @@ public class MathSwerveModule {
         double spinPos;
         double wantedAngle = angle;
         double angleToGive;
-        double conditionArr[] = { 10, 5, 3, 2, 1 };
-        double speedArr[] = { 0.3, 0.2, 0.1, 0.05, 0.02 };
+        double conditionArr[] = { 20, 15, 10, 5 };
+        double speedArr[] = { 0.2, 0.15, 0.1, 0.05 };
         double speedToGive;
         double conditionAmount;
         double driveSpeed = speed;
         spinPos = spinEncoder.getAbsolutePosition();
+        double absoluteDistanceBetween = Math.abs(spinPos - wantedAngle);
+        double speedScalar = Math.abs(wantedAngle / spinPos);
+        if (i > 3) {
+            i = 0;
+        } else {
+        }
 
-        if (Math.abs(spinPos - wantedAngle) > 90 && wantedAngle > spinPos) {
+        if (absoluteDistanceBetween > 90 && wantedAngle > spinPos) {
             spinOptimize = -1;
-            angleToGive = Math.abs(wantedAngle - 180);
-        } else if (Math.abs(spinPos - wantedAngle) > 90 && wantedAngle < spinPos) {
+            angleToGive = wantedAngle - 180;
+
+            if (angleToGive < 0) {
+                angleToGive += 360;
+            } else if (angleToGive >= 360) {
+                angleToGive -= 360;
+            } else {
+                // System.out.println("in bounds");
+            }
+
+        } else if (absoluteDistanceBetween > 90 && wantedAngle < spinPos) {
             spinOptimize = -1;
-            angleToGive = Math.abs(wantedAngle + 180);
-        } else if (Math.abs(spinPos - wantedAngle) < 90) {
+            angleToGive = wantedAngle + 180;
+
+            if (angleToGive < 0) {
+                angleToGive += 360;
+            } else if (angleToGive >= 360) {
+                angleToGive -= 360;
+            } else {
+            }
+
+        } else if (absoluteDistanceBetween < 90) {
             angleToGive = wantedAngle;
             spinOptimize = 1;
         } else {
@@ -45,18 +69,26 @@ public class MathSwerveModule {
             angleToGive = 0;
         }
 
-        for (int i = 0; i < 5; i++) {
-            speedToGive = 0.05;
-            conditionAmount = conditionArr[i];
-            if (spinPos > angleToGive + conditionAmount && angleToGive < 361) {
-                spinMotor.set(speedToGive);
-            } else if (spinPos < angleToGive - conditionAmount && angleToGive < 361) {
-                spinMotor.set(-speedToGive);
-            } else {
-                spinMotor.set(0);
-            }
+        // speedToGive = speedArr[i];
+        // conditionAmount = conditionArr[i];
+        if (spinPos > angleToGive + 10) {// + conditionAmount
+            spinMotor.set(0.15);
+        } else if (spinPos < angleToGive - 10) {// - conditionAmount
+            spinMotor.set(-0.15);
+        } else if (spinPos > angleToGive + 5) {
+            spinMotor.set(0.05);
+        } else if (spinPos < angleToGive - 5) {
+            spinMotor.set(-0.05);
+        } else {
+            spinMotor.set(0);
         }
-        System.out.println(angleToGive + " wantedAngle");
+        // else if (spinPos > angleToGive - conditionAmount && spinPos < angleToGive +
+        // conditionAmount) {
+        // i++;
+        // }
+        System.out.println(absoluteDistanceBetween);
+        System.out.println(speedScalar * 0.2);
+        System.out.println(i);
         driveMotor.set(driveSpeed * spinOptimize);
     }
 

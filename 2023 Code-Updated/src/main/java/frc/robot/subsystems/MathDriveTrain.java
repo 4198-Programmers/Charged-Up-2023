@@ -62,4 +62,11 @@ public class MathDriveTrain extends SubsystemBase {
         }
     }
 
+    public void AutoDrive(double angleArg, double speedArg){
+        frModule.setDesiredState(angleArg, speedArg);
+        flModule.setDesiredState(angleArg, speedArg);
+        brModule.setDesiredState(angleArg, speedArg);
+        blModule.setDesiredState(angleArg, speedArg);
+    }
+
 }
