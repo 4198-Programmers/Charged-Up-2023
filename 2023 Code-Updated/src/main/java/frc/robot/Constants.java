@@ -23,7 +23,6 @@ public final class Constants {
     public static final byte LEFT_JOYSTICK = 0;
 
     //apriltag variables
-    public static final double WANTED_PITCH = 0;
     public static final double WANTED_YAW = 0;
     public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0;
 }
