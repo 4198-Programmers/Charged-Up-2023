@@ -20,7 +20,10 @@ public final class Constants {
     public static final byte HAND_MOTOR = 0;
     public static final byte RETRACTABLE_ARM_MOTOR = 0;
 
+    //joysticks
     public static final byte LEFT_JOYSTICK = 0;
+    public static final byte MID_JOYSTICK = 1;
+    public static final byte RIGHT_JOYSTICK = 2;
 
     //apriltag variables
     public static final double WANTED_DISTANCE = 0;

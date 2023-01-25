@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -9,9 +11,9 @@ import frc.robot.subsystems.PhotonVision;
 public class CenterTag extends CommandBase{
     private PhotonVision vision;
     private DriveTrain swerveDrive;
-    private double yaw;
     private boolean isfinished = false;
     
+
     public CenterTag(PhotonVision visionSub, DriveTrain swerveDriveSub) {
         super();
         this.vision = visionSub;
@@ -21,12 +23,19 @@ public class CenterTag extends CommandBase{
 
     @Override
     public void execute() {
-        this.yaw = vision.getYaw();
-        if(Constants.WANTED_YAW < this.yaw) {
+        PhotonTrackedTarget target = this.vision.getBestTarget();
+        if(target == null) {
+            isfinished = true;
+            return;
+        }
+        double yaw = target.getYaw();
+        double varianceInYaw = Constants.WANTED_YAW - yaw;
+        if(varianceInYaw < -0.5) {
             swerveDrive.Move(-90, 0.5);
-        } else if (Constants.WANTED_YAW > this.yaw) {
+        } else if (varianceInYaw > 0.5) {
             swerveDrive.Move(90, 0.5);
-        } else if (Constants.WANTED_YAW - 0.5 < this.yaw && Constants.WANTED_YAW + 0.5 > this.yaw) {
+        } else {
+            swerveDrive.Move(0, 0);
             this.isfinished = true;
         }
         super.execute();
