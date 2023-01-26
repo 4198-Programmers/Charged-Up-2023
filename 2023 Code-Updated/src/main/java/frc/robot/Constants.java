@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 /**
@@ -27,4 +23,8 @@ public final class Constants {
     public static final double WANTED_YAW = 0;
     public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0;
     public static final double WANTED_SKEW = 0;
+    
+    //math variables
+    public static final int MOTOR_CONVERSION_FACTOR = 42; // 42 ticks per motor rotation, needs to be multiplied by gear                                                      // ratio
+    public static final double WHEEL_DIAMTER_METERS = 0.1016;
 }
