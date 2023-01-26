@@ -11,6 +11,7 @@ import frc.robot.subsystems.PhotonVision;
 public class DistanceTag extends CommandBase {
     private PhotonVision vision;
     private DriveTrain swerveDrive;
+
     private boolean isfinished = false;
     public DistanceTag(PhotonVision photonVision, DriveTrain swerveDriveTrain) {
         super();
@@ -18,22 +19,20 @@ public class DistanceTag extends CommandBase {
         this.swerveDrive = swerveDriveTrain;
         addRequirements(photonVision, swerveDriveTrain);
     }
-    
     @Override
     public void execute() {
         PhotonTrackedTarget target = this.vision.getBestTarget();
         if(target == null) {
-            isfinished = true;
+            this.isfinished = true;
             return;
         }
-        double distanceToTarget = Maths.DistanceFromTarget(target.getPitch());
+        double distanceToTarget = Maths.DistanceFromTarget(vision.getPitch());
         double varianceInDistance = Constants.WANTED_DISTANCE - distanceToTarget;
         if(varianceInDistance < -0.5) {
             swerveDrive.Move(0, 0.5);
         } else if(varianceInDistance > 0.5) {
             swerveDrive.Move(180, 0.5);
         } else {
-            swerveDrive.Move(0, 0);
             this.isfinished = true;
         }
     

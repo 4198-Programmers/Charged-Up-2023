@@ -12,7 +12,7 @@ public class PhotonVision extends SubsystemBase {
     // essentially collects the latest data from the camera
     PhotonPipelineResult result = camera.getLatestResult();
     
-    
+    PhotonTrackedTarget target;
     
     double skew;
     double yaw;
@@ -20,11 +20,26 @@ public class PhotonVision extends SubsystemBase {
     double fiducialId;
 
     public PhotonTrackedTarget getBestTarget() {
-        PhotonTrackedTarget target = null; 
+        this.target = null; 
         if (result.hasTargets()) {
             target = result.getBestTarget();
             System.out.println(target.toString());
         }
         return target;
+    }
+
+    public double getYaw() {
+        this.yaw = this.target.getYaw();
+        return this.yaw;
+    }
+
+    public double getPitch() {
+        this.pitch = this.target.getPitch();
+        return this.pitch;
+    }
+
+    public double getSkew() {
+        this.skew = this.target.getSkew();
+        return this.skew;
     }
 }

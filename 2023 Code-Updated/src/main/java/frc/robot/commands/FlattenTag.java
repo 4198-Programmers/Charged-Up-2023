@@ -1,8 +1,5 @@
 package frc.robot.commands;
-
-import org.opencv.photo.Photo;
-
-import edu.wpi.first.math.geometry.Rotation2d;
+import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
@@ -12,7 +9,7 @@ public class FlattenTag extends CommandBase{
     private PhotonVision vision;
     private DriveTrain swerveDrive;
     private Boolean isFinished;
-    private double skew;
+
 
     public FlattenTag(PhotonVision visionSub, DriveTrain swerveDriveSub) {
         super();
@@ -23,13 +20,19 @@ public class FlattenTag extends CommandBase{
     
     @Override
     public void execute() {
-        this.skew = vision.getSkew();
-        if(Constants.WANTED_SKEW < this.skew) {
+        PhotonTrackedTarget target = this.vision.getBestTarget();
+        if(target == null) {
+            this.isFinished = true;
+            return;
+        }
+        double skew = target.getSkew();
+        double varianceInSkew = Constants.WANTED_SKEW - skew;
+        if(varianceInSkew < -0.5) {
             swerveDrive.Move(120, 0.5);
-        } else if (Constants.WANTED_SKEW > this.skew) {
+        } else if (varianceInSkew > 0.5) {
             swerveDrive.Move(-120, 0.5);
-        } else if (Constants.WANTED_SKEW - 1 < this.skew && Constants.WANTED_SKEW + 1 > this.skew) {
-            isFinished = true;
+        } else {
+            this.isFinished = true;
         }
     }
 
