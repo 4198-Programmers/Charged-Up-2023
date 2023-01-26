@@ -1,20 +1,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Hand;
+import frc.robot.subsystems.Claw;
 
 public class HandMove extends CommandBase{
     double speed;
-    Hand hand;
+    String value;
+    Claw claw;
 
-    public HandMove(double speed, Hand hand){
-        this.speed = speed;
-        this.hand = hand;
-        addRequirements(hand);
+    public HandMove(String value, Claw claw){
+        this.value = value;
+        this.claw = claw;
+        addRequirements(claw);
     }
 
-    @Override
-    public void initialize() {
-        hand.setSpeed(speed);
-    }
+@Override
+public void execute() {
+    claw.useClaw(value);
+}
 }
