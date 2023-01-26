@@ -1,6 +1,6 @@
 package frc.robot;
 
-import frc.robot.commands.AutoCommand;
+
 import frc.robot.commands.CenterTag;
 import frc.robot.commands.CheckPhotonTarget;
 import frc.robot.commands.DistanceTag;
@@ -30,6 +30,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
+  //photonvision variables
+  private final PhotonVision photonVision = new PhotonVision();
   // private final FieldDriveSub fieldDriveTrain = new FieldDriveSub(); //
   // Subsystems
   // private final Pneumatics pneumaticsClaw = new Pneumatics();
@@ -42,6 +44,7 @@ public class RobotContainer {
   private final Joystick joystickMid = new Joystick(1);
   private final Joystick joystickRight = new Joystick(2);
   private final Trigger clawBTN = new JoystickButton(joystickLeft, 1);
+  private final DriveTrain driveTrain = new DriveTrain(); 
 
   // private final FieldDriveCom fieldDriving = new FieldDriveCom(fieldDriveTrain,
   // joystickLeft, joystickMid);
@@ -59,8 +62,8 @@ public class RobotContainer {
   // private final StopArm stopArm = new StopArm(vertArm);
 
   
-  private final Trigger button1 = new JoystickButton(leftJoystick, 1);
-  private final Trigger button2 = new JoystickButton(leftJoystick, 2);
+  private final Trigger button1 = new JoystickButton(joystickLeft, 1);
+  private final Trigger button2 = new JoystickButton(joystickLeft, 2);
   
   public RobotContainer() {
     
