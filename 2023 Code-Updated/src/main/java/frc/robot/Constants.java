@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -27,4 +29,10 @@ public final class Constants {
     //math variables
     public static final int MOTOR_CONVERSION_FACTOR = 42; // 42 ticks per motor rotation, needs to be multiplied by gear                                                      // ratio
     public static final double WHEEL_DIAMTER_METERS = 0.1016;
+
+    //swerve variables
+    public static final double MAX_VOLTAGE = 12.0;
+    public static final double  MAX_VELOCITY_METERS_PER_SECOND = 5800.0 / 60.0 * SdsModuleConfigurations.MK4I_L1.getWheelDiameter() * Math.PI;
+    public static final double DRIVETRAIN_FRONT_TO_BACK_LENGTH = 0;
+    public static final double DRIVETRAIN_SIDE_TO_SIDE_WIDTH = 0;
 }
