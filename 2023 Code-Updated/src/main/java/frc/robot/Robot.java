@@ -29,6 +29,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_robotContainer.initialize();
+    m_robotContainer.zeroGyro();
   }
 
   /**
@@ -45,7 +46,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    m_robotContainer.updating();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -83,7 +83,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_robotContainer.updating();
+
+  }
 
   @Override
   public void testInit() {

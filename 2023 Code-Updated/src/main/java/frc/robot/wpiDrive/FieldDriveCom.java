@@ -1,4 +1,4 @@
-package frc.robot.wpiVcontainer;
+package frc.robot.wpiDrive;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -29,7 +29,8 @@ public class FieldDriveCom extends CommandBase {
         xAxis = joystick.getX() * maxMPS;
         yAxis = joystick.getY() * maxMPS;
         zAxis = joystickTwo.getX() * maxMPS;//controller change is done later in code
-        driveTrain.drive(xAxis, yAxis, zAxis, false);
+        driveTrain.drive(xAxis, yAxis, zAxis, true);
+        driveTrain.updateOdometry();
     }
 
 }
