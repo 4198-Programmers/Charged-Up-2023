@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.Constants;
 import frc.robot.Maths;
 
 public class FieldSwerveModule {
@@ -69,8 +70,11 @@ public class FieldSwerveModule {
         double driveOut = drivePID.calculate(driveMotor.get(),
                 desiredState.speedMetersPerSecond);
         driveMotor.set(driveOut / maxDriveVelocity);
-        double turnOut = spinPID.calculate(spinPos, wantedAngle);
-        spinMotor.set((turnOut / maxSpinVelocity));
+        double currentDifferenceInAngle = wantedAngle - spinEncoder.getAbsolutePosition();
+        double differenceOfDifferenceInAngle = currentDifferenceInAngle - 
+        (Constants.WANTED_DIFFERENCE_IN_ANGLE * (currentDifferenceInAngle / Math.abs(currentDifferenceInAngle)));
+        double turnOut = spinPID.calculate(spinMotor.get(), differenceOfDifferenceInAngle);
+        spinMotor.set((turnOut));
 
         // if (spinPos < wantedAngle) {// desiredState.angle.getDegrees()
         // spinMotor.set(-0.02 * spinOptimize);
