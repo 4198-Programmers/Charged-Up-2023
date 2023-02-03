@@ -6,5 +6,5 @@ public final class Constants {
                                                           // ratio
     public static final double WHEEL_DIAMTER_METERS = 0.1016;
 
-    public static final double WANTED_DIFFERENCE_IN_ANGLE = 1;
+    public static final double WANTED_DIFFERENCE_IN_ANGLE = 20;
 }

@@ -26,25 +26,28 @@ public class FieldSwerveModule {
     double maxSpinVelocity = 0.4667056958; // in meters per second
     double maxDriveVelocity = 0.4667056958; // in meters per second
     double maxDriveAcceleration = 0.002; // in meters per second
-    double spinkP = 0.000025;
-    double spinkI = 0.000001;
-    double spinkD = 0.00001;
-    double drivekP = 0.0001;
-    double drivekI = 0.0000001;
-    double drivekD = 0;
+    double spinkP = 1;
+    double spinkI = 0.01;
+    double spinkD = 0.001;
+    double drivekP = 1;
+    double drivekI = 0.01;
+    double drivekD = 0.001;
     // private ProfiledPIDController spinPID = new ProfiledPIDController(spinkP,
     // spinkI, spinkD,
     // new TrapezoidProfile.Constraints(maxSpinVelocity, maxSpinAcceleration));
     private PIDController spinPID = new PIDController(spinkP, spinkI, spinkD);
     private PIDController drivePID = new PIDController(drivekP, drivekI, drivekD);
-
+private int spinID;
     public FieldSwerveModule(CANSparkMax driveMotorArg, int spinID, int CANCoderID, double CANCoderZeroOffset) {
+        this.spinID = spinID;
         driveMotor = driveMotorArg;
+        spinOffset = CANCoderZeroOffset;
         spinMotor = new CANSparkMax(spinID, MotorType.kBrushless);
         spinEncoder = new CANCoder(CANCoderID);
         driveEncoder = driveMotor.getEncoder();
         driveEncoder.setPositionConversionFactor(8.14);
-        // spinEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+        spinPID.enableContinuousInput(-180, 180);
+        spinEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         spinEncoder.configMagnetOffset(spinOffset);
     }
 
@@ -55,9 +58,11 @@ public class FieldSwerveModule {
 
     public void setDesiredState(SwerveModuleState desiredState) {
         // double wantedAngle = desiredState.angle.getDegrees();
-        Rotation2d rotation = new Rotation2d(spinPos);
-        spinPID.enableContinuousInput(-180, 180);
-        SwerveModuleState state = SwerveModuleState.optimize(desiredState, rotation);
+        spinPos = spinEncoder.getAbsolutePosition();
+        Rotation2d currentRotation = Rotation2d.fromDegrees(spinPos);
+        SwerveModuleState state = SwerveModuleState.optimize(desiredState, currentRotation);
+        Rotation2d optimizedAngle = state.angle;
+        double turnSpeed = optimizedAngle.minus(currentRotation).getDegrees() / 90.0;
         double wantedAngle = state.angle.getDegrees();
         // byte spinOptimize;
         // if (Math.abs(spinPos - wantedAngle)>90){
@@ -66,15 +71,16 @@ public class FieldSwerveModule {
         // spinOptimize = 1;
         // }
         // SwerveModuleState state = SwerveModuleState.optimize(desiredState, rotation);
-        spinPos = spinEncoder.getAbsolutePosition();
         double driveOut = drivePID.calculate(driveMotor.get(),
                 desiredState.speedMetersPerSecond);
-        driveMotor.set(driveOut / maxDriveVelocity);
-        double currentDifferenceInAngle = wantedAngle - spinEncoder.getAbsolutePosition();
-        double differenceOfDifferenceInAngle = currentDifferenceInAngle - 
-        (Constants.WANTED_DIFFERENCE_IN_ANGLE * (currentDifferenceInAngle / Math.abs(currentDifferenceInAngle)));
-        double turnOut = spinPID.calculate(spinMotor.get(), differenceOfDifferenceInAngle);
-        spinMotor.set((turnOut));
+        // driveMotor.set(driveOut / maxDriveVelocity);
+
+        // double currentDifferenceInAngle = wantedAngle - spinEncoder.getAbsolutePosition();
+        // double differenceOfDifferenceInAngle = currentDifferenceInAngle - 
+        // (Constants.WANTED_DIFFERENCE_IN_ANGLE * (currentDifferenceInAngle / Math.abs(currentDifferenceInAngle)));
+        double turnOut = spinPID.calculate(spinMotor.get(), turnSpeed);
+        spinMotor.set(turnOut * 0.5);
+        System.out.println("Module: " + spinID + " turn:" + turnOut + " Turn Speed: " + turnSpeed +  " drive: " + driveOut + " Wanted: " + wantedAngle + " Current: " + spinPos);
 
         // if (spinPos < wantedAngle) {// desiredState.angle.getDegrees()
         // spinMotor.set(-0.02 * spinOptimize);
@@ -102,5 +108,7 @@ public class FieldSwerveModule {
         return new SwerveModulePosition(encoderDistance, rotation);
 
     }
+
+    
 
 }

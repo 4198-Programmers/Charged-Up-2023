@@ -20,13 +20,13 @@ public class FieldDriveSub extends SubsystemBase {
   CANSparkMax FLdriveMotor = new CANSparkMax(2, MotorType.kBrushless);
   CANSparkMax BRdriveMotor = new CANSparkMax(6, MotorType.kBrushless);
   CANSparkMax BLdriveMotor = new CANSparkMax(8, MotorType.kBrushless);
-  private final FieldSwerveModule frontRSwerve = new FieldSwerveModule(FRdriveMotor, 3, 10, -15.01171875); // +27
+  private final FieldSwerveModule frontRSwerve = new FieldSwerveModule(FRdriveMotor, 3, 10, 27); // +27
                                                                                                            // -42.01171875
-  private final FieldSwerveModule frontLSwerve = new FieldSwerveModule(FLdriveMotor, 1, 9, 89.12890625);// +32
+  private final FieldSwerveModule frontLSwerve = new FieldSwerveModule(FLdriveMotor, 1, 9, 32);// +32
                                                                                                         // 57.12890625
-  private final FieldSwerveModule backRSwerve = new FieldSwerveModule(BRdriveMotor, 5, 11, 30.24804688);// +33.5
+  private final FieldSwerveModule backRSwerve = new FieldSwerveModule(BRdriveMotor, 5, 11, 33.5);// +33.5
                                                                                                         // -3.251953125
-  private final FieldSwerveModule backLSwerve = new FieldSwerveModule(BLdriveMotor, 7, 12, 70.149921875);// +35
+  private final FieldSwerveModule backLSwerve = new FieldSwerveModule(BLdriveMotor, 7, 12, 35);// +35
                                                                                                          // 35.149921875
   RelativeEncoder FRdriveENC = FRdriveMotor.getEncoder();
   RelativeEncoder FLdriveENC = FLdriveMotor.getEncoder();
@@ -36,23 +36,29 @@ public class FieldDriveSub extends SubsystemBase {
   Translation2d frontLLocation = new Translation2d(0.381, 0.381);
   Translation2d backRLocation = new Translation2d(-0.381, -0.381);
   Translation2d backLLocation = new Translation2d(-0.381, 0.381);
-  GyroSub gyroSub;
+  GyroSub gyroSub = new GyroSub();
+  SwerveDriveKinematics kinematic;
+  SwerveDriveOdometry odometry;
 
   public FieldDriveSub(GyroSub gyroSubArg) {
     gyroSub = gyroSubArg;
+    kinematic = new SwerveDriveKinematics(frontRLocation, frontLLocation, backRLocation,
+    backLLocation);
+    odometry = new SwerveDriveOdometry(kinematic, gyroSub.getRotation2dManual(),
+    new SwerveModulePosition[] {
+        frontRSwerve.getPosition(), frontLSwerve.getPosition(), backRSwerve.getPosition(),
+        backLSwerve.getPosition() });
   }
-
-  SwerveDriveKinematics kinematic = new SwerveDriveKinematics(frontRLocation, frontLLocation, backRLocation,
-      backLLocation);
-  SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematic, gyroSub.getRotation2dManual(),
-      new SwerveModulePosition[] {
-          frontRSwerve.getPosition(), frontLSwerve.getPosition(), backRSwerve.getPosition(),
-          backLSwerve.getPosition() });
+  
+  
+  
+  
 
   double maxMPS = 0.4667056958; // max Meters per second of the drive motors (relative to the wheels)
 
 
   public void drive(double xSpeed, double ySpeed, double zSpeed, boolean fieldRelative) {
+    
     // SwerveModuleState[] swerveModuleStatesArray = kinematic
     // .toSwerveModuleStates(fieldRelative?
     // ChassisSpeeds.fromFieldRelativeSpeeds(-ySpeed,

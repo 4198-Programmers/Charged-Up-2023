@@ -23,22 +23,24 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
-  // private final FieldDriveSub fieldDriveTrain = new FieldDriveSub(); //
+  private final GyroSub gyroSub = new GyroSub();
+
+  private final FieldDriveSub fieldDriveTrain = new FieldDriveSub(gyroSub);
   // Subsystems
   // private final Pneumatics pneumaticsClaw = new Pneumatics();
-  private final MathDriveTrain mathDriveTrain = new MathDriveTrain();
+  // private final MathDriveTrain mathDriveTrain = new MathDriveTrain();
   // private final LazySusanSub lazySusan = new LazySusanSub();
   // private final VertArm vertArm = new VertArm();
-  private final GyroSub gyroSub = new GyroSub();
+ 
 
   private final Joystick joystickLeft = new Joystick(0); // Joysticks
   private final Joystick joystickMid = new Joystick(1);
   private final Joystick joystickRight = new Joystick(2);
   private final Trigger clawBTN = new JoystickButton(joystickLeft, 1);
 
-  // private final FieldDriveCom fieldDriving = new FieldDriveCom(fieldDriveTrain,
-  // joystickLeft, joystickMid);
-  private final MathDriveCom mathDriving = new MathDriveCom(mathDriveTrain, joystickLeft, joystickMid);
+  private final FieldDriveCom fieldDriving = new FieldDriveCom(fieldDriveTrain,
+  joystickLeft, joystickMid);
+  // private final MathDriveCom mathDriving = new MathDriveCom(mathDriveTrain, joystickLeft, joystickMid);
   // private final StopClaw stopClaw = new StopClaw(pneumaticsClaw);
   // private final OpenClaw openClaw = new OpenClaw(pneumaticsClaw);
 
@@ -56,9 +58,9 @@ public class RobotContainer {
 
   public void initialize() {
     configureButtonBindings();
-    // fieldDriveTrain.setDefaultCommand(fieldDriving); //to change driving modes
+     fieldDriveTrain.setDefaultCommand(fieldDriving); //to change driving modes
     // simply switch which is commented out
-    mathDriveTrain.setDefaultCommand(mathDriving);
+    // mathDriveTrain.setDefaultCommand(mathDriving);
     // vertArm.setDefaultCommand(controlArm);
     // lazySusan.setDefaultCommand(controlSusan);
     // pneumaticsClaw.setDefaultCommand(stopClaw);
@@ -66,7 +68,7 @@ public class RobotContainer {
   }
 
   public void updating() {
-    gyroSub.displayGyro();
+    // gyroSub.displayGyro();
   }
 
   private void configureButtonBindings() {

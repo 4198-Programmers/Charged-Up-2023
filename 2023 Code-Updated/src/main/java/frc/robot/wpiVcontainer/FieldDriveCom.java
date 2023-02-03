@@ -26,10 +26,20 @@ public class FieldDriveCom extends CommandBase {
 
     @Override
     public void execute() {
-        xAxis = joystick.getX() * maxMPS;
-        yAxis = joystick.getY() * maxMPS;
-        zAxis = joystickTwo.getX() * maxMPS;//controller change is done later in code
+        xAxis = deadband(joystick.getX(), 0.1) * maxMPS;
+        yAxis = deadband(joystick.getY(), 0.1) * maxMPS;
+        zAxis = deadband(joystickTwo.getX(), 0.1) * maxMPS;//controller change is done later in code
         driveTrain.drive(xAxis, yAxis, zAxis, false);
+    }
+
+    private double deadband(double current, double limit) {
+        return current;
+        // if(Math.abs(current) < limit){
+        //     return 0;
+        // } 
+        // double max = 1 - limit;
+        // double speed = (Math.abs(current) - limit / max) * (current / Math.abs(current));
+        // return speed;
     }
 
 }
