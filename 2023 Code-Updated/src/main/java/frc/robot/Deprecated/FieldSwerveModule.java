@@ -1,3 +1,5 @@
+package frc.robot.Deprecated;
+/**
 package frc.robot.wpiDrive;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
@@ -64,7 +66,7 @@ public class FieldSwerveModule {
         double driveOut = drivePID.calculate(driveMotor.get(),
                 (state.speedMetersPerSecond / maxDriveVelocity));
         // driveMotor.set(driveOut / maxDriveVelocity);
-        double turnOut = spinPID.calculate(spinEncoder.getAbsolutePosition(), 0);// state.angle.getDegrees()
+        double turnOut = spinPID.calculate(spinEncoder.getAbsolutePosition(), 0); //state.angle.getDegrees();
         spinMotor.set((turnOut / maxSpinVelocity));
         System.out.println(turnOut / maxSpinVelocity);
     }
@@ -86,3 +88,4 @@ public class FieldSwerveModule {
     }
 
 }
+*/

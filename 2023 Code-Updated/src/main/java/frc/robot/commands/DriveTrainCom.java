@@ -1,9 +1,10 @@
-package frc.robot.ModuleBiasDrive;
+package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.DriveTrainMod;
 
 public class DriveTrainCom extends CommandBase {
     private final DriveTrainMod driveTrain;
@@ -17,7 +18,8 @@ public class DriveTrainCom extends CommandBase {
         xSupplier = xValuesArg;
         ySupplier = yValuesArg;
         zSupplier = zValuesArg;
-        addRequirements(driveTrain);
+        addRequirements(driveTrainArg);
+        //changed driveTrain to driveTrainArg in addreq - SK
     }
 
     @Override
@@ -27,13 +29,16 @@ public class DriveTrainCom extends CommandBase {
 
     @Override
     public void execute() {
-        driveTrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(xSupplier.getAsDouble(), ySupplier.getAsDouble(),
-                zSupplier.getAsDouble(), driveTrain.ManualGyroRotation()));
+        driveTrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
+                xSupplier.getAsDouble(),
+                ySupplier.getAsDouble(),
+                zSupplier.getAsDouble(),
+                driveTrain.ManualGyroRotation()));
     }
 
     @Override
     public void end(boolean interrupted) {
-        driveTrain.drive(new ChassisSpeeds(0, 0, 0));
+        driveTrain.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
     }
 
     @Override

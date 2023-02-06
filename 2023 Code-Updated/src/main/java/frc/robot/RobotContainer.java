@@ -1,25 +1,21 @@
 package frc.robot;
 
-import frc.robot.MathDriveFiles.MathDriveCom;
-import frc.robot.MathDriveFiles.MathDriveTrain;
-import frc.robot.ModuleBiasDrive.DriveTrainCom;
-import frc.robot.ModuleBiasDrive.DriveTrainMod;
-import frc.robot.commands.AutoMove;
-import frc.robot.commands.CloseClaw;
-import frc.robot.commands.ControlArm;
-import frc.robot.commands.ControlSusan;
-import frc.robot.commands.MotorTestingCom;
-import frc.robot.commands.OpenClaw;
-import frc.robot.commands.StopArm;
-import frc.robot.commands.StopClaw;
-import frc.robot.commands.StopSusan;
-import frc.robot.subsystems.LazySusanSub;
-import frc.robot.subsystems.MotorTesting;
-import frc.robot.subsystems.Pneumatics;
-import frc.robot.subsystems.VertArm;
-import frc.robot.wpiDrive.FieldDriveCom;
-import frc.robot.wpiDrive.FieldDriveSub;
+import frc.robot.commands.DriveTrainCom;
+// import frc.robot.commands.AutoMove;
+// import frc.robot.commands.CloseClaw;
+// import frc.robot.commands.ControlArm;
+// import frc.robot.commands.ControlSusan;
+// import frc.robot.commands.MotorTestingCom;
+// import frc.robot.commands.OpenClaw;
+// import frc.robot.commands.StopArm;
+// import frc.robot.commands.StopClaw;
+// import frc.robot.commands.StopSusan;
+// import frc.robot.subsystems.LazySusanSub;
+// import frc.robot.subsystems.MotorTesting;
+// import frc.robot.subsystems.Pneumatics;
+// import frc.robot.subsystems.VertArm;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -34,10 +30,11 @@ public class RobotContainer {
   // MotorTesting testing = new MotorTesting();
   DriveTrainMod driveTrainModular = new DriveTrainMod();
 
-  private final Joystick joystickLeft = new Joystick(0); // Joysticks
-  private final Joystick joystickMid = new Joystick(1);
-  private final Joystick joystickRight = new Joystick(2);
-  private final Trigger clawBTN = new JoystickButton(joystickLeft, 1);
+  Joystick joystickLeft = new Joystick(0); // Joysticks
+ Joystick joystickMid = new Joystick(1);
+  Joystick joystickRight = new Joystick(2);
+  Trigger clawBTN = new JoystickButton(joystickLeft, 1);
+  XboxController xbox = new XboxController(3);
 
   // private final FieldDriveCom fieldDriving = new FieldDriveCom(fieldDriveTrain,
   // joystickLeft, joystickMid);
@@ -58,8 +55,8 @@ public class RobotContainer {
 
   public RobotContainer() {
     driveTrainModular.setDefaultCommand(new DriveTrainCom(driveTrainModular,
+        () -> -modifyAxis(joystickLeft.getX()) * -DriveTrainMod.MAX_VELOCITY_METERS_PER_SECOND,
         () -> -modifyAxis(joystickLeft.getY()) * DriveTrainMod.MAX_VELOCITY_METERS_PER_SECOND,
-        () -> -modifyAxis(joystickLeft.getX()) * DriveTrainMod.MAX_VELOCITY_METERS_PER_SECOND,
         () -> -modifyAxis(joystickMid.getX()) * DriveTrainMod.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
   }
 
@@ -78,7 +75,6 @@ public class RobotContainer {
 
   public void zeroGyro(){
     driveTrainModular.zeroGyro();
-    // fieldDriveTrain.resetGyro();
   }
 
   private static double deadband(double value, double deadband) { // for controller drift, keeps values between 0-1
@@ -101,7 +97,6 @@ public class RobotContainer {
 
   public void updating() {
     // fieldDriveTrain.displayGyro();
-    driveTrainModular.getPrint();
   }
 
   private void configureButtonBindings() {
