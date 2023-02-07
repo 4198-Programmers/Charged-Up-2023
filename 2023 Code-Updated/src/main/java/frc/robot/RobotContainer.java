@@ -14,6 +14,22 @@ import frc.robot.commands.DriveTrainCom;
 // import frc.robot.subsystems.MotorTesting;
 // import frc.robot.subsystems.Pneumatics;
 // import frc.robot.subsystems.VertArm;
+
+import frc.robot.commands.CenterTag;
+import frc.robot.commands.CheckPhotonTarget;
+import frc.robot.commands.DistanceTag;
+import frc.robot.commands.FlattenTag;
+import frc.robot.subsystems.PhotonVision;
+import frc.robot.commands.CloseClaw;
+import frc.robot.commands.ControlArm;
+import frc.robot.commands.ControlSusan;
+import frc.robot.commands.OpenClaw;
+import frc.robot.commands.StopArm;
+import frc.robot.commands.StopClaw;
+import frc.robot.commands.StopSusan;
+import frc.robot.subsystems.LazySusanSub;
+import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.VertArm;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,6 +37,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
+  //photonvision variables
+  private final PhotonVision photonVision = new PhotonVision();
+  // private final FieldDriveSub fieldDriveTrain = new FieldDriveSub(); //
   // Subsystems
   // private final Pneumatics pneumaticsClaw = new Pneumatics();
   // private final MathDriveTrain mathDriveTrain = new MathDriveTrain();
@@ -53,6 +72,10 @@ public class RobotContainer {
   // private final ControlArm controlArm = new ControlArm(vertArm, joystickRight);
   // private final StopArm stopArm = new StopArm(vertArm);
 
+  
+  private final Trigger button1 = new JoystickButton(joystickLeft, 1);
+  private final Trigger button2 = new JoystickButton(joystickLeft, 2);
+  
   public RobotContainer() {
     driveTrainModular.setDefaultCommand(new DriveTrainCom(driveTrainModular,
         () -> -modifyAxis(joystickLeft.getX()) * -DriveTrainMod.MAX_VELOCITY_METERS_PER_SECOND,
@@ -100,6 +123,8 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    button1.whileTrue(new CheckPhotonTarget(photonVision));   
+    button2.whileTrue(new FlattenTag(photonVision, driveTrainModular).andThen(new CenterTag(photonVision, driveTrainModular)).andThen(new DistanceTag(photonVision, driveTrainModular)));
     // clawBTN.toggleOnTrue(closeClaw);
     // clawBTN.toggleOnFalse(openClaw);
   }

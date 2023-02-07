@@ -1,7 +1,10 @@
 package frc.robot;
 
 public class Maths {
-
+    public static double DistanceFromTarget(double pitch) {
+        double distanceToTarget = Constants.CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE/Math.tan(Math.toRadians(pitch));
+        return distanceToTarget;
+    }
     public static double positionConversion(double encoderPos) { // converts position to meters for system use
         double circumferenceMeters = (Math.PI * (Constants.WHEEL_DIAMTER_METERS));
         double distanceMeters = (encoderPos / Constants.MOTOR_CONVERSION_FACTOR) * circumferenceMeters;
