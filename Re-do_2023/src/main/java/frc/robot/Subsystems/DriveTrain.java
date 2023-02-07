@@ -20,17 +20,20 @@ import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
 
-        public static final double MAX_VOLTAGE = 12.0;
+        public static final double MAX_VOLTAGE = 12.0; // Not truly a max voltage, but more like a speed modifier
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND = 5880.0 / 60.0
+        public static final double MAX_VELOCITY_METERS_PER_SECOND = 5880.0 / 60.0 // 5880 is the max rotations of the
+                                                                                  // motor per second
                         * SdsModuleConfigurations.MK4I_L2.getDriveReduction()
                         * SdsModuleConfigurations.MK4I_L2.getWheelDiameter() * Math.PI;
 
-        public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
+        public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND / // more
+                                                                                                              // math
                         Math.hypot(Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
                                         Constants.DRIVETRAIN_LENGTH_METERS / 2.0);
 
-        private final SwerveDriveKinematics mkinematics = new SwerveDriveKinematics(
+        private final SwerveDriveKinematics mkinematics = new SwerveDriveKinematics( // Creates an internal drawing of
+                                                                                     // the drivebase for calculation
                         // Front Left
                         new Translation2d(-Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
                                         Constants.DRIVETRAIN_LENGTH_METERS / 2.0),
@@ -44,20 +47,23 @@ public class DriveTrain extends SubsystemBase {
                         new Translation2d(Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
                                         -Constants.DRIVETRAIN_LENGTH_METERS / 2.0));
 
-        private final AHRS NavX = new AHRS(SPI.Port.kMXP, (byte) 200);
+        private final AHRS NavX = new AHRS(SPI.Port.kMXP, (byte) 200); // initializes the gyro to the board port (MXP)
 
         private final SwerveModule frontLeft;
         private final SwerveModule frontRight;
         private final SwerveModule backLeft;
         private final SwerveModule backRight;
-        private final ShuffleboardTab mTab;
+        private final ShuffleboardTab mTab; // meant to be used to output the drive values, throws an odd error I cannot
+                                            // fix
 
-        private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+        private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0); // start at zeros just in case
 
         public DriveTrain() {
-                mTab = Shuffleboard.getTab("DriveTrain"); //mTab.getLayout("Front Left", BuiltInLayouts.kList).withSize(2, 4).withPosition(0, 0),
+                mTab = Shuffleboard.getTab("DriveTrain"); // mTab.getLayout("Front Left",
+                                                          // BuiltInLayouts.kList).withSize(2, 4).withPosition(0, 0),
 
-                frontLeft = Mk4iSwerveModuleHelper.createNeo(
+                frontLeft = Mk4iSwerveModuleHelper.createNeo( // Create Neo is a function by SDS that will create the
+                                                              // motors and control them for us
                                 Mk4iSwerveModuleHelper.GearRatio.L2,
                                 Constants.FRONT_LEFT_DRIVE,
                                 Constants.FRONT_LEFT_STEER,
@@ -86,11 +92,13 @@ public class DriveTrain extends SubsystemBase {
                                 Constants.BACK_RIGHT_STEER_OFFSET);
         }
 
-        public void zeroGyro() {
+        public void zeroGyro() { // sets the robots current front to zero in the gyro (top of the board when
+                                 // verical)
                 NavX.zeroYaw();
         }
 
-        public Rotation2d getGyroRotation() {
+        public Rotation2d getGyroRotation() { // Manually returns the gyro position as a Rotation2d so that wpi can use
+                                              // it to do math for us
                 if (NavX.isMagnetometerCalibrated()) {
                         return Rotation2d.fromDegrees(-NavX.getFusedHeading());
                 }
@@ -98,17 +106,21 @@ public class DriveTrain extends SubsystemBase {
                 return Rotation2d.fromDegrees(360 - NavX.getYaw());
         }
 
-        public void drive(ChassisSpeeds speeds) {
+        public void drive(ChassisSpeeds speeds) { // passes in speeds to be used in periodic
                 chassisSpeeds = speeds;
         }
 
         @Override
-        public void periodic() {
-                SwerveModuleState[] states = mkinematics.toSwerveModuleStates(chassisSpeeds);
+        public void periodic() { // makes sure this is run every cycle of the robot
+                // uses the kinematic from earlier and the wanted speeds (x,y,z) to make 4 unique speeds for each wheel
+                SwerveModuleState[] states = mkinematics.toSwerveModuleStates(chassisSpeeds); 
+                // makes sure the wheels aren't passed a speed faster than they can go
                 SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
-                SmartDashboard.putNumber("Gyro Angle", NavX.getAngle());
-
-                frontLeft.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
+                // puts the gyro angle on the dashboard for debugging
+                SmartDashboard.putNumber("Gyro Angle", NavX.getAngle()); 
+                                                                         
+                // sets each wheel to their assigned speed from an array, this must be done in the same order as the kinematic was made
+                frontLeft.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, 
                                 states[0].angle.getRadians());
                 frontRight.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
                                 states[1].angle.getRadians());
