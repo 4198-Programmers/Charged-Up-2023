@@ -3,18 +3,19 @@ package frc.robot.commands;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.DriveTrainMod;
 import frc.robot.subsystems.PhotonVision;
 
 public class CenterTag extends CommandBase{
     private PhotonVision vision;
-    private DriveTrain swerveDrive;
+    private DriveTrainMod swerveDrive;
 
     private boolean isfinished = false;
     
-    public CenterTag(PhotonVision visionSub, DriveTrain swerveDriveSub) {
+    public CenterTag(PhotonVision visionSub, DriveTrainMod swerveDriveSub) {
         super();
         this.vision = visionSub;
         this.swerveDrive = swerveDriveSub;
@@ -31,9 +32,9 @@ public class CenterTag extends CommandBase{
         double yaw = target.getYaw();
         double varianceInYaw = Constants.WANTED_YAW - yaw;
         if(varianceInYaw < -0.5) {
-            swerveDrive.Move(-90, 0.5);
+            swerveDrive.drive(new ChassisSpeeds(0, -0.5, 0));;
         } else if (varianceInYaw > 0.5) {
-            swerveDrive.Move(90, 0.5);
+            swerveDrive.drive(new ChassisSpeeds(0,0.5,0));
         } else {
             this.isfinished = true;
         }
