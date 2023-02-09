@@ -27,6 +27,7 @@ import frc.robot.commands.OpenClaw;
 import frc.robot.commands.StopArm;
 import frc.robot.commands.StopClaw;
 import frc.robot.commands.StopSusan;
+import frc.robot.commands.TagFollower;
 import frc.robot.subsystems.LazySusanSub;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.VertArm;
@@ -74,7 +75,9 @@ public class RobotContainer {
 
   
   private final Trigger button1 = new JoystickButton(joystickLeft, 1);
-  private final Trigger button2 = new JoystickButton(joystickLeft, 2);
+  private final Trigger aprilTagLeft = new JoystickButton(joystickLeft, 2);
+  private final Trigger aprilTagMid = new JoystickButton(joystickLeft, 3);
+  private final Trigger aprilTagRight = new JoystickButton(joystickLeft, 4);
   
   public RobotContainer() {
     driveTrainModular.setDefaultCommand(new DriveTrainCom(driveTrainModular,
@@ -124,7 +127,9 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     button1.whileTrue(new CheckPhotonTarget(photonVision));   
-    button2.whileTrue(new FlattenTag(photonVision, driveTrainModular).andThen(new CenterTag(photonVision, driveTrainModular)).andThen(new DistanceTag(photonVision, driveTrainModular)));
+    aprilTagLeft.whileTrue(new TagFollower(photonVision, driveTrainModular, Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT));
+    aprilTagMid.whileTrue(new TagFollower(photonVision, driveTrainModular, Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
+    aprilTagRight.whileTrue(new TagFollower(photonVision, driveTrainModular, Constants.WANTED_YAW_RIGHT, Constants.WANTED_SKEW_RIGHT, Constants.WANTED_DISTANCE_RIGHT));
     // clawBTN.toggleOnTrue(closeClaw);
     // clawBTN.toggleOnFalse(openClaw);
   }

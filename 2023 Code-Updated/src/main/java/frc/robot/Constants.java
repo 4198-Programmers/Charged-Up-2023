@@ -21,11 +21,17 @@ public final class Constants {
     public static final byte LEFT_JOYSTICK = 0;
 
     //apriltag variables
-    public static final double WANTED_DISTANCE = 0;
-    public static final double WANTED_YAW = 0;
+    public static final double WANTED_DISTANCE_LEFT = 0;
+    public static final double WANTED_DISTANCE_MID = 0;
+    public static final double WANTED_DISTANCE_RIGHT = 0;
+    public static final double WANTED_YAW_LEFT = 0;
+    public static final double WANTED_YAW_MID = 0;
+    public static final double WANTED_YAW_RIGHT = 0;
+    public static final double WANTED_SKEW_LEFT = 0;
+    public static final double WANTED_SKEW_MID = 0;
+    public static final double WANTED_SKEW_RIGHT = 0;
     public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0;
-    public static final double WANTED_SKEW = 0;
-    
+
     //math variables
     public static final int MOTOR_CONVERSION_FACTOR = 42; // 42 ticks per motor rotation, needs to be multiplied by gear                                                      // ratio
     public static final double WHEEL_DIAMTER_METERS = 0.1016;

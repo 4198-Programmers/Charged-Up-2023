@@ -30,7 +30,7 @@ public class CenterTag extends CommandBase{
             return;
         }
         double yaw = target.getYaw();
-        double varianceInYaw = Constants.WANTED_YAW - yaw;
+        double varianceInYaw = Constants.WANTED_YAW_MID - yaw;
         if(varianceInYaw < -0.5) {
             swerveDrive.drive(new ChassisSpeeds(0, -0.5, 0));;
         } else if (varianceInYaw > 0.5) {
