@@ -31,6 +31,7 @@ public class RobotContainer {
   //private final ControlSusan controlSusan = new ControlSusan(lazySusanSub, ()-> (-stickThree.getRawAxis(0)), 100);
   private final ControlReach reachOut = new ControlReach(reachArmSub, () -> 1);
   private final ControlReach reachIn = new ControlReach(reachArmSub, () ->-1);
+  
 
   //private final ControlArm controlArm = new ControlArm(vertArm, () -> stickThree.getRawAxis(1), 100);
 

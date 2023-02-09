@@ -95,7 +95,6 @@ public class DriveTrain extends SubsystemBase {
                                  // verical)
                 NavX.zeroYaw();
         }
-
         public Rotation2d getGyroRotation() { // Manually returns the gyro position as a Rotation2d so that wpi can use
                                               // it to do math for us
                 if (NavX.isMagnetometerCalibrated()) {
