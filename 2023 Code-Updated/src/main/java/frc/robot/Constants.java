@@ -22,7 +22,7 @@ public final class Constants {
 
     //apriltag variables
     public static final double WANTED_DISTANCE_LEFT = 0;
-    public static final double WANTED_DISTANCE_MID = 0;
+    public static final double WANTED_DISTANCE_MID = 48;
     public static final double WANTED_DISTANCE_RIGHT = 0;
     public static final double WANTED_YAW_LEFT = 0;
     public static final double WANTED_YAW_MID = 0;
