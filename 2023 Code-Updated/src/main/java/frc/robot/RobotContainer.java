@@ -27,6 +27,7 @@ import frc.robot.commands.OpenClaw;
 import frc.robot.commands.StopArm;
 import frc.robot.commands.StopClaw;
 import frc.robot.commands.StopSusan;
+import frc.robot.commands.TagFollower;
 import frc.robot.subsystems.LazySusanSub;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.VertArm;
@@ -124,7 +125,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     button1.whileTrue(new CheckPhotonTarget(photonVision));   
-    button2.whileTrue(new FlattenTag(photonVision, driveTrainModular).andThen(new CenterTag(photonVision, driveTrainModular)).andThen(new DistanceTag(photonVision, driveTrainModular)));
+    button2.whileTrue(new TagFollower(photonVision, driveTrainModular));
     // clawBTN.toggleOnTrue(closeClaw);
     // clawBTN.toggleOnFalse(openClaw);
   }
