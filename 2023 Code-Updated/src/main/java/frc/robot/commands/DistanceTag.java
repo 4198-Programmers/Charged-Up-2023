@@ -28,7 +28,7 @@ public class DistanceTag extends CommandBase {
             return;
         }
         double distanceToTarget = Maths.DistanceFromTarget(vision.getPitch());
-        double varianceInDistance = Constants.WANTED_DISTANCE - distanceToTarget;
+        double varianceInDistance = Constants.WANTED_DISTANCE_MID - distanceToTarget;
         if(varianceInDistance < -0.5) {
             swerveDrive.drive(new ChassisSpeeds(-0.5, 0, 0));;
         } else if(varianceInDistance > 0.5) {

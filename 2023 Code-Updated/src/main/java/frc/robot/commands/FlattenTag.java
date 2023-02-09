@@ -28,7 +28,7 @@ public class FlattenTag extends CommandBase{
             return;
         }
         double skew = target.getSkew();
-        double varianceInSkew = Constants.WANTED_SKEW - skew;
+        double varianceInSkew = Constants.WANTED_SKEW_MID - skew;
         if(varianceInSkew < -0.5) {
             swerveDrive.drive(new ChassisSpeeds(0,0,-0.5));;
         } else if (varianceInSkew > 0.5) {

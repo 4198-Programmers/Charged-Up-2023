@@ -13,11 +13,16 @@ import frc.robot.subsystems.PhotonVision;
 public class TagFollower extends CommandBase{
     private PhotonVision vision;
     private DriveTrainMod swerveDrive;
+    private double wantedYaw;
+    private double wantedSkew;
+    private double wantedDistance;
     
-    public TagFollower(PhotonVision visionSub, DriveTrainMod swerveDriveSub) {
+    public TagFollower(PhotonVision visionSub, DriveTrainMod swerveDriveSub, double wantedYaw, double wantedSkew, double wantedDistance) {
         super();
         this.vision = visionSub;
         this.swerveDrive = swerveDriveSub;
+        this.wantedYaw = wantedYaw;
+        this.wantedSkew = wantedSkew;
         addRequirements(visionSub, swerveDriveSub);
     }
 
@@ -31,15 +36,15 @@ public class TagFollower extends CommandBase{
 
         //yaw is positive to the right (the tag is to the right relative to the camera)
         double yaw = target.getYaw();
-        double varianceInYaw = Constants.WANTED_YAW - yaw;
+        double varianceInYaw = this.wantedYaw - yaw;
         //skew is positive when counter clockwise rotation relative to the camera
         double skew = target.getSkew();
-        double varianceInSkew = Constants.WANTED_SKEW - skew;
+        double varianceInSkew = this.wantedSkew - skew;
         //pitch is positive when it is upwards relative to the camera
         double pitch = target.getPitch();
         //distance increases as pitch decreases and vice versa
         double distanceToTarget = Maths.DistanceFromTarget(pitch);
-        double varianceInDistance = Constants.WANTED_DISTANCE - distanceToTarget;
+        double varianceInDistance = this.wantedDistance - distanceToTarget;
         double vx = 0;
         double vy = 0;
         double omegaRadians = 0;
