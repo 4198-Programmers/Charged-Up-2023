@@ -22,7 +22,7 @@ public class ControlReach extends CommandBase{
 
     @Override
     public void execute() {
-        reach.moveReach(speedSupplier.getAsDouble());
+            reach.moveReach(speedSupplier.getAsDouble());
     }
 
     @Override

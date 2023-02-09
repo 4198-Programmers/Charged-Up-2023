@@ -11,7 +11,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,16 +34,16 @@ public class DriveTrain extends SubsystemBase {
         private final SwerveDriveKinematics mkinematics = new SwerveDriveKinematics( // Creates an internal drawing of
                                                                                      // the drivebase for calculation
                         // Front Left
-                        new Translation2d(-Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
+                        new Translation2d(Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
                                         Constants.DRIVETRAIN_LENGTH_METERS / 2.0),
                         // Front Right
                         new Translation2d(Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
-                                        Constants.DRIVETRAIN_LENGTH_METERS / 2.0),
+                                        -Constants.DRIVETRAIN_LENGTH_METERS / 2.0),
                         // Back Left
                         new Translation2d(-Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
-                                        -Constants.DRIVETRAIN_LENGTH_METERS / 2.0),
+                                        Constants.DRIVETRAIN_LENGTH_METERS / 2.0),
                         // Back Right
-                        new Translation2d(Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
+                        new Translation2d(-Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
                                         -Constants.DRIVETRAIN_LENGTH_METERS / 2.0));
 
         private final AHRS NavX = new AHRS(SPI.Port.kMXP, (byte) 200); // initializes the gyro to the board port (MXP)

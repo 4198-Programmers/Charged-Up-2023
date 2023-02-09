@@ -10,7 +10,7 @@ import frc.robot.Constants;
 public class Pneumatics extends SubsystemBase {
     private final Compressor airCompressor = new Compressor(Constants.PNEUMATICS_PORT, PneumaticsModuleType.CTREPCM);
 
-    private final DoubleSolenoid gripReaperSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
+    private final DoubleSolenoid gripSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
             Constants.PNEUMATICS_FORWARD_CHANNEL,
             Constants.PNEUMATICS_REVERSE_CHANNEL);
 
@@ -19,22 +19,22 @@ public class Pneumatics extends SubsystemBase {
     }
 
     public void OpenClawPullIn() {
-        gripReaperSolenoid.set(Value.kReverse);
+        gripSolenoid.set(Value.kReverse);
     }
 
     public void CloseClawPushOut() {
-        gripReaperSolenoid.set(Value.kForward);
+        gripSolenoid.set(Value.kForward);
     }
 
     public void StopClaw() {
-        gripReaperSolenoid.set(Value.kOff); // essentially an in solenoid
+        gripSolenoid.set(Value.kOff); // essentially an in solenoid
     }
 
     public void setState(Value state) {
-        gripReaperSolenoid.set(state);
+        gripSolenoid.set(state);
     }
 
     public Value getState() {
-        return gripReaperSolenoid.get();
+        return gripSolenoid.get();
     }
 }
