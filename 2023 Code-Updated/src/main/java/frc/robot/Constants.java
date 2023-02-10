@@ -61,5 +61,5 @@ public final class Constants {
 
     //swerve variables
     public static final double MAX_VOLTAGE = 12.0;
-    public static final double  MAX_VELOCITY_METERS_PER_SECOND = 5800.0 / 60.0 * SdsModuleConfigurations.MK4I_L1.getWheelDiameter() * Math.PI;
+    public static final double  MAX_VELOCITY_METERS_PER_SECOND = 5800.0 / 60.0 * SdsModuleConfigurations.MK4I_L2.getWheelDiameter() * Math.PI;
 }
