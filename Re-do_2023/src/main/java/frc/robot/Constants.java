@@ -33,8 +33,8 @@ public final class Constants {
             IN_OUT_MOTOR_ID = 15;
     public static final double MAX_REACH = 1000;
     public static final double MIN_REACH = -1000;
-    public static final double MAX_VERTICAL_POSITION = 0;
-    public static final double MIN_VERTICAL_POSITION = 0;
+    public static final double MAX_VERTICAL_POSITION = 1000;
+    public static final double MIN_VERTICAL_POSITION = -1000;
     public static final double MAX_SUSAN_LEFT_POSITION = -37;
     public static final double MAX_SUSAN_RIGHT_POSITION = 34;
 
@@ -63,5 +63,7 @@ public final class Constants {
    //Right Joystick Buttons
         public static final int REACH_OUT_BUTTON = 5;
         public static final int REACH_IN_BUTTON = 3;
+        public static final int CLAW_OPEN_BUTTON = 0;
+        public static final int CLAW_CLOSE_BUTTON = 0;
 
 }

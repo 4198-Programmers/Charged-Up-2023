@@ -8,22 +8,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ReachArmSub extends SubsystemBase{
-    private final CANSparkMax reachMotor = new CANSparkMax(Constants.IN_OUT_MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkMax reachMotor = new CANSparkMax(Constants.IN_OUT_MOTOR_ID, MotorType.kBrushed);
     private final RelativeEncoder reachEncoder = reachMotor.getEncoder();
 
-    public double getPosition(){
+    public double getLocation(){
         return reachEncoder.getPosition();
     }
 
     public void moveReach(double speed){
         double expectedSpeed = speed;
-        if(getPosition() >= Constants.MAX_REACH && speed > 0){
+        if(getLocation() >= Constants.MAX_REACH && speed > 0){
             expectedSpeed = 0;
         }
-        else if(getPosition() <= Constants.MIN_REACH && speed < 0){
+        else if(getLocation() <= Constants.MIN_REACH && speed < 0){
             expectedSpeed = 0;
         }
         reachMotor.set(expectedSpeed);
+        System.out.println("Reach " + getLocation());
     }
 
     public void stopReach(){
