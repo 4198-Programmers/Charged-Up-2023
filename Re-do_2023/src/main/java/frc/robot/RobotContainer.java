@@ -14,8 +14,10 @@ import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.DriveTrainCom;
+import frc.robot.Commands.TagFollower;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
+import frc.robot.Subsystems.PhotonVision;
 import frc.robot.Subsystems.ReachArmSub;
 import frc.robot.Subsystems.VertArm;
 
@@ -23,7 +25,8 @@ public class RobotContainer {
   private final Joystick stickOne = new Joystick(0);
   private final Joystick stickTwo = new Joystick(1);
   private final Joystick stickThree = new Joystick(2);
-
+  
+  private final PhotonVision photonVision = new PhotonVision();
   private final DriveTrain mDriveTrain = new DriveTrain();
   //private final LazySusanSub lazySusanSub = new LazySusanSub();
   private final ReachArmSub reachArmSub = new ReachArmSub();
@@ -31,6 +34,7 @@ public class RobotContainer {
   //private final ControlSusan controlSusan = new ControlSusan(lazySusanSub, ()-> (-stickThree.getRawAxis(0)), 100);
   private final ControlReach reachOut = new ControlReach(reachArmSub, () -> 1);
   private final ControlReach reachIn = new ControlReach(reachArmSub, () ->-1);
+  
 
   //private final ControlArm controlArm = new ControlArm(vertArm, () -> stickThree.getRawAxis(1), 100);
 
@@ -51,6 +55,14 @@ public class RobotContainer {
     new POVButton(stickThree, 180).onTrue(reachIn);
     new JoystickButton(stickThree, Constants.REACH_OUT_BUTTON);
     new JoystickButton(stickThree, Constants.REACH_IN_BUTTON);
+    new JoystickButton(stickTwo, Constants.APRIL_TAG_LEFT_BUTTON)
+      .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT));
+    new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON)
+      .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
+    new JoystickButton(stickTwo, Constants.APRIL_TAG_CENTER_BUTTON)
+      .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
+    
+
   }
 
   public Command getAutonomousCommand() {

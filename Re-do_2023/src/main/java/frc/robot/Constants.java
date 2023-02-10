@@ -38,8 +38,29 @@ public final class Constants {
     public static final double MAX_SUSAN_LEFT_POSITION = -37;
     public static final double MAX_SUSAN_RIGHT_POSITION = 34;
 
+    //april tags constants
+    public static final double WANTED_DISTANCE_LEFT = 0;
+    public static final double WANTED_DISTANCE_MID = 0;
+    public static final double WANTED_DISTANCE_RIGHT = 0;
+    public static final double WANTED_YAW_LEFT = 0;
+    public static final double WANTED_YAW_MID = 0;
+    public static final double WANTED_YAW_RIGHT = 0;
+    public static final double WANTED_SKEW_LEFT = 0;
+    public static final double WANTED_SKEW_MID = 0;
+    public static final double WANTED_SKEW_RIGHT = 0;
+    public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0;
+    
 
-    //Buttons
+
+   //Left Joystick Buttons
+        
+        
+   //Mid Joystick Buttons
+        public static final int APRIL_TAG_LEFT_BUTTON = 3;
+        public static final int APRIL_TAG_CENTER_BUTTON = 4;
+        public static final int APRIL_TAG_RIGHT_BUTTON = 5;
+
+   //Right Joystick Buttons
         public static final int REACH_OUT_BUTTON = 5;
         public static final int REACH_IN_BUTTON = 3;
 
