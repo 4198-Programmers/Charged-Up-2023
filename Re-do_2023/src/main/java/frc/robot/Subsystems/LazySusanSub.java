@@ -24,7 +24,7 @@ public class LazySusanSub extends SubsystemBase{
             expectedSpeed = 0;
         }
         susanMotor.set(expectedSpeed);
-        System.out.println(getLocation());
+        System.out.println("Susan " + getLocation());
     }
 
     public void stopSusan(){
