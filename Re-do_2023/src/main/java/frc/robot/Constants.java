@@ -26,15 +26,15 @@ public final class Constants {
     public static final double BACK_RIGHT_STEER_OFFSET = -Math.toRadians(197.75 - 180);
 
     public static final int SUSAN_MOTOR_ID = 15,
-            PNEUMATICS_PORT = 0,
+            PNEUMATICS_PORT = 20,
             PNEUMATICS_FORWARD_CHANNEL = 4,
             PNEUMATICS_REVERSE_CHANNEL = 5,
-            VERTICAL_MOVER_MOTOR_ID = 0,
-            IN_OUT_MOTOR_ID = 15;
+            VERTICAL_MOVER_MOTOR_ID = 14,
+            IN_OUT_MOTOR_ID = 13;
     public static final double MAX_REACH = 1000;
     public static final double MIN_REACH = -1000;
-    public static final double MAX_VERTICAL_POSITION = 1000;
-    public static final double MIN_VERTICAL_POSITION = -1000;
+    public static final double MAX_VERTICAL_POSITION = -3;
+    public static final double MIN_VERTICAL_POSITION = 0;
     public static final double MAX_SUSAN_LEFT_POSITION = -37;
     public static final double MAX_SUSAN_RIGHT_POSITION = 34;
 
@@ -52,18 +52,17 @@ public final class Constants {
     
 
 
-   //Left Joystick Buttons
+   //Joystick 1 Buttons
         
         
-   //Mid Joystick Buttons
+   //Joystick 2 Buttons
         public static final int APRIL_TAG_LEFT_BUTTON = 3;
         public static final int APRIL_TAG_CENTER_BUTTON = 4;
         public static final int APRIL_TAG_RIGHT_BUTTON = 5;
 
-   //Right Joystick Buttons
-        public static final int REACH_OUT_BUTTON = 5;
-        public static final int REACH_IN_BUTTON = 3;
-        public static final int CLAW_OPEN_BUTTON = 0;
-        public static final int CLAW_CLOSE_BUTTON = 0;
+   //Joystick 3 Buttons
+        public static final int ON_TRIGGER_CLAW_BUTTON = 1;
+
+   //Joystick 4 Buttons
 
 }

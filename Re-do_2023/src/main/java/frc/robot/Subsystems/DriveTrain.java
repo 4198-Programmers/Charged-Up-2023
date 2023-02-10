@@ -97,9 +97,9 @@ public class DriveTrain extends SubsystemBase {
         }
         public Rotation2d getGyroRotation() { // Manually returns the gyro position as a Rotation2d so that wpi can use
                                               // it to do math for us
-                if (NavX.isMagnetometerCalibrated()) {
-                        return Rotation2d.fromDegrees(-NavX.getFusedHeading());
-                }
+                // if (NavX.isMagnetometerCalibrated()) {
+                //         return Rotation2d.fromDegrees(-NavX.getFusedHeading());
+                // }
 
                 return Rotation2d.fromDegrees(360 - NavX.getYaw());
         }

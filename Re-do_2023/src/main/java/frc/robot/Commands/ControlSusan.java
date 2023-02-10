@@ -10,7 +10,7 @@ public class ControlSusan extends CommandBase {
     private final DoubleSupplier speedSupplier;
     private final double speedScalar;
 
-    public ControlSusan(LazySusanSub susanArg, DoubleSupplier supplier, int percentSpeed) {
+    public ControlSusan(LazySusanSub susanArg, DoubleSupplier supplier, int percentSpeed/*maybe try passing it a double (no need for  "/ 100" and see if it fixes things*/) {
         lazySusan = susanArg;
         speedSupplier = supplier;
         speedScalar = percentSpeed / 100;
