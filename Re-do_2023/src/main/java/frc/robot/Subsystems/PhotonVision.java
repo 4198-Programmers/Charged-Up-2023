@@ -5,6 +5,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PhotonVision extends SubsystemBase {
     // set up the camera object
@@ -13,7 +14,6 @@ public class PhotonVision extends SubsystemBase {
     PhotonPipelineResult result = camera.getLatestResult();
     
     PhotonTrackedTarget target;
-    
     double skew;
     double yaw;
     double pitch;
@@ -41,5 +41,13 @@ public class PhotonVision extends SubsystemBase {
     public double getSkew() {
         this.skew = this.target.getSkew();
         return this.skew;
+    }
+
+    @Override
+    public void periodic() {
+        getBestTarget();
+        SmartDashboard.putNumber("Pitch: ", getPitch());
+        SmartDashboard.putNumber("Yaw: ", getYaw());
+        SmartDashboard.putNumber("Skew: ", getSkew());
     }
 }
