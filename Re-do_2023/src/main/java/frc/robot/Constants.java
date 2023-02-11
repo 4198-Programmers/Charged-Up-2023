@@ -26,7 +26,7 @@ public final class Constants {
     public static final double BACK_RIGHT_STEER_OFFSET = -Math.toRadians(197.75 - 180);
 
     public static final int SUSAN_MOTOR_ID = 15,
-            PNEUMATICS_PORT = 20,
+            PNEUMATICS_PORT = 21,
             PNEUMATICS_FORWARD_CHANNEL = 4,
             PNEUMATICS_REVERSE_CHANNEL = 5,
             VERTICAL_MOVER_MOTOR_ID = 14,

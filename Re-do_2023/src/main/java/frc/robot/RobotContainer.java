@@ -18,6 +18,7 @@ import frc.robot.Commands.DriveTrainCom;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Commands.OpenClaw;
+import frc.robot.Commands.zeroHeading;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
 import frc.robot.Subsystems.VertArm;
@@ -70,6 +71,7 @@ public class RobotContainer {
     new JoystickButton(stickThree, Constants.ON_TRIGGER_CLAW_BUTTON).onTrue(new ControlClaw(pneumatics));
     new JoystickButton(stickThree, 4).onTrue(new OpenClaw(pneumatics));
     new JoystickButton(stickFour, 3).onTrue(new CloseClaw(pneumatics));
+    new JoystickButton(stickOne, 11).onTrue(new zeroHeading(mDriveTrain));
   }
 
   public Command getAutonomousCommand() {

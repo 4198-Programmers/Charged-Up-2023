@@ -20,6 +20,7 @@ public class ControlSusan extends CommandBase {
     @Override
     public void execute() {
         lazySusan.spinSusan(speedSupplier.getAsDouble() * speedScalar);
+        System.out.println("Susan Location: " + lazySusan.getLocation());
     }
 
 }

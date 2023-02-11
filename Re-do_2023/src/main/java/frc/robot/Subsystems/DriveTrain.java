@@ -100,8 +100,7 @@ public class DriveTrain extends SubsystemBase {
                 // if (NavX.isMagnetometerCalibrated()) {
                 //         return Rotation2d.fromDegrees(-NavX.getFusedHeading());
                 // }
-
-                return Rotation2d.fromDegrees(180 - NavX.getYaw());
+                return Rotation2d.fromDegrees(-NavX.getYaw() + 90);
         }
 
         public void drive(ChassisSpeeds speeds) { // passes in speeds to be used in periodic

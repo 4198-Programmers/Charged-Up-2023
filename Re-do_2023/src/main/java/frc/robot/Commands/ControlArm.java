@@ -20,6 +20,8 @@ public class ControlArm extends CommandBase {
     @Override
     public void execute() {
         upArmSub.moveArm(speedSupplier.getAsDouble() * speedScalar);
+        System.out.println("VertArm " + upArmSub.getLocation());
+
     }
 
 }

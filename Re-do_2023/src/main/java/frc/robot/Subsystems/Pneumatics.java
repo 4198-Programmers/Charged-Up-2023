@@ -16,6 +16,7 @@ public class Pneumatics extends SubsystemBase {
 
     public void Pressurize() {
         airCompressor.enableDigital();
+        System.out.println("AirCompressor" + airCompressor.getCurrent());
     }
 
     public void OpenClawPullIn() {
