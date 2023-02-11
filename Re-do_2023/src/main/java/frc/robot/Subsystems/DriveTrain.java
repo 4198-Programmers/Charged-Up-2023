@@ -101,7 +101,7 @@ public class DriveTrain extends SubsystemBase {
                 //         return Rotation2d.fromDegrees(-NavX.getFusedHeading());
                 // }
 
-                return Rotation2d.fromDegrees(360 - NavX.getYaw());
+                return Rotation2d.fromDegrees(180 - NavX.getYaw());
         }
 
         public void drive(ChassisSpeeds speeds) { // passes in speeds to be used in periodic

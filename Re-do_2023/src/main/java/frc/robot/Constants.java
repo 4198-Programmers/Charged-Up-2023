@@ -33,8 +33,8 @@ public final class Constants {
             IN_OUT_MOTOR_ID = 13;
     public static final double MAX_REACH = 1000;
     public static final double MIN_REACH = -1000;
-    public static final double MAX_VERTICAL_POSITION = -3;
-    public static final double MIN_VERTICAL_POSITION = 0;
+    public static final double MAX_VERTICAL_POSITION = 1000;
+    public static final double MIN_VERTICAL_POSITION = -1000;
     public static final double MAX_SUSAN_LEFT_POSITION = -37;
     public static final double MAX_SUSAN_RIGHT_POSITION = 34;
 

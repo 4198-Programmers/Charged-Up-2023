@@ -15,10 +15,8 @@ import frc.robot.Commands.ControlClaw;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.DriveTrainCom;
-import frc.robot.Commands.TagFollower;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
-import frc.robot.Subsystems.PhotonVision;
 import frc.robot.Commands.OpenClaw;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
@@ -30,7 +28,7 @@ public class RobotContainer {
   private final Joystick stickThree = new Joystick(2);
   private final Joystick stickFour = new Joystick(3);
   
-  private final PhotonVision photonVision = new PhotonVision();
+  // private final PhotonVision photonVision = new PhotonVision();
   private final DriveTrain mDriveTrain = new DriveTrain();
   private final LazySusanSub lazySusanSub = new LazySusanSub();
   private final ReachArmSub reachArmSub = new ReachArmSub();
@@ -50,23 +48,28 @@ public class RobotContainer {
 
     lazySusanSub.setDefaultCommand(controlSusan);
     reachArmSub.setDefaultCommand(reach);
+    pneumatics.Pressurize();
+    mDriveTrain.zeroGyro();
+
 
   }
   //int reachOutButton = stickThree.getPOV();
   private void configureBindings() {
     new POVButton(stickThree, -1).onTrue(new ControlReach(reachArmSub, () -> 0));
 
-    new JoystickButton(stickFour, 1).onTrue(new ControlArm(vertArm, () ->stickThree.getRawAxis(1), 100));
+    new JoystickButton(stickFour, 1).onTrue(new ControlArm(vertArm, () -> -stickFour.getRawAxis(1), 100));
     new JoystickButton(stickFour, 1).onFalse(new ControlArm(vertArm, () -> 0, 100));
     
-    new JoystickButton(stickTwo, Constants.APRIL_TAG_LEFT_BUTTON)
-      .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT));
-    new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON)
-      .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
-    new JoystickButton(stickTwo, Constants.APRIL_TAG_CENTER_BUTTON)
-      .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
+    // new JoystickButton(stickTwo, Constants.APRIL_TAG_LEFT_BUTTON)
+    //   .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT));
+    // new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON)
+    //   .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
+    // new JoystickButton(stickTwo, Constants.APRIL_TAG_CENTER_BUTTON)
+    //   .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
 
     new JoystickButton(stickThree, Constants.ON_TRIGGER_CLAW_BUTTON).onTrue(new ControlClaw(pneumatics));
+    new JoystickButton(stickThree, 4).onTrue(new OpenClaw(pneumatics));
+    new JoystickButton(stickFour, 3).onTrue(new CloseClaw(pneumatics));
   }
 
   public Command getAutonomousCommand() {
