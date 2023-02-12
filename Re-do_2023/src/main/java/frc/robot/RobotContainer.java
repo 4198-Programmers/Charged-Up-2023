@@ -37,7 +37,6 @@ public class RobotContainer {
   private final ReachArmSub reachArmSub = new ReachArmSub();
   private final VertArm vertArm = new VertArm();  
   private final Pneumatics pneumatics = new Pneumatics();
-  private final ControlSusan controlSusan = new ControlSusan(lazySusanSub, ()-> (-stickFour.getRawAxis(0)), 100);
   private final ControlReach reach = new ControlReach(reachArmSub, () -> -stickThree.getRawAxis(1));
   
 
@@ -49,18 +48,14 @@ public class RobotContainer {
         () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
         () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5)); //ATTENTION These values were multiplied by Oren to make the bot not die while testing the three  * .5 terms should be deleted
 
-    lazySusanSub.setDefaultCommand(controlSusan);
     reachArmSub.setDefaultCommand(reach);
     pneumatics.Pressurize();
     new ZeroHeading(mDriveTrain, true);
-    pneumatics.setDefaultCommand(new OpenClaw(pneumatics));
+    pneumatics.setDefaultCommand(new CloseClaw(pneumatics));
+    vertArm.setDefaultCommand(new ControlArm(vertArm, () -> stickFour.getRawAxis(1), 100));
   }
   //int reachOutButton = stickThree.getPOV();
   private void configureBindings() {
-    new POVButton(stickThree, -1).onTrue(new ControlReach(reachArmSub, () -> 0));
-
-    new JoystickButton(stickFour, 1).onTrue(new ControlArm(vertArm, () -> -stickFour.getRawAxis(1), 100));
-    new JoystickButton(stickFour, 1).onFalse(new ControlArm(vertArm, () -> 0, 100));
     
     // new JoystickButton(stickTwo, Constants.APRIL_TAG_LEFT_BUTTON)
     //   .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT));
@@ -76,6 +71,9 @@ public class RobotContainer {
 
     new JoystickButton(stickOne, 11).onTrue(new ZeroHeading(mDriveTrain, true));
     new JoystickButton(stickOne, 12).onTrue(new ZeroHeading(mDriveTrain, false));
+
+    new JoystickButton(stickFour, 3).onTrue(new ControlSusan(lazySusanSub, () -> 0.1, 100));
+    new JoystickButton(stickFour, 4).onTrue(new ControlSusan(lazySusanSub, () -> -0.1, 100));
   }
 
   public Command getAutonomousCommand() {
