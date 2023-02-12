@@ -102,10 +102,15 @@ public class DriveTrain extends SubsystemBase {
                 // }
                 return Rotation2d.fromDegrees(-NavX.getYaw() + 90);
         }
+        public Rotation2d getRobotOrientationRotation(){
+                return Rotation2d.fromDegrees(NavX.getYaw() - NavX.getYaw());
+        }
 
         public void drive(ChassisSpeeds speeds) { // passes in speeds to be used in periodic
                 chassisSpeeds = speeds;
         }
+
+        
 
         @Override
         public void periodic() { // makes sure this is run every cycle of the robot

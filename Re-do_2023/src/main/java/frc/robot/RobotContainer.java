@@ -11,17 +11,19 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.CloseClaw;
 import frc.robot.Commands.ControlArm;
-import frc.robot.Commands.ControlClaw;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.DriveTrainCom;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Commands.OpenClaw;
-import frc.robot.Commands.zeroHeading;
+import frc.robot.Commands.ToggleChannels;
+import frc.robot.Commands.ZeroHeading;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
 import frc.robot.Subsystems.VertArm;
+
+//All PhotonVision subsystems/commands had to be commented out because the camera does not exist yet.
 
 public class RobotContainer {
   private final Joystick stickOne = new Joystick(0);
@@ -36,23 +38,22 @@ public class RobotContainer {
   private final VertArm vertArm = new VertArm();  
   private final Pneumatics pneumatics = new Pneumatics();
   private final ControlSusan controlSusan = new ControlSusan(lazySusanSub, ()-> (-stickFour.getRawAxis(0)), 100);
-  private final ControlReach reach = new ControlReach(reachArmSub, () -> stickThree.getRawAxis(1));
+  private final ControlReach reach = new ControlReach(reachArmSub, () -> -stickThree.getRawAxis(1));
   
 
   public RobotContainer() {
     configureBindings();
     mDriveTrain.setDefaultCommand(new DriveTrainCom(
         mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .1,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .1,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .1)); //ATTENTION These values were multiplied by Oren to make the bot not die while testing the three  * .1 terms should be deleted
+        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5)); //ATTENTION These values were multiplied by Oren to make the bot not die while testing the three  * .5 terms should be deleted
 
     lazySusanSub.setDefaultCommand(controlSusan);
     reachArmSub.setDefaultCommand(reach);
     pneumatics.Pressurize();
-    mDriveTrain.zeroGyro();
-
-
+    new ZeroHeading(mDriveTrain, true);
+    pneumatics.setDefaultCommand(new OpenClaw(pneumatics));
   }
   //int reachOutButton = stickThree.getPOV();
   private void configureBindings() {
@@ -68,10 +69,13 @@ public class RobotContainer {
     // new JoystickButton(stickTwo, Constants.APRIL_TAG_CENTER_BUTTON)
     //   .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
 
-    new JoystickButton(stickThree, Constants.ON_TRIGGER_CLAW_BUTTON).onTrue(new ControlClaw(pneumatics));
-    new JoystickButton(stickThree, 4).onTrue(new OpenClaw(pneumatics));
-    new JoystickButton(stickFour, 3).onTrue(new CloseClaw(pneumatics));
-    new JoystickButton(stickOne, 11).onTrue(new zeroHeading(mDriveTrain));
+    //new JoystickButton(stickThree, Constants.ON_TRIGGER_CLAW_BUTTON).onTrue(new ControlClaw(pneumatics));
+    new JoystickButton(stickThree, 3).onTrue(new OpenClaw(pneumatics));
+    new JoystickButton(stickThree, 2).onTrue(new CloseClaw(pneumatics));
+    new JoystickButton(stickThree, 1).onTrue(new ToggleChannels(pneumatics));
+
+    new JoystickButton(stickOne, 11).onTrue(new ZeroHeading(mDriveTrain, true));
+    new JoystickButton(stickOne, 12).onTrue(new ZeroHeading(mDriveTrain, false));
   }
 
   public Command getAutonomousCommand() {

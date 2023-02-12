@@ -3,6 +3,7 @@ package frc.robot.Commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.Pneumatics;
 
+
 public class OpenClaw extends CommandBase {
     private final Pneumatics pneumaticsSub;
 
@@ -14,6 +15,7 @@ public class OpenClaw extends CommandBase {
     @Override
     public void execute() {
         pneumaticsSub.OpenClawPullIn();
+        System.out.println("Open");
     }
 
 }

@@ -29,6 +29,7 @@ public final class Constants {
             PNEUMATICS_PORT = 21,
             PNEUMATICS_FORWARD_CHANNEL = 4,
             PNEUMATICS_REVERSE_CHANNEL = 5,
+            PNEUMATICS_SINGLE_CHANNEL = 7,
             VERTICAL_MOVER_MOTOR_ID = 14,
             IN_OUT_MOTOR_ID = 13;
     public static final double MAX_REACH = 1000;

@@ -14,6 +14,7 @@ public class CloseClaw extends CommandBase {
     @Override
     public void execute() {
         clawSub.CloseClawPushOut();
+        System.out.println("Close");
     }
 
 }
