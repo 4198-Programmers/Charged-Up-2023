@@ -23,13 +23,13 @@ public class Pneumatics extends SubsystemBase {
         System.out.println("Pressure: " + airCompressor.getPressure());
     }
 
-    public void OpenClawPullIn() {
+    public void OpenClaw() {
         singleSolenoid.set(true);
         //solenoid.set(Value.kForward);
         System.out.println("Open Claw Made It");
     }
 
-    public void CloseClawPushOut() {
+    public void CloseClaw() {
         singleSolenoid.set(false);
         //solenoid.set(Value.kReverse);
         System.out.println("Close Claw Made It");

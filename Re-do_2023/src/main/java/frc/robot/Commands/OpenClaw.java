@@ -14,7 +14,7 @@ public class OpenClaw extends CommandBase {
 
     @Override
     public void execute() {
-        pneumaticsSub.OpenClawPullIn();
+        pneumaticsSub.OpenClaw();
         System.out.println("Open");
     }
 

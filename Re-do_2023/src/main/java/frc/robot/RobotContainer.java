@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.CloseClaw;
 import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
@@ -65,6 +64,7 @@ public class RobotContainer {
     //   .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
 
     //new JoystickButton(stickThree, Constants.ON_TRIGGER_CLAW_BUTTON).onTrue(new ControlClaw(pneumatics));
+
     new JoystickButton(stickThree, 3).onTrue(new OpenClaw(pneumatics));
     new JoystickButton(stickThree, 2).onTrue(new CloseClaw(pneumatics));
     new JoystickButton(stickThree, 1).onTrue(new ToggleChannels(pneumatics));
