@@ -21,6 +21,7 @@ public class ControlArm extends CommandBase {
     public void execute() {
         upArmSub.moveArm(speedSupplier.getAsDouble() * speedScalar);
         System.out.println("VertArm " + upArmSub.getLocation());
+        System.out.println("Vert Arm Speed: " + upArmSub.getSpeed());
 
     }
 

@@ -26,6 +26,10 @@ public class VertArm extends SubsystemBase{
         verticalMotor.set(expectedSpeed);
     }
 
+    public double getSpeed(){
+        return verticalMotor.get();
+    }
+
     public void stopArm(){
         verticalMotor.set(0);
     }

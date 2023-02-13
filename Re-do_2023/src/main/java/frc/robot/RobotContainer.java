@@ -51,7 +51,7 @@ public class RobotContainer {
     pneumatics.Pressurize();
     new ZeroHeading(mDriveTrain, true);
     pneumatics.setDefaultCommand(new CloseClaw(pneumatics));
-    vertArm.setDefaultCommand(new ControlArm(vertArm, () -> stickFour.getRawAxis(1), 100));
+    vertArm.setDefaultCommand(new ControlArm(vertArm, () -> -vertArmStill(stickFour.getRawAxis(1)), 100));
   }
   //int reachOutButton = stickThree.getPOV();
   private void configureBindings() {
@@ -65,9 +65,7 @@ public class RobotContainer {
 
     //new JoystickButton(stickThree, Constants.ON_TRIGGER_CLAW_BUTTON).onTrue(new ControlClaw(pneumatics));
 
-    new JoystickButton(stickThree, 3).onTrue(new OpenClaw(pneumatics));
-    new JoystickButton(stickThree, 2).onTrue(new CloseClaw(pneumatics));
-    new JoystickButton(stickThree, 1).onTrue(new ToggleChannels(pneumatics));
+    new JoystickButton(stickThree, 1).toggleOnTrue(new ToggleChannels(pneumatics, !pneumatics.getChannel()));
 
     new JoystickButton(stickOne, 11).onTrue(new ZeroHeading(mDriveTrain, true));
     new JoystickButton(stickOne, 12).onTrue(new ZeroHeading(mDriveTrain, false));
@@ -99,6 +97,9 @@ public class RobotContainer {
     value = Math.copySign(value * value, value);
 
     return value;
+  }
+  private double vertArmStill(double value){
+    return value - 0.03125;
   }
 
   public void resetGyro() {

@@ -35,6 +35,7 @@ public class Pneumatics extends SubsystemBase {
     }
     public void toggleChannel(){
         singleSolenoid.set(!singleSolenoid.get());
+        //singleSolenoid.toggle();
     }
     public boolean getChannel(){
         return singleSolenoid.get();

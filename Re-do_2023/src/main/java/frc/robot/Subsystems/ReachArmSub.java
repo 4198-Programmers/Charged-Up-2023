@@ -26,6 +26,10 @@ public class ReachArmSub extends SubsystemBase{
         //System.out.println("Reach " + getLocation());
     }
 
+    public double getSpeed(){
+        return reachMotor.get();
+    }
+
     public void stopReach(){
         reachMotor.set(0);
     }
