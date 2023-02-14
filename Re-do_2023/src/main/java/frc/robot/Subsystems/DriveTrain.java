@@ -95,13 +95,18 @@ public class DriveTrain extends SubsystemBase {
                                  // verical)
                 NavX.zeroYaw();
         }
-        public Rotation2d getGyroRotation() { // Manually returns the gyro position as a Rotation2d so that wpi can use
+        public Rotation2d getGyroRotation(boolean fieldOrientation) { // Manually returns the gyro position as a Rotation2d so that wpi can use
                                               // it to do math for us
                 // if (NavX.isMagnetometerCalibrated()) {
                 //         return Rotation2d.fromDegrees(-NavX.getFusedHeading());
                 // } 
+                if(fieldOrientation){
+                return Rotation2d.fromDegrees(-NavX.getYaw() + 90);        
+                }else{
+                return Rotation2d.fromDegrees(90);    
+                }
                 
-                return Rotation2d.fromDegrees(-NavX.getYaw() + 90);
+                
                 //return Rotation2d.fromDegrees(90);
         }
         public Rotation2d getRobotOrientationRotation(){
@@ -121,7 +126,7 @@ public class DriveTrain extends SubsystemBase {
                 // makes sure the wheels aren't passed a speed faster than they can go
                 SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
                 // puts the gyro angle on the dashboard for debugging
-                SmartDashboard.putNumber("Gyro Angle", NavX.getAngle()); 
+                SmartDashboard.putNumber("Gyro Angle", NavX.getAngle());
                                                                          
                 // sets each wheel to their assigned speed from an array, this must be done in the same order as the kinematic was made
                 frontLeft.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, 

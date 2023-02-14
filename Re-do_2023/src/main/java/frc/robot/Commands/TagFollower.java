@@ -35,15 +35,15 @@
 //         //for Chassis Speeds, +vx is foreward, +vy is left, and +omegaRadians is counterclockwise
 
 //         //yaw is positive to the right (the tag is to the right relative to the camera)
-//         double yaw = target.getYaw();
+//         double yaw = -target.getYaw();
 //         double varianceInYaw = this.wantedYaw - yaw;
 //         //skew is positive when counter clockwise rotation relative to the camera
-//         double skew = target.getSkew();
+//         double skew = -target.getSkew();
 //         double varianceInSkew = this.wantedSkew - skew;
 //         //pitch is positive when it is upwards relative to the camera
-//         double pitch = target.getPitch();
+//         double pitch = -target.getPitch();
 //         //distance increases as pitch decreases and vice versa
-//         double distanceToTarget = Maths.DistanceFromTarget(pitch);
+//         double distanceToTarget = -Maths.DistanceFromTarget(pitch);
 //         double varianceInDistance = this.wantedDistance - distanceToTarget;
 //         double vx = 0;
 //         double vy = 0;

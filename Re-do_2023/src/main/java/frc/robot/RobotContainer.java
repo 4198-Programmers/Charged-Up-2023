@@ -35,7 +35,6 @@ public class RobotContainer {
   private final ReachArmSub reachArmSub = new ReachArmSub();
   private final VertArm vertArm = new VertArm();  
   private final Pneumatics pneumatics = new Pneumatics();
-  private final ControlReach reach = new ControlReach(reachArmSub, () -> -stickThree.getRawAxis(1));
   
 
   public RobotContainer() {
@@ -46,11 +45,11 @@ public class RobotContainer {
         () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
         () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5, true)); //ATTENTION These values were multiplied by Oren to make the bot not die while testing the three  * .5 terms should be deleted
 
-    reachArmSub.setDefaultCommand(reach);
+    reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () ->-stickFour.getRawAxis(1)));
     pneumatics.Pressurize();
     new ZeroHeading(mDriveTrain, true); //This sets the robot front to be the forward direction
     pneumatics.setDefaultCommand(new CloseClaw(pneumatics));
-    vertArm.setDefaultCommand(new ControlArm(vertArm, () -> 0.5*modifyVertArm(stickThree.getRawAxis(1)), 100));
+    vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));
   }
   private void configureBindings() {
     
@@ -61,34 +60,48 @@ public class RobotContainer {
     // new JoystickButton(stickTwo, Constants.APRIL_TAG_CENTER_BUTTON)
     //   .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
 
-    //new JoystickButton(stickThree, Constants.ON_TRIGGER_CLAW_BUTTON).onTrue(new ControlClaw(pneumatics));
-
 //This lets a person press single button and open and close the claw every other time.
-    new JoystickButton(stickThree, 1).toggleOnTrue(new ToggleChannels(pneumatics, !pneumatics.getChannel()));
+    new JoystickButton(stickThree, Constants.TOGGLE_CLAW_BUTTON).toggleOnTrue(new ToggleChannels(pneumatics, !pneumatics.getChannel()));
 
 //This resets the robot to field orientation and sets the current front of the robot to the forward direction
-    new JoystickButton(stickOne, 11).onTrue(new ZeroHeading(mDriveTrain, true));
-    new JoystickButton(stickOne, 11).onTrue(new DriveTrainCom(
+    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new ZeroHeading(mDriveTrain, true));
+    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
       mDriveTrain,
       () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
       () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
       () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5, true));
 
+      new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new ZeroHeading(mDriveTrain, true));
+      new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new DriveTrainCom(
+        mDriveTrain,
+        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5, true));
+
       // This makes the front of the robot always the forward direction.
-    new JoystickButton(stickOne, 12).onTrue(new DriveTrainCom(
+      //When fieldOrientation is false, it is in robotOrientation.
+    new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
       mDriveTrain,
       () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
       () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
       () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5, false));
+    new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON).toggleOnFalse(new DriveTrainCom(
+        mDriveTrain,
+        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5, false));
 
-
-    new JoystickButton(stickFour, 3).onTrue(new ControlSusan(lazySusanSub, () -> 0.1, 100));
-    new JoystickButton(stickFour, 4).onTrue(new ControlSusan(lazySusanSub, () -> -0.1, 100));
+//Make sure susan is set to a low value because it spins really fast. It has to be at least under 0.3, most likely.
+    new JoystickButton(stickFour, Constants.LAZY_SUSAN_LEFT_BUTTON).onTrue(new ControlSusan(lazySusanSub, () -> 0.1, 100));
+    new JoystickButton(stickFour, Constants.LAZY_SUSAN_RIGHT_BUTTON).onTrue(new ControlSusan(lazySusanSub, () -> -0.1, 100));
   }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }
+  /*This and the modifyAxis methods are used so that when the joystick isn't being used, that
+   * the speed is set to 0. This is incase the joysticks don't rest at 0 exactly.
+   */
   private static double deadband(double value, double deadband) {
     if (Math.abs(value) > deadband) {
       if (value > 0.0) {
@@ -111,7 +124,10 @@ public class RobotContainer {
   }
   /**This is so that when the joystick does not have an output(or 0) it stays still. */
   private double modifyVertArm(double value){
-    return value + 2*0.03125;
+    if(vertArm.getLocation() <=0.46){
+      return 0.25*value;
+    }
+    return (0.25*value) + 3*0.03125;
   }
 
   public void resetGyro() {

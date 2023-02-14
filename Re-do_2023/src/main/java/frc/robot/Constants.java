@@ -34,15 +34,15 @@ public final class Constants {
             IN_OUT_MOTOR_ID = 13;
     public static final double MAX_REACH = 1000;
     public static final double MIN_REACH = -1000;
-    public static final double MAX_VERTICAL_POSITION = 1000;
-    public static final double MIN_VERTICAL_POSITION = -1000;
+    public static final double MAX_VERTICAL_POSITION = 2.16;
+    public static final double MIN_VERTICAL_POSITION = 0.08;
     public static final double MAX_SUSAN_LEFT_POSITION = -37;
     public static final double MAX_SUSAN_RIGHT_POSITION = 34;
 
     //april tags constants
-    public static final double WANTED_DISTANCE_LEFT = 0;
-    public static final double WANTED_DISTANCE_MID = 0;
-    public static final double WANTED_DISTANCE_RIGHT = 0;
+    public static final double WANTED_DISTANCE_LEFT = 29.875;
+    public static final double WANTED_DISTANCE_MID = 29.875;
+    public static final double WANTED_DISTANCE_RIGHT = 29.875;
     public static final double WANTED_YAW_LEFT = 0;
     public static final double WANTED_YAW_MID = 0;
     public static final double WANTED_YAW_RIGHT = 0;
@@ -54,7 +54,8 @@ public final class Constants {
 
 
    //Joystick 1 Buttons
-        
+        public static final int FIELD_ORIENTATION_BUTTON = 11;
+        public static final int ROBOT_ORIENTATION_BUTTON = 12;
         
    //Joystick 2 Buttons
         public static final int APRIL_TAG_LEFT_BUTTON = 3;
@@ -62,8 +63,8 @@ public final class Constants {
         public static final int APRIL_TAG_RIGHT_BUTTON = 5;
 
    //Joystick 3 Buttons
-        public static final int ON_TRIGGER_CLAW_BUTTON = 1;
-
+   public static final int TOGGLE_CLAW_BUTTON = 1;
    //Joystick 4 Buttons
-
+public static final int LAZY_SUSAN_LEFT_BUTTON = 3;
+public static final int LAZY_SUSAN_RIGHT_BUTTON = 4;
 }
