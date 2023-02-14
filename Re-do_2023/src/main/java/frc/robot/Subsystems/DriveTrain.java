@@ -99,11 +99,13 @@ public class DriveTrain extends SubsystemBase {
                                               // it to do math for us
                 // if (NavX.isMagnetometerCalibrated()) {
                 //         return Rotation2d.fromDegrees(-NavX.getFusedHeading());
-                // }
+                // } 
+                
                 return Rotation2d.fromDegrees(-NavX.getYaw() + 90);
+                //return Rotation2d.fromDegrees(90);
         }
         public Rotation2d getRobotOrientationRotation(){
-                return Rotation2d.fromDegrees(0);
+                return Rotation2d.fromDegrees(90);
         }
 
         public void drive(ChassisSpeeds speeds) { // passes in speeds to be used in periodic
