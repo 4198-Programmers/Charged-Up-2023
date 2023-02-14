@@ -3,12 +3,12 @@ package frc.robot.Commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.DriveTrain;
 
-public class ZeroHeading extends CommandBase{
+public class zeroHeading extends CommandBase{
     DriveTrain driveTrain;
     boolean stopLoopCondition;
     boolean done;
 
-    public ZeroHeading(DriveTrain driveTrain, boolean stopLoopCondition){
+    public zeroHeading(DriveTrain driveTrain, boolean stopLoopCondition){
         this.driveTrain = driveTrain;
         this.stopLoopCondition = stopLoopCondition;
     }

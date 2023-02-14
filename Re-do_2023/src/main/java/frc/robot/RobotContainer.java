@@ -16,7 +16,7 @@ import frc.robot.Commands.DriveTrainCom;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Commands.ToggleChannels;
-import frc.robot.Commands.ZeroHeading;
+import frc.robot.Commands.zeroHeading;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
 import frc.robot.Subsystems.VertArm;
@@ -47,7 +47,7 @@ public class RobotContainer {
 
     reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () ->-stickFour.getRawAxis(1)));
     pneumatics.Pressurize();
-    new ZeroHeading(mDriveTrain, true); //This sets the robot front to be the forward direction
+    new zeroHeading(mDriveTrain, true); //This sets the robot front to be the forward direction
     pneumatics.setDefaultCommand(new CloseClaw(pneumatics));
     vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));
   }
@@ -64,14 +64,14 @@ public class RobotContainer {
     new JoystickButton(stickThree, Constants.TOGGLE_CLAW_BUTTON).toggleOnTrue(new ToggleChannels(pneumatics, !pneumatics.getChannel()));
 
 //This resets the robot to field orientation and sets the current front of the robot to the forward direction
-    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new ZeroHeading(mDriveTrain, true));
+    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new zeroHeading(mDriveTrain, true));
     new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
       mDriveTrain,
       () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
       () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
       () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5, true));
 
-      new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new ZeroHeading(mDriveTrain, true));
+      new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new zeroHeading(mDriveTrain, true));
       new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new DriveTrainCom(
         mDriveTrain,
         () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
