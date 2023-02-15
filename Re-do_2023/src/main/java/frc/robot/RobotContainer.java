@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -13,6 +15,7 @@ import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.DriveTrainCom;
+import frc.robot.Commands.SusanMode;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Commands.ToggleChannels;
@@ -50,6 +53,7 @@ public class RobotContainer {
     new zeroHeading(mDriveTrain, true); //This sets the robot front to be the forward direction
     pneumatics.setDefaultCommand(new CloseClaw(pneumatics));
     vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));
+    lazySusanSub.mode(IdleMode.kBrake);
   }
   private void configureBindings() {
     
@@ -94,6 +98,8 @@ public class RobotContainer {
 //Make sure susan is set to a low value because it spins really fast. It has to be at least under 0.3, most likely.
     new JoystickButton(stickFour, Constants.LAZY_SUSAN_LEFT_BUTTON).onTrue(new ControlSusan(lazySusanSub, () -> 0.1, 100));
     new JoystickButton(stickFour, Constants.LAZY_SUSAN_RIGHT_BUTTON).onTrue(new ControlSusan(lazySusanSub, () -> -0.1, 100));
+    new JoystickButton(stickFour, Constants.SUSAN_BRAKE_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kBrake));
+    new JoystickButton(stickFour, Constants.SUSAN_COAST_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kCoast));
   }
 
   public Command getAutonomousCommand() {

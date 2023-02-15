@@ -2,6 +2,7 @@ package frc.robot.Subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,6 +29,9 @@ public class LazySusanSub extends SubsystemBase{
 
     public void stopSusan(){
         susanMotor.set(0);
+    }
+    public void mode(IdleMode mode){
+        susanMotor.setIdleMode(mode);
     }
     
 }

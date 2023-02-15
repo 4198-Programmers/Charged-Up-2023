@@ -35,7 +35,7 @@ public final class Constants {
     public static final double MAX_REACH = 1000;
     public static final double MIN_REACH = -1000;
     public static final double MAX_VERTICAL_POSITION = 2.16;
-    public static final double MIN_VERTICAL_POSITION = 0.08;
+    public static final double MIN_VERTICAL_POSITION = 0.1;
     public static final double MAX_SUSAN_LEFT_POSITION = -37;
     public static final double MAX_SUSAN_RIGHT_POSITION = 34;
 
@@ -50,8 +50,10 @@ public final class Constants {
         public static final int APRIL_TAG_RIGHT_BUTTON = 5;
 
    //Joystick 3 Buttons
-   public static final int TOGGLE_CLAW_BUTTON = 1;
+        public static final int TOGGLE_CLAW_BUTTON = 1;
    //Joystick 4 Buttons
-public static final int LAZY_SUSAN_LEFT_BUTTON = 3;
-public static final int LAZY_SUSAN_RIGHT_BUTTON = 4;
+        public static final int LAZY_SUSAN_LEFT_BUTTON = 3;
+        public static final int LAZY_SUSAN_RIGHT_BUTTON = 4;
+        public static final int SUSAN_BRAKE_BUTTON = 11;
+        public static final int SUSAN_COAST_BUTTON = 12;
 }
