@@ -56,4 +56,5 @@ public final class Constants {
         public static final int LAZY_SUSAN_RIGHT_BUTTON = 4;
         public static final int SUSAN_BRAKE_BUTTON = 11;
         public static final int SUSAN_COAST_BUTTON = 12;
+        public static final int SUSAN_ZERO_HEADING_BUTTON = 9;
 }

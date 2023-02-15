@@ -15,6 +15,7 @@ import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.DriveTrainCom;
+import frc.robot.Commands.SusanHead;
 import frc.robot.Commands.SusanMode;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
@@ -98,6 +99,7 @@ public class RobotContainer {
 //Make sure susan is set to a low value because it spins really fast. It has to be at least under 0.3, most likely.
     new JoystickButton(stickFour, Constants.LAZY_SUSAN_LEFT_BUTTON).onTrue(new ControlSusan(lazySusanSub, () -> 0.1, 100));
     new JoystickButton(stickFour, Constants.LAZY_SUSAN_RIGHT_BUTTON).onTrue(new ControlSusan(lazySusanSub, () -> -0.1, 100));
+    new JoystickButton(stickFour, Constants.SUSAN_ZERO_HEADING_BUTTON).onTrue(new SusanHead(lazySusanSub, 0));
     new JoystickButton(stickFour, Constants.SUSAN_BRAKE_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kBrake));
     new JoystickButton(stickFour, Constants.SUSAN_COAST_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kCoast));
   }
