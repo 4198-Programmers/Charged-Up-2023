@@ -41,10 +41,10 @@ public class LazySusanSub extends SubsystemBase{
     }
 
     public void spinSusanWithAngles(double speed, double wantedDegrees, double currentDegrees){
-        if(currentDegrees - wantedDegrees < -0.5){
+        if(currentDegrees - wantedDegrees < -Constants.ANGLE_OFFSET){
             susanMotor.set(-speed);
         }
-        else if(currentDegrees - wantedDegrees > 0.5){
+        else if(currentDegrees - wantedDegrees > Constants.ANGLE_OFFSET){
            susanMotor.set(speed);
         }
     }   

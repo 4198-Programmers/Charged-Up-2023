@@ -53,6 +53,12 @@ public class RobotContainer {
     vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));
     lazySusanSub.mode(IdleMode.kBrake);
   }
+
+  JoystickButton toggleClawButton = new JoystickButton(stickFour, Constants.TOGGLE_CLAW_BUTTON);
+  JoystickButton fieldOrientationButton = new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON);
+  JoystickButton robotOrientationButton = new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON);
+  JoystickButton susanRightButton = new JoystickButton(stickFour, Constants.LAZY_SUSAN_RIGHT_BUTTON);
+  JoystickButton susanLeftButton = new JoystickButton(stickFour, Constants.LAZY_SUSAN_LEFT_BUTTON);
   private void configureBindings() {
     
     // new JoystickButton(stickTwo, Constants.APRIL_TAG_LEFT_BUTTON)
@@ -63,19 +69,21 @@ public class RobotContainer {
     //   .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
 
 //This lets a person press single button and open and close the claw every other time.
-    new JoystickButton(stickFour, Constants.TOGGLE_CLAW_BUTTON).toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel()));
+    toggleClawButton.toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel()));
+    toggleClawButton.onTrue(new SusanMode(lazySusanSub, IdleMode.kCoast));
+    toggleClawButton.onFalse(new SusanMode(lazySusanSub, IdleMode.kBrake));
 
 //This resets the robot to field orientation and sets the current front of the robot to the forward direction
-    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new zeroHeading(mDriveTrain));
-    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
+    fieldOrientationButton.onTrue(new zeroHeading(mDriveTrain));
+    fieldOrientationButton.onTrue(new DriveTrainCom(
       mDriveTrain,
       () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
       () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
       () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5, 
       true));
 
-      new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new zeroHeading(mDriveTrain));
-      new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new DriveTrainCom(
+      fieldOrientationButton.toggleOnFalse(new zeroHeading(mDriveTrain));
+      fieldOrientationButton.toggleOnFalse(new DriveTrainCom(
         mDriveTrain,
         () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
         () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
@@ -84,13 +92,13 @@ public class RobotContainer {
 
       // This makes the front of the robot always the forward direction.
       //When fieldOrientation is false, it is in robotOrientation.
-    new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
+    robotOrientationButton.onTrue(new DriveTrainCom(
       mDriveTrain,
       () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
       () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
       () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5, 
       false));
-    new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON).toggleOnFalse(new DriveTrainCom(
+    robotOrientationButton.toggleOnFalse(new DriveTrainCom(
         mDriveTrain,
         () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
         () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
@@ -98,8 +106,8 @@ public class RobotContainer {
         false));
 
 //Make sure susan is set to a low value because it spins really fast. It has to be at least under 0.3, most likely.
-    new JoystickButton(stickFour, Constants.LAZY_SUSAN_LEFT_BUTTON).onTrue(new ControlSusan(lazySusanSub, () -> 0.1, 100));
-    new JoystickButton(stickFour, Constants.LAZY_SUSAN_RIGHT_BUTTON).onTrue(new ControlSusan(lazySusanSub, () -> -0.1, 100));
+    susanLeftButton.onTrue(new ControlSusan(lazySusanSub, () -> 0.1, 100));
+    susanRightButton.onTrue(new ControlSusan(lazySusanSub, () -> -0.1, 100));
 
     new JoystickButton(stickFour, Constants.SUSAN_BRAKE_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kBrake));
     new JoystickButton(stickFour, Constants.SUSAN_COAST_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kCoast));
