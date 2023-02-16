@@ -158,8 +158,4 @@ public class RobotContainer {
     }
     return (0.25 * value) + 3 * 0.03125;
   }
-
-  public void resetGyro() {
-    mDriveTrain.zeroGyro();
-  }
 }
