@@ -10,11 +10,13 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.CloseClaw;
 import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.DriveTrainCom;
+import frc.robot.Commands.SusanControlOnPOV;
 import frc.robot.Commands.SusanMode;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
@@ -100,6 +102,8 @@ public class RobotContainer {
     new JoystickButton(stickFour, Constants.LAZY_SUSAN_RIGHT_BUTTON).onTrue(new ControlSusan(lazySusanSub, () -> -0.1, 100));
     new JoystickButton(stickFour, Constants.SUSAN_BRAKE_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kBrake));
     new JoystickButton(stickFour, Constants.SUSAN_COAST_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kCoast));
+
+    new POVButton(stickFour, stickFour.getPOV()).onTrue(new SusanControlOnPOV(lazySusanSub, () -> 0.1, 100, stickFour.getPOV()));
   }
 
   public Command getAutonomousCommand() {

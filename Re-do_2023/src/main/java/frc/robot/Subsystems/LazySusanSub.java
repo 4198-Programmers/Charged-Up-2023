@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Maths;
 
 public class LazySusanSub extends SubsystemBase{
     private final CANSparkMax susanMotor = new CANSparkMax(Constants.SUSAN_MOTOR_ID, MotorType.kBrushless);
@@ -32,6 +33,9 @@ public class LazySusanSub extends SubsystemBase{
     }
     public void mode(IdleMode mode){
         susanMotor.setIdleMode(mode);
+    }
+    public double getRotation(){
+        return Maths.arcLengthToRotations(susanEncoder.getPosition());
     }
     
 }
