@@ -52,14 +52,10 @@ public class DriveTrain extends SubsystemBase {
         private final SwerveModule frontRight;
         private final SwerveModule backLeft;
         private final SwerveModule backRight;
-        private final ShuffleboardTab mTab; // meant to be used to output the drive values, throws an odd error I cannot
-                                            // fix
-
         private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0); // start at zeros just in case
 
         public DriveTrain() {
-                mTab = Shuffleboard.getTab("DriveTrain"); // mTab.getLayout("Front Left",
-                                                          // BuiltInLayouts.kList).withSize(2, 4).withPosition(0, 0),
+                Shuffleboard.getTab("DriveTrain");
 
                 frontLeft = Mk4iSwerveModuleHelper.createNeo( // Create Neo is a function by SDS that will create the
                                                               // motors and control them for us
