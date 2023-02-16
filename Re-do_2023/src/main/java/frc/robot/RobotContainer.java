@@ -65,7 +65,7 @@ public class RobotContainer {
     //   .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
 
 //This lets a person press single button and open and close the claw every other time.
-    new JoystickButton(stickThree, Constants.TOGGLE_CLAW_BUTTON).toggleOnTrue(new ToggleChannels(pneumatics, !pneumatics.getChannel()));
+    new JoystickButton(stickFour, Constants.TOGGLE_CLAW_BUTTON).toggleOnTrue(new ToggleChannels(pneumatics, !pneumatics.getChannel()));
 
 //This resets the robot to field orientation and sets the current front of the robot to the forward direction
     new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new zeroHeading(mDriveTrain, true));
