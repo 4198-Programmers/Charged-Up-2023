@@ -91,39 +91,45 @@ public class DriveTrain extends SubsystemBase {
                                  // verical)
                 NavX.zeroYaw();
         }
-        //We are passing in a boolean so that it can easily switch from field to robot orientation.
-        public Rotation2d getGyroRotation(boolean fieldOrientation) { // Manually returns the gyro position as a Rotation2d so that wpi can use
-                                              // it to do math for us
+
+        // We are passing in a boolean so that it can easily switch from field to robot
+        // orientation.
+        public Rotation2d getGyroRotation(boolean fieldOrientation) { // Manually returns the gyro position as a
+                                                                      // Rotation2d so that wpi can use
+                // it to do math for us
                 // if (NavX.isMagnetometerCalibrated()) {
-                //         return Rotation2d.fromDegrees(-NavX.getFusedHeading());
-                // } 
-                if(fieldOrientation){
-                return Rotation2d.fromDegrees(-NavX.getYaw() + 90);//-NavX.getYaw so that the wheels turn in the right direction + 90 so the the front of the robot is considered the forward direction when reset.   
-                }else{
-                return Rotation2d.fromDegrees(90);    //This sets the front of the robot to be the front/forward direction at all times.
+                // return Rotation2d.fromDegrees(-NavX.getFusedHeading());
+                // }
+                if (fieldOrientation) {
+                        return Rotation2d.fromDegrees(-NavX.getYaw() + 90);// -NavX.getYaw so that the wheels turn in
+                                                                           // the right direction + 90 so the the front
+                                                                           // of the robot is considered the forward
+                                                                           // direction when reset.
+                } else {
+                        return Rotation2d.fromDegrees(90); // This sets the front of the robot to be the front/forward
+                                                           // direction at all times.
                 }
-                
-                
-                //return Rotation2d.fromDegrees(90);
+
+                // return Rotation2d.fromDegrees(90);
         }
 
         public void drive(ChassisSpeeds speeds) { // passes in speeds to be used in periodic
                 chassisSpeeds = speeds;
         }
 
-        
-
         @Override
         public void periodic() { // makes sure this is run every cycle of the robot
-                // uses the kinematic from earlier and the wanted speeds (x,y,z) to make 4 unique speeds for each wheel
-                SwerveModuleState[] states = mkinematics.toSwerveModuleStates(chassisSpeeds); 
+                // uses the kinematic from earlier and the wanted speeds (x,y,z) to make 4
+                // unique speeds for each wheel
+                SwerveModuleState[] states = mkinematics.toSwerveModuleStates(chassisSpeeds);
                 // makes sure the wheels aren't passed a speed faster than they can go
                 SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
                 // puts the gyro angle on the dashboard for debugging
                 SmartDashboard.putNumber("Gyro Angle", NavX.getAngle());
-                                                                         
-                // sets each wheel to their assigned speed from an array, this must be done in the same order as the kinematic was made
-                frontLeft.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, 
+
+                // sets each wheel to their assigned speed from an array, this must be done in
+                // the same order as the kinematic was made
+                frontLeft.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
                                 states[0].angle.getRadians());
                 frontRight.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
                                 states[1].angle.getRadians());

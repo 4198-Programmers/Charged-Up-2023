@@ -5,11 +5,11 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.ReachArmSub;
 
-public class ControlReach extends CommandBase{
+public class ControlReach extends CommandBase {
     private final ReachArmSub reach;
     private final DoubleSupplier speedSupplier;
 
-    public ControlReach(ReachArmSub reachArg, DoubleSupplier supplier){
+    public ControlReach(ReachArmSub reachArg, DoubleSupplier supplier) {
         reach = reachArg;
         speedSupplier = supplier;
 
@@ -22,7 +22,7 @@ public class ControlReach extends CommandBase{
 
     @Override
     public void execute() {
-            reach.moveReach(speedSupplier.getAsDouble());
+        reach.moveReach(speedSupplier.getAsDouble());
 
     }
 
@@ -36,8 +36,4 @@ public class ControlReach extends CommandBase{
         return false;
     }
 
-
-
-
-    
 }
