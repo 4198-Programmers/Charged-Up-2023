@@ -17,12 +17,12 @@ public class VertArm extends SubsystemBase{
     
     public void moveArm(double speed){
         double expectedSpeed = speed;
-        // if(getLocation() >= Constants.MAX_VERTICAL_POSITION && speed > 0){
-        //     expectedSpeed = 0;
-        // }
-        // else if(getLocation() <= Constants.MIN_VERTICAL_POSITION && speed < 0){ //taken out because with the drift after robot is disabled, values are unreliable 2-14
-        //     expectedSpeed = 0;
-        // }
+        if(getLocation() >= Constants.MAX_VERTICAL_POSITION && speed > 0){
+            expectedSpeed = 0;
+        }
+        else if(getLocation() <= Constants.MIN_VERTICAL_POSITION && speed < 0){ //taken out because with the drift after robot is disabled, values are unreliable 2-14
+            expectedSpeed = 0;
+        }
         verticalMotor.set(expectedSpeed);
     }
 

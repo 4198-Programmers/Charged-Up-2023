@@ -5,12 +5,10 @@ import frc.robot.Subsystems.DriveTrain;
 
 public class zeroHeading extends CommandBase{
     DriveTrain driveTrain;
-    boolean stopLoopCondition;
     boolean done;
 
-    public zeroHeading(DriveTrain driveTrain, boolean stopLoopCondition){
+    public zeroHeading(DriveTrain driveTrain){
         this.driveTrain = driveTrain;
-        this.stopLoopCondition = stopLoopCondition;
     }
     @Override
     public void initialize() {
@@ -19,17 +17,9 @@ public class zeroHeading extends CommandBase{
 
     @Override
     public void execute() {
-        System.out.println("Stop Loop: " + stopLoopCondition);
-        if(stopLoopCondition == false){
-            driveTrain.getRobotOrientationRotation();
-            System.out.println("Robot Orientation");
-
-        }else if(stopLoopCondition == true){
-        driveTrain.zeroGyro(); 
-        System.out.println("Field Orientation");
+        driveTrain.zeroGyro();
+        done = true;
         }
-        done = stopLoopCondition;
-    }
     @Override
     public boolean isFinished() {
         return done;

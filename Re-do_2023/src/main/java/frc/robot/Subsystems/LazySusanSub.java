@@ -37,5 +37,14 @@ public class LazySusanSub extends SubsystemBase{
     public double getRotation(){
         return Maths.arcLengthToRotations(susanEncoder.getPosition());
     }
+    public void spinSusanWithAngles(double speed, double degrees){
+        if(degrees == -1){
+            speed = 0;
+        }
+        else if(degrees > 180 +Constants.ANGLE_OFFSET){
+            speed = -speed;
+        }
+        susanMotor.set(speed);
+    }
     
 }

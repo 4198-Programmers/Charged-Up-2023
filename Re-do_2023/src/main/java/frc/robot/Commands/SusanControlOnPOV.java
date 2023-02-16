@@ -1,9 +1,7 @@
 package frc.robot.Commands;
 
 import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.Subsystems.LazySusanSub;
 
 public class SusanControlOnPOV extends CommandBase {
@@ -22,18 +20,8 @@ public class SusanControlOnPOV extends CommandBase {
 
     @Override
     public void execute() {
-        double speed = speedSupplier.getAsDouble();
-        if(degrees == -1){
-            speed = 0;
-        }
-        else if(lazySusan.getRotation() < degrees - Constants.ANGLE_OFFSET){
-            speed = speedSupplier.getAsDouble();
-        }
-        else if(lazySusan.getRotation() > degrees + Constants.ANGLE_OFFSET){
-            speed = -speedSupplier.getAsDouble();
-        }
-        lazySusan.spinSusan(speed * speedScalar);
-        System.out.println("Susan Location: " + lazySusan.getLocation());
+    lazySusan.spinSusanWithAngles(speedSupplier.getAsDouble() * speedScalar, degrees);
+        System.out.println("Susan Rotation: " + lazySusan.getRotation());
     }
 
 }
