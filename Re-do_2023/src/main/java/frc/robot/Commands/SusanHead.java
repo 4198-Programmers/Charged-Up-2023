@@ -5,7 +5,7 @@ import frc.robot.Subsystems.LazySusanSub;
 
 public class SusanHead extends CommandBase{
     LazySusanSub lazySusanSub;
-    double head = 0;
+    double head;
 
     public SusanHead(LazySusanSub lazySusanSub, double head) {
         this.lazySusanSub = lazySusanSub;
@@ -15,12 +15,7 @@ public class SusanHead extends CommandBase{
 
     @Override
     public void execute() {
-        double differenceInHeading = lazySusanSub.getHeading() - head;
-        if(differenceInHeading < -0.5) {
-            lazySusanSub.spinSusan(0.1);
-        } else if(differenceInHeading > 0.5) {
-            lazySusanSub.spinSusan(-0.1);
-        }
+        lazySusanSub.spinSusanWithAngles(0.25, head, lazySusanSub.getLocation());
     }
 
 }
