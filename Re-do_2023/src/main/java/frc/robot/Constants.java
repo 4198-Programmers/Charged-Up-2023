@@ -58,4 +58,6 @@ public final class Constants {
         public static final int SUSAN_COAST_BUTTON = 12;
         public static final double SUSAN_CIRCUMFERENCE = 0;
         public static final int ANGLE_OFFSET = 0;
+
+        public static final int MOTOR_ROTATIONS_PER_360_SUSAN = 
 }
