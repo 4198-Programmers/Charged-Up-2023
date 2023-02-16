@@ -20,7 +20,7 @@ public class VertArm extends SubsystemBase{
         if(getLocation() >= Constants.MAX_VERTICAL_POSITION && speed > 0){
             expectedSpeed = 0;
         }
-        else if(getLocation() <= Constants.MIN_VERTICAL_POSITION && speed < 0){
+        else if(getLocation() <= Constants.MIN_VERTICAL_POSITION && speed < 0){ //taken out because with the drift after robot is disabled, values are unreliable 2-14
             expectedSpeed = 0;
         }
         verticalMotor.set(expectedSpeed);

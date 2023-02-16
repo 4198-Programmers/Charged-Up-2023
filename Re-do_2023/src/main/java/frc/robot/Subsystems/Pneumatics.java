@@ -20,39 +20,10 @@ public class Pneumatics extends SubsystemBase {
         airCompressor.enableDigital();
         System.out.println("Pressure: " + airCompressor.getPressure());
     }
-
-    public void OpenClaw() {
-        singleSolenoid.set(true);
-        //solenoid.set(Value.kForward);
-        System.out.println("Open Claw Made It");
-    }
-
-    public void CloseClaw() {
-        singleSolenoid.set(false);
-        //solenoid.set(Value.kReverse);
-        System.out.println("Close Claw Made It");
-        //singleSolenoid.close();
-    }
-    public void toggleChannel(){
-        singleSolenoid.set(!singleSolenoid.get());
-        //singleSolenoid.toggle();
-    }
     public boolean getChannel(){
         return singleSolenoid.get();
     }
     public void togglePneumatics(boolean solenoidOn){
         singleSolenoid.set(solenoidOn);
     }
-
-    // public void StopClaw() {
-    //     solenoid.set(Value.kOff); // essentially an in solenoid
-    // }
-
-    // public void setState(Value state) {
-    //     gripSolenoid.set(state);
-    // }
-
-    // public Value getState() {
-    //     return gripSolenoid.get();
-    // }
 }

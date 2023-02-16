@@ -57,4 +57,6 @@ public final class Constants {
         public static final int SUSAN_BRAKE_BUTTON = 11;
         public static final int SUSAN_COAST_BUTTON = 12;
         public static final int SUSAN_ZERO_HEADING_BUTTON = 9;
+        public static final double SUSAN_CIRCUMFERENCE = 0;
+        public static final int ANGLE_OFFSET = 0;
 }

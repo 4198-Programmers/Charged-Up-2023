@@ -31,11 +31,21 @@ public class LazySusanSub extends SubsystemBase{
     public void stopSusan(){
         susanMotor.set(0);
     }
+
     public void mode(IdleMode mode){
         susanMotor.setIdleMode(mode);
     }
-    public double getHeading() {
-        return Maths.susanEncoderToAngle(susanEncoder.getPosition());
 
+    public double getRotation(){
+        return Maths.arcLengthToRotations(susanEncoder.getPosition());
     }
+
+    public void spinSusanWithAngles(double speed, double wantedDegrees, double currentDegrees){
+        if(currentDegrees - wantedDegrees < -0.5){
+            susanMotor.set(-speed);
+        }
+        else if(currentDegrees - wantedDegrees > 0.5){
+           susanMotor.set(speed);
+        }
+    }   
 }

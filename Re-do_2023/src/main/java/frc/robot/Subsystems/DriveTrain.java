@@ -95,22 +95,20 @@ public class DriveTrain extends SubsystemBase {
                                  // verical)
                 NavX.zeroYaw();
         }
+        //We are passing in a boolean so that it can easily switch from field to robot orientation.
         public Rotation2d getGyroRotation(boolean fieldOrientation) { // Manually returns the gyro position as a Rotation2d so that wpi can use
                                               // it to do math for us
                 // if (NavX.isMagnetometerCalibrated()) {
                 //         return Rotation2d.fromDegrees(-NavX.getFusedHeading());
                 // } 
                 if(fieldOrientation){
-                return Rotation2d.fromDegrees(-NavX.getYaw() + 90);        
+                return Rotation2d.fromDegrees(-NavX.getYaw() + 90);//-NavX.getYaw so that the wheels turn in the right direction + 90 so the the front of the robot is considered the forward direction when reset.   
                 }else{
-                return Rotation2d.fromDegrees(90);    
+                return Rotation2d.fromDegrees(90);    //This sets the front of the robot to be the front/forward direction at all times.
                 }
                 
                 
                 //return Rotation2d.fromDegrees(90);
-        }
-        public Rotation2d getRobotOrientationRotation(){
-                return Rotation2d.fromDegrees(90);
         }
 
         public void drive(ChassisSpeeds speeds) { // passes in speeds to be used in periodic
