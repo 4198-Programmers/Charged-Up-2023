@@ -16,7 +16,7 @@ public class AutoSusan extends CommandBase{
  }   
  @Override
  public void execute() {
-     lazySusanSub.spinSusanWithAngles(speed, wantedDegrees, lazySusanSub.getRotation());
+     lazySusanSub.spinSusanWithAngles(speed, wantedDegrees);
  }
  @Override
  public boolean isFinished() {

@@ -34,4 +34,11 @@ public class VertArm extends SubsystemBase {
     public void stopArm() {
         verticalMotor.set(0);
     }
+    public void autoVert(double speed, double wantedDistance) {
+        if (getLocation() - wantedDistance < -Constants.VERT_OFFSET) {
+            verticalMotor.set(-speed);
+        } else if (getLocation() - wantedDistance > Constants.VERT_OFFSET) {
+            verticalMotor.set(speed);
+        }
+    }
 }

@@ -39,10 +39,10 @@ public class LazySusanSub extends SubsystemBase {
         return Maths.arcLengthToRotations(susanEncoder.getPosition());
     }
 
-    public void spinSusanWithAngles(double speed, double wantedDegrees, double currentDegrees) {
-        if (currentDegrees - wantedDegrees < -0.5) {
+    public void spinSusanWithAngles(double speed, double wantedDegrees) {
+        if (getLocation() - wantedDegrees < -0.5) {
             susanMotor.set(-speed);
-        } else if (currentDegrees - wantedDegrees > 0.5) {
+        } else if (getLocation() - wantedDegrees > 0.5) {
             susanMotor.set(speed);
         }
     }
