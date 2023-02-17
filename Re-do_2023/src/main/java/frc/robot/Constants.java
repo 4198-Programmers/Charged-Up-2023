@@ -76,5 +76,5 @@ public final class Constants {
         public static final double SUSAN_CIRCUMFERENCE = 0;
         public static final int ANGLE_OFFSET = 0;
 
-        public static final int MOTOR_ROTATIONS_PER_360_SUSAN = 
+        public static final int MOTOR_ROTATIONS_PER_360_SUSAN = 0;
 }
