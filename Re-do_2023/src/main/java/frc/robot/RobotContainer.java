@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
@@ -16,8 +17,10 @@ import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.DriveTrainCom;
 import frc.robot.Commands.SusanHead;
 import frc.robot.Commands.SusanMode;
+import frc.robot.Commands.TagFollower;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
+import frc.robot.Subsystems.PhotonVision;
 import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Commands.zeroHeading;
 import frc.robot.Subsystems.Pneumatics;
@@ -30,12 +33,28 @@ public class RobotContainer {
   private final Joystick stickThree = new Joystick(2);
   private final Joystick stickFour = new Joystick(3);
   
-  // private final PhotonVision photonVision = new PhotonVision();
+  private final PhotonVision photonVision = new PhotonVision();
   private final DriveTrain mDriveTrain = new DriveTrain();
   private final LazySusanSub lazySusanSub = new LazySusanSub();
   private final ReachArmSub reachArmSub = new ReachArmSub();
   private final VertArm vertArm = new VertArm();  
   private final Pneumatics pneumatics = new Pneumatics();
+  
+  private final SequentialCommandGroup aprilTagLeft = 
+  new SusanHead(lazySusanSub, 0)
+  .andThen(new TagFollower(photonVision, mDriveTrain, 
+  Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT));
+  
+  private final SequentialCommandGroup aprilTagRight = 
+  new SusanHead(lazySusanSub, 0)
+  .andThen(new TagFollower(photonVision, mDriveTrain, 
+  Constants.WANTED_YAW_RIGHT, Constants.WANTED_SKEW_RIGHT, Constants.WANTED_DISTANCE_RIGHT));
+
+  private final SequentialCommandGroup aprilTagMid = 
+  new SusanHead(lazySusanSub, 0)
+  .andThen(new TagFollower(photonVision, mDriveTrain, 
+  Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
+  
   
 
   public RobotContainer() {
@@ -55,13 +74,13 @@ public class RobotContainer {
     lazySusanSub.mode(IdleMode.kBrake);
   }
   private void configureBindings() {
-    
-    // new JoystickButton(stickTwo, Constants.APRIL_TAG_LEFT_BUTTON)
-    //   .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT));
-    // new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON)
-    //   .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
-    // new JoystickButton(stickTwo, Constants.APRIL_TAG_CENTER_BUTTON)
-    //   .whileTrue(new TagFollower(photonVision, mDriveTrain, Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
+    // april tags auto performance buttons
+    new JoystickButton(stickTwo, Constants.APRIL_TAG_LEFT_BUTTON)
+      .whileTrue(aprilTagLeft);
+    new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON)
+      .whileTrue(aprilTagRight);
+    new JoystickButton(stickTwo, Constants.APRIL_TAG_CENTER_BUTTON)
+      .whileTrue(aprilTagMid);
 
 //This lets a person press single button and open and close the claw every other time.
     new JoystickButton(stickFour, Constants.TOGGLE_CLAW_BUTTON).toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel()));
@@ -105,6 +124,8 @@ public class RobotContainer {
 
     new JoystickButton(stickFour, Constants.SUSAN_BRAKE_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kBrake));
     new JoystickButton(stickFour, Constants.SUSAN_COAST_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kCoast));
+    
+    
   }
 
   public Command getAutonomousCommand() {
