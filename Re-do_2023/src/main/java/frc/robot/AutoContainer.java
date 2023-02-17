@@ -29,7 +29,7 @@ public class AutoContainer {
         ThreeAndTwoB(new SequentialCommandGroup()),
         ThreeAndThreeE(new SequentialCommandGroup()),
         ThreeAndThreeB(new SequentialCommandGroup());
-        
+
         private SequentialCommandGroup sequentialCommandGroup;
     private LocationAndNumberOfElements(SequentialCommandGroup sequentialCommandGroup){
         this.sequentialCommandGroup = sequentialCommandGroup;
@@ -51,5 +51,32 @@ public class AutoContainer {
         this.pneumatics = pneumatics;
         this.reachArmSub = reachArmSub;
         this.vertArm = vertArm;
+    }
+    public static SequentialCommandGroup right(){
+        return new SequentialCommandGroup();
+    }
+    public static SequentialCommandGroup left(){
+        return new SequentialCommandGroup();
+    }
+    public static SequentialCommandGroup middle(){
+        return new SequentialCommandGroup();
+    }
+    public static SequentialCommandGroup OneBallBalance(){
+        return new SequentialCommandGroup();
+    }
+    public static SequentialCommandGroup TwoBallBalance(){
+        return new SequentialCommandGroup();
+    }
+    public static SequentialCommandGroup ThreeBallBalance(){
+        return new SequentialCommandGroup();
+    }
+    public static SequentialCommandGroup OneBall(){
+        return new SequentialCommandGroup();
+    }
+    public static SequentialCommandGroup TwoBall(){
+        return new SequentialCommandGroup();
+    }
+    public static SequentialCommandGroup ThreeBall(){
+        return new SequentialCommandGroup();
     }
 }

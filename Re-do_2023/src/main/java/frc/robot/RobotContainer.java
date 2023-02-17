@@ -37,8 +37,6 @@ public class RobotContainer {
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();
 
-  private final SendableChooser<Command> mChooser = new SendableChooser<>();
-
   public RobotContainer() {
     configureBindings();
     mDriveTrain.setDefaultCommand(new DriveTrainCom(
@@ -120,8 +118,19 @@ public class RobotContainer {
     new JoystickButton(stickFour, Constants.SUSAN_BRAKE_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kBrake));
     new JoystickButton(stickFour, Constants.SUSAN_COAST_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kCoast));
   }
-  
+  private final SendableChooser<Command> LocationChooser = new SendableChooser<>();
+  private final SendableChooser<Command> AutoType = new SendableChooser<>();
+
   public Command getAutonomousCommand() {
+    LocationChooser.addOption("Right Side", AutoContainer.right());
+    LocationChooser.addOption("Middle Side", AutoContainer.middle());
+    LocationChooser.addOption("Left Side", AutoContainer.left());
+    AutoType.addOption("1 Ball Balance", AutoContainer.OneBallBalance());
+    AutoType.addOption("2 Ball Balance", AutoContainer.TwoBallBalance());
+    AutoType.addOption("3 Ball Balance", AutoContainer.ThreeBallBalance());
+    AutoType.addOption("1 Ball", AutoContainer.OneBall());
+    AutoType.addOption("2 Ball", AutoContainer.TwoBall());
+    AutoType.addOption("3 Ball", AutoContainer.ThreeBall());
     return Commands.print("No autonomous command configured");
   }
 
