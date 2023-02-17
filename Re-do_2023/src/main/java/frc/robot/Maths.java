@@ -6,7 +6,8 @@ public class Maths {
         return angle;
     }
 
-    public static double degreesToRotations_Susan(double wantedDegrees){
-
+    public static double degreesToRotations_Susan(double wantedDegrees) {
+        double degreesPerRotate = 360 / Constants.MOTOR_ROTATIONS_PER_360_SUSAN;
+        return wantedDegrees / degreesPerRotate;
     }
 }
