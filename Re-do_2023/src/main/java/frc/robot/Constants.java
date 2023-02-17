@@ -58,6 +58,7 @@ public final class Constants {
                         SUSAN_BRAKE_BUTTON = 11,
                         SUSAN_COAST_BUTTON = 12;
 
+        //Turret Values
         public static final double SUSAN_CIRCUMFERENCE = 0,
                         MOTOR_ROTATIONS_PER_360_SUSAN = 104.7272727273, // gear ratio = 16 sprocket ratio = 7 + (6/11)
                         BALANCE_SPEED = 0.1;
@@ -65,4 +66,7 @@ public final class Constants {
                         VERT_OFFSET = 0,
                         ANGLE_OFFSET = 0; // for what? [2-17]- CP
         public static final float PITCH_OFFSET = 5; // Must be a float for the gyro values
+
+        //Auto Values
+        public static final double AUTO_VERT_ARM_PICKUP_POS = 0;
 }
