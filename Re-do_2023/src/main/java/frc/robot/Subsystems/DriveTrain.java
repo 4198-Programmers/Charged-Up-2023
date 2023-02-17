@@ -109,7 +109,17 @@ public class DriveTrain extends SubsystemBase {
                                                            // direction at all times.
                 }
 
-                // return Rotation2d.fromDegrees(90);
+        }
+
+        public double BalanceDrive() {
+                float pitch = NavX.getPitch();
+                if (pitch > Constants.PITCH_OFFSET) {
+                        return Constants.BALANCE_SPEED;
+                } else if (pitch < -Constants.PITCH_OFFSET) {
+                        return -Constants.BALANCE_SPEED;
+                } else {
+                        return 0;
+                }
         }
 
         public void drive(ChassisSpeeds speeds) { // passes in speeds to be used in periodic

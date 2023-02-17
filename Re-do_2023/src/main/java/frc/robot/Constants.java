@@ -62,4 +62,6 @@ public final class Constants {
         public static final int SUSAN_MAX_ANGLE = 630;
         // SUSAN gear ratio = 16 sprocket ratio = 7 + (6/11)
         public static final int VERT_OFFSET = 0;
+        public static final float PITCH_OFFSET = 5;
+        public static final double BALANCE_SPEED = 0.1;
 }
