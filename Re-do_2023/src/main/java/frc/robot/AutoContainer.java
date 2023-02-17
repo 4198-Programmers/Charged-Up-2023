@@ -9,35 +9,36 @@ import frc.robot.Subsystems.VertArm;
 
 //All auto is bot oriented
 public class AutoContainer {
-    public enum LocationAndNumberOfElements{
-        //Location and #Of Elements
-        OneAndOneE(new SequentialCommandGroup()),
-        OneAndOneB(new SequentialCommandGroup()),
-        OneAndTwoE(new SequentialCommandGroup()),
-        OneAndTwoB(new SequentialCommandGroup()),
-        OneAndThreeE(new SequentialCommandGroup()),
-        OneAndThreeB(new SequentialCommandGroup()),
-        TwoAndOneB(new SequentialCommandGroup()),
-        TwoAndOneE(new SequentialCommandGroup()),
-        TwoAndTwoE(new SequentialCommandGroup()),
-        TwoAndTwoB(new SequentialCommandGroup()),
-        TwoAndThreeE(new SequentialCommandGroup()),
-        TwoAndThreeB(new SequentialCommandGroup()),
-        ThreeAndOneB(new SequentialCommandGroup()),
-        ThreeAndOneE(new SequentialCommandGroup()),
-        ThreeAndTwoE(new SequentialCommandGroup()),
-        ThreeAndTwoB(new SequentialCommandGroup()),
-        ThreeAndThreeE(new SequentialCommandGroup()),
-        ThreeAndThreeB(new SequentialCommandGroup());
+    public static int autoType;
+    public static int locationChoose;
 
-        private SequentialCommandGroup sequentialCommandGroup;
-    private LocationAndNumberOfElements(SequentialCommandGroup sequentialCommandGroup){
-        this.sequentialCommandGroup = sequentialCommandGroup;
+    public enum Location {
+
+        Left(0),
+        Middle(1),
+        Right(2);
+
+
+        private Location(int location) {
+            locationChoose = location;
+        }
     }
-    public SequentialCommandGroup getCommand(){
-        return sequentialCommandGroup;
+
+    public enum AutoType {
+
+        OneElementNoBalance(0),
+        TwoElementNoBalance(1),
+        ThreeElementNoBalance(2),
+        OneElementBalance(3),
+        TwoElementBalance(4);
+
+
+        private AutoType(int type) {
+            autoType = type;
+        }
+
     }
-    }
+
     DriveTrain driveTrain;
     LazySusanSub lazySusanSub;
     Pneumatics pneumatics;
@@ -52,31 +53,50 @@ public class AutoContainer {
         this.reachArmSub = reachArmSub;
         this.vertArm = vertArm;
     }
-    public static SequentialCommandGroup right(){
+
+    SequentialCommandGroup[] locationGroup = { Left(), Middle(), Right() };
+    SequentialCommandGroup[] typeCommand = { OneElement(), TwoElement(), ThreeElement(), OneElementBalance(), TwoElementBalance() };
+
+    // public SequentialCommandGroup getAutoChoice(){
+
+    // }
+
+    public SequentialCommandGroup autoRunCommands(){
+        SequentialCommandGroup locationCommand = locationGroup[locationChoose];
+        SequentialCommandGroup typeCommandGroup = typeCommand[autoType];
+
+        return new SequentialCommandGroup(locationCommand.andThen(typeCommandGroup));
+    }
+
+    public static SequentialCommandGroup Right() {
         return new SequentialCommandGroup();
     }
-    public static SequentialCommandGroup left(){
+
+    public static SequentialCommandGroup Left() {
         return new SequentialCommandGroup();
     }
-    public static SequentialCommandGroup middle(){
+
+    public static SequentialCommandGroup Middle() {
         return new SequentialCommandGroup();
     }
-    public static SequentialCommandGroup OneBallBalance(){
+
+    public static SequentialCommandGroup OneElementBalance() {
         return new SequentialCommandGroup();
     }
-    public static SequentialCommandGroup TwoBallBalance(){
+
+    public static SequentialCommandGroup TwoElementBalance() {
         return new SequentialCommandGroup();
     }
-    public static SequentialCommandGroup ThreeBallBalance(){
+
+    public static SequentialCommandGroup OneElement() {
         return new SequentialCommandGroup();
     }
-    public static SequentialCommandGroup OneBall(){
+
+    public static SequentialCommandGroup TwoElement() {
         return new SequentialCommandGroup();
     }
-    public static SequentialCommandGroup TwoBall(){
-        return new SequentialCommandGroup();
-    }
-    public static SequentialCommandGroup ThreeBall(){
+
+    public static SequentialCommandGroup ThreeElement() {
         return new SequentialCommandGroup();
     }
 }

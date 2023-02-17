@@ -14,7 +14,7 @@ public class Balance extends CommandBase {
 
     @Override
     public void execute() {
-        driveTrain.drive(new ChassisSpeeds(0, driveTrain.BalanceDrive(), 0));
+        driveTrain.drive(new ChassisSpeeds(driveTrain.BalanceDrive(), 0, 0));
     }
 
     @Override

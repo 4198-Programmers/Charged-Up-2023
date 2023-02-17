@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.AutoContainer.AutoType;
+import frc.robot.AutoContainer.Location;
+import frc.robot.Commands.Balance;
 import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
@@ -37,6 +40,10 @@ public class RobotContainer {
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();
 
+  private AutoContainer mAutoContainer = new AutoContainer(mDriveTrain, lazySusanSub, pneumatics, reachArmSub, vertArm);
+  private final SendableChooser<Location> LocationChooser = new SendableChooser<>();
+  private final SendableChooser<AutoType> AutoChooser = new SendableChooser<>();
+
   public RobotContainer() {
     configureBindings();
     mDriveTrain.setDefaultCommand(new DriveTrainCom(
@@ -52,6 +59,7 @@ public class RobotContainer {
     new ZeroHeading(mDriveTrain); // This sets the robot front to be the forward direction
     pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
     vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));
+    lazySusanSub.setDefaultCommand(new ControlSusan(lazySusanSub, () -> modifyAxis(stickThree.getX()), 80));
     lazySusanSub.mode(IdleMode.kBrake);
   }
 
@@ -109,29 +117,29 @@ public class RobotContainer {
         false));
 
     // Make sure susan is set to a low value because it spins really fast. It has to
-    // be at least under 0.3, most likely.
-    new JoystickButton(stickFour, Constants.LAZY_SUSAN_LEFT_BUTTON)
-        .onTrue(new ControlSusan(lazySusanSub, () -> 0.1, 100));
-    new JoystickButton(stickFour, Constants.LAZY_SUSAN_RIGHT_BUTTON)
-        .onTrue(new ControlSusan(lazySusanSub, () -> -0.1, 100));
+    // be at least under 0.3, most likely. -> That is what the % modifier is for. Don't change the speed -CP
+    // new JoystickButton(stickFour, Constants.LAZY_SUSAN_LEFT_BUTTON)
+    //     .whileTrue(new ControlSusan(lazySusanSub, () -> 1, 10));
+    // new JoystickButton(stickFour, Constants.LAZY_SUSAN_RIGHT_BUTTON)
+    //     .whileTrue(new ControlSusan(lazySusanSub, () -> -1, 10));
 
     new JoystickButton(stickFour, Constants.SUSAN_BRAKE_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kBrake));
     new JoystickButton(stickFour, Constants.SUSAN_COAST_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kCoast));
+
+    new JoystickButton(stickOne, 1).whileTrue(new Balance(mDriveTrain));
   }
-  private final SendableChooser<Command> LocationChooser = new SendableChooser<>();
-  private final SendableChooser<Command> AutoType = new SendableChooser<>();
 
   public Command getAutonomousCommand() {
-    LocationChooser.addOption("Right Side", AutoContainer.right());
-    LocationChooser.addOption("Middle Side", AutoContainer.middle());
-    LocationChooser.addOption("Left Side", AutoContainer.left());
-    AutoType.addOption("1 Ball Balance", AutoContainer.OneBallBalance());
-    AutoType.addOption("2 Ball Balance", AutoContainer.TwoBallBalance());
-    AutoType.addOption("3 Ball Balance", AutoContainer.ThreeBallBalance());
-    AutoType.addOption("1 Ball", AutoContainer.OneBall());
-    AutoType.addOption("2 Ball", AutoContainer.TwoBall());
-    AutoType.addOption("3 Ball", AutoContainer.ThreeBall());
-    return Commands.print("No autonomous command configured");
+    LocationChooser.addOption("Left", Location.Left);
+    LocationChooser.addOption("Middle", Location.Middle);
+    LocationChooser.addOption("Right", Location.Right);
+    AutoChooser.addOption("One Element, No Balance", AutoType.OneElementNoBalance);
+    AutoChooser.addOption("Two Element, No Balance", AutoType.TwoElementNoBalance);
+    AutoChooser.addOption("Three Element, No Balance", AutoType.ThreeElementNoBalance);
+    AutoChooser.addOption("One Element, Balance", AutoType.OneElementBalance);
+    AutoChooser.addOption("Two Element, Balance", AutoType.TwoElementBalance);
+    return mAutoContainer.autoRunCommands();
+    // return Commands.print("No autonomous command configured");
   }
 
   /*
