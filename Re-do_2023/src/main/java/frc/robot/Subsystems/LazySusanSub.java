@@ -19,7 +19,7 @@ public class LazySusanSub extends SubsystemBase {
 
     public void spinSusan(double speed) {
         double expectedSpeed = speed;
-        if (getLocation() >= Constants.MAX_SUSAN_RIGHT_POSITION && speed > 0) {
+        if (getLocation() >= Constants.MAX_SUSAN_RIGHT_POSITION && speed > 0) { // counterclockwise = negative
             expectedSpeed = 0;
         } else if (getLocation() <= Constants.MAX_SUSAN_LEFT_POSITION && speed < 0) {
             expectedSpeed = 0;
@@ -44,6 +44,29 @@ public class LazySusanSub extends SubsystemBase {
             susanMotor.set(-speed);
         } else if (getLocation() - wantedDegrees > 0.5) {
             susanMotor.set(speed);
+        }
+    }
+
+    public void spinSusanCP(double speed) { // counterclockwise = negative
+
+        double expectedSpeed = speed;
+
+        if (getLocation() >= Maths.degreesToRotations_Susan(Constants.SUSAN_MAX_ANGLE) && speed > 0) {
+            expectedSpeed = 0;
+        } else if (getLocation() <= Maths.degreesToRotations_Susan(-Constants.SUSAN_MAX_ANGLE) && speed < 0) {
+            expectedSpeed = 0;
+        }
+
+        susanMotor.set(expectedSpeed);
+    }
+
+    public void setSusanAngleCP(double wantedAngle) { // counterclockwise = negative
+        if (getLocation() < Maths.degreesToRotations_Susan(wantedAngle) - Maths.degreesToRotations_Susan(5)) {
+            spinSusanCP(0.3);
+        } else if (getLocation() > Maths.degreesToRotations_Susan(wantedAngle) + Maths.degreesToRotations_Susan(5)) {
+            spinSusanCP(-0.3);
+        } else {
+            spinSusanCP(0);
         }
     }
 }
