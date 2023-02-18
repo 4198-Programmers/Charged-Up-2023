@@ -17,6 +17,10 @@ public class LazySusanSub extends SubsystemBase {
         return susanEncoder.getPosition();
     }
 
+    public void zeroPosition(){
+        susanEncoder.setPosition(0);
+    }
+
     public void stopSusan() {
         susanMotor.set(0);
     }
@@ -41,11 +45,11 @@ public class LazySusanSub extends SubsystemBase {
 
         double expectedSpeed = speed;
 
-        if (getLocation() >= Maths.degreesToRotations_Susan(Constants.SUSAN_MAX_ANGLE) && speed > 0) {
-            expectedSpeed = 0;
-        } else if (getLocation() <= Maths.degreesToRotations_Susan(-Constants.SUSAN_MAX_ANGLE) && speed < 0) {
-            expectedSpeed = 0;
-        }
+        // if (getLocation() >= Maths.degreesToRotations_Susan(Constants.SUSAN_MAX_ANGLE) && speed > 0) {
+        //     expectedSpeed = 0;
+        // } else if (getLocation() <= Maths.degreesToRotations_Susan(-Constants.SUSAN_MAX_ANGLE) && speed < 0) {
+        //     expectedSpeed = 0;
+        // }
 
         susanMotor.set(expectedSpeed);
     }

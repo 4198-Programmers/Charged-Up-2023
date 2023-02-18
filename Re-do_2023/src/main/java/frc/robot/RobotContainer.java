@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.AutoContainer.AutoType;
 import frc.robot.AutoContainer.LevelPriority;
@@ -23,6 +24,7 @@ import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Commands.ZeroHeading;
+import frc.robot.Commands.ZeroSusan;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
 import frc.robot.Subsystems.VertArm;
@@ -60,7 +62,8 @@ public class RobotContainer {
     new ZeroHeading(mDriveTrain); // This sets the robot front to be the forward direction
     pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
     vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));
-    lazySusanSub.setDefaultCommand(new ControlSusan(lazySusanSub, () -> modifyAxis(stickThree.getX()), 80));
+    lazySusanSub.setDefaultCommand(new SequentialCommandGroup(
+        new ZeroSusan(lazySusanSub).andThen(new ControlSusan(lazySusanSub, () -> modifyAxis(stickThree.getX()), 80))));
     lazySusanSub.mode(IdleMode.kBrake);
   }
 

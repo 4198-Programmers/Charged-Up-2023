@@ -17,7 +17,7 @@ public class ControlSusan extends CommandBase {
                                                                                          */) {
         lazySusan = susanArg;
         speedSupplier = supplier;
-        speedScalar = percentSpeed / 100;
+        speedScalar = Math.abs(percentSpeed / 100);
         addRequirements(lazySusan);
     }
 

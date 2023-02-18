@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import com.ctre.phoenix.led.CANdle;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Commands.ZeroDrive;
+import frc.robot.Commands.ZeroVert;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Subsystems.Pneumatics;
@@ -99,7 +101,8 @@ public class AutoContainer {
         stop, close claw), (three ball query if true -> vert up + drive + spin, stop, open claw, drive + spin + arm to pickup, 
         stop, close claw), (balance query if true -> vert to hold, drive on station, balance, stop), (else vert to hold, drive away from midline, stop) */
 
-
+        new ZeroDrive(driveTrain)
+        .alongWith(new ZeroVert(vertArm))
         );
     }
 
