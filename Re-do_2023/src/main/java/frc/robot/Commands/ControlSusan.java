@@ -8,23 +8,20 @@ import frc.robot.Subsystems.LazySusanSub;
 public class ControlSusan extends CommandBase {
     private final LazySusanSub lazySusan;
     private final DoubleSupplier speedSupplier;
-    private final double speedScalar;
+    private double speedScalar;
+    private final double percentSpeed;
 
-    public ControlSusan(LazySusanSub susanArg, DoubleSupplier supplier, int percentSpeed/*
-                                                                                         * maybe try passing it a double
-                                                                                         * (no need for "/ 100" and see
-                                                                                         * if it fixes things
-                                                                                         */) {
+    public ControlSusan(LazySusanSub susanArg, DoubleSupplier supplier, double percentSpeed) {
+        this.percentSpeed = percentSpeed;
         lazySusan = susanArg;
         speedSupplier = supplier;
-        speedScalar = Math.abs(percentSpeed / 100);
         addRequirements(lazySusan);
     }
 
     @Override
     public void execute() {
+        speedScalar = Math.abs(percentSpeed / 100);
         lazySusan.spinSusan(speedSupplier.getAsDouble() * speedScalar);
-        System.out.println("Susan Location: " + lazySusan.getLocation());
     }
 
 }
