@@ -12,11 +12,10 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import java.lang.reflect.Method;
 
-import com.ctre.phoenix.led.CANdle;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.ZeroDrive;
 import frc.robot.Commands.ZeroVert;
 import frc.robot.Subsystems.DriveTrain;
@@ -41,6 +40,7 @@ public class AutoContainer {
             locationChoose = location;
         }
     }
+
     public enum AutoType {
 
         OneElementNoBalance(0),
@@ -114,39 +114,9 @@ public class AutoContainer {
 
         new ZeroDrive(driveTrain)
         .alongWith(new ZeroVert(vertArm))
+        .andThen(new ZeroDrive(driveTrain)) //should be an auto drive, not sure if needed 
+        .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, vertHeight))
         );
-    }
-
-    public static SequentialCommandGroup Right() {
-        return new SequentialCommandGroup();
-    }
-
-    public static SequentialCommandGroup Left() {
-        return new SequentialCommandGroup();
-    }
-
-    public static SequentialCommandGroup Middle() {
-        return new SequentialCommandGroup();
-    }
-
-    public static SequentialCommandGroup OneElementBalance() {
-        return new SequentialCommandGroup();
-    }
-
-    public static SequentialCommandGroup TwoElementBalance() {
-        return new SequentialCommandGroup();
-    }
-
-    public static SequentialCommandGroup OneElement() {
-        return new SequentialCommandGroup();
-    }
-
-    public static SequentialCommandGroup TwoElement() {
-        return new SequentialCommandGroup();
-    }
-
-    public static SequentialCommandGroup ThreeElement() {
-        return new SequentialCommandGroup();
     }
 
     public void makeTragectory(){
@@ -161,4 +131,3 @@ public class AutoContainer {
     }
 
     }   
-}

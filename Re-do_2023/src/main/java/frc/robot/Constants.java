@@ -68,5 +68,5 @@ public final class Constants {
         public static final float PITCH_OFFSET = 5; // Must be a float for the gyro values
 
         //Auto Values
-        public static final double AUTO_VERT_ARM_PICKUP_POS = 0;
+        public static final double AUTO_VERT_SPEED = 0.1;
 }
