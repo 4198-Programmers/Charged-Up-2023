@@ -69,4 +69,6 @@ public final class Constants {
 
         //Auto Values
         public static final double AUTO_VERT_SPEED = 0.1;
+        public static final double MAX_SPEED_METERS_PER_SECOND = 0;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0;
 }

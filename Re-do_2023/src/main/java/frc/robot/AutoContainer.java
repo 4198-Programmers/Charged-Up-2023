@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.StopDrive;
 import frc.robot.Commands.ZeroDrive;
@@ -125,8 +126,8 @@ public class AutoContainer {
         );
     }
 
-    public void makeTragectory() {
-        String trajectortyJSOn = "Desktop/PathWeaver/Paths/BlueLeftElementOneToBalance.wpilib.json";
+    public Trajectory makeTragectory(String trajectorystring) {
+        String trajectortyJSOn = trajectorystring;
         Trajectory trajectory = new Trajectory();
         Path trajectoryPath = Filesystem.getOperatingDirectory().toPath().resolve(trajectortyJSOn);
         try {
@@ -134,6 +135,7 @@ public class AutoContainer {
         } catch (IOException e) {
             DriverStation.reportError("Unable To open Trajectory" + trajectortyJSOn, e.getStackTrace());
         }
+        return trajectory;
     }
 
 }

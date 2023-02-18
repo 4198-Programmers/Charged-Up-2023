@@ -44,6 +44,9 @@ public class DriveTrain extends SubsystemBase {
                         // Back Right
                         new Translation2d(-Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
                                         -Constants.DRIVETRAIN_LENGTH_METERS / 2.0));
+        public SwerveDriveKinematics getKinematics(){
+                return mkinematics;
+        }
 
         private final AHRS NavX = new AHRS(SPI.Port.kMXP, (byte) 200); // initializes the gyro to the board port (MXP)
 
