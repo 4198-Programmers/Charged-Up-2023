@@ -122,6 +122,11 @@ public class DriveTrain extends SubsystemBase {
                 }
         }
 
+        public void StopDrive(){
+                ChassisSpeeds noMove = new ChassisSpeeds(0,0,0);
+                drive(noMove);
+        }
+
         public void ZeroDrive() {
                 // code to zero drive
         }

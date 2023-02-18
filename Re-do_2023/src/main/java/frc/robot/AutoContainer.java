@@ -1,7 +1,5 @@
 package frc.robot;
 
-
-
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -13,9 +11,9 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 
-
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commands.AutoVert;
+import frc.robot.Commands.StopDrive;
 import frc.robot.Commands.ZeroDrive;
 import frc.robot.Commands.ZeroVert;
 import frc.robot.Subsystems.DriveTrain;
@@ -105,21 +103,29 @@ public class AutoContainer {
         boolean threeElementQuery = threeElementQueryArray[autoType];
         boolean balanceQuery = balanceQueryArray[autoType];
         int vertHeight = vertHeightArray[priorityLocal];
-        // Following is just an example to understand the goal of this, with no photonvision as I don't know if that works yet - [cp 2-17]
+        // Following is just an example to understand the goal of this, with no
+        // photonvision as I don't know if that works yet - [cp 2-17]
 
         return new SequentialCommandGroup(
-        /* zero wheels, zero vert arm, drive forward + vert up, stop, open claw, (two ball query if true -> drive + spin + arm to pickup, 
-        stop, close claw), (three ball query if true -> vert up + drive + spin, stop, open claw, drive + spin + arm to pickup, 
-        stop, close claw), (balance query if true -> vert to hold, drive on station, balance, stop), (else vert to hold, drive away from midline, stop) */
+                /*
+                 * zero wheels, zero vert arm, drive forward + vert up, stop, open claw, (two
+                 * ball query if true -> drive + spin + arm to pickup,
+                 * stop, close claw), (three ball query if true -> vert up + drive + spin, stop,
+                 * open claw, drive + spin + arm to pickup,
+                 * stop, close claw), (balance query if true -> vert to hold, drive on station,
+                 * balance, stop), (else vert to hold, drive away from midline, stop)
+                 */
 
-        new ZeroDrive(driveTrain)
-        .alongWith(new ZeroVert(vertArm))
-        .andThen(new ZeroDrive(driveTrain)) //should be an auto drive, not sure if needed 
-        .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, vertHeight))
+                (new ZeroDrive(driveTrain)
+                        .alongWith(new ZeroVert(vertArm)))
+                        .andThen((new ZeroDrive(driveTrain)) // should be an auto drive, not sure if needed
+                                .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, vertHeight)))
+                                .andThen(new StopDrive(driveTrain))
+
         );
     }
 
-    public void makeTragectory(){
+    public void makeTragectory() {
         String trajectortyJSOn = "Desktop/PathWeaver/Paths/BlueLeftElementOneToBalance.wpilib.json";
         Trajectory trajectory = new Trajectory();
         Path trajectoryPath = Filesystem.getOperatingDirectory().toPath().resolve(trajectortyJSOn);
@@ -130,4 +136,4 @@ public class AutoContainer {
         }
     }
 
-    }   
+}
