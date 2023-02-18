@@ -74,4 +74,6 @@ public final class Constants {
         public static final double MAX_SPEED_METERS_PER_SECOND = 0;
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0;
         public static final Rotation2d DRIVE_ANGLE_OFFSET = null;
+        public static double driveKS;
+        public static double driveKA;
 }

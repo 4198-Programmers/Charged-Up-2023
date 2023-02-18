@@ -23,11 +23,11 @@ public class SwerveModule {
         this.moduleNumber = moduleNumber;
         this.angleOffset = moduleConstants.angleOffset;
 
-        spinEncoder = spinMotor.getEncoder();
+        // spinEncoder = spinMotor.getEncoder();
 
-        spinMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
+        // spinMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
 
-        driveMotor = new CANSparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
+        // driveMotor = new CANSparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
 
         
     }
