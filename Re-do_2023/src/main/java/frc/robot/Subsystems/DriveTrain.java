@@ -122,6 +122,15 @@ public class DriveTrain extends SubsystemBase {
                 }
         }
 
+        public void ZeroDrive() {
+                // code to zero drive
+        }
+
+        public double[] DrivePos() {
+                double[] positions = { 0, 0, 0, 0 };
+                return positions;
+        }
+
         public void drive(ChassisSpeeds speeds) { // passes in speeds to be used in periodic
                 chassisSpeeds = speeds;
         }

@@ -13,7 +13,7 @@ public class ControlArm extends CommandBase {
     public ControlArm(VertArm upArmArg, DoubleSupplier supplier, int percentSpeed) {
         upArmSub = upArmArg;
         speedSupplier = supplier;
-        speedScalar = percentSpeed / 100;
+        speedScalar = Math.abs(percentSpeed / 100);
         addRequirements(upArmArg);
     }
 
