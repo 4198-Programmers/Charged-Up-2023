@@ -1,0 +1,76 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 2.2580645161290334,
+        "y": 4.439558462450259
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.4811727806448873,
+        "y": 4.439558462450259
+      },
+      "holonomicAngle": 0.1690535637193587,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.71,
+        "y": 4.44
+      },
+      "prevControl": {
+        "x": 1.9950453123059746,
+        "y": 4.44
+      },
+      "nextControl": {
+        "x": 1.9950453123059746,
+        "y": 4.44
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "PutConeOnGrid"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.653839641012616,
+        "y": 4.5369782406231485
+      },
+      "prevControl": {
+        "x": 6.14113730719277,
+        "y": 4.5369782406231485
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": []
+}

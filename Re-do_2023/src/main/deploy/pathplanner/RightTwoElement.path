@@ -1,0 +1,105 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.9574549149098301,
+        "y": 1.1022352044704096
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.6997895424362282,
+        "y": 1.1022352044704096
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.7141042853514281,
+        "y": 1.1022352044704096
+      },
+      "prevControl": {
+        "x": 1.8858812003338294,
+        "y": 1.1022352044704096
+      },
+      "nextControl": {
+        "x": 1.8858812003338294,
+        "y": 1.1022352044704096
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "PutConeOnGrid"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.423654704452266,
+        "y": 0.93
+      },
+      "prevControl": {
+        "x": 6.251282373767787,
+        "y": 0.93
+      },
+      "nextControl": {
+        "x": 6.523857904858665,
+        "y": 0.93
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "GetReadyToPickUpCone"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.695634819841068,
+        "y": 0.93
+      },
+      "prevControl": {
+        "x": 6.566009309590507,
+        "y": 0.93
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "PickUpCone"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": []
+}

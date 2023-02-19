@@ -1,7 +1,6 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.PathHolder;
@@ -9,10 +8,10 @@ import frc.robot.Subsystems.PathHolder;
 public class RunPathAuto extends CommandBase {
     private final PathHolder path;
     private final DriveTrain driveTrain;
-    // private long timeStart;
+    private long timeStart;
     private double matchTime;
     private ChassisSpeeds toSwerveSpeeds;
-    private double[] velocitiesHolder;
+    private double[] variablesHolder;
 
     public RunPathAuto(PathHolder pathSub, DriveTrain driveArg) {
         this.path = pathSub;
@@ -22,17 +21,25 @@ public class RunPathAuto extends CommandBase {
 
     @Override
     public void initialize() {
-        // timeStart = System.currentTimeMillis();
+        timeStart = System.currentTimeMillis();
     }
 
     @Override
     public void execute() {
-        // matchTime = (double) (System.currentTimeMillis() - timeStart);
-        matchTime = (15 - DriverStation.getMatchTime());
+        matchTime = (double) ((System.currentTimeMillis() - timeStart) / 1000);
+        variablesHolder = path.getPathVelocities(matchTime);
+
+        if (matchTime <= variablesHolder[3]) {
+            toSwerveSpeeds = new ChassisSpeeds(variablesHolder[0] * 0.5, variablesHolder[1],  variablesHolder[2] * .5);
+            System.out.println(variablesHolder[0]);
+            driveTrain.drive(toSwerveSpeeds);
+        } else {
+            toSwerveSpeeds = new ChassisSpeeds(0, 0, 0);
+            driveTrain.drive(toSwerveSpeeds);
+            System.out.println("Stop Auto");
+        }
         // gives match time countdown not up, subtract from 15 to be accurate
-        velocitiesHolder = path.getPathVelocities(matchTime);
-        toSwerveSpeeds = new ChassisSpeeds(velocitiesHolder[0], velocitiesHolder[1], velocitiesHolder[2]);
-        driveTrain.drive(toSwerveSpeeds);
+
     }
 
 }
