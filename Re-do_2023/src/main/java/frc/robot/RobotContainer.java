@@ -7,9 +7,11 @@ package frc.robot;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.AutoContainer.AutoType;
 import frc.robot.AutoContainer.LevelPriority;
@@ -19,12 +21,15 @@ import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.DriveTrainCom;
+import frc.robot.Commands.RunPathAuto;
 import frc.robot.Commands.SusanMode;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
+import frc.robot.Subsystems.PathHolder;
 import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Commands.ZeroHeading;
 import frc.robot.Commands.ZeroSusan;
+import frc.robot.Commands.ZeroVert;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
 import frc.robot.Subsystems.VertArm;
@@ -41,11 +46,13 @@ public class RobotContainer {
   private final ReachArmSub reachArmSub = new ReachArmSub();
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();
+  private final PathHolder mPath = new PathHolder();
 
   private AutoContainer mAutoContainer = new AutoContainer(mDriveTrain, lazySusanSub, pneumatics, reachArmSub, vertArm);
   private final SendableChooser<Location> LocationChooser = new SendableChooser<>();
   private final SendableChooser<AutoType> AutoChooser = new SendableChooser<>();
   private final SendableChooser<LevelPriority> LevelChooser = new SendableChooser<>();
+  private final RunPathAuto autoPath = new RunPathAuto(mPath, mDriveTrain);
 
   public RobotContainer() {
     configureBindings();
@@ -57,13 +64,14 @@ public class RobotContainer {
         true)); // ATTENTION These values were multiplied by Oren to make the bot not die while
                 // testing the three * .5 terms should be deleted
 
-    reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> -stickFour.getRawAxis(1)));
+    reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> -stickFour.getRawAxis(1), 100));
     pneumatics.Pressurize();
     new ZeroHeading(mDriveTrain); // This sets the robot front to be the forward direction
     pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
-    vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));
-    lazySusanSub.setDefaultCommand(new SequentialCommandGroup(
-        new ZeroSusan(lazySusanSub).andThen(new ControlSusan(lazySusanSub, () -> modifyAxis(-stickThree.getX()), 80))));
+    vertArm.setDefaultCommand(
+        new ZeroVert(vertArm).andThen(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 25)));
+    lazySusanSub.setDefaultCommand(
+        new ZeroSusan(lazySusanSub).andThen(new ControlSusan(lazySusanSub, () -> modifyAxis(-stickThree.getX()), 80)));
     lazySusanSub.mode(IdleMode.kBrake);
   }
 
@@ -134,7 +142,11 @@ public class RobotContainer {
     new JoystickButton(stickOne, 1).whileTrue(new Balance(mDriveTrain));
   }
 
-  public Command getAutonomousCommand() {
+  public void initializeAuto() {
+    ShuffleboardTab autoTab = Shuffleboard.getTab("Auto Choices");
+    autoTab.add(AutoChooser);
+    autoTab.add(LocationChooser);
+    autoTab.add(LevelChooser);
     LocationChooser.setDefaultOption("Left", Location.Left);
     LocationChooser.addOption("Middle", Location.Middle);
     LocationChooser.addOption("Right", Location.Right);
@@ -146,8 +158,13 @@ public class RobotContainer {
     LevelChooser.setDefaultOption("Floor", LevelPriority.Floor);
     LevelChooser.addOption("Middle", LevelPriority.Mid);
     LevelChooser.addOption("Top", LevelPriority.Top);
-    return mAutoContainer.autoRunCommand();
+
+  }
+
+  public Command getAutonomousCommand() {
+    // return mAutoContainer.autoRunCommand();
     // return Commands.print("No autonomous command configured");
+    return autoPath;
   }
 
   /*
@@ -181,9 +198,9 @@ public class RobotContainer {
    * still.
    */
   private double modifyVertArm(double value) {
-    if (vertArm.getLocation() <= 0.46) {
-      return 0.25 * value;
+    if (value < 0.03125) {
+      return 0.03125;
     }
-    return (0.25 * value) + 3 * 0.03125;
+    return value; // changed to remove confusing math and limit for now [2-18 CP]
   }
 }

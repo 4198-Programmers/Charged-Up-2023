@@ -19,8 +19,12 @@ public class ControlSusan extends CommandBase {
     }
 
     @Override
+    public void initialize() {
+        speedScalar = Math.abs(percentSpeed / 100); // How can math have anti-lock braking?
+    }
+
+    @Override
     public void execute() {
-        speedScalar = Math.abs(percentSpeed / 100); // How can math have anti-lock braking? 
         lazySusan.spinSusan(speedSupplier.getAsDouble() * speedScalar);
     }
 
