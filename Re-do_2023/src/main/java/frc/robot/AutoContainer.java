@@ -163,21 +163,9 @@ public class AutoContainer {
 
         );
     }
-    public Trajectory makeTragectory(String trajectorystring) {
-        String trajectortyJSOn = trajectorystring;
-        Trajectory trajectory = new Trajectory();
-        Path trajectoryPath = Filesystem.getOperatingDirectory().toPath().resolve(trajectortyJSOn);
-        try {
-            trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-        } catch (IOException e) {
-            DriverStation.reportError("Unable To open Trajectory" + trajectortyJSOn, e.getStackTrace());
-        }
-        return trajectory;
-    }
 
-    public void planPathExample(Autos autos, Command finalCommand){
+    public FollowPathWithEvents planPathExample(Autos autos, Command finalCommand){
         PathPlannerTrajectory trajectory = PathPlanner.loadPath(autos.getPath(), new PathConstraints(Constants.MAX_SPEED_METERS_PER_SECOND, Constants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
-        PathPlannerState state;
         HashMap<String, Command> eventMap = new HashMap<>();
         finalCommand = new Balance(driveTrain);
         eventMap.put("PutConeOnGrid", new SequentialCommandGroup(new AutoVert(vertArm, 0.5, Constants.MAX_VERTICAL_POSITION).alongWith(
@@ -185,6 +173,7 @@ public class AutoContainer {
         new TogglePneumatics(pneumatics, true),
         new AutoVert(vertArm, -0.5, Constants.MIN_VERTICAL_POSITION).alongWith(new ControlReach(reachArmSub, ()->-0.5, 100)).raceWith(new WaitCommand(1))));
         FollowPathWithEvents command = new FollowPathWithEvents(finalCommand,  trajectory.getMarkers(), eventMap);
+        return command;
     }    
 
 }
