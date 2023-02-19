@@ -18,7 +18,7 @@ public class ZeroHeading extends CommandBase {
 
     @Override
     public void execute() {
-        driveTrain.zeroGyro();
+        driveTrain.zeroHeading();
         done = true;
     }
 

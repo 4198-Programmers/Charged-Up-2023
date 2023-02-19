@@ -2,16 +2,24 @@ package frc.robot;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.HolonomicDriveController;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.spline.Spline.ControlVector;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -140,4 +148,16 @@ public class AutoContainer {
         return trajectory;
     }
 
-}
+    public Command getAutoDrive(String trajectoryString, Supplier<Pose2d> supplier){
+        Trajectory trajectory = makeTragectory(trajectoryString);
+        
+        PIDController xController = new PIDController(0, 0, 0);
+        PIDController yController = new PIDController(0, 0, 0);
+       ProfiledPIDController thetaController = new ProfiledPIDController(0, 0, 0, new Constraints(Constants.MAX_SPEED_METERS_PER_SECOND, Constants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
+       thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+            trajectory, supplier, null, new HolonomicDriveController(xController, yController, thetaController), null, driveTrain);
+        return new SequentialCommandGroup(
+            new InstantCommand(() -> driveTrain.resetOdometry(trajectory.getInitialPose())), swerveControllerCommand, new InstantCommand(() -> driveTrain.stopModules()));
+        }
+    }

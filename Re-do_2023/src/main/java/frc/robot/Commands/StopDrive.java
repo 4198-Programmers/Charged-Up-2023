@@ -13,7 +13,7 @@ public class StopDrive extends CommandBase{
 
     @Override
     public void execute() {
-        driveTrain.StopDrive();
+        driveTrain.stopModules();
     }
     
 }

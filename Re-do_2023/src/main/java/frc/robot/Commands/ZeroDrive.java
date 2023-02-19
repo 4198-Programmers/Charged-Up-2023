@@ -1,6 +1,5 @@
 package frc.robot.Commands;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.DriveTrain;
 
@@ -14,8 +13,8 @@ public class ZeroDrive extends CommandBase{
 
     @Override
     public void execute() {
-        driveTrain.StopDrive();
-        driveTrain.ZeroDrive();
+        driveTrain.stopModules();
+        //driveTrain.ZeroDrive();
     }
     
 }

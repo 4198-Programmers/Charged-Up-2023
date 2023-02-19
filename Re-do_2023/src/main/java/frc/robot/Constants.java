@@ -1,6 +1,9 @@
 package frc.robot;
 
+import java.util.function.BiConsumer;
+
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 
 public final class Constants {
         // Drive Train Values
@@ -74,6 +77,36 @@ public final class Constants {
         public static final double MAX_SPEED_METERS_PER_SECOND = 0;
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0;
         public static final Rotation2d DRIVE_ANGLE_OFFSET = null;
+        public static final double DRIVE_ENCODER_ROTATION_TO_METER = 0;
+        public static final double ANGLE_ENCODER_ROTATIONS_TO_RADIANS = 0;
+        public static final boolean FRONT_LEFT_MOTOR_REVERSED = false;
+        public static final boolean FRONT_LEFT_ANGLE_REVERSED = false;
+        public static final boolean FRONT_LEFT_ABSOLUTE_ENCODER_REVERSED = false;
+        public static final int FRONT_LEFT_ABSOLUTE_ENCODER_ID = 0;
+        public static final boolean FRONT_RIGHT_MOTOR_REVERSED = false;
+        public static final boolean FRONT_RIGHT_ANGLE_REVERSED = false;
+        public static final int FRONT_RIGHT_ABSOLUTE_ENCODER_ID = 0;
+        public static final boolean FRONT_RIGHT_ABSOULTE_ENCODER_REVERSED = false;
+        public static final boolean BACK_LEFT_MOTOR_REVERSED = false;
+        public static final boolean BACK_LEFT_ANGLE_REVERSED = false;
+        public static final boolean BACK_LEFT_ABSOLUTE_ENCODER_REVERSED = false;
+        public static final int BACK_LEFT_ABSOLUTE_ENCODER_ID = 0;
+        public static final boolean BACK_RIGHT_MOTOR_REVERSED = false;
+        public static final boolean BACK_RIGHT_ANGLE_REVERSED = false;
+        public static final boolean BACK_RIGHT_ABSOULTE_ENCODER_REVERSED = false;
+        public static final int BACK_RIGHT_ABSOLUTE_ENCODER_ID = 0;
+        public static final double FRONT_LEFT_DISTANCE_FROM_CENTER = 0;
+        public static final Rotation2d FRONT_LEFT_ANGLE_FROM_CENTER = null;
+        public static final double FRONT_RIGHT_DISTANCE_FROM_CENTER = 0;
+        public static final Rotation2d FRONT_RIGHT_ANGLE_FROM_CENTER = null;
+        public static final double BACK_LEFT_DISTANCE_FROM_CENTER = 0;
+        public static final Rotation2d BACK_LEFT_ANGLE_FROM_CENTER = null;
+        public static final double BACK_RIGHT_DISTANCE_FROM_CENTER = 0;
+        public static final Rotation2d BACK_RIGHT_ANGLE_FROM_CENTER = null;
+        public static final BiConsumer<Double, State> THETA_CONTROLLER_CONTRAINTS = null;
         public static double driveKS;
         public static double driveKA;
+        public static double kPangle;
+        public static Object kPThetaController;
+        public static Object kThetaControllerConstraints;
 }
