@@ -3,16 +3,11 @@ package frc.robot;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.spline.Spline.ControlVector;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.StopDrive;
 import frc.robot.Commands.ZeroDrive;
@@ -125,7 +120,6 @@ public class AutoContainer {
 
         );
     }
-
     public Trajectory makeTragectory(String trajectorystring) {
         String trajectortyJSOn = trajectorystring;
         Trajectory trajectory = new Trajectory();
