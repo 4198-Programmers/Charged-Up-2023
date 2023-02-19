@@ -3,16 +3,11 @@ package frc.robot;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.spline.Spline.ControlVector;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.StopDrive;
 import frc.robot.Commands.ZeroDrive;
@@ -62,6 +57,71 @@ public class AutoContainer {
 
         private LevelPriority(int priority) {
             priorityLocal = priority;
+        }
+    }
+
+    public enum Paths{
+        BlueRightStartToGrid("path/BlueRightStartToGrid.wpiLib.json"),
+        BlueRightGridToBalance("pathName"),
+        BlueRightGridToOutOfCommunity("pathName"),
+        BlueRightGridToElementOne("pathName"),
+        BlueRightGridToElementTwo("pathName"),
+        BlueRightElementOneToGrid("pathName"),
+        BlueRightElementTwoToGrid("pathName"),
+        BlueRightElementOneToBalance("pathName"),
+        BlueRightElementTwoToBalance("pathName"),
+        BlueLeftStartToGrid("pathName"),
+        BlueLeftGridToBalance("pathName"),
+        BlueLeftGridToOutOfCommunity("pathName"),
+        BlueLeftGridToElementOne("pathName"),
+        BlueLeftGridToElementTwo("pathName"),
+        BlueLeftElementOneToGrid("pathName"),
+        BlueLeftElementTwoToGrid("pathName"),
+        BlueLeftElementOneToBalance("pathName"),
+        BlueLeftElementTwoToBalance("pathName"),
+        BlueMiddleStartToGrid("pathName"),
+        BlueMiddleGridToBalance("pathName"),
+        BlueMiddleGridToOutOfCommunity("pathName"),
+        BlueMiddleGridToElementOne("pathName"),
+        BlueMiddleGridToElementTwo("pathName"),
+        BlueMiddleElementOneToGrid("pathName"),
+        BlueMiddleElementTwoToGrid("pathName"),
+        BlueMiddleElementOneToBalance("pathName"),
+        BlueMiddleElementTwoToBalance("pathName"),
+        RedRightStartToGrid("pathName"),
+        RedRightGridToBalance("pathName"),
+        RedRightGridToOutOfCommunity("pathName"),
+        RedRightGridToElementOne("pathName"),
+        RedRightGridToElementTwo("pathName"),
+        RedRightElementOneToGrid("pathName"),
+        RedRightElementTwoToGrid("pathName"),
+        RedRightElementOneToBalance("pathName"),
+        RedRightElementTwoToBalance("pathName"),
+        RedLeftStartToGrid("pathName"),
+        RedLeftGridToBalance("pathName"),
+        RedLeftGridToOutOfCommunity("pathName"),
+        RedLeftGridToElementOne("pathName"),
+        RedLeftGridToElementTwo("pathName"),
+        RedLeftElementOneToGrid("pathName"),
+        RedLeftElementTwoToGrid("pathName"),
+        RedLeftElementOneToBalance("pathName"),
+        RedLeftElementTwoToBalance("pathName"),
+        RedMiddleStartToGrid("pathName"),
+        RedMiddleGridToBalance("pathName"),
+        RedMiddleGridToOutOfCommunity("pathName"),
+        RedMiddleGridToElementOne("pathName"),
+        RedMiddleGridToElementTwo("pathName"),
+        RedMiddleElementOneToGrid("pathName"),
+        RedMiddleElementTwoToGrid("pathName"),
+        RedMiddleElementOneToBalance("pathName"),
+        RedMiddleElementTwoToBalance("pathName");
+
+        private String path;
+        private Paths(String path){
+            this.path = path;
+        }
+        public String getPath(){
+            return path;
         }
     }
 
@@ -125,17 +185,15 @@ public class AutoContainer {
 
         );
     }
-
-    public Trajectory makeTragectory(String trajectorystring) {
-        String trajectortyJSOn = trajectorystring;
-        Trajectory trajectory = new Trajectory();
-        Path trajectoryPath = Filesystem.getOperatingDirectory().toPath().resolve(trajectortyJSOn);
-        try {
-            trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-        } catch (IOException e) {
-            DriverStation.reportError("Unable To open Trajectory" + trajectortyJSOn, e.getStackTrace());
-        }
-        return trajectory;
-    }
+    // public Trajectory getTragectory(Paths path){
+    //     Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path.getPath());
+    //     Trajectory trajectory = new Trajectory();
+    //     try {
+    //         trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    //     } catch (IOException e) {
+    //         DriverStation.reportError("Unable to Open Trajectory" + path, e.getStackTrace());
+    //     }
+    //     return trajectory;
+    // }
 
 }
