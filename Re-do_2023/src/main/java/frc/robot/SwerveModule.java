@@ -1,39 +1,24 @@
 package frc.robot;
 
+import com.revrobotics.AnalogInput;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.controller.PIDController;
 
 public class SwerveModule {
-    public int moduleNumber;
-    private Rotation2d angleOffset;
-    private Rotation2d lastAngle;
+  private final CANSparkMax driveMotor;
+  private final CANSparkMax angleMotor;
 
-    private CANSparkMax spinMotor;
-    private CANSparkMax driveMotor;
-    private RelativeEncoder spinEncoder;
+  private final RelativeEncoder driveEncoder = driveMotor.getEncoder();
+  private final RelativeEncoder angleEncoder = angleMotor.getEncoder();
 
-    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.driveKS, Constants.driveKA);
+  private final PIDController anglePIDController;
 
-    public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
-        this.moduleNumber = moduleNumber;
-        this.angleOffset = moduleConstants.angleOffset;
+  private final AnalogInput absoluteEncoder;
+  private final boolean absoluteEncoderReversed;
+  private final double absoluteEncoderOffsetRad;
 
-        // spinEncoder = spinMotor.getEncoder();
-
-        // spinMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
-
-        // driveMotor = new CANSparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
-
-        
-    }
-
-    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
-        
-    }
+  public SwerveModule(int driveMotorID, int angleMotorID, boolean driveMotorReversed, boolean angleMotorReversed)
 
 }
