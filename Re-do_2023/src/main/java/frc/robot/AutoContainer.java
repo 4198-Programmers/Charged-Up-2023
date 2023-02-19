@@ -2,18 +2,34 @@ package frc.robot;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.HashMap;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Commands.AutoVert;
+import frc.robot.Commands.Balance;
+import frc.robot.Commands.ControlReach;
+import frc.robot.Commands.RunPathAuto;
 import frc.robot.Commands.StopDrive;
+import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Commands.ZeroDrive;
 import frc.robot.Commands.ZeroVert;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
+import frc.robot.Subsystems.PathHolder;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
 import frc.robot.Subsystems.VertArm;
@@ -58,6 +74,33 @@ public class AutoContainer {
         private LevelPriority(int priority) {
             priorityLocal = priority;
         }
+    }
+
+    public enum Autos{
+        LeftOneElement("LeftOneElement"),
+        LeftOneElementBalance("LeftOneElementBalance"),
+        LeftTwoElement("LeftTwoElement"),
+        LeftTwoElementBalance("LeftTwoElementBalance"),
+        LeftThreeElementBalance("LeftThreeElementBalance"),
+        MiddleOneElement("MiddleOneElement"),
+        MiddleOneElementBalance("MiddleOneElementBalance"),
+        MiddleTwoElement("MiddleTwoElement"),
+        MiddleTwoElementBalance("MiddleTwoElementBalance"),
+        MiddleThreeElementBalance("MiddleThreeElementBalance"),
+        RightOneElement("RightOneElement"),
+        RightOneElementBalance("RightOneElementBalance"),
+        RightTwoElement("RightTwoElement"),
+        RightTwoElementBalance("RightTwoElementBalance"),
+        RightThreeElementBalance("RightThreeElementBalance");
+
+        private String path;
+        private Autos(String path){
+            this.path = path;
+        }
+        public String getPath(){
+            return path;
+        }
+
     }
 
     DriveTrain driveTrain;
@@ -131,5 +174,17 @@ public class AutoContainer {
         }
         return trajectory;
     }
+
+    public void planPathExample(Autos autos, Command finalCommand){
+        PathPlannerTrajectory trajectory = PathPlanner.loadPath(autos.getPath(), new PathConstraints(Constants.MAX_SPEED_METERS_PER_SECOND, Constants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
+        PathPlannerState state;
+        HashMap<String, Command> eventMap = new HashMap<>();
+        finalCommand = new Balance(driveTrain);
+        eventMap.put("PutConeOnGrid", new SequentialCommandGroup(new AutoVert(vertArm, 0.5, Constants.MAX_VERTICAL_POSITION).alongWith(
+        new ControlReach(reachArmSub, () -> 0.5, 100).raceWith(new WaitCommand(1))),
+        new TogglePneumatics(pneumatics, true),
+        new AutoVert(vertArm, -0.5, Constants.MIN_VERTICAL_POSITION).alongWith(new ControlReach(reachArmSub, ()->-0.5, 100)).raceWith(new WaitCommand(1))));
+        FollowPathWithEvents command = new FollowPathWithEvents(finalCommand,  trajectory.getMarkers(), eventMap);
+    }    
 
 }
