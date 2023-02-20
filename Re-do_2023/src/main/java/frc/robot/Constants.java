@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+
 public final class Constants {
         // Drive Train Values
         public static final double DRIVETRAIN_WIDTH_METERS = 0.62;
@@ -71,4 +73,43 @@ public final class Constants {
         public static final double AUTO_VERT_SPEED = 0.1;
         public static final double MAX_SPEED_METERS_PER_SECOND = 0;
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0;
+        public static final double GEAR_RATIO = 0;
+        public static double driveKS;
+        public static double driveKV;
+        public static double driveKA;
+        public static boolean invertGyro;
+
+        public static final class Mod0{
+                public static final int driveMotor = 7,
+                        angleMotor = 8,
+                        angleEncoder = 12;
+                public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-291.18);
+                public static final SwerveModuleConstants constants = 
+                new SwerveModuleConstants(driveMotor, angleMotor, angleEncoder, angleOffset);
+        }
+        public static final class Mod1{
+                public static final int driveMotor = 3,
+                        angleMotor= 4,
+                        angleEncoder = 11;
+                public static final Rotation2d angleOffset = Rotation2d.fromDegrees(150 - 180);
+                public static final SwerveModuleConstants constants = 
+                new SwerveModuleConstants(driveMotor, angleMotor, angleEncoder, angleOffset);
+        }
+        public static final class Mod2{
+                public static final int driveMotor = 5,
+                        angleMotor = 6,
+                        angleEncoder = 9;
+                public static final Rotation2d angleOffset = Rotation2d.fromDegrees(272.63);
+                public static final SwerveModuleConstants constants = 
+                new SwerveModuleConstants(driveMotor, angleMotor, angleEncoder, angleOffset);
+        }
+        public static final class Mod3{
+                public static final int driveMotor = 2,
+                        angleMotor = 1,
+                        angleEncoder = 10;
+                public static final Rotation2d angleOffset = Rotation2d.fromDegrees(197.75 - 180);
+                public static final SwerveModuleConstants constants = 
+                new SwerveModuleConstants(driveMotor, angleMotor, angleEncoder, angleOffset);
+        }
+
 }

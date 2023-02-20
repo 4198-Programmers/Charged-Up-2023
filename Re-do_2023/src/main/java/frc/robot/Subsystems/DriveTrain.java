@@ -1,20 +1,25 @@
 package frc.robot.Subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper;
-import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
-import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.Mod0;
+import frc.robot.Constants.Mod1;
+import frc.robot.Constants.Mod2;
+import frc.robot.Constants.Mod3;
 
 public class DriveTrain extends SubsystemBase {
 
@@ -22,8 +27,8 @@ public class DriveTrain extends SubsystemBase {
 
         public static final double MAX_VELOCITY_METERS_PER_SECOND = 5880.0 / 60.0 // 5880 is the max rotations of the
                                                                                   // motor per second
-                        * SdsModuleConfigurations.MK4I_L2.getDriveReduction()
-                        * SdsModuleConfigurations.MK4I_L2.getWheelDiameter() * Math.PI;
+                        * (14.0 / 50.0) * (25.0 / 19.0) * (15.0 / 45.0) /*Drive Reduction */
+                        * 0.10033/*Wheel Diameter */ * Math.PI;
 
         public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND / // more
                                                                                                               // math
@@ -49,6 +54,12 @@ public class DriveTrain extends SubsystemBase {
         }
 
         private final AHRS NavX = new AHRS(SPI.Port.kMXP, (byte) 200); // initializes the gyro to the board port (MXP)
+        private SwerveDriveOdometry swerveDriveOdometry;
+        private Field2d field;
+
+        private SwerveModulePosition[] positions = new SwerveModulePosition[]{
+
+        };
 
         private final SwerveModule frontLeft;
         private final SwerveModule frontRight;
@@ -59,39 +70,23 @@ public class DriveTrain extends SubsystemBase {
         public DriveTrain() {
                 Shuffleboard.getTab("DriveTrain");
 
-                frontLeft = Mk4iSwerveModuleHelper.createNeo( // Create Neo is a function by SDS that will create the
-                                                              // motors and control them for us
-                                Mk4iSwerveModuleHelper.GearRatio.L2,
-                                Constants.FRONT_LEFT_DRIVE,
-                                Constants.FRONT_LEFT_STEER,
-                                Constants.FRONT_LEFT_ENCODER,
-                                Constants.FRONT_LEFT_STEER_OFFSET);
+                frontLeft =     new SwerveModule(0, Mod0.constants);
+                frontRight =    new SwerveModule(1, Mod1.constants);
+                backLeft =      new SwerveModule(2, Mod2.constants);
+                backRight =     new SwerveModule(3, Mod3.constants);
 
-                frontRight = Mk4iSwerveModuleHelper.createNeo(
-                                Mk4iSwerveModuleHelper.GearRatio.L2,
-                                Constants.FRONT_RIGHT_DRIVE,
-                                Constants.FRONT_RIGHT_STEER,
-                                Constants.FRONT_RIGHT_ENCODER,
-                                Constants.FRONT_RIGHT_STEER_OFFSET);
 
-                backLeft = Mk4iSwerveModuleHelper.createNeo(
-                                Mk4iSwerveModuleHelper.GearRatio.L2,
-                                Constants.BACK_LEFT_DRIVE,
-                                Constants.BACK_LEFT_STEER,
-                                Constants.BACK_LEFT_ENCODER,
-                                Constants.BACK_LEFT_STEER_OFFSET);
+                swerveDriveOdometry = new SwerveDriveOdometry(mkinematics, getYaw(), positions);
 
-                backRight = Mk4iSwerveModuleHelper.createNeo(
-                                Mk4iSwerveModuleHelper.GearRatio.L2,
-                                Constants.BACK_RIGHT_DRIVE,
-                                Constants.BACK_RIGHT_STEER,
-                                Constants.BACK_RIGHT_ENCODER,
-                                Constants.BACK_RIGHT_STEER_OFFSET);
         }
 
         public void zeroGyro() { // sets the robots current front to zero in the gyro (top of the board when
                                  // verical)
                 NavX.zeroYaw();
+        }
+
+        public Rotation2d getYaw(){
+                return (Constants.invertGyro) ? Rotation2d.fromDegrees(360 - NavX.getYaw()): Rotation2d.fromDegrees(NavX.getYaw());
         }
 
         // We are passing in a boolean so that it can easily switch from field to robot
@@ -143,6 +138,10 @@ public class DriveTrain extends SubsystemBase {
                 chassisSpeeds = speeds;
         }
 
+        public Pose2d getPose(){
+                return swerveDriveOdometry.getPoseMeters();
+        }
+
         @Override
         public void periodic() { // makes sure this is run every cycle of the robot
                 // uses the kinematic from earlier and the wanted speeds (x,y,z) to make 4
@@ -153,16 +152,14 @@ public class DriveTrain extends SubsystemBase {
                 // puts the gyro angle on the dashboard for debugging
                 SmartDashboard.putNumber("Gyro Angle", NavX.getAngle());
 
+                field.setRobotPose(getPose());
                 // sets each wheel to their assigned speed from an array, this must be done in
                 // the same order as the kinematic was made
-                frontLeft.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-                                states[0].angle.getRadians());
-                frontRight.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-                                states[1].angle.getRadians());
-                backLeft.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-                                states[2].angle.getRadians());
-                backRight.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-                                states[3].angle.getRadians());
+                frontLeft.setDesiredState(states[0], false);
+                frontRight.setDesiredState(states[1], false);
+                backLeft.setDesiredState(states[2], false);
+                backRight.setDesiredState(states[3], false);
+
         }
 
 }
