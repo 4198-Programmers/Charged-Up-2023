@@ -10,17 +10,15 @@ import com.pathplanner.lib.commands.FollowPathWithEvents;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Commands.AutoReach;
 import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.Balance;
 import frc.robot.Commands.ControlReach;
-import frc.robot.Commands.StopDrive;
 import frc.robot.Commands.TogglePneumatics;
-import frc.robot.Commands.ZeroDrive;
-import frc.robot.Commands.ZeroVert;
-import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
+import frc.robot.Subsystems.SwerveDriveBase;
 import frc.robot.Subsystems.VertArm;
 
 //All auto is bot oriented
@@ -92,20 +90,11 @@ public class AutoContainer {
 
     }
 
-    DriveTrain driveTrain;
-    LazySusanSub lazySusanSub;
-    Pneumatics pneumatics;
-    ReachArmSub reachArmSub;
-    VertArm vertArm;
-
-    public AutoContainer(DriveTrain driveTrain, LazySusanSub lazySusanSub, Pneumatics pneumatics,
-            ReachArmSub reachArmSub, VertArm vertArm) {
-        this.driveTrain = driveTrain;
-        this.lazySusanSub = lazySusanSub;
-        this.pneumatics = pneumatics;
-        this.reachArmSub = reachArmSub;
-        this.vertArm = vertArm;
-    }
+    static final SwerveDriveBase swerveDriveBase = new SwerveDriveBase();
+    static final LazySusanSub lazySusanSub = new LazySusanSub();
+    static final Pneumatics pneumatics = new Pneumatics();
+    static final ReachArmSub reachArmSub = new ReachArmSub();
+    static final VertArm vertArm = new VertArm();
 
     int[] locationVarOneArray = { 27, 84, 17 };
     // Will need multiple for different distance values, labelled when we know them
@@ -134,33 +123,58 @@ public class AutoContainer {
         // Following is just an example to understand the goal of this, with no
         // photonvision as I don't know if that works yet - [cp 2-17]
 
-        return new SequentialCommandGroup(
-                /*
-                 * zero wheels, zero vert arm, drive forward + vert up, stop, open claw, (two
-                 * ball query if true -> drive + spin + arm to pickup,
-                 * stop, close claw), (three ball query if true -> vert up + drive + spin, stop,
-                 * open claw, drive + spin + arm to pickup,
-                 * stop, close claw), (balance query if true -> vert to hold, drive on station,
-                 * balance, stop), (else vert to hold, drive away from midline, stop)
-                 */
-
-                (new ZeroDrive(driveTrain)
-                        .alongWith(new ZeroVert(vertArm)))
-                        .andThen((new ZeroDrive(driveTrain)) // should be an auto drive, not sure if needed
-                                .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, vertHeight)))
-                                .andThen(new StopDrive(driveTrain))
-
-        );
+        return new SequentialCommandGroup();
     }
 
-    public FollowPathWithEvents planPathExample(Autos autos, Command finalCommand){
+    public static SequentialCommandGroup getReadyToPutConOnGridCommand(){
+        return new SequentialCommandGroup(new AutoVert( vertArm, 0.5, Constants.MAX_VERTICAL_POSITION).alongWith(
+            new AutoReach(reachArmSub, () -> 0.5, 100).raceWith(new WaitCommand(1))),
+            new TogglePneumatics(pneumatics, true),
+            new AutoVert( vertArm, -0.5, Constants.MIN_VERTICAL_POSITION).alongWith(new ControlReach(reachArmSub, ()->-0.5, 100)).raceWith(new WaitCommand(1)));
+    }
+    public static SequentialCommandGroup putConeOnGridCommand(){
+        return new SequentialCommandGroup();
+    }
+    public static SequentialCommandGroup getReadyToPickUpConeCommand(){
+        return new SequentialCommandGroup();
+    }
+    public static SequentialCommandGroup pickUpConeCommand(){
+        return new SequentialCommandGroup();
+    }
+    public static SequentialCommandGroup balanceCommand(){
+        return new SequentialCommandGroup(
+            new Balance(swerveDriveBase)
+        );
+    }
+    public enum Actions{
+        getReadyToPutConeOnGrid("GetReadyToPutConeOnGrid", getReadyToPutConOnGridCommand()),
+        putConeOnGrid("PutConeOnGrid", putConeOnGridCommand()),
+        getReadyToPickUpCone("GetReadyToPickUpCone", getReadyToPickUpConeCommand()),
+        pickUpCone("PickUpCone", pickUpConeCommand()),
+        balance("Balance", balanceCommand());
+
+        private String action;
+        private SequentialCommandGroup sequentialCommandGroup;
+        private Actions(String action, SequentialCommandGroup sequentialCommandGroup){
+            this.action = action;
+            this.sequentialCommandGroup = sequentialCommandGroup;
+        }
+        public String getkey(){
+            return action;
+        }
+        public SequentialCommandGroup getCommand(){
+            return sequentialCommandGroup;
+        }
+    }
+    HashMap<String, Command> eventMap = new HashMap<>();
+    public void makeAutoCommand(Actions actions){
+        eventMap.put(actions.getkey(), actions.getCommand());
+    }
+
+    public FollowPathWithEvents planPathExample(Autos autos, Actions finalAction){
         PathPlannerTrajectory trajectory = PathPlanner.loadPath(autos.getPath(), new PathConstraints(Constants.MAX_SPEED_METERS_PER_SECOND, Constants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
-        HashMap<String, Command> eventMap = new HashMap<>();
-        finalCommand = new Balance(driveTrain);
-        eventMap.put("PutConeOnGrid", new SequentialCommandGroup(new AutoVert(vertArm, 0.5, Constants.MAX_VERTICAL_POSITION).alongWith(
-        new ControlReach(reachArmSub, () -> 0.5, 100).raceWith(new WaitCommand(1))),
-        new TogglePneumatics(pneumatics, true),
-        new AutoVert(vertArm, -0.5, Constants.MIN_VERTICAL_POSITION).alongWith(new ControlReach(reachArmSub, ()->-0.5, 100)).raceWith(new WaitCommand(1))));
+        makeAutoCommand(Actions.getReadyToPutConeOnGrid);
+        Command finalCommand = finalAction.getCommand();
         FollowPathWithEvents command = new FollowPathWithEvents(finalCommand,  trajectory.getMarkers(), eventMap);
         return command;
     }    

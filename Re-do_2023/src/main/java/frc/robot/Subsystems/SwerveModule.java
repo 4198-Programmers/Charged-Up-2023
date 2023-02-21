@@ -1,88 +1,95 @@
 package frc.robot.Subsystems;
 
-import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.lib.math.OnboardModuleState;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
-import frc.robot.SwerveModuleConstants;
 
 public class SwerveModule {
-public int moduleNumber;
-private Rotation2d lastAngle;
-private Rotation2d angleOffset;
+    private final CANSparkMax driveMotor;
+    private final CANSparkMax angleMotor;
 
-private CANSparkMax angleMotor;
-private CANSparkMax driveMotor;
+    private final RelativeEncoder driveEncoder;
+    private final RelativeEncoder angleEncoder;
 
-private RelativeEncoder driveEncoder;
-private RelativeEncoder integratedAngleEncoder;
-private CANCoder angleEncoder;
+    private final PIDController anglePIDController;
 
-private final SparkMaxPIDController driveController;
-private final SparkMaxPIDController angleController;
+    private AnalogInput absoluteEncoder;
+    private boolean absoluteEncoderReversed;
+    private double absoluteEncoderOffsetRad;
 
-private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.driveKS, Constants.driveKV, Constants.driveKA);
 
-public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
-    this.moduleNumber = moduleNumber;
-    angleOffset= moduleConstants.angleOffset;
+    public SwerveModule(SwerveModuleConstants swerveModuleConstants){
+        this.driveMotor = swerveModuleConstants.driveMotor;
+        this.angleMotor = swerveModuleConstants.angleMotor;
 
-    angleEncoder = new CANCoder(moduleConstants.cancoderID);
+        this.driveEncoder = swerveModuleConstants.driveEncoder;
+        this.angleEncoder = swerveModuleConstants.angleEncoder;
 
-    angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
-    integratedAngleEncoder = angleMotor.getEncoder();
-    angleController = angleMotor.getPIDController();
+        this.anglePIDController = swerveModuleConstants.anglePIDController;
 
-    driveMotor = new CANSparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
-    driveEncoder = driveMotor.getEncoder();
-    driveController = driveMotor.getPIDController();
+        this.absoluteEncoder = swerveModuleConstants.absoluteEncoder;
+        this.absoluteEncoderReversed = swerveModuleConstants.absoluteEncoderReversed;
+        this.absoluteEncoderOffsetRad = swerveModuleConstants.absoluteEncoderOffsetRad;
 
-    lastAngle = getState().angle;
-}
-
-public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
-    desiredState = OnboardModuleState.optimize(desiredState, getState().angle);
-
-    setAngle(desiredState);
-    setSpeed(desiredState, isOpenLoop);
-}
-
-public  void resetToAbsolute(){
-    double absolutePosition = getCanCoder().getDegrees() - angleOffset.getDegrees();
-    integratedAngleEncoder.setPosition(absolutePosition);
-}
-
-private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
-    if(isOpenLoop){
-        double percentOutput = desiredState.speedMetersPerSecond / Constants.MAX_SPEED_METERS_PER_SECOND;
-        driveMotor.set(percentOutput);
-    }else{
-        driveController.setReference(desiredState.speedMetersPerSecond, ControlType.kVelocity, 0 , feedforward.calculate(desiredState.speedMetersPerSecond));
+        resetEncoders();
     }
-}
 
-private void setAngle(SwerveModuleState desiredState){
-    Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.MAX_SPEED_METERS_PER_SECOND * 0.01))? lastAngle : desiredState.angle;
-    angleController.setReference(angle.getDegrees(), ControlType.kPosition);
-    lastAngle = angle;
-}
+    public double getDrivePosition(){
+        return driveEncoder.getPosition();
+    }
 
-private Rotation2d getAngle(){
-    return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
-}
-public Rotation2d getCanCoder(){
-    return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
-}
-public SwerveModuleState getState(){
-    return new SwerveModuleState(driveEncoder.getVelocity(), getAngle());
-}
+    public double getAnglePosition(){
+        return angleEncoder.getPosition();
+    }
 
+    public double getDriveVelocity(){
+        return driveEncoder.getVelocity();
+    }
+
+    public double getAngleVelocity(){
+        return angleEncoder.getVelocity();
+    }
+
+    public double getAbsoluteEncoderRad(){
+        double angle = absoluteEncoder.getVoltage() / RobotController.getVoltage5V();
+        angle *= 2.0 * Math.PI;
+        angle -= absoluteEncoderOffsetRad;
+        return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
+    }
+
+    public void resetEncoders(){
+        driveEncoder.setPosition(0);
+        angleEncoder.setPosition(getAbsoluteEncoderRad());
+    }
+
+    public SwerveModuleState getState(){
+        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAnglePosition()));
+    }
+
+    public void setDesiredState(SwerveModuleState state){
+        if(Math.abs(state.speedMetersPerSecond) < 0.001){
+            stop();
+            return;
+        }
+        state = SwerveModuleState.optimize(state, getState().angle);
+        driveMotor.set(state.speedMetersPerSecond / Constants.MAX_SPEED_METERS_PER_SECOND);
+        angleMotor.set(anglePIDController.calculate(getAnglePosition(), state.angle.getRadians()));
+        SmartDashboard.putString("Swerve[" + absoluteEncoder.getChannel() + "] state", state.toString());
+    }
+
+    public void stop(){
+        driveMotor.set(0);
+        angleMotor.set(0);
+    }
+
+    public Rotation2d getAngle(){
+        return new Rotation2d(getAnglePosition());
+    }
 }

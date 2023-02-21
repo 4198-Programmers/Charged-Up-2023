@@ -1,31 +1,15 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import frc.robot.Subsystems.SwerveModuleConstants;
 
 public final class Constants {
         // Drive Train Values
         public static final double DRIVETRAIN_WIDTH_METERS = 0.62;
         public static final double DRIVETRAIN_LENGTH_METERS = 0.62;
-        // Front Left Swerve Values
-        public static final int FRONT_LEFT_DRIVE = 7,
-                        FRONT_LEFT_STEER = 8,
-                        FRONT_LEFT_ENCODER = 12;
-        public static final double FRONT_LEFT_STEER_OFFSET = -Math.toRadians(291.18);
-        // Front Right Swerve Values
-        public static final int FRONT_RIGHT_DRIVE = 3,
-                        FRONT_RIGHT_STEER = 4,
-                        FRONT_RIGHT_ENCODER = 11;
-        public static final double FRONT_RIGHT_STEER_OFFSET = -Math.toRadians(150 - 180);
-        // Back Left Swerve Values
-        public static final int BACK_LEFT_DRIVE = 5,
-                        BACK_LEFT_STEER = 6,
-                        BACK_LEFT_ENCODER = 9;
-        public static final double BACK_LEFT_STEER_OFFSET = -Math.toRadians(272.63);
-        // Back Right Swerve Values
-        public static final int BACK_RIGHT_DRIVE = 2,
-                        BACK_RIGHT_STEER = 1,
-                        BACK_RIGHT_ENCODER = 10;
-        public static final double BACK_RIGHT_STEER_OFFSET = -Math.toRadians(197.75 - 180);
+
         // Motor IDs and Pneumatics Ports
         public static final int SUSAN_MOTOR_ID = 15,
                         PNEUMATICS_PORT = 0,
@@ -33,8 +17,7 @@ public final class Constants {
                         VERTICAL_MOVER_MOTOR_ID = 14,
                         IN_OUT_MOTOR_ID = 13,
                         LED_CAN_ID = 0;
-        // Vert Arm and Reach Arm Encoder Values [Inaccurate as the vert arm drifts
-        // after you turn off the robot 2-17]
+
         public static final double MAX_REACH = 1000,
                         MIN_REACH = -1000,
                         MAX_VERTICAL_POSITION = 2.16,
@@ -73,43 +56,80 @@ public final class Constants {
         public static final double AUTO_VERT_SPEED = 0.1;
         public static final double MAX_SPEED_METERS_PER_SECOND = 0;
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0;
+        public static final double DRIVE_ENCODER_ROTATIONS_TO_METERS = 0;
+        public static final double DRIVE_ENCODER_VELOCITY_CONVERSION = 0;
+        public static final double ANGLE_ENCODER_ROTATIONS_TO_RADIANS = 0;
+        public static final double ANGLE_ENCODER_VELOCITY_CONVERSION = 0;
+        public static final double ANGLE_KP = 0;
+        public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics( // Creates an internal drawing of the drivebase for calculation
+                // Front Left
+                new Translation2d(Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
+                Constants.DRIVETRAIN_LENGTH_METERS / 2.0),
+                // Front Right
+                new Translation2d(Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
+                -Constants.DRIVETRAIN_LENGTH_METERS / 2.0),
+                // Back Left
+                new Translation2d(-Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
+                Constants.DRIVETRAIN_LENGTH_METERS / 2.0),
+                // Back Right
+                new Translation2d(-Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
+                -Constants.DRIVETRAIN_LENGTH_METERS / 2.0));
+                
         public static final double GEAR_RATIO = 0;
-        public static double driveKS;
-        public static double driveKV;
-        public static double driveKA;
-        public static boolean invertGyro;
+        public static final double WHEEL_CIRCUMFERENCE = 0;
+        public static final double MAX_SPEED = 0;
+        public static final double X_PID_CONTROLLER_KP = 0;
+        public static final double Y_PID_CONTROLLER_KP = 0;
+        public static final double THETA_PID_CONTROLLER_KP = 0;
+        public static final Constraints THETA_CONTROLLER_CONSTRAINTS = null;
 
-        public static final class Mod0{
-                public static final int driveMotor = 7,
-                        angleMotor = 8,
-                        angleEncoder = 12;
-                public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-291.18);
-                public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotor, angleMotor, angleEncoder, angleOffset);
+        public static final class FrontLeft{
+                public static final int driveMotorID = 7,
+                        angleMotorID = 8,
+                        absoluteEncoderID = 12;
+                public static final boolean driveMotorReversed = false, 
+                        angleMotorReversed = false, 
+                        absoluteEncoderReversed = false;
+                public static final double absoluteEncoderOffsetRad = -Math.toRadians(291.18);
+
+                public static SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, driveMotorReversed, angleMotorReversed, absoluteEncoderID,  absoluteEncoderOffsetRad, absoluteEncoderReversed);
         }
-        public static final class Mod1{
-                public static final int driveMotor = 3,
-                        angleMotor= 4,
-                        angleEncoder = 11;
-                public static final Rotation2d angleOffset = Rotation2d.fromDegrees(150 - 180);
-                public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotor, angleMotor, angleEncoder, angleOffset);
+
+        public static final class FrontRight{
+                public static final int driveMotorID = 3,
+                        angleMotorID = 4,
+                        absoluteEncoderID = 11;
+                public static final boolean driveMotorReversed = false, 
+                        angleMotorReversed = false, 
+                        absoluteEncoderReversed = false;
+                public static final double absoluteEncoderOffsetRad = -Math.toRadians(150 - 180);
+
+                public static SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, driveMotorReversed, angleMotorReversed, absoluteEncoderID,  absoluteEncoderOffsetRad, absoluteEncoderReversed);
         }
-        public static final class Mod2{
-                public static final int driveMotor = 5,
-                        angleMotor = 6,
-                        angleEncoder = 9;
-                public static final Rotation2d angleOffset = Rotation2d.fromDegrees(272.63);
-                public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotor, angleMotor, angleEncoder, angleOffset);
+        public static final class BackLeft{
+                public static final int driveMotorID = 5,
+                        angleMotorID = 6,
+                        absoluteEncoderID = 9;
+                public static final boolean driveMotorReversed = false, 
+                        angleMotorReversed = false, 
+                        absoluteEncoderReversed = false;
+                public static final double absoluteEncoderOffsetRad = -Math.toRadians(272.63);
+
+                public static SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, driveMotorReversed, angleMotorReversed, absoluteEncoderID,  absoluteEncoderOffsetRad, absoluteEncoderReversed);
         }
-        public static final class Mod3{
-                public static final int driveMotor = 2,
-                        angleMotor = 1,
-                        angleEncoder = 10;
-                public static final Rotation2d angleOffset = Rotation2d.fromDegrees(197.75 - 180);
-                public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotor, angleMotor, angleEncoder, angleOffset);
+
+        public static final class BackRight{
+                public static final int driveMotorID = 2,
+                        angleMotorID = 1,
+                        absoluteEncoderID = 10;
+                public static final boolean driveMotorReversed = false, 
+                        angleMotorReversed = false, 
+                        absoluteEncoderReversed = false;
+                public static final double absoluteEncoderOffsetRad = -Math.toRadians(197.75 - 180);
+
+                public static SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID, driveMotorReversed, angleMotorReversed, absoluteEncoderID,  absoluteEncoderOffsetRad, absoluteEncoderReversed);
         }
+
+        public static boolean invertGyro = true;
 
 }

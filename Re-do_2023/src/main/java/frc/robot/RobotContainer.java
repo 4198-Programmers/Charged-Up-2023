@@ -19,18 +19,16 @@ import frc.robot.Commands.Balance;
 import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
-import frc.robot.Commands.DriveTrainCom;
-import frc.robot.Commands.RunPathAuto;
 import frc.robot.Commands.SusanMode;
-import frc.robot.Subsystems.DriveTrain;
+import frc.robot.Commands.TeleOpSwerve;
 import frc.robot.Subsystems.LazySusanSub;
-import frc.robot.Subsystems.PathHolder;
 import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Commands.ZeroHeading;
 import frc.robot.Commands.ZeroSusan;
 import frc.robot.Commands.ZeroVert;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
+import frc.robot.Subsystems.SwerveDriveBase;
 import frc.robot.Subsystems.VertArm;
 
 public class RobotContainer {
@@ -40,32 +38,30 @@ public class RobotContainer {
   private final Joystick stickFour = new Joystick(3);
 
   // private final PhotonVision photonVision = new PhotonVision();
-  private final DriveTrain mDriveTrain = new DriveTrain();
+  private final SwerveDriveBase swerveDriveBase = new SwerveDriveBase();
   private final LazySusanSub lazySusanSub = new LazySusanSub();
   private final ReachArmSub reachArmSub = new ReachArmSub();
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();
-  private final PathHolder mPath = new PathHolder();
+  private final AutoContainer autoContainer = new AutoContainer();
 
-  private AutoContainer mAutoContainer = new AutoContainer(mDriveTrain, lazySusanSub, pneumatics, reachArmSub, vertArm);
   private final SendableChooser<Location> LocationChooser = new SendableChooser<>();
   private final SendableChooser<AutoType> AutoChooser = new SendableChooser<>();
   private final SendableChooser<LevelPriority> LevelChooser = new SendableChooser<>();
-  private final RunPathAuto autoPath = new RunPathAuto(mPath, mDriveTrain);
 
   public RobotContainer() {
     configureBindings();
-    mDriveTrain.setDefaultCommand(new DriveTrainCom(
-        mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
-        true)); // ATTENTION These values were multiplied by Oren to make the bot not die while
+    swerveDriveBase.setDefaultCommand(new TeleOpSwerve(
+      swerveDriveBase,
+      () -> modifyAxis(stickOne.getX()) *0.5, 
+      () -> modifyAxis(stickOne.getY()) * 0.5, 
+      () -> modifyAxis(stickTwo.getX()) * 0.5, 
+      () -> true)); // ATTENTION These values were multiplied by Oren to make the bot not die while
                 // testing the three * .5 terms should be deleted
 
     reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> -stickFour.getRawAxis(1), 100));
     pneumatics.Pressurize();
-    new ZeroHeading(mDriveTrain); // This sets the robot front to be the forward direction
+    new ZeroHeading(swerveDriveBase); // This sets the robot front to be the forward direction
     pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
     vertArm.setDefaultCommand(
         new ZeroVert(vertArm).andThen(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 25)));
@@ -96,36 +92,36 @@ public class RobotContainer {
 
     // This resets the robot to field orientation and sets the current front of the
     // robot to the forward direction
-    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new ZeroHeading(mDriveTrain));
-    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
-        mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
-        true));
+    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new ZeroHeading(swerveDriveBase));
+    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new TeleOpSwerve(
+      swerveDriveBase,
+      () -> modifyAxis(stickOne.getX()) *0.5, 
+      () -> modifyAxis(stickOne.getY()) * 0.5, 
+      () -> modifyAxis(stickTwo.getX()) * 0.5, 
+      () -> true));
 
-    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new ZeroHeading(mDriveTrain));
-    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new DriveTrainCom(
-        mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
-        true));
+    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new ZeroHeading(swerveDriveBase));
+    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new TeleOpSwerve(
+      swerveDriveBase,
+      () -> modifyAxis(stickOne.getX()) *0.5, 
+      () -> modifyAxis(stickOne.getY()) * 0.5, 
+      () -> modifyAxis(stickTwo.getX()) * 0.5, 
+      () -> true));
 
     // This makes the front of the robot always the forward direction.
     // When fieldOrientation is false, it is in robotOrientation.
-    new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
-        mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
-        false));
-    new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON).toggleOnFalse(new DriveTrainCom(
-        mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
-        false));
+    new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON).onTrue(new TeleOpSwerve(
+      swerveDriveBase,
+      () -> modifyAxis(stickOne.getX()) *0.5, 
+      () -> modifyAxis(stickOne.getY()) * 0.5, 
+      () -> modifyAxis(stickTwo.getX()) * 0.5, 
+      () -> false));
+    new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON).toggleOnFalse(new TeleOpSwerve(
+      swerveDriveBase,
+      () -> modifyAxis(stickOne.getX()) *0.5, 
+      () -> modifyAxis(stickOne.getY()) * 0.5, 
+      () -> modifyAxis(stickTwo.getX()) * 0.5, 
+      () -> false));
 
     // Make sure susan is set to a low value because it spins really fast. It has to
     // be at least under 0.3, most likely. -> That is what the % modifier is for.
@@ -138,7 +134,7 @@ public class RobotContainer {
     new JoystickButton(stickFour, Constants.SUSAN_BRAKE_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kBrake));
     new JoystickButton(stickFour, Constants.SUSAN_COAST_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kCoast));
 
-    new JoystickButton(stickOne, 1).whileTrue(new Balance(mDriveTrain));
+    new JoystickButton(stickOne, 1).whileTrue(new Balance(swerveDriveBase));
   }
 
   public void initializeAuto() {
@@ -161,9 +157,8 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    // return mAutoContainer.autoRunCommand();
+    return autoContainer.autoRunCommand();
     // return Commands.print("No autonomous command configured");
-    return autoPath;
   }
 
   /*
