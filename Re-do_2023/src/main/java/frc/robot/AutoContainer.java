@@ -10,6 +10,7 @@ import com.pathplanner.lib.commands.FollowPathWithEvents;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Commands.AutoReach;
 import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.Balance;
 import frc.robot.Commands.ControlReach;
@@ -65,7 +66,7 @@ public class AutoContainer {
         }
     }
 
-    public enum Autos{
+    public enum Autos {
         LeftOneElement("LeftOneElement"),
         LeftOneElementBalance("LeftOneElementBalance"),
         LeftTwoElement("LeftTwoElement"),
@@ -83,10 +84,12 @@ public class AutoContainer {
         RightThreeElementBalance("RightThreeElementBalance");
 
         private String path;
-        private Autos(String path){
+
+        private Autos(String path) {
             this.path = path;
         }
-        public String getPath(){
+
+        public String getPath() {
             return path;
         }
 
@@ -154,28 +157,34 @@ public class AutoContainer {
 
         );
     }
-<<<<<<< Updated upstream
-    public static SequentialCommandGroup getReadyToPutConOnGridCommand(){
-        return new SequentialCommandGroup(new AutoVert( vertArm, 0.5, Constants.MAX_VERTICAL_POSITION).alongWith(
-            new AutoReach(reachArmSub, () -> 0.5, 100).raceWith(new WaitCommand(1))),
-            new TogglePneumatics(pneumatics, true),
-            new AutoVert( vertArm, -0.5, Constants.MIN_VERTICAL_POSITION).alongWith(new ControlReach(reachArmSub, ()->-0.5, 100)).raceWith(new WaitCommand(1)));
+
+    public static SequentialCommandGroup getReadyToPutConOnGridCommand() {
+        return new SequentialCommandGroup(new AutoVert(vertArm, 0.5, Constants.MAX_VERTICAL_POSITION).alongWith(
+                // new AutoReach(reachArmSub, () -> 0.5, 100).raceWith(new WaitCommand(1))),
+                // //TODO commit issue
+                new TogglePneumatics(pneumatics, true),
+                new AutoVert(vertArm, -0.5, Constants.MIN_VERTICAL_POSITION)
+                        .alongWith(new ControlReach(reachArmSub, () -> -0.5, 100)).raceWith(new WaitCommand(1))));
     }
-    public static SequentialCommandGroup putConeOnGridCommand(){
+
+    public static SequentialCommandGroup putConeOnGridCommand() {
         return new SequentialCommandGroup();
     }
-    public static SequentialCommandGroup getReadyToPickUpConeCommand(){
+
+    public static SequentialCommandGroup getReadyToPickUpConeCommand() {
         return new SequentialCommandGroup();
     }
-    public static SequentialCommandGroup pickUpConeCommand(){
+
+    public static SequentialCommandGroup pickUpConeCommand() {
         return new SequentialCommandGroup();
     }
-    public static SequentialCommandGroup balanceCommand(){
+
+    public static SequentialCommandGroup balanceCommand() {
         return new SequentialCommandGroup(
-            new Balance(swerveDriveBase)
-        );
+                new Balance(driveTrain));
     }
-    public enum Actions{
+
+    public enum Actions {
         getReadyToPutConeOnGrid("GetReadyToPutConeOnGrid", getReadyToPutConOnGridCommand()),
         putConeOnGrid("PutConeOnGrid", putConeOnGridCommand()),
         getReadyToPickUpCone("GetReadyToPickUpCone", getReadyToPickUpConeCommand()),
@@ -184,22 +193,26 @@ public class AutoContainer {
 
         private String action;
         private SequentialCommandGroup sequentialCommandGroup;
-        private Actions(String action, SequentialCommandGroup sequentialCommandGroup){
+
+        private Actions(String action, SequentialCommandGroup sequentialCommandGroup) {
             this.action = action;
             this.sequentialCommandGroup = sequentialCommandGroup;
         }
-        public String getkey(){
+
+        public String getkey() {
             return action;
         }
-        public SequentialCommandGroup getCommand(){
+
+        public SequentialCommandGroup getCommand() {
             return sequentialCommandGroup;
         }
     }
+
     HashMap<String, Command> eventMap = new HashMap<>();
-    public void makeAutoCommand(Actions actions){
+
+    public void makeAutoCommand(Actions actions) {
         eventMap.put(actions.getkey(), actions.getCommand());
     }
-=======
     // Leaving this here just in case, but most likely will not be used CP [2-21]
     // public Trajectory makeTragectory(String trajectorystring) {
     // String trajectortyJSOn = trajectorystring;
@@ -214,18 +227,21 @@ public class AutoContainer {
     // }
     // return trajectory;
     // }
->>>>>>> Stashed changes
 
-    public FollowPathWithEvents planPathExample(Autos autos, Command finalCommand){
-        PathPlannerTrajectory trajectory = PathPlanner.loadPath(autos.getPath(), new PathConstraints(Constants.MAX_SPEED_METERS_PER_SECOND, Constants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
+    public FollowPathWithEvents planPathExample(Autos autos, Command finalCommand) {
+        PathPlannerTrajectory trajectory = PathPlanner.loadPath(autos.getPath(), new PathConstraints(
+                Constants.MAX_SPEED_METERS_PER_SECOND, Constants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
         HashMap<String, Command> eventMap = new HashMap<>();
         finalCommand = new Balance(driveTrain);
-        eventMap.put("PutConeOnGrid", new SequentialCommandGroup(new AutoVert(vertArm, 0.5, Constants.MAX_VERTICAL_POSITION).alongWith(
-        new ControlReach(reachArmSub, () -> 0.5, 100).raceWith(new WaitCommand(1))),
-        new TogglePneumatics(pneumatics, true),
-        new AutoVert(vertArm, -0.5, Constants.MIN_VERTICAL_POSITION).alongWith(new ControlReach(reachArmSub, ()->-0.5, 100)).raceWith(new WaitCommand(1))));
-        FollowPathWithEvents command = new FollowPathWithEvents(finalCommand,  trajectory.getMarkers(), eventMap);
+        eventMap.put("PutConeOnGrid",
+                new SequentialCommandGroup(new AutoVert(vertArm, 0.5, Constants.MAX_VERTICAL_POSITION).alongWith(
+                        new ControlReach(reachArmSub, () -> 0.5, 100).raceWith(new WaitCommand(1))),
+                        new TogglePneumatics(pneumatics, true),
+                        new AutoVert(vertArm, -0.5, Constants.MIN_VERTICAL_POSITION)
+                                .alongWith(new ControlReach(reachArmSub, () -> -0.5, 100))
+                                .raceWith(new WaitCommand(1))));
+        FollowPathWithEvents command = new FollowPathWithEvents(finalCommand, trajectory.getMarkers(), eventMap);
         return command;
-    }    
+    }
 
 }
