@@ -15,7 +15,7 @@ public class SusanHead extends CommandBase{
 
     @Override
     public void execute() {
-        lazySusanSub.spinSusanWithAngles(0.25, head, lazySusanSub.getLocation());
+        lazySusanSub.spinSusanWithAngles(0.25, head);
     }
 
 }
