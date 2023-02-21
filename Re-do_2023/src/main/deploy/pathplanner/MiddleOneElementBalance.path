@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "GetReadyToPutConeOnGrid"
+          "PrepElementPlacement"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -44,7 +44,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "PutConeOnGrid"
+          "PlaceElement"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -53,74 +53,22 @@
     },
     {
       "anchorPoint": {
-        "x": 2.8270290700485092,
-        "y": 4.496210140526649
+        "x": 4.0,
+        "y": 2.77
       },
       "prevControl": {
-        "x": 1.9395373760465024,
-        "y": 3.8813908157679435
-      },
-      "nextControl": {
-        "x": 3.634848106453128,
-        "y": 5.055835383045698
-      },
-      "holonomicAngle": 0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 4.9273206038302115,
-        "y": 4.744216473324291
-      },
-      "prevControl": {
-        "x": 4.593361956260775,
-        "y": 4.75154526455672
-      },
-      "nextControl": {
-        "x": 4.593361956260775,
-        "y": 4.75154526455672
-      },
-      "holonomicAngle": 0,
-      "isReversal": true,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": true,
-      "stopEvent": {
-        "names": [
-          "GetReadyToPickUpCone"
-        ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 6.53082385176534,
-        "y": 4.68478943384117
-      },
-      "prevControl": {
-        "x": 4.923910390985036,
-        "y": 4.68478943384117
+        "x": 3.0,
+        "y": 2.77
       },
       "nextControl": null,
       "holonomicAngle": 0,
       "isReversal": false,
       "velOverride": null,
-      "isLocked": false,
+      "isLocked": true,
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "PickUpCone"
+          "Balance"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",

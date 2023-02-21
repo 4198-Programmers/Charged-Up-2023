@@ -168,37 +168,44 @@ public class AutoContainer {
      * 
      */
 
-    public static SequentialCommandGroup getReadyToPutConOnGridCommand() {
+    public static SequentialCommandGroup PrepElementPlacement() {
         return new SequentialCommandGroup(new AutoVert(vertArm, 0.5, Constants.MAX_VERTICAL_POSITION).alongWith(
                 new TogglePneumatics(pneumatics, true),
                 new AutoVert(vertArm, -0.5, Constants.MIN_VERTICAL_POSITION)
                         .alongWith(new ControlReach(reachArmSub, () -> -0.5, 100)).raceWith(new WaitCommand(1))));
     }
 
-    public static SequentialCommandGroup putConeOnGridCommand() {
+    public static SequentialCommandGroup PlaceElement() {
         return new SequentialCommandGroup();
     }
 
-    public static SequentialCommandGroup getReadyToPickUpConeCommand() { // TODO Something exremely similar in
-                                                                         // PathHolder, just separate so fewer conflicts
+    public static SequentialCommandGroup PrepElementPickup() { // TODO Something exremely similar in
+                                                               // PathHolder, just separate so fewer conflicts
         return new SequentialCommandGroup();
     }
 
-    public static SequentialCommandGroup pickUpConeCommand() {
+    public static SequentialCommandGroup PickupElement() {
         return new SequentialCommandGroup();
     }
 
-    public static SequentialCommandGroup balanceCommand() {
+    public static SequentialCommandGroup Balance() {
         return new SequentialCommandGroup(
                 new Balance(driveTrain));
     }
 
+    public static SequentialCommandGroup InitializeAutoValues() {
+        return new SequentialCommandGroup(null
+
+        );
+    }
+
     public enum Actions {
-        getReadyToPutConeOnGrid("GetReadyToPutConeOnGrid", getReadyToPutConOnGridCommand()),
-        putConeOnGrid("PutConeOnGrid", putConeOnGridCommand()),
-        getReadyToPickUpCone("GetReadyToPickUpCone", getReadyToPickUpConeCommand()),
-        pickUpCone("PickUpCone", pickUpConeCommand()),
-        balance("Balance", balanceCommand());
+        prepElementPlacement("PrepElementPlacement", PrepElementPlacement()),
+        placeElement("PlaceElement", PlaceElement()),
+        prepElementPickup("PrepElementPickup", PrepElementPickup()),
+        pickupElement("PickupElement", PickupElement()),
+        balance("Balance", Balance()),
+        initializeAutoValues("IntializeAutoValues", InitializeAutoValues());
 
         private String action;
         private SequentialCommandGroup sequentialCommandGroup;

@@ -3,12 +3,12 @@
     {
       "anchorPoint": {
         "x": 2.3,
-        "y": 4.43312714117627
+        "y": 2.763613689002814
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.198930362462839,
-        "y": 4.43312714117627
+        "x": 1.9926009306628398,
+        "y": 2.763613689002814
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "GetReadyToPutConeOnGrid"
+          "PrepElementPlacement"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -27,15 +27,15 @@
     {
       "anchorPoint": {
         "x": 1.89,
-        "y": 4.43
+        "y": 2.765264752534713
       },
       "prevControl": {
-        "x": 2.1130641117025344,
-        "y": 4.43
+        "x": 2.0592527172989894,
+        "y": 2.765264752534713
       },
       "nextControl": {
-        "x": 2.1130641117025344,
-        "y": 4.43
+        "x": 2.0592527172989894,
+        "y": 2.765264752534713
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -44,7 +44,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "PutConeOnGrid"
+          "PlaceElement"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -53,26 +53,24 @@
     },
     {
       "anchorPoint": {
-        "x": 5.4228247812245,
-        "y": 4.615076404463602
+        "x": 2.8270290700485092,
+        "y": 4.496210140526649
       },
       "prevControl": {
-        "x": 4.4228247812245,
-        "y": 4.615076404463602
+        "x": 1.9395373760465024,
+        "y": 3.8813908157679435
       },
       "nextControl": {
-        "x": 6.4228247812245,
-        "y": 4.615076404463602
+        "x": 3.634848106453128,
+        "y": 5.055835383045698
       },
       "holonomicAngle": 0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "GetReadyToPickUpCone"
-        ],
+        "names": [],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -80,16 +78,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.51,
-        "y": 4.6
+        "x": 5.696066188373172,
+        "y": 3.9916497179747013
       },
       "prevControl": {
-        "x": 5.731627048863712,
-        "y": 4.6
+        "x": 5.269388818063286,
+        "y": 4.852432604203504
       },
       "nextControl": {
-        "x": 5.731627048863712,
-        "y": 4.6
+        "x": 5.269388818063286,
+        "y": 4.852432604203504
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -98,8 +96,60 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "PickUpCone"
+          "PrepElementPickup"
         ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.53082385176534,
+        "y": 3.4
+      },
+      "prevControl": {
+        "x": 4.923910390985036,
+        "y": 3.4
+      },
+      "nextControl": {
+        "x": 4.923910390985036,
+        "y": 3.4
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "PickupElement"
+        ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 2.747207670157304,
+        "y": 4.718744260697035
+      },
+      "prevControl": {
+        "x": 5.812361423489235,
+        "y": 5.873345220390602
+      },
+      "nextControl": {
+        "x": 1.8831797673890973,
+        "y": 4.393276918429536
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
@@ -108,15 +158,15 @@
     {
       "anchorPoint": {
         "x": 2.3,
-        "y": 4.43
+        "y": 2.77
       },
       "prevControl": {
-        "x": 4.2766760041337,
-        "y": 4.43
+        "x": 2.4948102166422106,
+        "y": 2.77
       },
       "nextControl": {
-        "x": 0.323323995866299,
-        "y": 4.43
+        "x": 2.105189783357789,
+        "y": 2.77
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -125,7 +175,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "GetReadyToPutConeOnGrid"
+          "PrepElementPlacement"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -135,15 +185,15 @@
     {
       "anchorPoint": {
         "x": 1.89,
-        "y": 4.43
+        "y": 2.77
       },
       "prevControl": {
-        "x": 3.9562178590724173,
-        "y": 4.43
+        "x": 2.3959823867774377,
+        "y": 2.77
       },
       "nextControl": {
-        "x": 3.9562178590724173,
-        "y": 4.43
+        "x": 2.3959823867774377,
+        "y": 2.77
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -152,7 +202,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "PutConeOnGrid"
+          "PlaceElement"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -161,16 +211,43 @@
     },
     {
       "anchorPoint": {
-        "x": 5.981015477768205,
-        "y": 3.754203536912596
+        "x": 3.189825325426176,
+        "y": 0.7674178913877316
       },
       "prevControl": {
-        "x": 5.117574861965345,
-        "y": 5.014227925928014
+        "x": 1.9774409386868232,
+        "y": 0.8124434372956959
       },
       "nextControl": {
-        "x": 6.0133734582126515,
-        "y": 3.706983329994978
+        "x": 5.395462960830959,
+        "y": 0.6855048944080021
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Balance"
+        ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.549457558034189,
+        "y": 1.293271550264365
+      },
+      "prevControl": {
+        "x": 4.524924130933818,
+        "y": 0.4451600962738563
+      },
+      "nextControl": {
+        "x": 6.154758221407857,
+        "y": 1.794341024559778
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -179,7 +256,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "GetReadyToPickUpCone"
+          "PrepElementPickup"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -188,16 +265,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.51,
-        "y": 3.37
+        "x": 6.53,
+        "y": 2.162779812830639
       },
       "prevControl": {
-        "x": 5.859713274868151,
-        "y": 3.37
+        "x": 6.224807222273779,
+        "y": 2.1665552791414493
       },
       "nextControl": {
-        "x": 5.859713274868151,
-        "y": 3.37
+        "x": 6.224807222273779,
+        "y": 2.1665552791414493
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -215,12 +292,12 @@
     },
     {
       "anchorPoint": {
-        "x": 4.0,
-        "y": 2.5
+        "x": 4.039633770915127,
+        "y": 2.714992843933133
       },
       "prevControl": {
-        "x": 4.507209296861059,
-        "y": 2.5
+        "x": 4.62707118093806,
+        "y": 2.714992843933133
       },
       "nextControl": null,
       "holonomicAngle": 0,
