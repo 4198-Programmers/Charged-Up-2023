@@ -3,10 +3,10 @@ package frc.robot.Commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.VertArm;
 
-public class ZeroVert extends CommandBase{
+public class ZeroVert extends CommandBase {
     VertArm vertArm;
 
-    public ZeroVert(VertArm vertArmArg){
+    public ZeroVert(VertArm vertArmArg) {
         this.vertArm = vertArmArg;
         addRequirements(vertArmArg);
     }
@@ -16,5 +16,10 @@ public class ZeroVert extends CommandBase{
         vertArm.stopArm();
         vertArm.ZeroArm();
     }
-    
+
+    @Override
+    public boolean isFinished() {
+        return vertArm.getLocation() == 0;
+    }
+
 }

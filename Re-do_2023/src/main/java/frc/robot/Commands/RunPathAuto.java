@@ -30,7 +30,7 @@ public class RunPathAuto extends CommandBase {
         variablesHolder = path.getPathVelocities(matchTime);
 
         if (matchTime <= variablesHolder[3]) {
-            toSwerveSpeeds = new ChassisSpeeds(variablesHolder[0] * 0.5, variablesHolder[1],  variablesHolder[2] * .5);
+            toSwerveSpeeds = new ChassisSpeeds(variablesHolder[0], variablesHolder[1],  variablesHolder[2]);
             System.out.println(variablesHolder[0]);
             driveTrain.drive(toSwerveSpeeds);
         } else {

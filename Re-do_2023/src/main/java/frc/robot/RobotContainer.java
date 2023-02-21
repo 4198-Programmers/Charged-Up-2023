@@ -32,6 +32,7 @@ import frc.robot.Commands.ZeroVert;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
 import frc.robot.Subsystems.VertArm;
+import frc.robot.Subsystems.PathHolder.PathChoice;
 
 public class RobotContainer {
   private final Joystick stickOne = new Joystick(0);
@@ -52,6 +53,7 @@ public class RobotContainer {
   private final SendableChooser<AutoType> AutoChooser = new SendableChooser<>();
   private final SendableChooser<LevelPriority> LevelChooser = new SendableChooser<>();
   private final RunPathAuto autoPath = new RunPathAuto(mPath, mDriveTrain);
+  private final SendableChooser<PathChoice> PathChooser = new SendableChooser<>();
 
   public RobotContainer() {
     configureBindings();
@@ -63,14 +65,14 @@ public class RobotContainer {
         true)); // ATTENTION These values were multiplied by Oren to make the bot not die while
                 // testing the three * .5 terms should be deleted
 
-    reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> -stickFour.getRawAxis(1), 100));
+    reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> -stickFour.getRawAxis(1), 75));
     pneumatics.Pressurize();
     new ZeroHeading(mDriveTrain); // This sets the robot front to be the forward direction
     pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
     vertArm.setDefaultCommand(
-        new ZeroVert(vertArm).andThen(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 25)));
+        new ZeroVert(vertArm).andThen(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 30)));
     lazySusanSub.setDefaultCommand(
-        new ZeroSusan(lazySusanSub).andThen(new ControlSusan(lazySusanSub, () -> modifyAxis(-stickThree.getX()), 80)));
+        new ZeroSusan(lazySusanSub).andThen(new ControlSusan(lazySusanSub, () -> modifyAxis(-stickFour.getX()), 50)));
     lazySusanSub.mode(IdleMode.kBrake);
   }
 
@@ -158,6 +160,8 @@ public class RobotContainer {
     LevelChooser.addOption("Middle", LevelPriority.Mid);
     LevelChooser.addOption("Top", LevelPriority.Top);
 
+    PathChooser.setDefaultOption("Left One Element No Balance", PathChoice.Left_One_Element_No_Balance);
+
   }
 
   public Command getAutonomousCommand() {
@@ -197,9 +201,10 @@ public class RobotContainer {
    * still.
    */
   private double modifyVertArm(double value) {
-    if (value < 0.03125) {
-      return 0.03125;
-    }
-    return value; // changed to remove confusing math and limit for now [2-18 CP]
+    if (value < Constants.VERT_ARM_NO_DROP_SPEED && value > -0.075) {
+      return Constants.VERT_ARM_NO_DROP_SPEED;
+    } else {
+      return value;
+    } // changed to remove confusing math and limit for now [2-18 CP]
   }
 }

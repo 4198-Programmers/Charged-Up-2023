@@ -20,13 +20,12 @@ public class ControlArm extends CommandBase {
 
     @Override
     public void initialize() {
-        speedScalar = Math.abs(percentSpeed / 100);
+        speedScalar = percentSpeed / 100;
     }
 
     @Override
     public void execute() {
         upArmSub.moveArm(speedSupplier.getAsDouble() * speedScalar);
-
     }
 
 }

@@ -126,32 +126,35 @@ public class AutoContainer {
      **/
 
     public SequentialCommandGroup autoRunCommand() {
-        int varOne = locationVarOneArray[locationChoose];
-        boolean twoElementQuery = twoElementQueryArray[autoType];
-        boolean threeElementQuery = threeElementQueryArray[autoType];
-        boolean balanceQuery = balanceQueryArray[autoType];
-        int vertHeight = vertHeightArray[priorityLocal];
+        // Again, leaving this just in case, but it probably won't be needed
+        // int varOne = locationVarOneArray[locationChoose];
+        // boolean twoElementQuery = twoElementQueryArray[autoType];
+        // boolean threeElementQuery = threeElementQueryArray[autoType];
+        // boolean balanceQuery = balanceQueryArray[autoType];
+        // int vertHeight = vertHeightArray[priorityLocal];
         // Following is just an example to understand the goal of this, with no
         // photonvision as I don't know if that works yet - [cp 2-17]
 
         return new SequentialCommandGroup(
-                /*
-                 * zero wheels, zero vert arm, drive forward + vert up, stop, open claw, (two
-                 * ball query if true -> drive + spin + arm to pickup,
-                 * stop, close claw), (three ball query if true -> vert up + drive + spin, stop,
-                 * open claw, drive + spin + arm to pickup,
-                 * stop, close claw), (balance query if true -> vert to hold, drive on station,
-                 * balance, stop), (else vert to hold, drive away from midline, stop)
-                 */
+        /*
+         * zero wheels, zero vert arm, drive forward + vert up, stop, open claw, (two
+         * ball query if true -> drive + spin + arm to pickup,
+         * stop, close claw), (three ball query if true -> vert up + drive + spin, stop,
+         * open claw, drive + spin + arm to pickup,
+         * stop, close claw), (balance query if true -> vert to hold, drive on station,
+         * balance, stop), (else vert to hold, drive away from midline, stop)
+         */
 
-                (new ZeroDrive(driveTrain)
-                        .alongWith(new ZeroVert(vertArm)))
-                        .andThen((new ZeroDrive(driveTrain)) // should be an auto drive, not sure if needed
-                                .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, vertHeight)))
-                                .andThen(new StopDrive(driveTrain))
+        // (new ZeroDrive(driveTrain)
+        // .alongWith(new ZeroVert(vertArm)))
+        // .andThen((new ZeroDrive(driveTrain)) // should be an auto drive, not sure if
+        // needed
+        // .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, vertHeight)))
+        // .andThen(new StopDrive(driveTrain))
 
         );
     }
+<<<<<<< Updated upstream
     public static SequentialCommandGroup getReadyToPutConOnGridCommand(){
         return new SequentialCommandGroup(new AutoVert( vertArm, 0.5, Constants.MAX_VERTICAL_POSITION).alongWith(
             new AutoReach(reachArmSub, () -> 0.5, 100).raceWith(new WaitCommand(1))),
@@ -196,6 +199,22 @@ public class AutoContainer {
     public void makeAutoCommand(Actions actions){
         eventMap.put(actions.getkey(), actions.getCommand());
     }
+=======
+    // Leaving this here just in case, but most likely will not be used CP [2-21]
+    // public Trajectory makeTragectory(String trajectorystring) {
+    // String trajectortyJSOn = trajectorystring;
+    // Trajectory trajectory = new Trajectory();
+    // Path trajectoryPath =
+    // Filesystem.getOperatingDirectory().toPath().resolve(trajectortyJSOn);
+    // try {
+    // trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    // } catch (IOException e) {
+    // DriverStation.reportError("Unable To open Trajectory" + trajectortyJSOn,
+    // e.getStackTrace());
+    // }
+    // return trajectory;
+    // }
+>>>>>>> Stashed changes
 
     public FollowPathWithEvents planPathExample(Autos autos, Command finalCommand){
         PathPlannerTrajectory trajectory = PathPlanner.loadPath(autos.getPath(), new PathConstraints(Constants.MAX_SPEED_METERS_PER_SECOND, Constants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
