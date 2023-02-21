@@ -30,41 +30,43 @@ public class AutoContainer {
     private static int locationChoose;
     private static int priorityLocal;
 
-    public enum Location {
-
-        Left(0),
-        Middle(1),
-        Right(2);
-
-        private Location(int location) {
-            locationChoose = location;
-        }
-    }
-
-    public enum AutoType {
-
-        OneElementNoBalance(0),
-        TwoElementNoBalance(1),
-        OneElementBalance(2),
-        TwoElementBalance(3),
-        ThreeElementBalance(4);
-
-        private AutoType(int type) {
-            autoType = type;
-        }
-
-    }
-
-    public enum LevelPriority {
-
-        Floor(0),
-        Mid(1),
-        Top(2);
-
-        private LevelPriority(int priority) {
-            priorityLocal = priority;
-        }
-    }
+    /**
+     * public enum Location {
+     * 
+     * Left(0),
+     * Middle(1),
+     * Right(2);
+     * 
+     * private Location(int location) {
+     * locationChoose = location;
+     * }
+     * }
+     * 
+     * public enum AutoType {
+     * 
+     * OneElementNoBalance(0),
+     * TwoElementNoBalance(1),
+     * OneElementBalance(2),
+     * TwoElementBalance(3),
+     * ThreeElementBalance(4);
+     * 
+     * private AutoType(int type) {
+     * autoType = type;
+     * }
+     * 
+     * }
+     * 
+     * public enum LevelPriority {
+     * 
+     * Floor(0),
+     * Mid(1),
+     * Top(2);
+     * 
+     * private LevelPriority(int priority) {
+     * priorityLocal = priority;
+     * }
+     * }
+     */
 
     public enum Autos {
         LeftOneElement("LeftOneElement"),
@@ -110,13 +112,16 @@ public class AutoContainer {
         this.vertArm = vertArm;
     }
 
-    int[] locationVarOneArray = { 27, 84, 17 };
-    // Will need multiple for different distance values, labelled when we know them
-    int[] vertHeightArray = { 20, 40, 60 }; // Encoder values for very height based on level priority
-    boolean[] twoElementQueryArray = { false, true, true, false, true };
-    boolean[] threeElementQueryArray = { false, false, true, false, false };
-    boolean[] balanceQueryArray = { false, false, true, true, true };
     /*
+     * int[] locationVarOneArray = { 27, 84, 17 };
+     * // Will need multiple for different distance values, labelled when we know
+     * them
+     * int[] vertHeightArray = { 20, 40, 60 }; // Encoder values for very height
+     * based on level priority
+     * boolean[] twoElementQueryArray = { false, true, true, false, true };
+     * boolean[] threeElementQueryArray = { false, false, true, false, false };
+     * boolean[] balanceQueryArray = { false, false, true, true, true };
+     * 
      * if the auto should get a second element,
      * should activate a command that starts by placing down the element on the
      * field, then go to get the next
@@ -126,42 +131,45 @@ public class AutoContainer {
      * statements to check how many elements we wish to manuever
      * Complicated but hopefully will improve ease of use, Arrays must be in order
      * to work [2-17]
-     **/
-
-    public SequentialCommandGroup autoRunCommand() {
-        // Again, leaving this just in case, but it probably won't be needed
-        // int varOne = locationVarOneArray[locationChoose];
-        // boolean twoElementQuery = twoElementQueryArray[autoType];
-        // boolean threeElementQuery = threeElementQueryArray[autoType];
-        // boolean balanceQuery = balanceQueryArray[autoType];
-        // int vertHeight = vertHeightArray[priorityLocal];
-        // Following is just an example to understand the goal of this, with no
-        // photonvision as I don't know if that works yet - [cp 2-17]
-
-        return new SequentialCommandGroup(
-        /*
-         * zero wheels, zero vert arm, drive forward + vert up, stop, open claw, (two
-         * ball query if true -> drive + spin + arm to pickup,
-         * stop, close claw), (three ball query if true -> vert up + drive + spin, stop,
-         * open claw, drive + spin + arm to pickup,
-         * stop, close claw), (balance query if true -> vert to hold, drive on station,
-         * balance, stop), (else vert to hold, drive away from midline, stop)
-         */
-
-        // (new ZeroDrive(driveTrain)
-        // .alongWith(new ZeroVert(vertArm)))
-        // .andThen((new ZeroDrive(driveTrain)) // should be an auto drive, not sure if
-        // needed
-        // .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, vertHeight)))
-        // .andThen(new StopDrive(driveTrain))
-
-        );
-    }
+     * 
+     * 
+     * public SequentialCommandGroup autoRunCommand() {
+     * // Again, leaving this just in case, but it probably won't be needed
+     * int varOne = locationVarOneArray[locationChoose];
+     * boolean twoElementQuery = twoElementQueryArray[autoType];
+     * boolean threeElementQuery = threeElementQueryArray[autoType];
+     * boolean balanceQuery = balanceQueryArray[autoType];
+     * int vertHeight = vertHeightArray[priorityLocal];
+     * // Following is just an example to understand the goal of this, with no
+     * // photonvision as I don't know if that works yet - [cp 2-17]
+     * 
+     * return new SequentialCommandGroup(
+     * 
+     * // * zero wheels, zero vert arm, drive forward + vert up, stop, open claw,
+     * (two
+     * // * ball query if true -> drive + spin + arm to pickup,
+     * // * stop, close claw), (three ball query if true -> vert up + drive + spin,
+     * stop,
+     * // * open claw, drive + spin + arm to pickup,
+     * // * stop, close claw), (balance query if true -> vert to hold, drive on
+     * station,
+     * // * balance, stop), (else vert to hold, drive away from midline, stop)
+     * 
+     * 
+     * (new ZeroDrive(driveTrain)
+     * .alongWith(new ZeroVert(vertArm)))
+     * .andThen((new ZeroDrive(driveTrain)) // should be an auto drive, not sure if
+     * //needed
+     * .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, vertHeight)))
+     * .andThen(new StopDrive(driveTrain))
+     * 
+     * );
+     * }
+     * 
+     */
 
     public static SequentialCommandGroup getReadyToPutConOnGridCommand() {
         return new SequentialCommandGroup(new AutoVert(vertArm, 0.5, Constants.MAX_VERTICAL_POSITION).alongWith(
-                // new AutoReach(reachArmSub, () -> 0.5, 100).raceWith(new WaitCommand(1))),
-                // //TODO commit issue
                 new TogglePneumatics(pneumatics, true),
                 new AutoVert(vertArm, -0.5, Constants.MIN_VERTICAL_POSITION)
                         .alongWith(new ControlReach(reachArmSub, () -> -0.5, 100)).raceWith(new WaitCommand(1))));
@@ -171,7 +179,8 @@ public class AutoContainer {
         return new SequentialCommandGroup();
     }
 
-    public static SequentialCommandGroup getReadyToPickUpConeCommand() {
+    public static SequentialCommandGroup getReadyToPickUpConeCommand() { // TODO Something exremely similar in
+                                                                         // PathHolder, just separate so fewer conflicts
         return new SequentialCommandGroup();
     }
 
