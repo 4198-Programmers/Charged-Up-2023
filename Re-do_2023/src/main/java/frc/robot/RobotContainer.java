@@ -77,11 +77,11 @@ public class RobotContainer {
 
   private void configureBindings() {
     // april tags auto performance buttons
-    new JoystickButton(stickTwo, Constants.APRIL_TAG_LEFT_BUTTON)
+    new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
       .whileTrue(aprilTagLeft);
     new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON)
       .whileTrue(aprilTagRight);
-    new JoystickButton(stickTwo, Constants.APRIL_TAG_CENTER_BUTTON)
+    new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON).and(new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON))
       .whileTrue(aprilTagMid);
 
     // This lets a person press single button and open and close the claw every

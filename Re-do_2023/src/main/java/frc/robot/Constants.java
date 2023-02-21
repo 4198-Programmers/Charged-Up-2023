@@ -40,11 +40,11 @@ public final class Constants {
     public static final double MAX_SUSAN_RIGHT_POSITION = 34;
 
     //april tags constants
-    public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0;
-    public static final double CAMERA_TO_DRIVEBASE_OFFSET = 0;
-    public static final double WANTED_DISTANCE_LEFT = 29.875; //16 + CAMERA_TO_DRIVEBASE_OFFSET
-    public static final double WANTED_DISTANCE_MID = 29.875; //16 + CAMERA_TO_DRIVEBASE_OFFSET
-    public static final double WANTED_DISTANCE_RIGHT = 29.875; //16 + CAMERA_TO_DRIVEBASE_OFFSET
+    public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0.25;
+    public static final double CAMERA_TO_DRIVEBASE_OFFSET = 14;
+    public static final double WANTED_DISTANCE_LEFT = 16 + CAMERA_TO_DRIVEBASE_OFFSET;
+    public static final double WANTED_DISTANCE_MID = 16 + CAMERA_TO_DRIVEBASE_OFFSET;
+    public static final double WANTED_DISTANCE_RIGHT = 16 + CAMERA_TO_DRIVEBASE_OFFSET;
     public static final double WANTED_YAW_LEFT = (90-Math.tanh((16 + CAMERA_TO_DRIVEBASE_OFFSET) / 21.75));
     public static final double WANTED_YAW_MID = 0;
     public static final double WANTED_YAW_RIGHT = -WANTED_YAW_LEFT;
@@ -57,13 +57,12 @@ public final class Constants {
 
 
    //Joystick 1 Buttons
+        public static final int APRIL_TAG_LEFT_BUTTON = 1;
         public static final int FIELD_ORIENTATION_BUTTON = 11;
         public static final int ROBOT_ORIENTATION_BUTTON = 12;
         
    //Joystick 2 Buttons
-        public static final int APRIL_TAG_LEFT_BUTTON = 3;
-        public static final int APRIL_TAG_CENTER_BUTTON = 4;
-        public static final int APRIL_TAG_RIGHT_BUTTON = 5;
+        public static final int APRIL_TAG_RIGHT_BUTTON = 1;
 
    //Joystick 3 Buttons
         public static final int TOGGLE_CLAW_BUTTON = 1;
