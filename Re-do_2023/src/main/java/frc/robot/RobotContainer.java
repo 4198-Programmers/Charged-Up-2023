@@ -13,9 +13,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.AutoContainer.AutoType;
-import frc.robot.AutoContainer.LevelPriority;
-import frc.robot.AutoContainer.Location;
 import frc.robot.Commands.Balance;
 import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
@@ -52,10 +49,13 @@ public class RobotContainer {
   private final Pneumatics pneumatics = new Pneumatics();
   private final PathHolder mPath = new PathHolder();
 
-  private AutoContainer mAutoContainer = new AutoContainer(mDriveTrain, lazySusanSub, pneumatics, reachArmSub, vertArm);
-  private final SendableChooser<Location> LocationChooser = new SendableChooser<>();
-  private final SendableChooser<AutoType> AutoChooser = new SendableChooser<>();
-  private final SendableChooser<LevelPriority> LevelChooser = new SendableChooser<>();
+  // private AutoContainer mAutoContainer = new AutoContainer(mDriveTrain, lazySusanSub, pneumatics, reachArmSub, vertArm);
+  // private final SendableChooser<Location> LocationChooser = new
+  // SendableChooser<>();
+  // private final SendableChooser<AutoType> AutoChooser = new
+  // SendableChooser<>();
+  // private final SendableChooser<LevelPriority> LevelChooser = new
+  // SendableChooser<>();
   private final RunPathAuto autoPath = new RunPathAuto(mPath, mDriveTrain);
   private final SendableChooser<PathChoice> PathChooser = new SendableChooser<>();
   
@@ -162,20 +162,25 @@ public class RobotContainer {
 
   public void initializeAuto() {
     ShuffleboardTab autoTab = Shuffleboard.getTab("Auto Choices");
-    autoTab.add(AutoChooser);
-    autoTab.add(LocationChooser);
-    autoTab.add(LevelChooser);
-    LocationChooser.setDefaultOption("Left", Location.Left);
-    LocationChooser.addOption("Middle", Location.Middle);
-    LocationChooser.addOption("Right", Location.Right);
-    AutoChooser.addOption("One Element, No Balance", AutoType.OneElementNoBalance);
-    AutoChooser.addOption("Two Element, No Balance", AutoType.TwoElementNoBalance);
-    AutoChooser.addOption("One Element, Balance", AutoType.OneElementBalance);
-    AutoChooser.setDefaultOption("Two Element, Balance", AutoType.TwoElementBalance);
-    AutoChooser.addOption("Three Element, Balance", AutoType.ThreeElementBalance);
-    LevelChooser.setDefaultOption("Floor", LevelPriority.Floor);
-    LevelChooser.addOption("Middle", LevelPriority.Mid);
-    LevelChooser.addOption("Top", LevelPriority.Top);
+    autoTab.add(PathChooser);
+    // autoTab.add(AutoChooser);
+    // autoTab.add(LocationChooser);
+    // autoTab.add(LevelChooser);
+    // LocationChooser.setDefaultOption("Left", Location.Left);
+    // LocationChooser.addOption("Middle", Location.Middle);
+    // LocationChooser.addOption("Right", Location.Right);
+    // AutoChooser.addOption("One Element, No Balance",
+    // AutoType.OneElementNoBalance);
+    // AutoChooser.addOption("Two Element, No Balance",
+    // AutoType.TwoElementNoBalance);
+    // AutoChooser.addOption("One Element, Balance", AutoType.OneElementBalance);
+    // AutoChooser.setDefaultOption("Two Element, Balance",
+    // AutoType.TwoElementBalance);
+    // AutoChooser.addOption("Three Element, Balance",
+    // AutoType.ThreeElementBalance);
+    // LevelChooser.setDefaultOption("Floor", LevelPriority.Floor);
+    // LevelChooser.addOption("Middle", LevelPriority.Mid);
+    // LevelChooser.addOption("Top", LevelPriority.Top);
 
     PathChooser.setDefaultOption("Left One Element No Balance", PathChoice.Left_One_Element_No_Balance);
 
