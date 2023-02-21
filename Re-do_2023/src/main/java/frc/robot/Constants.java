@@ -40,21 +40,20 @@ public final class Constants {
                         MAX_SUSAN_LEFT_POSITION = -37,
                         MAX_SUSAN_RIGHT_POSITION = 34;
 
-        // Joystick 1 Buttons
-        public static final int FIELD_ORIENTATION_BUTTON = 11,
-                        ROBOT_ORIENTATION_BUTTON = 12;
 
-        // Joystick 2 Buttons
-        public static final int APRIL_TAG_LEFT_BUTTON = 3,
-                        APRIL_TAG_CENTER_BUTTON = 4,
-                        APRIL_TAG_RIGHT_BUTTON = 5;
+           //Joystick 1 Buttons
+        public static final int APRIL_TAG_LEFT_BUTTON = 1;
+        public static final int FIELD_ORIENTATION_BUTTON = 11;
+        public static final int ROBOT_ORIENTATION_BUTTON = 12;
+        
+        //Joystick 2 Buttons
+        public static final int APRIL_TAG_RIGHT_BUTTON = 1;
 
         // Joystick 3 Buttons
         public static final int TOGGLE_CLAW_BUTTON = 1;
 
         // Joystick 4 Buttons
-        public static final int LAZY_SUSAN_LEFT_BUTTON = 3,
-                        LAZY_SUSAN_RIGHT_BUTTON = 4,
+        public static final int SUSAN_ZERO_HEADING_BUTTON = 3,
                         SUSAN_BRAKE_BUTTON = 11,
                         SUSAN_COAST_BUTTON = 12;
 
@@ -73,4 +72,21 @@ public final class Constants {
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0;
 
         public static final double VERT_ARM_NO_DROP_SPEED = 0.09;
+
+    //april tags constants
+    public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0.25;
+    public static final double CAMERA_TO_DRIVEBASE_OFFSET = 14;
+    public static final double WANTED_DISTANCE_LEFT = 16 + CAMERA_TO_DRIVEBASE_OFFSET;
+    public static final double WANTED_DISTANCE_MID = 16 + CAMERA_TO_DRIVEBASE_OFFSET;
+    public static final double WANTED_DISTANCE_RIGHT = 16 + CAMERA_TO_DRIVEBASE_OFFSET;
+    public static final double WANTED_YAW_LEFT = (90-Math.tanh((16 + CAMERA_TO_DRIVEBASE_OFFSET) / 21.75));
+    public static final double WANTED_YAW_MID = 0;
+    public static final double WANTED_YAW_RIGHT = -WANTED_YAW_LEFT;
+    public static final double WANTED_SKEW_LEFT = 0;
+    public static final double WANTED_SKEW_MID = 0;
+    public static final double WANTED_SKEW_RIGHT = 0;
+
+
+
+
 }
