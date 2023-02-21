@@ -92,11 +92,11 @@ public class AutoContainer {
 
     }
 
-    DriveTrain driveTrain;
-    LazySusanSub lazySusanSub;
-    Pneumatics pneumatics;
-    ReachArmSub reachArmSub;
-    VertArm vertArm;
+    static DriveTrain driveTrain = new DriveTrain();
+    static LazySusanSub lazySusanSub = new LazySusanSub();
+    static Pneumatics pneumatics = new Pneumatics();
+    static ReachArmSub reachArmSub = new ReachArmSub();
+    static VertArm vertArm = new VertArm();
 
     public AutoContainer(DriveTrain driveTrain, LazySusanSub lazySusanSub, Pneumatics pneumatics,
             ReachArmSub reachArmSub, VertArm vertArm) {
@@ -151,6 +151,50 @@ public class AutoContainer {
                                 .andThen(new StopDrive(driveTrain))
 
         );
+    }
+    public static SequentialCommandGroup getReadyToPutConOnGridCommand(){
+        return new SequentialCommandGroup(new AutoVert( vertArm, 0.5, Constants.MAX_VERTICAL_POSITION).alongWith(
+            new AutoReach(reachArmSub, () -> 0.5, 100).raceWith(new WaitCommand(1))),
+            new TogglePneumatics(pneumatics, true),
+            new AutoVert( vertArm, -0.5, Constants.MIN_VERTICAL_POSITION).alongWith(new ControlReach(reachArmSub, ()->-0.5, 100)).raceWith(new WaitCommand(1)));
+    }
+    public static SequentialCommandGroup putConeOnGridCommand(){
+        return new SequentialCommandGroup();
+    }
+    public static SequentialCommandGroup getReadyToPickUpConeCommand(){
+        return new SequentialCommandGroup();
+    }
+    public static SequentialCommandGroup pickUpConeCommand(){
+        return new SequentialCommandGroup();
+    }
+    public static SequentialCommandGroup balanceCommand(){
+        return new SequentialCommandGroup(
+            new Balance(swerveDriveBase)
+        );
+    }
+    public enum Actions{
+        getReadyToPutConeOnGrid("GetReadyToPutConeOnGrid", getReadyToPutConOnGridCommand()),
+        putConeOnGrid("PutConeOnGrid", putConeOnGridCommand()),
+        getReadyToPickUpCone("GetReadyToPickUpCone", getReadyToPickUpConeCommand()),
+        pickUpCone("PickUpCone", pickUpConeCommand()),
+        balance("Balance", balanceCommand());
+
+        private String action;
+        private SequentialCommandGroup sequentialCommandGroup;
+        private Actions(String action, SequentialCommandGroup sequentialCommandGroup){
+            this.action = action;
+            this.sequentialCommandGroup = sequentialCommandGroup;
+        }
+        public String getkey(){
+            return action;
+        }
+        public SequentialCommandGroup getCommand(){
+            return sequentialCommandGroup;
+        }
+    }
+    HashMap<String, Command> eventMap = new HashMap<>();
+    public void makeAutoCommand(Actions actions){
+        eventMap.put(actions.getkey(), actions.getCommand());
     }
 
     public FollowPathWithEvents planPathExample(Autos autos, Command finalCommand){
