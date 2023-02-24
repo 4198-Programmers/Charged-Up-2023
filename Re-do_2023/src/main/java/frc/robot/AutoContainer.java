@@ -94,15 +94,15 @@ public class AutoContainer {
 
     }
 
-    static DriveTrain driveTrain = new DriveTrain();
+    // static DriveTrain driveTrain = new DriveTrain();
     static LazySusanSub lazySusanSub = new LazySusanSub();
     static Pneumatics pneumatics = new Pneumatics();
     static ReachArmSub reachArmSub = new ReachArmSub();
     static VertArm vertArm = new VertArm();
 
-    public AutoContainer(DriveTrain driveTrain, LazySusanSub lazySusanSub, Pneumatics pneumatics,
+    public AutoContainer(LazySusanSub lazySusanSub, Pneumatics pneumatics,
             ReachArmSub reachArmSub, VertArm vertArm) {
-        this.driveTrain = driveTrain;
+        // this.driveTrain = driveTrain;
         this.lazySusanSub = lazySusanSub;
         this.pneumatics = pneumatics;
         this.reachArmSub = reachArmSub;
@@ -240,20 +240,20 @@ public class AutoContainer {
     // return trajectory;
     // }
 
-    public FollowPathWithEvents planPathExample(Autos autos, Command finalCommand) {
-        PathPlannerTrajectory trajectory = PathPlanner.loadPath(autos.getPath(), new PathConstraints(
-                Constants.MAX_VELOCITY_METERS_PER_SECOND, Constants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
-        HashMap<String, Command> eventMap = new HashMap<>();
-        finalCommand = new Balance(driveTrain);
-        eventMap.put("PutConeOnGrid",
-                new SequentialCommandGroup(new AutoVert(vertArm, 0.5, Constants.MAX_VERTICAL_POSITION).alongWith(
-                        new ControlReach(reachArmSub, () -> 0.5, 100).raceWith(new WaitCommand(1))),
-                        new TogglePneumatics(pneumatics, true),
-                        new AutoVert(vertArm, -0.5, Constants.MIN_VERTICAL_POSITION)
-                                .alongWith(new ControlReach(reachArmSub, () -> -0.5, 100))
-                                .raceWith(new WaitCommand(1))));
-        FollowPathWithEvents command = new FollowPathWithEvents(finalCommand, trajectory.getMarkers(), eventMap);
-        return command;
-    }
+    // public FollowPathWithEvents planPathExample(Autos autos, Command finalCommand) {
+    //     PathPlannerTrajectory trajectory = PathPlanner.loadPath(autos.getPath(), new PathConstraints(
+    //             Constants.MAX_VELOCITY_METERS_PER_SECOND, Constants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
+    //     HashMap<String, Command> eventMap = new HashMap<>();
+    //     finalCommand = new Balance(driveTrain);
+    //     eventMap.put("PutConeOnGrid",
+    //             new SequentialCommandGroup(new AutoVert(vertArm, 0.5, Constants.MAX_VERTICAL_POSITION).alongWith(
+    //                     new ControlReach(reachArmSub, () -> 0.5, 100).raceWith(new WaitCommand(1))),
+    //                     new TogglePneumatics(pneumatics, true),
+    //                     new AutoVert(vertArm, -0.5, Constants.MIN_VERTICAL_POSITION)
+    //                             .alongWith(new ControlReach(reachArmSub, () -> -0.5, 100))
+    //                             .raceWith(new WaitCommand(1))));
+    //     FollowPathWithEvents command = new FollowPathWithEvents(finalCommand, trajectory.getMarkers(), eventMap);
+    //     return command;
+    // }
 
 }

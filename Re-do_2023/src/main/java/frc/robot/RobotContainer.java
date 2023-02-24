@@ -13,28 +13,31 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Commands.Balance;
+import frc.robot.Commands.AutoSwerve;
+// import frc.robot.Commands.Balance;
 import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
-import frc.robot.Commands.DriveTrainCom;
-import frc.robot.Commands.FollowPathWithMarks;
-import frc.robot.Commands.RunPathAuto;
+// import frc.robot.Commands.DriveTrainCom;
+// import frc.robot.Commands.FollowPathWithMarks;
+// import frc.robot.Commands.RunPathAuto;
 import frc.robot.Commands.SusanHead;
 import frc.robot.Commands.SusanMode;
-import frc.robot.Commands.TagFollower;
-import frc.robot.Subsystems.DriveTrain;
+import frc.robot.Commands.TeleopSwerve;
+// import frc.robot.Commands.TagFollower;
+// import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
-import frc.robot.Subsystems.PathHolder;
+// import frc.robot.Subsystems.PathHolder;
 import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Commands.ZeroSusan;
 import frc.robot.Commands.ZeroVert;
-import frc.robot.Subsystems.PhotonVision;
+// import frc.robot.Subsystems.PhotonVision;
 import frc.robot.Commands.zeroHeading;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
+import frc.robot.Subsystems.Swerve;
 import frc.robot.Subsystems.VertArm;
-import frc.robot.Subsystems.PathHolder.PathChoice;
+// import frc.robot.Subsystems.PathHolder.PathChoice;
 
 public class RobotContainer {
   private final Joystick stickOne = new Joystick(0);
@@ -42,13 +45,14 @@ public class RobotContainer {
   private final Joystick stickThree = new Joystick(2);
   private final Joystick stickFour = new Joystick(3);
 
-  private final PhotonVision photonVision = new PhotonVision();
-  private final DriveTrain mDriveTrain = new DriveTrain();
+  // private final PhotonVision photonVision = new PhotonVision();
+  // private final DriveTrain mDriveTrain = new DriveTrain();
+  private final Swerve swerve = new Swerve();
   private final LazySusanSub lazySusanSub = new LazySusanSub();
   private final ReachArmSub reachArmSub = new ReachArmSub();
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();
-  private final PathHolder mPath = new PathHolder(vertArm, pneumatics, reachArmSub, lazySusanSub);
+  // private final PathHolder mPath = new PathHolder(vertArm, pneumatics, reachArmSub, lazySusanSub);
 
   // private AutoContainer mAutoContainer = new AutoContainer(mDriveTrain,
   // lazySusanSub, pneumatics, reachArmSub, vertArm);
@@ -58,34 +62,41 @@ public class RobotContainer {
   // SendableChooser<>();
   // private final SendableChooser<LevelPriority> LevelChooser = new
   // SendableChooser<>();
-  private final RunPathAuto autoPath = new RunPathAuto(mPath, mDriveTrain);
-  private final SendableChooser<PathChoice> PathChooser = new SendableChooser<>();
+  // private final RunPathAuto autoPath = new RunPathAuto(mPath, mDriveTrain);
+  //private final SendableChooser<PathChoice> PathChooser = new SendableChooser<>();
 
-  private final SequentialCommandGroup aprilTagLeft = new SusanHead(lazySusanSub, 0)
-      .andThen(new TagFollower(photonVision, mDriveTrain,
-          Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT));
+  // private final SequentialCommandGroup aprilTagLeft = new SusanHead(lazySusanSub, 0)
+  //     .andThen(new TagFollower(photonVision, mDriveTrain,
+  //         Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT));
 
-  private final SequentialCommandGroup aprilTagRight = new SusanHead(lazySusanSub, 0)
-      .andThen(new TagFollower(photonVision, mDriveTrain,
-          Constants.WANTED_YAW_RIGHT, Constants.WANTED_SKEW_RIGHT, Constants.WANTED_DISTANCE_RIGHT));
+  // private final SequentialCommandGroup aprilTagRight = new SusanHead(lazySusanSub, 0)
+  //     .andThen(new TagFollower(photonVision, mDriveTrain,
+  //         Constants.WANTED_YAW_RIGHT, Constants.WANTED_SKEW_RIGHT, Constants.WANTED_DISTANCE_RIGHT));
 
-  private final SequentialCommandGroup aprilTagMid = new SusanHead(lazySusanSub, 0)
-      .andThen(new TagFollower(photonVision, mDriveTrain,
-          Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
+  // private final SequentialCommandGroup aprilTagMid = new SusanHead(lazySusanSub, 0)
+  //     .andThen(new TagFollower(photonVision, mDriveTrain,
+  //         Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
 
   public RobotContainer() {
     configureBindings();
-    mDriveTrain.setDefaultCommand(new DriveTrainCom(
-        mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
-        true)); // ATTENTION These values were multiplied by Oren to make the bot not die while
-                // testing the three * .5 terms should be deleted
+    // mDriveTrain.setDefaultCommand(new DriveTrainCom(
+    //     mDriveTrain,
+    //     () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+    //     () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+    //     () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
+    //     true)); // ATTENTION These values were multiplied by Oren to make the bot not die while
+    //             // testing the three * .5 terms should be deleted
+
+    swerve.setDefaultCommand(new TeleopSwerve(swerve, 
+    () -> stickOne.getRawAxis(0) * 0.3, 
+    () -> stickOne.getRawAxis(1) * 0.3, 
+    () -> stickTwo.getRawAxis(0) * 0.3, 
+    () -> new JoystickButton(stickOne, 1).getAsBoolean()));
+    
 
     reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> -stickFour.getRawAxis(1), 75));
     pneumatics.Pressurize();
-    new zeroHeading(mDriveTrain); // This sets the robot front to be the forward direction
+    // new zeroHeading(mDriveTrain); // This sets the robot front to be the forward direction
     pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
     vertArm.setDefaultCommand(
         new ZeroVert(vertArm).andThen(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 30)));
@@ -96,13 +107,13 @@ public class RobotContainer {
 
   private void configureBindings() {
     // april tags auto performance buttons
-    new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
-        .whileTrue(aprilTagLeft);
-    new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON)
-        .whileTrue(aprilTagRight);
-    new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
-        .and(new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON))
-        .whileTrue(aprilTagMid);
+    // new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
+    //     .whileTrue(aprilTagLeft);
+    // new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON)
+    //     .whileTrue(aprilTagRight);
+    // new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
+    //     .and(new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON))
+    //     .whileTrue(aprilTagMid);
 
     // This lets a person press single button and open and close the claw every
     // other time.
@@ -111,36 +122,36 @@ public class RobotContainer {
 
     // This resets the robot to field orientation and sets the current front of the
     // robot to the forward direction
-    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new zeroHeading(mDriveTrain));
-    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
-        mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
-        true));
+    // new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new zeroHeading(mDriveTrain));
+    // new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
+    //     mDriveTrain,
+    //     () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+    //     () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+    //     () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
+    //     true));
 
-    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new zeroHeading(mDriveTrain));
-    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new DriveTrainCom(
-        mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
-        true));
+    // new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new zeroHeading(mDriveTrain));
+    // new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new DriveTrainCom(
+    //     mDriveTrain,
+    //     () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+    //     () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+    //     () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
+    //     true));
 
     // This makes the front of the robot always the forward direction.
     // When fieldOrientation is false, it is in robotOrientation.
-    new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
-        mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
-        false));
-    new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON).toggleOnFalse(new DriveTrainCom(
-        mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
-        false));
+    // new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
+    //     mDriveTrain,
+    //     () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+    //     () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+    //     () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
+    //     false));
+    // new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON).toggleOnFalse(new DriveTrainCom(
+    //     mDriveTrain,
+    //     () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+    //     () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
+    //     () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
+    //     false));
 
     // Make sure susan is set to a low value because it spins really fast. It has to
     // be at least under 0.3, most likely.
@@ -156,12 +167,12 @@ public class RobotContainer {
     new JoystickButton(stickFour, Constants.SUSAN_BRAKE_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kBrake));
     new JoystickButton(stickFour, Constants.SUSAN_COAST_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kCoast));
 
-    new JoystickButton(stickOne, 1).whileTrue(new Balance(mDriveTrain));
+    // new JoystickButton(stickOne, 1).whileTrue(new Balance(mDriveTrain));
   }
 
   public void initializeAuto() {
     ShuffleboardTab autoTab = Shuffleboard.getTab("Auto Choices");
-    autoTab.add(PathChooser);
+    // autoTab.add(PathChooser);
     // autoTab.add(AutoChooser);
     // autoTab.add(LocationChooser);
     // autoTab.add(LevelChooser);
@@ -187,10 +198,11 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+    return new AutoSwerve(new Swerve(), "LeftTwoElementBalance");
     // return mAutoContainer.autoRunCommand();
     // return Commands.print("No autonomous command configured");
     // return autoPath;
-    return new FollowPathWithMarks(mPath, mDriveTrain);
+    //return new FollowPathWithMarks(mPath, mDriveTrain);
   }
 
   /*
