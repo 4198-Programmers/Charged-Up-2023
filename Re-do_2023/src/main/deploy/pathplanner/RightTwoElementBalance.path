@@ -17,24 +17,25 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "GetReadyToPutConeOnGrid"
+          "InitializeAutoValues",
+          "PrepElementPlacement"
         ],
-        "executionBehavior": "parallel",
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
     },
     {
       "anchorPoint": {
-        "x": 1.89,
+        "x": 1.73,
         "y": 1.1030547843468177
       },
       "prevControl": {
-        "x": 1.9600910864755245,
+        "x": 1.8000910864755246,
         "y": 1.1030547843468177
       },
       "nextControl": {
-        "x": 1.9600910864755245,
+        "x": 1.8000910864755246,
         "y": 1.1030547843468177
       },
       "holonomicAngle": 0,
@@ -44,7 +45,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "PutConeOnGrid"
+          "PlaceElement"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -53,16 +54,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.235707610266693,
-        "y": 0.9542106805343279
+        "x": 5.849082146504994,
+        "y": 0.9486555619796925
       },
       "prevControl": {
-        "x": 5.979525161131543,
-        "y": 0.9542106805343279
+        "x": 5.812884643928948,
+        "y": 0.9486555619796925
       },
       "nextControl": {
-        "x": 5.979525161131543,
-        "y": 0.9542106805343279
+        "x": 5.812884643928948,
+        "y": 0.9486555619796925
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -71,7 +72,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "GetReadyToPickUpCone"
+          "PrepElementPickUp"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -80,16 +81,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.506781029933514,
-        "y": 0.9642960870646952
+        "x": 6.7,
+        "y": 0.9406095811360689
       },
       "prevControl": {
-        "x": 6.629069189736192,
-        "y": 0.9642960870646952
+        "x": 6.524480826615767,
+        "y": 0.9406095811360689
       },
       "nextControl": {
-        "x": 6.629069189736192,
-        "y": 0.9642960870646952
+        "x": 6.524480826615767,
+        "y": 0.9406095811360689
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -98,7 +99,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "PickUpCone"
+          "PickUpElement"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",

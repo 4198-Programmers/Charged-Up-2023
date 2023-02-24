@@ -40,13 +40,12 @@ public final class Constants {
                         MAX_SUSAN_LEFT_POSITION = -37,
                         MAX_SUSAN_RIGHT_POSITION = 34;
 
-
-           //Joystick 1 Buttons
+        // Joystick 1 Buttons
         public static final int APRIL_TAG_LEFT_BUTTON = 1;
         public static final int FIELD_ORIENTATION_BUTTON = 11;
         public static final int ROBOT_ORIENTATION_BUTTON = 12;
-        
-        //Joystick 2 Buttons
+
+        // Joystick 2 Buttons
         public static final int APRIL_TAG_RIGHT_BUTTON = 1;
 
         // Joystick 3 Buttons
@@ -57,7 +56,7 @@ public final class Constants {
                         SUSAN_BRAKE_BUTTON = 11,
                         SUSAN_COAST_BUTTON = 12;
 
-        //Turret Values
+        // Turret Values
         public static final double SUSAN_CIRCUMFERENCE = 0,
                         MOTOR_ROTATIONS_PER_360_SUSAN = 104.7272727273, // gear ratio = 16 sprocket ratio = 7 + (6/11)
                         BALANCE_SPEED = 0.1;
@@ -66,27 +65,31 @@ public final class Constants {
                         ANGLE_OFFSET = 0; // for what? [2-17]- CP
         public static final float PITCH_OFFSET = 5; // Must be a float for the gyro values
 
-        //Auto Values
-        public static final double AUTO_VERT_SPEED = 0.1;
-        public static final double MAX_SPEED_METERS_PER_SECOND = 0;
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0;
+        // Auto Values
+        public static final double AUTO_VERT_SPEED = 0.1,
+                        MAX_VELOCITY_METERS_PER_SECOND = 4,
+                        MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3,
+                        VERT_SAFE_TO_SPIN_ENC_POS = 0,
+                        AUTO_SUSAN_SPEED = 0.1,
+                        LEFT_PLACEMENT_DEGREES = -150,
+                        VERT_BOTTOM_SHELF_PLACEMENT_ENC = 0,
+                        MID_PLACEMENT_DEGREES = 180,
+                        RIGHT_PLACEMENT_DEGREES = 150,
+                        VERT_PICKUP_POS = 0;
 
         public static final double VERT_ARM_NO_DROP_SPEED = 0.09;
 
-    //april tags constants
-    public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0.25;
-    public static final double CAMERA_TO_DRIVEBASE_OFFSET = 14;
-    public static final double WANTED_DISTANCE_LEFT = 16 + CAMERA_TO_DRIVEBASE_OFFSET;
-    public static final double WANTED_DISTANCE_MID = 16 + CAMERA_TO_DRIVEBASE_OFFSET;
-    public static final double WANTED_DISTANCE_RIGHT = 16 + CAMERA_TO_DRIVEBASE_OFFSET;
-    public static final double WANTED_YAW_LEFT = (90-Math.tanh((16 + CAMERA_TO_DRIVEBASE_OFFSET) / 21.75));
-    public static final double WANTED_YAW_MID = 0;
-    public static final double WANTED_YAW_RIGHT = -WANTED_YAW_LEFT;
-    public static final double WANTED_SKEW_LEFT = 0;
-    public static final double WANTED_SKEW_MID = 0;
-    public static final double WANTED_SKEW_RIGHT = 0;
-
-
-
+        // april tags constants
+        public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0.25,
+                        CAMERA_TO_DRIVEBASE_OFFSET = 14,
+                        WANTED_DISTANCE_LEFT = 16 + CAMERA_TO_DRIVEBASE_OFFSET,
+                        WANTED_DISTANCE_MID = 16 + CAMERA_TO_DRIVEBASE_OFFSET,
+                        WANTED_DISTANCE_RIGHT = 16 + CAMERA_TO_DRIVEBASE_OFFSET,
+                        WANTED_YAW_LEFT = (90 - Math.tanh((16 + CAMERA_TO_DRIVEBASE_OFFSET) / 21.75)),
+                        WANTED_YAW_MID = 0,
+                        WANTED_YAW_RIGHT = -WANTED_YAW_LEFT,
+                        WANTED_SKEW_LEFT = 0,
+                        WANTED_SKEW_MID = 0,
+                        WANTED_SKEW_RIGHT = 0;
 
 }

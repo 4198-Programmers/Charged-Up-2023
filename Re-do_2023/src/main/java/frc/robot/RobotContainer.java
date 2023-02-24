@@ -48,7 +48,7 @@ public class RobotContainer {
   private final ReachArmSub reachArmSub = new ReachArmSub();
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();
-  private final PathHolder mPath = new PathHolder();
+  private final PathHolder mPath = new PathHolder(vertArm, pneumatics, reachArmSub, lazySusanSub);
 
   // private AutoContainer mAutoContainer = new AutoContainer(mDriveTrain,
   // lazySusanSub, pneumatics, reachArmSub, vertArm);

@@ -20,22 +20,22 @@
           "InitializeAutoValues",
           "PrepElementPlacement"
         ],
-        "executionBehavior": "parallel",
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
     },
     {
       "anchorPoint": {
-        "x": 1.89,
+        "x": 1.73,
         "y": 4.43
       },
       "prevControl": {
-        "x": 2.1130641117025344,
+        "x": 1.9530641117025345,
         "y": 4.43
       },
       "nextControl": {
-        "x": 2.1130641117025344,
+        "x": 1.9530641117025345,
         "y": 4.43
       },
       "holonomicAngle": 0,

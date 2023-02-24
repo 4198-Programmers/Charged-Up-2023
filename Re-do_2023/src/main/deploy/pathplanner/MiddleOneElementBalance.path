@@ -17,24 +17,25 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
+          "InitializeAutoValues",
           "PrepElementPlacement"
         ],
-        "executionBehavior": "parallel",
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
     },
     {
       "anchorPoint": {
-        "x": 1.89,
+        "x": 1.73,
         "y": 2.765264752534713
       },
       "prevControl": {
-        "x": 2.0592527172989894,
+        "x": 1.8992527172989895,
         "y": 2.765264752534713
       },
       "nextControl": {
-        "x": 2.0592527172989894,
+        "x": 1.8992527172989895,
         "y": 2.765264752534713
       },
       "holonomicAngle": 0,

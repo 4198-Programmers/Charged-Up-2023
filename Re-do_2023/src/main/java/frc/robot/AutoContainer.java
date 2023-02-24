@@ -247,7 +247,7 @@ public class AutoContainer {
 
     public FollowPathWithEvents planPathExample(Autos autos, Command finalCommand) {
         PathPlannerTrajectory trajectory = PathPlanner.loadPath(autos.getPath(), new PathConstraints(
-                Constants.MAX_SPEED_METERS_PER_SECOND, Constants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
+                Constants.MAX_VELOCITY_METERS_PER_SECOND, Constants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED));
         HashMap<String, Command> eventMap = new HashMap<>();
         finalCommand = new Balance(driveTrain);
         eventMap.put("PutConeOnGrid",

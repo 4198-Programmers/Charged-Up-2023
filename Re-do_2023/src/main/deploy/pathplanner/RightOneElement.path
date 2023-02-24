@@ -17,24 +17,25 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "GetReadyToPutConeOnGrid"
+          "InitializeAutoValues",
+          "PrepElementPlacement"
         ],
-        "executionBehavior": "parallel",
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
     },
     {
       "anchorPoint": {
-        "x": 1.8947209078706748,
+        "x": 1.73,
         "y": 1.1
       },
       "prevControl": {
-        "x": 2.297792851965239,
+        "x": 2.1330719440945645,
         "y": 1.1
       },
       "nextControl": {
-        "x": 2.297792851965239,
+        "x": 2.1330719440945645,
         "y": 1.1
       },
       "holonomicAngle": 0,
@@ -44,7 +45,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "PutConeOnGrid"
+          "PlaceElement"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",

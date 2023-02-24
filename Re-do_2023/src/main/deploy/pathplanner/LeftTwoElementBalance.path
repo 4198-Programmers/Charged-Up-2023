@@ -20,22 +20,22 @@
           "InitializeAutoValues",
           "PrepElementPlacement"
         ],
-        "executionBehavior": "parallel",
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
     },
     {
       "anchorPoint": {
-        "x": 1.89,
+        "x": 1.73,
         "y": 4.43
       },
       "prevControl": {
-        "x": 2.1130641117025344,
+        "x": 1.9530641117025345,
         "y": 4.43
       },
       "nextControl": {
-        "x": 2.1130641117025344,
+        "x": 1.9530641117025345,
         "y": 4.43
       },
       "holonomicAngle": 0,
@@ -81,15 +81,15 @@
     },
     {
       "anchorPoint": {
-        "x": 6.51,
+        "x": 6.7,
         "y": 4.6
       },
       "prevControl": {
-        "x": 5.731627048863712,
+        "x": 5.921627048863712,
         "y": 4.6
       },
       "nextControl": {
-        "x": 5.731627048863712,
+        "x": 5.921627048863712,
         "y": 4.6
       },
       "holonomicAngle": 0,
@@ -99,7 +99,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "PickupElement"
+          "PickUpElement"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
