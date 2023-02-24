@@ -8,6 +8,8 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Commands.AutoReach;
@@ -176,28 +178,27 @@ public class AutoContainer {
     }
 
     public static SequentialCommandGroup PlaceElement() {
-        return new SequentialCommandGroup();
+        return new SequentialCommandGroup(new PrintCommand("Place Element"));
     }
 
     public static SequentialCommandGroup PrepElementPickup() { // TODO Something exremely similar in
                                                                // PathHolder, just separate so fewer conflicts
-        return new SequentialCommandGroup();
+        return new SequentialCommandGroup(new PrintCommand("Prep Element Pickup"));
     }
 
     public static SequentialCommandGroup PickupElement() {
-        return new SequentialCommandGroup();
+        return new SequentialCommandGroup(new PrintCommand("PickupElement"));
     }
 
     public static SequentialCommandGroup Balance() {
-        return new SequentialCommandGroup(
-                new Balance(driveTrain));
+        return new SequentialCommandGroup(new PrintCommand("Balance"));
     }
 
     public static SequentialCommandGroup InitializeAutoValues() {
-        return new SequentialCommandGroup(null
-
-        );
+        return new SequentialCommandGroup(new PrintCommand("Initialize Auto Values"));
     }
+
+    //Start Emily Code - I don't want to try to read this I'm quick writing my own stuff CP [2-21]
 
     public enum Actions {
         prepElementPlacement("PrepElementPlacement", PrepElementPlacement()),

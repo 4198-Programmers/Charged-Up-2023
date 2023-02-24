@@ -1,5 +1,7 @@
 package frc.robot.Commands;
 
+import com.pathplanner.lib.commands.FollowPathWithEvents;
+
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.DriveTrain;
@@ -38,6 +40,8 @@ public class RunPathAuto extends CommandBase {
             driveTrain.drive(toSwerveSpeeds);
             System.out.println("Stop Auto");
         }
+
+
         // gives match time countdown not up, subtract from 15 to be accurate
 
     }
