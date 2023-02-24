@@ -1,14 +1,15 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Subsystems.DriveTrain;
+import frc.robot.Subsystems.Swerve;
 
 public class zeroHeading extends CommandBase {
-    DriveTrain driveTrain;
+    Swerve driveTrain;
     boolean done;
 
-    public zeroHeading(DriveTrain driveTrain) {
+    public zeroHeading(Swerve driveTrain) {
         this.driveTrain = driveTrain;
+        addRequirements(driveTrain);
     }
 
     @Override
