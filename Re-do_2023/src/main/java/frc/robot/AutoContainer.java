@@ -103,10 +103,10 @@ public class AutoContainer {
     public AutoContainer(LazySusanSub lazySusanSub, Pneumatics pneumatics,
             ReachArmSub reachArmSub, VertArm vertArm) {
         // this.driveTrain = driveTrain;
-        this.lazySusanSub = lazySusanSub;
-        this.pneumatics = pneumatics;
-        this.reachArmSub = reachArmSub;
-        this.vertArm = vertArm;
+        // this.lazySusanSub = lazySusanSub;
+        // this.pneumatics = pneumatics;
+        // this.reachArmSub = reachArmSub;
+        // this.vertArm = vertArm;
     }
 
     /*

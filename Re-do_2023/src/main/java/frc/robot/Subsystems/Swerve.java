@@ -1,8 +1,11 @@
 package frc.robot.Subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -13,9 +16,13 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.SwerveModule;
+import frc.robot.Constants.AutoConstants;
 
 public class Swerve extends SubsystemBase {
   private final AHRS gyro;
@@ -111,6 +118,22 @@ public class Swerve extends SubsystemBase {
     return (Constants.Swerve.invertGyro)
         ? Rotation2d.fromDegrees(360 - gyro.getYaw())
         : Rotation2d.fromDegrees(gyro.getYaw());
+  }
+
+  public Command swerveTrajectory(PathPlannerTrajectory trajectory){
+    return new SequentialCommandGroup(
+      new InstantCommand(() -> this.resetOdometry(trajectory.getInitialPose())),
+        new PPSwerveControllerCommand(
+          trajectory, 
+          this::getPose, 
+          Constants.Swerve.swerveKinematics, 
+          new PIDController(AutoConstants.kPXController, 0, 0), 
+          new PIDController(AutoConstants.kPYController, 0, 0), 
+          new PIDController(AutoConstants.kPThetaController, 0, 0), 
+          this::setModuleStates,
+          true,
+          this)
+      );
   }
 
   @Override

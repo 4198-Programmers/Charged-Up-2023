@@ -27,6 +27,7 @@ import frc.robot.Commands.TeleopSwerve;
 // import frc.robot.Commands.TagFollower;
 // import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
+import frc.robot.Subsystems.PathHolder;
 // import frc.robot.Subsystems.PathHolder;
 import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Commands.ZeroSusan;
@@ -52,6 +53,7 @@ public class RobotContainer {
   private final ReachArmSub reachArmSub = new ReachArmSub();
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();
+  private final PathHolder pathHolder = new PathHolder(vertArm, pneumatics, reachArmSub, lazySusanSub);
   // private final PathHolder mPath = new PathHolder(vertArm, pneumatics, reachArmSub, lazySusanSub);
 
   // private AutoContainer mAutoContainer = new AutoContainer(mDriveTrain,
@@ -198,7 +200,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new AutoSwerve(new Swerve(), "LeftTwoElementBalance");
+    return new AutoSwerve(swerve, "LeftThreeElementBalance", pathHolder);
     // return mAutoContainer.autoRunCommand();
     // return Commands.print("No autonomous command configured");
     // return autoPath;

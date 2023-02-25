@@ -19,23 +19,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Commands.AutoSusan;
 import frc.robot.Commands.AutoVert;
-import frc.robot.Commands.RunPathAuto;
 import frc.robot.Commands.TogglePneumatics;
 
 public class PathHolder extends SubsystemBase {
     private static String path;
     private static VertArm vertArm;
     private static Pneumatics pneumatics;
-    private ReachArmSub reachArm;
+    private static ReachArmSub reachArm;
     private static LazySusanSub lazySusan;
     private static int nPlacement;
+    private static Swerve swerve;
 
     public PathHolder(VertArm vertArm, Pneumatics pneumatics, ReachArmSub reachArm,
             LazySusanSub lazySusan) {
-        this.vertArm = vertArm;
-        this.pneumatics = pneumatics;
-        this.reachArm = reachArm;
-        this.lazySusan = lazySusan;
+        // this.vertArm = vertArm;
+        // this.pneumatics = pneumatics;
+        // this.reachArm = reachArm;
+        // this.lazySusan = lazySusan;
     }
 
     public enum PathChoice {// Extra spacing for readability
@@ -168,8 +168,11 @@ public class PathHolder extends SubsystemBase {
         CPHashMap.put("PickupElement", PickupElement());
         CPHashMap.put("Balance", Balance());
         CPHashMap.put("InitializeAutoValues", InitializeAutoValues());
-
         return CPHashMap;
+    }
+
+    public Command createAutoPath(){
+       return new FollowPathWithEvents(swerve.swerveTrajectory(examplePath), getPathMarks(), getPathEventMap());
     }
 
 }
