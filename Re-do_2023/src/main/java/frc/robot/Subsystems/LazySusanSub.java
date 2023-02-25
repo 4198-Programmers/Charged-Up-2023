@@ -12,6 +12,7 @@ import frc.robot.Maths;
 public class LazySusanSub extends SubsystemBase {
     private final CANSparkMax susanMotor = new CANSparkMax(Constants.SUSAN_MOTOR_ID, MotorType.kBrushless);
     private final RelativeEncoder susanEncoder = susanMotor.getEncoder();
+    int susanDirectionToggle = 1;
 
     public double getLocation() {
         return susanEncoder.getPosition();
@@ -23,6 +24,10 @@ public class LazySusanSub extends SubsystemBase {
 
     public void stopSusan() {
         susanMotor.set(0);
+    }
+
+    public void toggleSusan(){
+        susanDirectionToggle *= -1;
     }
 
     public void mode(IdleMode mode) {
@@ -43,7 +48,7 @@ public class LazySusanSub extends SubsystemBase {
 
     public void spinSusan(double speed) { // counterclockwise = negative
 
-        double expectedSpeed = speed;
+        double expectedSpeed = speed * susanDirectionToggle;
 
         // if (getLocation() >= Maths.degreesToRotations_Susan(Constants.SUSAN_MAX_ANGLE) && speed > 0) {
         //     expectedSpeed = 0;

@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 2.3,
-        "y": 4.43312714117627
+        "x": 2.981754296841928,
+        "y": 4.314304461942258
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.198930362462839,
-        "y": 4.43312714117627
+        "x": 2.675577851155703,
+        "y": 4.328221573109814
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -31,18 +31,18 @@
         "y": 4.43
       },
       "prevControl": {
-        "x": 1.9530641117025345,
-        "y": 4.43
+        "x": 2.1606447379561438,
+        "y": 4.411724240115148
       },
       "nextControl": {
-        "x": 1.9530641117025345,
-        "y": 4.43
+        "x": 2.1606447379561438,
+        "y": 4.411724240115148
       },
       "holonomicAngle": 0,
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PlaceElement"
@@ -58,8 +58,8 @@
         "y": 4.5
       },
       "prevControl": {
-        "x": 3.25,
-        "y": 4.5
+        "x": 4.7492274151214975,
+        "y": 4.495226907120482
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -75,5 +75,12 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 1.0,
+      "names": [
+        "PlaceElement"
+      ]
+    }
+  ]
 }

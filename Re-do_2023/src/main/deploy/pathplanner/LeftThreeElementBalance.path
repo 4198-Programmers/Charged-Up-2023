@@ -42,7 +42,7 @@
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PlaceElement"
@@ -69,7 +69,7 @@
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PrepElementPickup"
@@ -96,7 +96,7 @@
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PickupElement"
@@ -123,7 +123,7 @@
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PrepElementPlacement"
@@ -150,7 +150,7 @@
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PlaceElement"
@@ -177,7 +177,7 @@
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PrepElementPickup"
@@ -204,7 +204,7 @@
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PickupElement"
@@ -216,12 +216,12 @@
     },
     {
       "anchorPoint": {
-        "x": 3.9142007450681575,
-        "y": 3.590614681229363
+        "x": 3.900283633900602,
+        "y": 3.646283125899586
       },
       "prevControl": {
-        "x": 4.4214100419292155,
-        "y": 3.590614681229363
+        "x": 4.40749293076166,
+        "y": 3.646283125899586
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -239,5 +239,60 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 0.36363636363636365,
+      "names": [
+        "PrepElementPlacement"
+      ]
+    },
+    {
+      "position": 1.0,
+      "names": [
+        "PlaceElement"
+      ]
+    },
+    {
+      "position": 2.0,
+      "names": [
+        "PrepElementPickup"
+      ]
+    },
+    {
+      "position": 3.0,
+      "names": [
+        "PickupElement"
+      ]
+    },
+    {
+      "position": 4.000000000000001,
+      "names": [
+        "PrepElementPlacement"
+      ]
+    },
+    {
+      "position": 5.0,
+      "names": [
+        "PlaceElement"
+      ]
+    },
+    {
+      "position": 6.0,
+      "names": [
+        "PrepElementPickup"
+      ]
+    },
+    {
+      "position": 7.0,
+      "names": [
+        "PickupElement"
+      ]
+    },
+    {
+      "position": 8.0,
+      "names": [
+        "Balance"
+      ]
+    }
+  ]
 }

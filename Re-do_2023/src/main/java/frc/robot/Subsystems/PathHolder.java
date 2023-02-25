@@ -1,5 +1,6 @@
 package frc.robot.Subsystems;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -58,14 +59,20 @@ public class PathHolder extends SubsystemBase {
         Right_Two_Element_No_Balance("RightTwoElementNoBalance"),
         Right_One_Element_Balance("RightOneElementBalance"),
         Right_Two_Element_Balance("RightTwoElementBalance"),
-        Right_Three_Element_Balance("RightThreeElementBalance");
+        Right_Three_Element_Balance("RightThreeElementBalance"),
+
+        Drive_Straight("DriveStraight");
 
         private PathChoice(String chosenPath) {
             path = chosenPath;
         }
+
+        public static String getPath() {
+            return path;
+        }
     }
 
-    PathPlannerTrajectory examplePath = PathPlanner.loadPath(path, new PathConstraints(4, 3));
+    PathPlannerTrajectory examplePath = PathPlanner.loadPath("LeftThreeElementBalance", new PathConstraints(4, 3));
     PathPlannerState state;
 
     public double[] getPathVelocities(double matchTime) {
@@ -92,7 +99,7 @@ public class PathHolder extends SubsystemBase {
     }
 
     public static SequentialCommandGroup PrepElementPlacement() {
-        return new SequentialCommandGroup(new PrintCommand("Prep Element Placement"));
+        return new SequentialCommandGroup(new PrintCommand("Prep Element Placement").andThen(new TogglePneumatics(pneumatics, !pneumatics.getChannel())));
         // arm up to safety
         // spin to left degrees
         // arm to placement pos + increase nPlacement
@@ -108,7 +115,7 @@ public class PathHolder extends SubsystemBase {
     }
 
     public static SequentialCommandGroup PlaceElement() {
-        return new SequentialCommandGroup(new PrintCommand("Place Element"));
+        return new SequentialCommandGroup(new PrintCommand("Place Element").andThen(new TogglePneumatics(pneumatics, !pneumatics.getChannel())));
         // open claw
         // return new SequentialCommandGroup(new PrintCommand("Place Element")
         // .andThen(new TogglePneumatics(pneumatics, true))
@@ -117,7 +124,7 @@ public class PathHolder extends SubsystemBase {
 
     public static SequentialCommandGroup PrepElementPickup() { // TODO Something exremely similar in
                                                                // PathHolder, just separate so fewer conflicts
-        return new SequentialCommandGroup(new PrintCommand("Prep Element Pickup"));
+        return new SequentialCommandGroup(new PrintCommand("Prep Element Pickup").andThen(new TogglePneumatics(pneumatics, !pneumatics.getChannel())));
         // arm up to safety
         // spin to 0
         // arm to pickup pos
@@ -132,7 +139,7 @@ public class PathHolder extends SubsystemBase {
     }
 
     public static SequentialCommandGroup PickupElement() {
-        return new SequentialCommandGroup(new PrintCommand("PickupElement"));
+        return new SequentialCommandGroup(new PrintCommand("PickupElement").andThen(new TogglePneumatics(pneumatics, !pneumatics.getChannel())));
         // close claw
         // return new SequentialCommandGroup(new PrintCommand("Pickup Element")
         // .andThen(new TogglePneumatics(pneumatics, false))
@@ -140,14 +147,14 @@ public class PathHolder extends SubsystemBase {
     }
 
     public static SequentialCommandGroup Balance() {
-        return new SequentialCommandGroup(new PrintCommand("Balance"));
+        return new SequentialCommandGroup(new PrintCommand("Balance").andThen(new TogglePneumatics(pneumatics, !pneumatics.getChannel())));
         // arm to safety
         // spin to 0
         // balance
         // return new SequentialCommandGroup(new PrintCommand("Balance")
         // .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
         // Constants.VERT_SAFE_TO_SPIN_ENC_POS))
-        // .andThen(new Balance)
+        // .andThen(new Balance));
     }
 
     public static SequentialCommandGroup InitializeAutoValues() {

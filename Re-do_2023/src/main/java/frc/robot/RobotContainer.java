@@ -18,18 +18,17 @@ import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.DriveTrainCom;
-import frc.robot.Commands.FollowPathWithMarks;
 import frc.robot.Commands.RunPathAuto;
 import frc.robot.Commands.SusanHead;
 import frc.robot.Commands.SusanMode;
-import frc.robot.Commands.TagFollower;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Subsystems.PathHolder;
 import frc.robot.Commands.TogglePneumatics;
+import frc.robot.Commands.ToggleSusan;
+import frc.robot.Commands.WithMarker;
 import frc.robot.Commands.ZeroSusan;
 import frc.robot.Commands.ZeroVert;
-import frc.robot.Subsystems.PhotonVision;
 import frc.robot.Commands.zeroHeading;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
@@ -42,7 +41,7 @@ public class RobotContainer {
   private final Joystick stickThree = new Joystick(2);
   private final Joystick stickFour = new Joystick(3);
 
-  private final PhotonVision photonVision = new PhotonVision();
+  // private final PhotonVision photonVision = new PhotonVision();
   private final DriveTrain mDriveTrain = new DriveTrain();
   private final LazySusanSub lazySusanSub = new LazySusanSub();
   private final ReachArmSub reachArmSub = new ReachArmSub();
@@ -61,17 +60,17 @@ public class RobotContainer {
   private final RunPathAuto autoPath = new RunPathAuto(mPath, mDriveTrain);
   private final SendableChooser<PathChoice> PathChooser = new SendableChooser<>();
 
-  private final SequentialCommandGroup aprilTagLeft = new SusanHead(lazySusanSub, 0)
-      .andThen(new TagFollower(photonVision, mDriveTrain,
-          Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT));
+  // private final SequentialCommandGroup aprilTagLeft = new SusanHead(lazySusanSub, 0)
+  //     .andThen(new TagFollower(photonVision, mDriveTrain,
+  //         Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT));
 
-  private final SequentialCommandGroup aprilTagRight = new SusanHead(lazySusanSub, 0)
-      .andThen(new TagFollower(photonVision, mDriveTrain,
-          Constants.WANTED_YAW_RIGHT, Constants.WANTED_SKEW_RIGHT, Constants.WANTED_DISTANCE_RIGHT));
+  // private final SequentialCommandGroup aprilTagRight = new SusanHead(lazySusanSub, 0)
+  //     .andThen(new TagFollower(photonVision, mDriveTrain,
+  //         Constants.WANTED_YAW_RIGHT, Constants.WANTED_SKEW_RIGHT, Constants.WANTED_DISTANCE_RIGHT));
 
-  private final SequentialCommandGroup aprilTagMid = new SusanHead(lazySusanSub, 0)
-      .andThen(new TagFollower(photonVision, mDriveTrain,
-          Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
+  // private final SequentialCommandGroup aprilTagMid = new SusanHead(lazySusanSub, 0)
+  //     .andThen(new TagFollower(photonVision, mDriveTrain,
+  //         Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
 
   public RobotContainer() {
     configureBindings();
@@ -96,18 +95,20 @@ public class RobotContainer {
 
   private void configureBindings() {
     // april tags auto performance buttons
-    new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
-        .whileTrue(aprilTagLeft);
-    new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON)
-        .whileTrue(aprilTagRight);
-    new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
-        .and(new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON))
-        .whileTrue(aprilTagMid);
+    // new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
+    //     .whileTrue(aprilTagLeft);
+    // new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON)
+    //     .whileTrue(aprilTagRight);
+    // new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
+    //     .and(new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON))
+    //     .whileTrue(aprilTagMid);
 
     // This lets a person press single button and open and close the claw every
     // other time.
     new JoystickButton(stickFour, Constants.TOGGLE_CLAW_BUTTON)
         .toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel()));
+
+        new JoystickButton(stickFour, Constants.TOGGLE_SUSAN_DIRECTION_BUTTON).toggleOnTrue(new ToggleSusan(lazySusanSub));
 
     // This resets the robot to field orientation and sets the current front of the
     // robot to the forward direction
@@ -153,9 +154,6 @@ public class RobotContainer {
     // new JoystickButton(stickFour, Constants.LAZY_SUSAN_RIGHT_BUTTON)
     // .whileTrue(new ControlSusan(lazySusanSub, () -> -1, 10));
 
-    new JoystickButton(stickFour, Constants.SUSAN_BRAKE_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kBrake));
-    new JoystickButton(stickFour, Constants.SUSAN_COAST_BUTTON).onTrue(new SusanMode(lazySusanSub, IdleMode.kCoast));
-
     new JoystickButton(stickOne, 1).whileTrue(new Balance(mDriveTrain));
   }
 
@@ -181,8 +179,26 @@ public class RobotContainer {
     // LevelChooser.addOption("Middle", LevelPriority.Mid);
     // LevelChooser.addOption("Top", LevelPriority.Top);
 
-    // PathChooser.setDefaultOption("Left One Element No Balance",
-    // PathChoice.Left_One_Element_No_Balance);
+    PathChooser.setDefaultOption("Left One Element No Balance", PathChoice.Left_One_Element_No_Balance);
+    PathChooser.addOption("Left Three Element Balance", PathChoice.Left_Two_Element_No_Balance);
+    PathChooser.addOption("Left Three Element Balance", PathChoice.Left_One_Element_Balance);
+    PathChooser.addOption("Left Three Element Balance", PathChoice.Left_Two_Element_Balance);
+    PathChooser.addOption("Left Three Element Balance", PathChoice.Left_Three_Element_Balance);
+
+    PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_One_Element_No_Balance);
+    PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_Two_Element_No_Balance);
+    PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_One_Element_Balance);
+    PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_Two_Element_Balance);
+    PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_Three_Element_Balance);
+
+    PathChooser.addOption("Right Three Element Balance", PathChoice.Right_One_Element_No_Balance);
+    PathChooser.addOption("Right Three Element Balance", PathChoice.Right_Two_Element_No_Balance);
+    PathChooser.addOption("Right Three Element Balance", PathChoice.Right_One_Element_Balance);
+    PathChooser.addOption("Right Three Element Balance", PathChoice.Right_Two_Element_Balance);
+    PathChooser.addOption("Right Three Element Balance", PathChoice.Right_Three_Element_Balance);
+
+    PathChooser.addOption("Drive Straight", PathChoice.Drive_Straight);
+    
 
   }
 
@@ -190,7 +206,8 @@ public class RobotContainer {
     // return mAutoContainer.autoRunCommand();
     // return Commands.print("No autonomous command configured");
     // return autoPath;
-    return new FollowPathWithMarks(mPath, mDriveTrain);
+    return new RunPathAuto(mPath, mDriveTrain);
+    // return new WithMarker(mDriveTrain, mPath);
   }
 
   /*

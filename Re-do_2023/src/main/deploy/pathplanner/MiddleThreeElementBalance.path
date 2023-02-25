@@ -42,7 +42,7 @@
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PlaceElement"
@@ -94,7 +94,7 @@
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PrepElementPickup"
@@ -106,22 +106,22 @@
     },
     {
       "anchorPoint": {
-        "x": 6.7,
-        "y": 3.4
+        "x": 6.753291423249514,
+        "y": 3.395775124883584
       },
       "prevControl": {
-        "x": 5.093086539219696,
-        "y": 3.4
+        "x": 5.146377962469209,
+        "y": 3.395775124883584
       },
       "nextControl": {
-        "x": 5.093086539219696,
-        "y": 3.4
+        "x": 5.146377962469209,
+        "y": 3.395775124883584
       },
       "holonomicAngle": 0,
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PickUpElement"
@@ -173,7 +173,7 @@
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PrepElementPlacement"
@@ -200,7 +200,7 @@
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PlaceElement"
@@ -254,7 +254,7 @@
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PrepElementPickup"
@@ -266,22 +266,22 @@
     },
     {
       "anchorPoint": {
-        "x": 6.7,
-        "y": 2.162779812830639
+        "x": 6.753291423249514,
+        "y": 2.15715223097113
       },
       "prevControl": {
-        "x": 6.394783870475182,
-        "y": 2.162779812830639
+        "x": 6.4480752937246955,
+        "y": 2.15715223097113
       },
       "nextControl": {
-        "x": 6.394783870475182,
-        "y": 2.162779812830639
+        "x": 6.4480752937246955,
+        "y": 2.15715223097113
       },
       "holonomicAngle": 0,
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PickUpElement"
@@ -316,5 +316,48 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 1.0,
+      "names": [
+        "PlaceElement"
+      ]
+    },
+    {
+      "position": 3.0,
+      "names": [
+        "event"
+      ]
+    },
+    {
+      "position": 4.0,
+      "names": [
+        "PickupElement"
+      ]
+    },
+    {
+      "position": 6.0,
+      "names": [
+        "PrepElementPlacement"
+      ]
+    },
+    {
+      "position": 7.0,
+      "names": [
+        "PlaceElement"
+      ]
+    },
+    {
+      "position": 9.0,
+      "names": [
+        "PrepElementPickup"
+      ]
+    },
+    {
+      "position": 10.0,
+      "names": [
+        "PickupElement"
+      ]
+    }
+  ]
 }

@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 2.3,
-        "y": 4.43312714117627
+        "x": 2.981754296841928,
+        "y": 4.314304461942258
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.198930362462839,
-        "y": 4.43312714117627
+        "x": 2.8806846593047672,
+        "y": 4.314304461942258
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -42,7 +42,7 @@
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PlaceElement"
@@ -69,7 +69,7 @@
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PrepElementPickup"
@@ -81,22 +81,22 @@
     },
     {
       "anchorPoint": {
-        "x": 6.7,
-        "y": 4.6
+        "x": 6.767208534417069,
+        "y": 4.592646685293372
       },
       "prevControl": {
-        "x": 5.921627048863712,
-        "y": 4.6
+        "x": 5.988835583280781,
+        "y": 4.592646685293372
       },
       "nextControl": {
-        "x": 5.921627048863712,
-        "y": 4.6
+        "x": 5.988835583280781,
+        "y": 4.592646685293372
       },
       "holonomicAngle": 0,
       "isReversal": true,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": true,
+      "isStopPoint": false,
       "stopEvent": {
         "names": [
           "PickUpElement"
@@ -108,12 +108,12 @@
     },
     {
       "anchorPoint": {
-        "x": 4.0,
-        "y": 2.5
+        "x": 3.9559520785708244,
+        "y": 3.646283125899586
       },
       "prevControl": {
-        "x": 5.976676004133701,
-        "y": 2.4999999999999996
+        "x": 5.932628082704525,
+        "y": 3.6462831258995854
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -131,5 +131,24 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 1.0,
+      "names": [
+        "PlaceElement"
+      ]
+    },
+    {
+      "position": 2.0,
+      "names": [
+        "PrepElementPickup"
+      ]
+    },
+    {
+      "position": 3.0,
+      "names": [
+        "PickupElement"
+      ]
+    }
+  ]
 }

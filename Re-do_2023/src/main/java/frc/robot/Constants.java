@@ -53,8 +53,7 @@ public final class Constants {
 
         // Joystick 4 Buttons
         public static final int SUSAN_ZERO_HEADING_BUTTON = 3,
-                        SUSAN_BRAKE_BUTTON = 11,
-                        SUSAN_COAST_BUTTON = 12;
+                        TOGGLE_SUSAN_DIRECTION_BUTTON = 4;
 
         // Turret Values
         public static final double SUSAN_CIRCUMFERENCE = 0,
