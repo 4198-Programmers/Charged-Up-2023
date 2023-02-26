@@ -39,6 +39,7 @@ import frc.robot.Subsystems.ReachArmSub;
 import frc.robot.Subsystems.Swerve;
 import frc.robot.Subsystems.VertArm;
 // import frc.robot.Subsystems.PathHolder.PathChoice;
+import frc.robot.Subsystems.PathHolder.PathChoice;
 
 public class RobotContainer {
   private final Joystick stickOne = new Joystick(0);
@@ -53,7 +54,7 @@ public class RobotContainer {
   private final ReachArmSub reachArmSub = new ReachArmSub();
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();
-  private final PathHolder pathHolder = new PathHolder(vertArm, pneumatics, reachArmSub, lazySusanSub);
+  private final PathHolder pathHolder = new PathHolder(vertArm, pneumatics, reachArmSub, lazySusanSub, swerve);
   // private final PathHolder mPath = new PathHolder(vertArm, pneumatics, reachArmSub, lazySusanSub);
 
   // private AutoContainer mAutoContainer = new AutoContainer(mDriveTrain,
@@ -65,7 +66,7 @@ public class RobotContainer {
   // private final SendableChooser<LevelPriority> LevelChooser = new
   // SendableChooser<>();
   // private final RunPathAuto autoPath = new RunPathAuto(mPath, mDriveTrain);
-  //private final SendableChooser<PathChoice> PathChooser = new SendableChooser<>();
+  // private final SendableChooser<PathChoice> PathChooser = new SendableChooser<>();
 
   // private final SequentialCommandGroup aprilTagLeft = new SusanHead(lazySusanSub, 0)
   //     .andThen(new TagFollower(photonVision, mDriveTrain,
@@ -195,12 +196,12 @@ public class RobotContainer {
     // LevelChooser.addOption("Top", LevelPriority.Top);
 
     // PathChooser.setDefaultOption("Left One Element No Balance",
-    // PathChoice.Left_One_Element_No_Balance);
+    //  PathChoice.Left_One_Element_No_Balance);
 
   }
 
   public Command getAutonomousCommand() {
-    return new AutoSwerve(swerve, "LeftThreeElementBalance", pathHolder);
+    return new AutoSwerve(pathHolder);
     // return mAutoContainer.autoRunCommand();
     // return Commands.print("No autonomous command configured");
     // return autoPath;
