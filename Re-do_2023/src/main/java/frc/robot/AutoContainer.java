@@ -198,7 +198,8 @@ public class AutoContainer {
         return new SequentialCommandGroup(new PrintCommand("Initialize Auto Values"));
     }
 
-    //Start Emily Code - I don't want to try to read this I'm quick writing my own stuff CP [2-21]
+    // Start Emily Code - I don't want to try to read this I'm quick writing my own
+    // stuff CP [2-21]
 
     public enum Actions {
         prepElementPlacement("PrepElementPlacement", PrepElementPlacement()),

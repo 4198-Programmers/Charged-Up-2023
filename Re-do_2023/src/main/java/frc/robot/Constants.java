@@ -59,22 +59,21 @@ public final class Constants {
         public static final double SUSAN_CIRCUMFERENCE = 0,
                         MOTOR_ROTATIONS_PER_360_SUSAN = 104.7272727273, // gear ratio = 16 sprocket ratio = 7 + (6/11)
                         BALANCE_SPEED = 0.1;
-        public static final int SUSAN_MAX_ANGLE = 630,
-                        VERT_OFFSET = 0,
-                        ANGLE_OFFSET = 0; // for what? [2-17]- CP
         public static final float PITCH_OFFSET = 5; // Must be a float for the gyro values
 
         // Auto Values
         public static final double AUTO_VERT_SPEED = 0.1,
                         MAX_VELOCITY_METERS_PER_SECOND = 4,
                         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3,
-                        VERT_SAFE_TO_SPIN_ENC_POS = 0,
+                        VERT_SAFE_TO_SPIN_ENC_POS = 0.6, //printed at 0.5, better safe than broken
                         AUTO_SUSAN_SPEED = 0.1,
-                        LEFT_PLACEMENT_DEGREES = -150,
-                        VERT_BOTTOM_SHELF_PLACEMENT_ENC = 0,
-                        MID_PLACEMENT_DEGREES = 180,
-                        RIGHT_PLACEMENT_DEGREES = 150,
-                        VERT_PICKUP_POS = 0;
+                        LEFT_PLACEMENT_ENC_POS = 12.071479,
+                        VERT_BOTTOM_SHELF_PLACEMENT_ENC_MID = 0.603176,
+                        VERT_BOTTOM_SHELF_PLACEMENT_ENC_SIDES = 0.9972,
+                        MID_PLACEMENT_ENC_POS = 0,
+                        RIGHT_PLACEMENT_ENC_POS = -12.071479,
+                        VERT_PICKUP_POS = 0,
+                        AUTO_ENC_OFFSET = 0.05;
 
         public static final double VERT_ARM_NO_DROP_SPEED = 0.12;
 

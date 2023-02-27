@@ -15,7 +15,7 @@ public class VertArm extends SubsystemBase {
         return verticalEncoder.getPosition();
     }
 
-    public void ZeroArm(){
+    public void ZeroArm() {
         verticalEncoder.setPosition(0);
     }
 
@@ -31,11 +31,5 @@ public class VertArm extends SubsystemBase {
     public void stopArm() {
         verticalMotor.set(Constants.VERT_ARM_NO_DROP_SPEED);
     }
-    public void autoVert(double speed, double wantedDistance) {
-        if (getLocation() - wantedDistance < -Constants.VERT_OFFSET) {
-            verticalMotor.set(-speed);
-        } else if (getLocation() - wantedDistance > Constants.VERT_OFFSET) {
-            verticalMotor.set(speed);
-        }
-    }
+
 }

@@ -60,20 +60,25 @@ public class RobotContainer {
   // SendableChooser<>();
   // private final SendableChooser<LevelPriority> LevelChooser = new
   // SendableChooser<>();
-  private final RunPathAuto autoPath = new RunPathAuto(mPath, mDriveTrain);
-  // private final SendableChooser<PathChoice> PathChooser = new SendableChooser<>();
+  private final SendableChooser<String> PathChooser = new SendableChooser<>();
 
-  // private final SequentialCommandGroup aprilTagLeft = new SusanHead(lazySusanSub, 0)
-  //     .andThen(new TagFollower(photonVision, mDriveTrain,
-  //         Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT));
+  // private final SequentialCommandGroup aprilTagLeft = new
+  // SusanHead(lazySusanSub, 0)
+  // .andThen(new TagFollower(photonVision, mDriveTrain,
+  // Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT,
+  // Constants.WANTED_DISTANCE_LEFT));
 
-  // private final SequentialCommandGroup aprilTagRight = new SusanHead(lazySusanSub, 0)
-  //     .andThen(new TagFollower(photonVision, mDriveTrain,
-  //         Constants.WANTED_YAW_RIGHT, Constants.WANTED_SKEW_RIGHT, Constants.WANTED_DISTANCE_RIGHT));
+  // private final SequentialCommandGroup aprilTagRight = new
+  // SusanHead(lazySusanSub, 0)
+  // .andThen(new TagFollower(photonVision, mDriveTrain,
+  // Constants.WANTED_YAW_RIGHT, Constants.WANTED_SKEW_RIGHT,
+  // Constants.WANTED_DISTANCE_RIGHT));
 
-  // private final SequentialCommandGroup aprilTagMid = new SusanHead(lazySusanSub, 0)
-  //     .andThen(new TagFollower(photonVision, mDriveTrain,
-  //         Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
+  // private final SequentialCommandGroup aprilTagMid = new
+  // SusanHead(lazySusanSub, 0)
+  // .andThen(new TagFollower(photonVision, mDriveTrain,
+  // Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID,
+  // Constants.WANTED_DISTANCE_MID));
 
   public RobotContainer() {
     configureBindings();
@@ -88,7 +93,8 @@ public class RobotContainer {
         true)); // ATTENTION These values were multiplied by Oren to make the bot not die while
                 // testing the three * .5 terms should be deleted
 
-    // reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> -stickThree.getRawAxis(1), 75)); //CHANGETOTHREE
+    // reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () ->
+    // -stickThree.getRawAxis(1), 75)); //CHANGETOTHREE
     reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> 0, 0));
     pneumatics.Pressurize();
     new zeroHeading(mDriveTrain); // This sets the robot front to be the forward direction
@@ -96,26 +102,45 @@ public class RobotContainer {
     vertArm.setDefaultCommand(
         new ZeroVert(vertArm).andThen(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 30)));
     lazySusanSub.setDefaultCommand(
-        new ZeroSusan(lazySusanSub).andThen(new ControlSusan(lazySusanSub, () -> modifyAxis(-stickThree.getX()), 30)));//CHANGETOTHREE
+        new ZeroSusan(lazySusanSub).andThen(new ControlSusan(lazySusanSub, () -> modifyAxis(-stickThree.getX()), 30)));// CHANGETOTHREE
     lazySusanSub.mode(IdleMode.kBrake);
+
+    ShuffleboardTab autoTab = Shuffleboard.getTab("Auto Choices");
+    PathChooser.setDefaultOption("Left One Element No Balance", "LeftOneElement");
+    PathChooser.addOption("Left Two Element No Balance", "LeftTwoElement");
+    PathChooser.addOption("Left One Element Balance", "LeftOneElementBalance");
+    PathChooser.addOption("Left Two Element Balance", "LeftTwoElementBalance");
+    PathChooser.addOption("Left Three Element Balance", "LeftThreeElementBalance");
+    PathChooser.addOption("Mid One Element No Balance", "MiddleOneElement");
+    PathChooser.addOption("Mid Two Element No Balance", "MiddleTwoElement");
+    PathChooser.addOption("Mid One Element Balance", "MiddleOneElementBalance");
+    PathChooser.addOption("Mid Two Element Balance", "MiddleTwoElementBalance");
+    PathChooser.addOption("Mid Three Element Balance", "MiddleThreeElementBalance");
+    PathChooser.addOption("Right One Element No Balance", "RightOneElement");
+    PathChooser.addOption("Right Two Element No Balance", "RightTwoElement");
+    PathChooser.addOption("Right One Element No Balance", "RightOneElementBalance");
+    PathChooser.addOption("Right Two Element No Balance", "RightTwoElementBalance");
+    PathChooser.addOption("Right Three Element No Balance", "RightThreeElementBalance");
+    PathChooser.addOption("Drive Straight", "DriveStraight");
+    autoTab.add("Autonomous", PathChooser);
   }
 
   private void configureBindings() {
     // april tags auto performance buttons
     // new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
-    //     .whileTrue(aprilTagLeft);
+    // .whileTrue(aprilTagLeft);
     // new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON)
-    //     .whileTrue(aprilTagRight);
+    // .whileTrue(aprilTagRight);
     // new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
-    //     .and(new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON))
-    //     .whileTrue(aprilTagMid);
+    // .and(new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON))
+    // .whileTrue(aprilTagMid);
 
     // This lets a person press single button and open and close the claw every
     // other time.
     new JoystickButton(stickThree, Constants.TOGGLE_CLAW_BUTTON)
-        .toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel())); //CHANGETOTHREE
+        .toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel())); // CHANGETOTHREE
 
-        new JoystickButton(stickThree, Constants.TOGGLE_SUSAN_DIRECTION_BUTTON).toggleOnTrue(new ToggleSusan(lazySusanSub));//CHANGETOTHREE
+    new JoystickButton(stickThree, Constants.TOGGLE_SUSAN_DIRECTION_BUTTON).toggleOnTrue(new ToggleSusan(lazySusanSub));// CHANGETOTHREE
 
     // This resets the robot to field orientation and sets the current front of the
     // robot to the forward direction
@@ -152,7 +177,7 @@ public class RobotContainer {
 
     // Make sure susan is set to a low value because it spins really fast. It has to
     // be at least under 0.3, most likely.
-    new JoystickButton(stickThree, 7).onTrue(new SusanHead(lazySusanSub, 0)); //CHANGETOTHREE
+    new JoystickButton(stickThree, 7).onTrue(new SusanHead(lazySusanSub, 0)); // CHANGETOTHREE
     new JoystickButton(stickThree, 3).whileTrue(new ControlReach(reachArmSub, () -> 1, 75));
     new JoystickButton(stickThree, 2).whileTrue(new ControlReach(reachArmSub, () -> -1, 75));
     // Make sure susan is set to a low value because it spins really fast. It has to
@@ -167,65 +192,7 @@ public class RobotContainer {
   }
 
   public void initializeAuto() {
-    ShuffleboardTab autoTab = Shuffleboard.getTab("Auto Choices");
-    // autoTab.add(PathChooser);
-    // autoTab.add(AutoChooser);
-    // autoTab.add(LocationChooser);
-    // autoTab.add(LevelChooser);
-    // LocationChooser.setDefaultOption("Left", Location.Left);
-    // LocationChooser.addOption("Middle", Location.Middle);
-    // LocationChooser.addOption("Right", Location.Right);
-    // AutoChooser.addOption("One Element, No Balance",
-    // AutoType.OneElementNoBalance);
-    // AutoChooser.addOption("Two Element, No Balance",
-    // AutoType.TwoElementNoBalance);
-    // AutoChooser.addOption("One Element, Balance", AutoType.OneElementBalance);
-    // AutoChooser.setDefaultOption("Two Element, Balance",
-    // AutoType.TwoElementBalance);
-    // AutoChooser.addOption("Three Element, Balance",
-    // AutoType.ThreeElementBalance);
-    // LevelChooser.setDefaultOption("Floor", LevelPriority.Floor);
-    // LevelChooser.addOption("Middle", LevelPriority.Mid);
-    // LevelChooser.addOption("Top", LevelPriority.Top);
-    // PathChooser.addOption("Left One Element No Balance", PathChoice.Left_One_Element_No_Balance);
-    // PathChooser.addOption("Left Three Element Balance", PathChoice.Left_Two_Element_No_Balance);
-    // PathChooser.addOption("Left Three Element Balance", PathChoice.Left_One_Element_Balance);
-    // PathChooser.addOption("Left Three Element Balance", PathChoice.Left_Two_Element_Balance);
-    // PathChooser.addOption("Left Three Element Balance", PathChoice.Left_Three_Element_Balance);
-
-<<<<<<< Updated upstream
-    PathChooser.setDefaultOption("Left One Element No Balance", PathChoice.LeftOneElement);
-    PathChooser.addOption("Left Three Element Balance", PathChoice.LeftTwoElement);
-    PathChooser.addOption("Left Three Element Balance", PathChoice.LeftOneElementBalance);
-    PathChooser.addOption("Left Three Element Balance", PathChoice.LeftTwoElementBalance);
-    PathChooser.addOption("Left Three Element Balance", PathChoice.LeftThreeElementBalance);
-    PathChooser.addOption("Mid Three Element Balance", PathChoice.MiddleOneElement);
-    PathChooser.addOption("Mid Three Element Balance", PathChoice.MiddleTwoElement);
-    PathChooser.addOption("Mid Three Element Balance", PathChoice.MiddleOneElementBalance);
-    PathChooser.addOption("Mid Three Element Balance", PathChoice.MiddleTwoElementBalance);
-    PathChooser.addOption("Mid Three Element Balance", PathChoice.MiddleThreeElementBalance);
-    PathChooser.addOption("Right Three Element Balance", PathChoice.RightOneElement);
-    PathChooser.addOption("Right Three Element Balance", PathChoice.RightTwoElement);
-    PathChooser.addOption("Right Three Element Balance", PathChoice.RightOneElementBalance);
-    PathChooser.addOption("Right Three Element Balance", PathChoice.RightTwoElementBalance);
-    PathChooser.addOption("Right Three Element Balance", PathChoice.RightThreeElementBalance);
-    PathChooser.addOption("Drive Straight", PathChoice.DriveStraight);
-=======
-    // PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_One_Element_No_Balance);
-    // PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_Two_Element_No_Balance);
-    // PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_One_Element_Balance);
-    // PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_Two_Element_Balance);
-    // PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_Three_Element_Balance);
-
-    // PathChooser.addOption("Right Three Element Balance", PathChoice.Right_One_Element_No_Balance);
-    // PathChooser.addOption("Right Three Element Balance", PathChoice.Right_Two_Element_No_Balance);
-    // PathChooser.addOption("Right Three Element Balance", PathChoice.Right_One_Element_Balance);
-    // PathChooser.addOption("Right Three Element Balance", PathChoice.Right_Two_Element_Balance);
-    // PathChooser.addOption("Right Three Element Balance", PathChoice.Right_Three_Element_Balance);
-
-    // PathChooser.addOption("Drive Straight", PathChoice.Drive_Straight);
->>>>>>> Stashed changes
-    
+    mPath.setPath(PathChooser.getSelected());
 
   }
 

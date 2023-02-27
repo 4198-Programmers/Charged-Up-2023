@@ -20,81 +20,46 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Commands.AutoSusan;
 import frc.robot.Commands.AutoVert;
+import frc.robot.Commands.Balance;
 import frc.robot.Commands.RunPathAuto;
+import frc.robot.Commands.StopArm;
 import frc.robot.Commands.TogglePneumatics;
 
-<<<<<<< Updated upstream
 public class PathHolder {
-=======
-public class PathHolder extends SubsystemBase {
->>>>>>> Stashed changes
     private static VertArm vertArm;
     private static Pneumatics pneumatics;
     private ReachArmSub reachArm;
     private static LazySusanSub lazySusan;
     private static int nPlacement;
-<<<<<<< Updated upstream
     private static String pathChosen;
 
-    public enum PathChoice {
-        LeftOneElement("LeftOneElement"),
-        LeftOneElementBalance("LeftOneElementBalance"),
-        LeftTwoElement("LeftTwoElement"),
-        LeftTwoElementBalance("LeftTwoElementBalance"),
-        LeftThreeElementBalance("LeftThreeElementBalance"),
-        MiddleOneElement("MiddleOneElement"),
-        MiddleOneElementBalance("MiddleOneElementBalance"),
-        MiddleTwoElement("MiddleTwoElement"),
-        MiddleTwoElementBalance("MiddleTwoElementBalance"),
-        MiddleThreeElementBalance("MiddleThreeElementBalance"),
-        RightOneElement("RightOneElement"),
-        RightOneElementBalance("RightOneElementBalance"),
-        RightTwoElement("RightTwoElement"),
-        RightTwoElementBalance("RightTwoElementBalance"),
-        RightThreeElementBalance("RightThreeElementBalance"), 
-        DriveStraight("DriveStraight");
+    // public enum PathChoice {
+    // LeftOneElement("LeftOneElement"),
+    // LeftOneElementBalance("LeftOneElementBalance"),
+    // LeftTwoElement("LeftTwoElement"),
+    // LeftTwoElementBalance("LeftTwoElementBalance"),
+    // LeftThreeElementBalance("LeftThreeElementBalance"),
+    // MiddleOneElement("MiddleOneElement"),
+    // MiddleOneElementBalance("MiddleOneElementBalance"),
+    // MiddleTwoElement("MiddleTwoElement"),
+    // MiddleTwoElementBalance("MiddleTwoElementBalance"),
+    // MiddleThreeElementBalance("MiddleThreeElementBalance"),
+    // RightOneElement("RightOneElement"),
+    // RightOneElementBalance("RightOneElementBalance"),
+    // RightTwoElement("RightTwoElement"),
+    // RightTwoElementBalance("RightTwoElementBalance"),
+    // RightThreeElementBalance("RightThreeElementBalance"),
+    // DriveStraight("DriveStraight");
 
-        private PathChoice(String path) {
-            pathChosen = path;
-        }
-
-    }
-=======
-    // private static String path;
-
-    // public enum PathChoice {// Extra spacing for readability
-    //     // Probably an easier way to integrate this for driving, this is for
-    //     // functionality alone CP [2-21]
-
-
-    //     Left_One_Element_No_Balance("LeftOneElementNoBalance"),
-    //     Left_Two_Element_No_Balance("LeftTwoElementNoBalance"),
-    //     Left_One_Element_Balance("LeftOneElementBalance"),
-    //     Left_Two_Element_Balance("LeftTwoElementBalance"),
-    //     Left_Three_Element_Balance("LeftThreeElementBalance"),
-
-    //     Mid_One_Element_No_Balance("MidOneElementNoBalance"),
-    //     Mid_Two_Element_No_Balance("MidTwoElementNoBalance"),
-    //     Mid_One_Element_Balance("MidOneElementBalance"),
-    //     Mid_Two_Element_Balance("MidTwoElementBalance"),
-    //     Mid_Three_Element_Balance("MidThreeElementBalance"),
-
-    //     Right_One_Element_No_Balance("RightOneElementNoBalance"),
-    //     Right_Two_Element_No_Balance("RightTwoElementNoBalance"),
-    //     Right_One_Element_Balance("RightOneElementBalance"),
-    //     Right_Two_Element_Balance("RightTwoElementBalance"),
-    //     Right_Three_Element_Balance("RightThreeElementBalance"),
-
-    //     Drive_Straight("DriveStraight");
-
-
-
-    //     private PathChoice(String chosenPath) {
-    //         path = chosenPath;
-    //     }
+    // private PathChoice(String path) {
+    // pathChosen = path;
+    // }
 
     // }
->>>>>>> Stashed changes
+
+    public void setPath(String path) {
+        pathChosen = path;
+    }
 
     public PathHolder(VertArm vertArm, Pneumatics pneumatics, ReachArmSub reachArm,
             LazySusanSub lazySusan) {
@@ -103,13 +68,6 @@ public class PathHolder extends SubsystemBase {
         this.reachArm = reachArm;
         this.lazySusan = lazySusan;
     }
-<<<<<<< Updated upstream
-
-=======
-    PathPlannerTrajectory examplePath = PathPlanner.loadPath("DriveStraight", new PathConstraints(4, 3));
-    PathPlannerState state;
->>>>>>> Stashed changes
-
 
     public double[] getPathVelocities(double matchTime) {
         PathPlannerTrajectory examplePath = PathPlanner.loadPath(pathChosen, new PathConstraints(4, 3));
@@ -120,100 +78,109 @@ public class PathHolder extends SubsystemBase {
         return velocitiesAndRunTime;
     }
 
-<<<<<<< Updated upstream
     public List<EventMarker> getPathMarks() {
         PathPlannerTrajectory examplePath = PathPlanner.loadPath(pathChosen, new PathConstraints(4, 3));
         return examplePath.getMarkers();
     }
-=======
-    String[] pathArray = {"DriveStraight"};
 
-    // public void chooseAutoArr(int auto){
-    //     path = pathArray[auto];
-    //     examplePath = PathPlanner.loadPath(path, new PathConstraints(4, 3));
-    // }
->>>>>>> Stashed changes
-
-    public static double placementPos(int numberPlaced) {
-        if (numberPlaced == 0) {
-            nPlacement++;
-            System.out.println("Left Placement");
-            return Constants.LEFT_PLACEMENT_DEGREES;
-        } else if (numberPlaced == 1) {
-            nPlacement++;
-            System.out.println("Right Placement");
-            return Constants.MID_PLACEMENT_DEGREES;
-        } else {
-            System.out.println("No Placement");
-            return 0;
-        }
-    }
-
-    public static SequentialCommandGroup PrepElementPlacement() {
-        return new SequentialCommandGroup(new PrintCommand("Prep Element Placement")
-                .andThen(new TogglePneumatics(pneumatics, !pneumatics.getChannel())));
+    public static Command PrepElementPlacementOne() {
+        // return new SequentialCommandGroup(new PrintCommand("Prep Element
+        // Placement"));
         // arm up to safety
         // spin to left degrees
         // arm to placement pos + increase nPlacement
 
-        // return new SequentialCommandGroup(new PrintCommand("Prep Element Placement")
-        // .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-        // Constants.VERT_SAFE_TO_SPIN_ENC_POS))
-        // .andThen(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED,
-        // placementPos(nPlacement)))
-        // .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-        // Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC)));
+        return new SequentialCommandGroup(new PrintCommand("Prep Element Placement")
+                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+                        Constants.VERT_SAFE_TO_SPIN_ENC_POS))
+                .andThen(new PrintCommand("In Between"))
+                .andThen(new StopArm(vertArm))
+                .andThen(new PrintCommand("In Between"))
+                .andThen(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED,
+                        Constants.LEFT_PLACEMENT_ENC_POS))
+                .andThen(new PrintCommand("In Between"))
+                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+                        Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC_SIDES))
+                .andThen(new PrintCommand("In Between"))
+                .andThen(new StopArm(vertArm))
+                .andThen(new PrintCommand("Done")));
 
     }
 
-    public static SequentialCommandGroup PlaceElement() {
-        return new SequentialCommandGroup(
-                new PrintCommand("Place Element").andThen(new TogglePneumatics(pneumatics, !pneumatics.getChannel())));
+    public static Command PrepElementPlacementTwo() {
+        // return new SequentialCommandGroup(new PrintCommand("Prep Element
+        // Placement"));
+        // arm up to safety
+        // spin to left degrees
+        // arm to placement pos + increase nPlacement
+
+        return new SequentialCommandGroup(new PrintCommand("Prep Element Placement")
+                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+                        Constants.VERT_SAFE_TO_SPIN_ENC_POS))
+                .andThen(new PrintCommand("In Between"))
+                .andThen(new StopArm(vertArm))
+                .andThen(new PrintCommand("In Between"))
+                .andThen(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED,
+                        Constants.RIGHT_PLACEMENT_ENC_POS))
+                .andThen(new PrintCommand("In Between"))
+                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+                        Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC_SIDES))
+                .andThen(new PrintCommand("In Between"))
+                .andThen(new StopArm(vertArm))
+                .andThen(new PrintCommand("Done")));
+
+    }
+
+    public static Command PlaceElement() {
+        // return new SequentialCommandGroup(new PrintCommand("Place Element"));
         // open claw
-        // return new SequentialCommandGroup(new PrintCommand("Place Element")
-        // .andThen(new TogglePneumatics(pneumatics, true))
-        // );
+        return new SequentialCommandGroup(new PrintCommand("Place Element")
+                .andThen(new TogglePneumatics(pneumatics, true)).andThen(new PrintCommand("Done")));
     }
 
-    public static SequentialCommandGroup PrepElementPickup() { // TODO Something exremely similar in
-                                                               // PathHolder, just separate so fewer conflicts
-        return new SequentialCommandGroup(new PrintCommand("Prep Element Pickup")
-                .andThen(new TogglePneumatics(pneumatics, !pneumatics.getChannel())));
+    public static Command PrepElementPickup() { // TODO Something exremely similar in
+                                                // PathHolder, just separate so fewer conflicts
+        // return new SequentialCommandGroup(new PrintCommand("Prep Element Pickup"));
         // arm up to safety
         // spin to 0
         // arm to pickup pos
 
-        // return new SequentialCommandGroup(new PrintCommand("Prep Element Pickup")
-        // .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-        // Constants.VERT_SAFE_TO_SPIN_ENC_POS))
-        // .andThen(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED,
-        // 0))
-        // .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-        // Constants.VERT_PICKUP_POS)));
+        return new SequentialCommandGroup(new PrintCommand("Prep Element Pickup")
+                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+                        Constants.VERT_SAFE_TO_SPIN_ENC_POS))
+                .andThen(new PrintCommand("In Between"))
+                .andThen(new StopArm(vertArm))
+                .andThen(new PrintCommand("In Between"))
+                .andThen(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED,
+                        0))
+                .andThen(new PrintCommand("In Between"))
+                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+                        Constants.VERT_PICKUP_POS))
+                .andThen(new PrintCommand("In Between"))
+                .andThen(new StopArm(vertArm))
+                .andThen(new PrintCommand("Done")));
     }
 
-    public static SequentialCommandGroup PickupElement() {
-        return new SequentialCommandGroup(
-                new PrintCommand("PickupElement").andThen(new TogglePneumatics(pneumatics, !pneumatics.getChannel())));
+    public static Command PickupElement() {
+        // return new SequentialCommandGroup(new PrintCommand("PickupElement"));
         // close claw
-        // return new SequentialCommandGroup(new PrintCommand("Pickup Element")
-        // .andThen(new TogglePneumatics(pneumatics, false))
-        // );
+        return new SequentialCommandGroup(new PrintCommand("Pickup Element")
+                .andThen(new TogglePneumatics(pneumatics, false))
+                .andThen(new PrintCommand("Done")));
     }
 
-    public static SequentialCommandGroup Balance() {
-        return new SequentialCommandGroup(
-                new PrintCommand("Balance").andThen(new TogglePneumatics(pneumatics, !pneumatics.getChannel())));
+    public static Command Balance() {
+        // return new SequentialCommandGroup(new PrintCommand("Balance"));
         // arm to safety
         // spin to 0
         // balance
-        // return new SequentialCommandGroup(new PrintCommand("Balance")
-        // .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-        // Constants.VERT_SAFE_TO_SPIN_ENC_POS))
-        // .andThen(new Balance));
+        return new SequentialCommandGroup(new PrintCommand("Balance")
+                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+                        Constants.VERT_SAFE_TO_SPIN_ENC_POS))
+                .andThen(new PrintCommand("Done")));
     }
 
-    public static SequentialCommandGroup InitializeAutoValues() {
+    public static Command InitializeAutoValues() {
         return new SequentialCommandGroup(new PrintCommand("Initialize Auto Values"));
         // reset element placement
         // reset element pickup
@@ -221,7 +188,8 @@ public class PathHolder extends SubsystemBase {
 
     public HashMap<String, Command> getPathEventMap() {
         HashMap<String, Command> CPHashMap = new HashMap<>();
-        CPHashMap.put("PrepElementPlacement", PrepElementPlacement());
+        CPHashMap.put("PrepElementPlacementOne", PrepElementPlacementOne());
+        CPHashMap.put("PrepElementPlacementTwo", PrepElementPlacementTwo());
         CPHashMap.put("PlaceElement", PlaceElement());
         CPHashMap.put("PrepElementPickup", PrepElementPickup());
         CPHashMap.put("PickupElement", PickupElement());

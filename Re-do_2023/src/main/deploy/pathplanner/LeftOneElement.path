@@ -18,7 +18,7 @@
       "stopEvent": {
         "names": [
           "InitializeAutoValues",
-          "PrepElementPlacement"
+          "PrepElementPlacementOne"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -77,9 +77,15 @@
   ],
   "markers": [
     {
-      "position": 1.0,
+      "position": 1.0000000000000002,
       "names": [
         "PlaceElement"
+      ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "PrepElementPlacementOne"
       ]
     }
   ]

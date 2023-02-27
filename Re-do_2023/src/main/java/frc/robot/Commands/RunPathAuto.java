@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.PathHolder;
-import frc.robot.Subsystems.PathHolder.PathChoice;
 
 public class RunPathAuto extends CommandBase {
     private final PathHolder path;
