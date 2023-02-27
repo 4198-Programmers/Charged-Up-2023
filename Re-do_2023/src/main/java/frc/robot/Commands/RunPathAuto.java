@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.PathHolder;
+import frc.robot.Subsystems.PathHolder.PathChoice;
 
 public class RunPathAuto extends CommandBase {
     private final PathHolder path;
@@ -29,7 +31,7 @@ public class RunPathAuto extends CommandBase {
     public RunPathAuto(PathHolder pathSub, DriveTrain driveArg) {
         this.path = pathSub;
         this.driveTrain = driveArg;
-        addRequirements(pathSub, driveArg);
+        addRequirements(driveArg);
     }
 
     @Override
@@ -56,16 +58,15 @@ public class RunPathAuto extends CommandBase {
             }
         }
 
-
         if (unpassedMarkers.size() > 0 && matchTime >= unpassedMarkers.get(0).timeSeconds) {
             PathPlannerTrajectory.EventMarker marker = unpassedMarkers.remove(0);
 
-            for (String name : marker.names){
-                if(map.containsKey(name)){
+            for (String name : marker.names) {
+                if (map.containsKey(name)) {
                     commands = map.get(name);
                     commands.schedule();
                     System.out.println(matchTime + "time");
-                } else{
+                } else {
                     System.out.println("cannot run commands?");
                 }
             }

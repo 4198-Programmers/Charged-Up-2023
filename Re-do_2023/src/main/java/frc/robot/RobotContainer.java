@@ -179,25 +179,22 @@ public class RobotContainer {
     // LevelChooser.addOption("Middle", LevelPriority.Mid);
     // LevelChooser.addOption("Top", LevelPriority.Top);
 
-    PathChooser.setDefaultOption("Left One Element No Balance", PathChoice.Left_One_Element_No_Balance);
-    PathChooser.addOption("Left Three Element Balance", PathChoice.Left_Two_Element_No_Balance);
-    PathChooser.addOption("Left Three Element Balance", PathChoice.Left_One_Element_Balance);
-    PathChooser.addOption("Left Three Element Balance", PathChoice.Left_Two_Element_Balance);
-    PathChooser.addOption("Left Three Element Balance", PathChoice.Left_Three_Element_Balance);
-
-    PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_One_Element_No_Balance);
-    PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_Two_Element_No_Balance);
-    PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_One_Element_Balance);
-    PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_Two_Element_Balance);
-    PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_Three_Element_Balance);
-
-    PathChooser.addOption("Right Three Element Balance", PathChoice.Right_One_Element_No_Balance);
-    PathChooser.addOption("Right Three Element Balance", PathChoice.Right_Two_Element_No_Balance);
-    PathChooser.addOption("Right Three Element Balance", PathChoice.Right_One_Element_Balance);
-    PathChooser.addOption("Right Three Element Balance", PathChoice.Right_Two_Element_Balance);
-    PathChooser.addOption("Right Three Element Balance", PathChoice.Right_Three_Element_Balance);
-
-    PathChooser.addOption("Drive Straight", PathChoice.Drive_Straight);
+    PathChooser.setDefaultOption("Left One Element No Balance", PathChoice.LeftOneElement);
+    PathChooser.addOption("Left Three Element Balance", PathChoice.LeftTwoElement);
+    PathChooser.addOption("Left Three Element Balance", PathChoice.LeftOneElementBalance);
+    PathChooser.addOption("Left Three Element Balance", PathChoice.LeftTwoElementBalance);
+    PathChooser.addOption("Left Three Element Balance", PathChoice.LeftThreeElementBalance);
+    PathChooser.addOption("Mid Three Element Balance", PathChoice.MiddleOneElement);
+    PathChooser.addOption("Mid Three Element Balance", PathChoice.MiddleTwoElement);
+    PathChooser.addOption("Mid Three Element Balance", PathChoice.MiddleOneElementBalance);
+    PathChooser.addOption("Mid Three Element Balance", PathChoice.MiddleTwoElementBalance);
+    PathChooser.addOption("Mid Three Element Balance", PathChoice.MiddleThreeElementBalance);
+    PathChooser.addOption("Right Three Element Balance", PathChoice.RightOneElement);
+    PathChooser.addOption("Right Three Element Balance", PathChoice.RightTwoElement);
+    PathChooser.addOption("Right Three Element Balance", PathChoice.RightOneElementBalance);
+    PathChooser.addOption("Right Three Element Balance", PathChoice.RightTwoElementBalance);
+    PathChooser.addOption("Right Three Element Balance", PathChoice.RightThreeElementBalance);
+    PathChooser.addOption("Drive Straight", PathChoice.DriveStraight);
     
 
   }

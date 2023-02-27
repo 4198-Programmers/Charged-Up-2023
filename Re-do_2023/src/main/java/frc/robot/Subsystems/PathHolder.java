@@ -23,13 +23,37 @@ import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.RunPathAuto;
 import frc.robot.Commands.TogglePneumatics;
 
-public class PathHolder extends SubsystemBase {
-    private static String path;
+public class PathHolder {
     private static VertArm vertArm;
     private static Pneumatics pneumatics;
     private ReachArmSub reachArm;
     private static LazySusanSub lazySusan;
     private static int nPlacement;
+    private static String pathChosen;
+
+    public enum PathChoice {
+        LeftOneElement("LeftOneElement"),
+        LeftOneElementBalance("LeftOneElementBalance"),
+        LeftTwoElement("LeftTwoElement"),
+        LeftTwoElementBalance("LeftTwoElementBalance"),
+        LeftThreeElementBalance("LeftThreeElementBalance"),
+        MiddleOneElement("MiddleOneElement"),
+        MiddleOneElementBalance("MiddleOneElementBalance"),
+        MiddleTwoElement("MiddleTwoElement"),
+        MiddleTwoElementBalance("MiddleTwoElementBalance"),
+        MiddleThreeElementBalance("MiddleThreeElementBalance"),
+        RightOneElement("RightOneElement"),
+        RightOneElementBalance("RightOneElementBalance"),
+        RightTwoElement("RightTwoElement"),
+        RightTwoElementBalance("RightTwoElementBalance"),
+        RightThreeElementBalance("RightThreeElementBalance"), 
+        DriveStraight("DriveStraight");
+
+        private PathChoice(String path) {
+            pathChosen = path;
+        }
+
+    }
 
     public PathHolder(VertArm vertArm, Pneumatics pneumatics, ReachArmSub reachArm,
             LazySusanSub lazySusan) {
@@ -39,48 +63,19 @@ public class PathHolder extends SubsystemBase {
         this.lazySusan = lazySusan;
     }
 
-    public enum PathChoice {// Extra spacing for readability
-        // Probably an easier way to integrate this for driving, this is for
-        // functionality alone CP [2-21]
-
-        Left_One_Element_No_Balance("LeftOneElementNoBalance"),
-        Left_Two_Element_No_Balance("LeftTwoElementNoBalance"),
-        Left_One_Element_Balance("LeftOneElementBalance"),
-        Left_Two_Element_Balance("LeftTwoElementBalance"),
-        Left_Three_Element_Balance("LeftThreeElementBalance"),
-
-        Mid_One_Element_No_Balance("MidOneElementNoBalance"),
-        Mid_Two_Element_No_Balance("MidTwoElementNoBalance"),
-        Mid_One_Element_Balance("MidOneElementBalance"),
-        Mid_Two_Element_Balance("MidTwoElementBalance"),
-        Mid_Three_Element_Balance("MidThreeElementBalance"),
-
-        Right_One_Element_No_Balance("RightOneElementNoBalance"),
-        Right_Two_Element_No_Balance("RightTwoElementNoBalance"),
-        Right_One_Element_Balance("RightOneElementBalance"),
-        Right_Two_Element_Balance("RightTwoElementBalance"),
-        Right_Three_Element_Balance("RightThreeElementBalance"),
-
-        Drive_Straight("DriveStraight");
-
-        private PathChoice(String chosenPath) {
-            path = chosenPath;
-        }
-
-        public static String getPath() {
-            return path;
-        }
-    }
-
-    PathPlannerTrajectory examplePath = PathPlanner.loadPath("LeftThreeElementBalance", new PathConstraints(4, 3));
-    PathPlannerState state;
 
     public double[] getPathVelocities(double matchTime) {
-        state = (PathPlannerState) examplePath.sample(matchTime);
+        PathPlannerTrajectory examplePath = PathPlanner.loadPath(pathChosen, new PathConstraints(4, 3));
+        PathPlannerState state = (PathPlannerState) examplePath.sample(matchTime);
         double[] velocitiesAndRunTime = { state.velocityMetersPerSecond, 0, state.holonomicAngularVelocityRadPerSec,
                 examplePath.getTotalTimeSeconds() };
 
         return velocitiesAndRunTime;
+    }
+
+    public List<EventMarker> getPathMarks() {
+        PathPlannerTrajectory examplePath = PathPlanner.loadPath(pathChosen, new PathConstraints(4, 3));
+        return examplePath.getMarkers();
     }
 
     public static double placementPos(int numberPlaced) {
@@ -161,10 +156,6 @@ public class PathHolder extends SubsystemBase {
         return new SequentialCommandGroup(new PrintCommand("Initialize Auto Values"));
         // reset element placement
         // reset element pickup
-    }
-
-    public List<EventMarker> getPathMarks() {
-        return examplePath.getMarkers();
     }
 
     public HashMap<String, Command> getPathEventMap() {
