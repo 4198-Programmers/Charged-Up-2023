@@ -22,7 +22,6 @@ public class Swerve extends SubsystemBase {
 
   private SwerveDriveOdometry swerveOdometry;
   private SwerveModule[] mSwerveMods;
-  // private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0, 0, 0);
 
   private Field2d field;
 
@@ -30,6 +29,10 @@ public class Swerve extends SubsystemBase {
     gyro = new AHRS(SPI.Port.kMXP, (byte) 200);
    
     zeroGyro();
+
+   
+    
+    
 
    // ADD SWERVE MOD POSITION REMOVE NULL
 
@@ -60,10 +63,6 @@ public class Swerve extends SubsystemBase {
       mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
     }
   }
-  // public void drive(ChassisSpeeds chassisSpeeds){
-  //   this.chassisSpeeds = chassisSpeeds;
-  // }
-  
 
   /* Used by SwerveControllerCommand in Auto */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -78,9 +77,6 @@ public class Swerve extends SubsystemBase {
 
   public Pose2d getPose() {
     return swerveOdometry.getPoseMeters();
-  }
-  public Pose2d resetPose(){
-    return new Pose2d();
   }
 
   public void resetOdometry(Pose2d pose) {
@@ -110,31 +106,10 @@ public class Swerve extends SubsystemBase {
 
   public Rotation2d getYaw() {
     return (Constants.Swerve.invertGyro)
-        ? Rotation2d.fromDegrees(360 - gyro.getYaw() )
+        ? Rotation2d.fromDegrees(360 - gyro.getYaw())
         : Rotation2d.fromDegrees(gyro.getYaw());
   }
 
-/**Sets the rotation and speed to 0 */
-  public void pointWheelsForward(){
-
-    }
-
-
-  public void pointWheelsInward(){
-    
-  }
-
-  // public void balance(){
-  //   if(gyro.getPitch() > 0.5){
-  //     drive(new Translation2d(0, 1), 0, false, true);
-  //   }
-  //   else if(gyro.getPitch() < -0.5){
-  //     drive(new Translation2d(0, -0.5), 0, false, true);
-  //   }
-  //   else{
-  //     drive(new Translation2d(0, 0), 0, false, false);
-  //   }
-  // }
   @Override
   public void periodic() {
     swerveOdometry.update(getYaw(), getModulePositions()); 
