@@ -1,11 +1,8 @@
 package frc.robot.Subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -16,19 +13,16 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.SwerveModule;
-import frc.robot.Constants.AutoConstants;
 
 public class Swerve extends SubsystemBase {
   private final AHRS gyro;
 
   private SwerveDriveOdometry swerveOdometry;
   private SwerveModule[] mSwerveMods;
+  private final Rotation2d[] lastAngles;
 
   private Field2d field;
 
@@ -36,7 +30,13 @@ public class Swerve extends SubsystemBase {
     gyro = new AHRS(SPI.Port.kMXP, (byte) 200);
    
     zeroGyro();
-
+    //Manually makes empty angles
+    lastAngles = new Rotation2d[]{
+      new Rotation2d(),
+      new Rotation2d(),
+      new Rotation2d(),
+      new Rotation2d()
+    };
    
     
     
@@ -120,22 +120,36 @@ public class Swerve extends SubsystemBase {
         : Rotation2d.fromDegrees(gyro.getYaw());
   }
 
-  public Command swerveTrajectory(PathPlannerTrajectory trajectory){
-    return new SequentialCommandGroup(
-      new InstantCommand(() -> this.resetOdometry(trajectory.getInitialPose())),
-        new PPSwerveControllerCommand(
-          trajectory, 
-          this::getPose, 
-          Constants.Swerve.swerveKinematics, 
-          new PIDController(AutoConstants.kPXController, 0, 0), 
-          new PIDController(AutoConstants.kPYController, 0, 0), 
-          new PIDController(AutoConstants.kPThetaController, 0, 0), 
-          this::setModuleStates,
-          true,
-          this)
-      );
+  private void setModule(int i, SwerveModuleState desiredState){
+    mSwerveMods[i].setDesiredState(desiredState, true);
+    lastAngles[i] = desiredState.angle;
+    
+  }
+/**Sets the rotation and speed to 0 */
+  public void pointWheelsForward(){
+    for( int i = 0; i< 4; i++){
+      setModule(i, new SwerveModuleState(0, new Rotation2d()));
+    }
   }
 
+  public void pointWheelsInward(){
+    setModule(0, new SwerveModuleState(0, Rotation2d.fromDegrees(Constants.FRONT_LEFT_ANGLE_INWARD)));
+    setModule(1, new SwerveModuleState(0, Rotation2d.fromDegrees(Constants.FRONT_RIGHT_ANGLE_INWARD)));
+    setModule(2, new SwerveModuleState(0, Rotation2d.fromDegrees(Constants.BACK_LEFT_ANGLE_INWARD)));
+    setModule(3, new SwerveModuleState(0, Rotation2d.fromDegrees(Constants.BACK_RIGHT_ANGLE_INWARD)));
+  }
+
+  public void balance(){
+    if(gyro.getPitch() > 0.5){
+      drive(new Translation2d(0, 1), 0, false, true);
+    }
+    else if(gyro.getPitch() < -0.5){
+      drive(new Translation2d(0, -0.5), 0, false, true);
+    }
+    else{
+      drive(new Translation2d(0, 0), 0, false, false);
+    }
+  }
   @Override
   public void periodic() {
     swerveOdometry.update(getYaw(), getModulePositions()); 

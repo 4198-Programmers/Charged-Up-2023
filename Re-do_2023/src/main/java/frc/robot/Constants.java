@@ -62,8 +62,7 @@ public final class Constants {
 
         // Joystick 4 Buttons
         public static final int SUSAN_ZERO_HEADING_BUTTON = 3,
-                        SUSAN_BRAKE_BUTTON = 11,
-                        SUSAN_COAST_BUTTON = 12;
+                        SUSAN_TOGGLE_BUTTON = 1;
 
         // Turret Values
         public static final double SUSAN_CIRCUMFERENCE = 0,
@@ -100,6 +99,10 @@ public final class Constants {
                         WANTED_SKEW_LEFT = 0,
                         WANTED_SKEW_MID = 0,
                         WANTED_SKEW_RIGHT = 0;
+        public static final double FRONT_LEFT_ANGLE_INWARD = 0;
+        public static final double FRONT_RIGHT_ANGLE_INWARD = 0;
+        public static final double BACK_LEFT_ANGLE_INWARD = 0;
+        public static final double BACK_RIGHT_ANGLE_INWARD = 0;
 
                         public static final class Swerve {
                                 public static final double stickDeadband = 0.1;
