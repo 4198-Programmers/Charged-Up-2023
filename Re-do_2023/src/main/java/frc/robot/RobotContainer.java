@@ -68,9 +68,9 @@ public class RobotContainer {
     locationChooser = new SendableChooser<>();
 
     swerve.setDefaultCommand(new TeleopSwerve(swerve, 
-    () -> stickOne.getRawAxis(0) * 0.3, 
-    () -> stickOne.getRawAxis(1) * 0.3, 
-    () -> stickTwo.getRawAxis(0) * 0.3, 
+    () -> stickOne.getX() * 0.3, 
+    () -> stickOne.getY() * 0.3, 
+    () -> stickTwo.getX() * 0.3, 
     () -> new JoystickButton(stickOne, 1).getAsBoolean()));
     
 

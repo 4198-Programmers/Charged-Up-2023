@@ -22,7 +22,7 @@ public class Swerve extends SubsystemBase {
 
   private SwerveDriveOdometry swerveOdometry;
   private SwerveModule[] mSwerveMods;
-  private final Rotation2d[] lastAngles;
+  // private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0, 0, 0);
 
   private Field2d field;
 
@@ -30,16 +30,6 @@ public class Swerve extends SubsystemBase {
     gyro = new AHRS(SPI.Port.kMXP, (byte) 200);
    
     zeroGyro();
-    //Manually makes empty angles
-    lastAngles = new Rotation2d[]{
-      new Rotation2d(),
-      new Rotation2d(),
-      new Rotation2d(),
-      new Rotation2d()
-    };
-   
-    
-    
 
    // ADD SWERVE MOD POSITION REMOVE NULL
 
@@ -70,6 +60,10 @@ public class Swerve extends SubsystemBase {
       mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
     }
   }
+  // public void drive(ChassisSpeeds chassisSpeeds){
+  //   this.chassisSpeeds = chassisSpeeds;
+  // }
+  
 
   /* Used by SwerveControllerCommand in Auto */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -116,40 +110,31 @@ public class Swerve extends SubsystemBase {
 
   public Rotation2d getYaw() {
     return (Constants.Swerve.invertGyro)
-        ? Rotation2d.fromDegrees(360 - gyro.getYaw())
+        ? Rotation2d.fromDegrees(360 - gyro.getYaw() )
         : Rotation2d.fromDegrees(gyro.getYaw());
   }
 
-  private void setModule(int i, SwerveModuleState desiredState){
-    mSwerveMods[i].setDesiredState(desiredState, true);
-    lastAngles[i] = desiredState.angle;
-    
-  }
 /**Sets the rotation and speed to 0 */
   public void pointWheelsForward(){
-    for( int i = 0; i< 4; i++){
-      setModule(i, new SwerveModuleState(0, new Rotation2d()));
+
     }
-  }
+
 
   public void pointWheelsInward(){
-    setModule(0, new SwerveModuleState(0, Rotation2d.fromDegrees(Constants.FRONT_LEFT_ANGLE_INWARD)));
-    setModule(1, new SwerveModuleState(0, Rotation2d.fromDegrees(Constants.FRONT_RIGHT_ANGLE_INWARD)));
-    setModule(2, new SwerveModuleState(0, Rotation2d.fromDegrees(Constants.BACK_LEFT_ANGLE_INWARD)));
-    setModule(3, new SwerveModuleState(0, Rotation2d.fromDegrees(Constants.BACK_RIGHT_ANGLE_INWARD)));
+    
   }
 
-  public void balance(){
-    if(gyro.getPitch() > 0.5){
-      drive(new Translation2d(0, 1), 0, false, true);
-    }
-    else if(gyro.getPitch() < -0.5){
-      drive(new Translation2d(0, -0.5), 0, false, true);
-    }
-    else{
-      drive(new Translation2d(0, 0), 0, false, false);
-    }
-  }
+  // public void balance(){
+  //   if(gyro.getPitch() > 0.5){
+  //     drive(new Translation2d(0, 1), 0, false, true);
+  //   }
+  //   else if(gyro.getPitch() < -0.5){
+  //     drive(new Translation2d(0, -0.5), 0, false, true);
+  //   }
+  //   else{
+  //     drive(new Translation2d(0, 0), 0, false, false);
+  //   }
+  // }
   @Override
   public void periodic() {
     swerveOdometry.update(getYaw(), getModulePositions()); 

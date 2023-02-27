@@ -1,5 +1,6 @@
 package frc.robot;
 
+
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
@@ -10,9 +11,12 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.lib.config.CTREConfigs;
 import frc.lib.config.SwerveModuleConstants;
 import frc.lib.math.OnboardModuleState;
+import frc.lib.util.CANCoderUtil;
 import frc.lib.util.CANSparkMaxUtil;
+import frc.lib.util.CANCoderUtil.CCUsage;
 import frc.lib.util.CANSparkMaxUtil.Usage;
 
 public class SwerveModule {
@@ -26,6 +30,8 @@ public class SwerveModule {
   private RelativeEncoder driveEncoder;
   private RelativeEncoder integratedAngleEncoder;
   private CANCoder angleEncoder;
+  private CTREConfigs configs = new CTREConfigs();
+
 
   private final SparkMaxPIDController driveController;
   private final SparkMaxPIDController angleController;
@@ -40,7 +46,7 @@ public class SwerveModule {
 
     /* Angle Encoder Config */
     angleEncoder = new CANCoder(moduleConstants.cancoderID);
-    // configAngleEncoder();
+    
 
     /* Angle Motor Config */
     angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
@@ -55,6 +61,7 @@ public class SwerveModule {
     configDriveMotor();
 
     lastAngle = getState().angle;
+    configAngleEncoder();
   }
 
   public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
@@ -70,6 +77,13 @@ public class SwerveModule {
     double absolutePosition = getCanCoder().getDegrees() - angleOffset.getDegrees();
     integratedAngleEncoder.setPosition(absolutePosition);
   }
+
+  private void configAngleEncoder(){
+    angleEncoder.configFactoryDefault();
+    CANCoderUtil.setCANCoderBusUsage(angleEncoder, CCUsage.kMinimal);
+    angleEncoder.configAllSettings(configs.swerveCanCoderConfig);
+  }
+
 
 
   private void configAngleMotor() {

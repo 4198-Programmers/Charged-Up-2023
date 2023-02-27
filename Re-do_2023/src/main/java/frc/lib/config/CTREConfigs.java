@@ -7,7 +7,7 @@ import com.ctre.phoenix.sensors.SensorTimeBase;
 import frc.robot.Constants;
 
 public final class CTREConfigs {
-  public static CANCoderConfiguration swerveCanCoderConfig;
+  public CANCoderConfiguration swerveCanCoderConfig;
 
   public CTREConfigs() {
     swerveCanCoderConfig = new CANCoderConfiguration();
