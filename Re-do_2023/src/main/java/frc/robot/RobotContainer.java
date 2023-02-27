@@ -6,6 +6,9 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -33,7 +36,7 @@ import frc.robot.Commands.zeroHeading;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
 import frc.robot.Subsystems.VertArm;
-import frc.robot.Subsystems.PathHolder.PathChoice;
+// import frc.robot.Subsystems.PathHolder.PathChoice;
 
 public class RobotContainer {
   private final Joystick stickOne = new Joystick(0);
@@ -58,7 +61,7 @@ public class RobotContainer {
   // private final SendableChooser<LevelPriority> LevelChooser = new
   // SendableChooser<>();
   private final RunPathAuto autoPath = new RunPathAuto(mPath, mDriveTrain);
-  private final SendableChooser<PathChoice> PathChooser = new SendableChooser<>();
+  // private final SendableChooser<PathChoice> PathChooser = new SendableChooser<>();
 
   // private final SequentialCommandGroup aprilTagLeft = new SusanHead(lazySusanSub, 0)
   //     .andThen(new TagFollower(photonVision, mDriveTrain,
@@ -74,6 +77,9 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry pipeline = table.getEntry("pipeline");
+    pipeline.setDouble(0);
     mDriveTrain.setDefaultCommand(new DriveTrainCom(
         mDriveTrain,
         () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
@@ -82,14 +88,15 @@ public class RobotContainer {
         true)); // ATTENTION These values were multiplied by Oren to make the bot not die while
                 // testing the three * .5 terms should be deleted
 
-    reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> -stickFour.getRawAxis(1), 75));
+    // reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> -stickThree.getRawAxis(1), 75)); //CHANGETOTHREE
+    reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> 0, 0));
     pneumatics.Pressurize();
     new zeroHeading(mDriveTrain); // This sets the robot front to be the forward direction
     pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
     vertArm.setDefaultCommand(
         new ZeroVert(vertArm).andThen(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 30)));
     lazySusanSub.setDefaultCommand(
-        new ZeroSusan(lazySusanSub).andThen(new ControlSusan(lazySusanSub, () -> modifyAxis(-stickFour.getX()), 50)));
+        new ZeroSusan(lazySusanSub).andThen(new ControlSusan(lazySusanSub, () -> modifyAxis(-stickThree.getX()), 30)));//CHANGETOTHREE
     lazySusanSub.mode(IdleMode.kBrake);
   }
 
@@ -105,10 +112,10 @@ public class RobotContainer {
 
     // This lets a person press single button and open and close the claw every
     // other time.
-    new JoystickButton(stickFour, Constants.TOGGLE_CLAW_BUTTON)
-        .toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel()));
+    new JoystickButton(stickThree, Constants.TOGGLE_CLAW_BUTTON)
+        .toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel())); //CHANGETOTHREE
 
-        new JoystickButton(stickFour, Constants.TOGGLE_SUSAN_DIRECTION_BUTTON).toggleOnTrue(new ToggleSusan(lazySusanSub));
+        new JoystickButton(stickThree, Constants.TOGGLE_SUSAN_DIRECTION_BUTTON).toggleOnTrue(new ToggleSusan(lazySusanSub));//CHANGETOTHREE
 
     // This resets the robot to field orientation and sets the current front of the
     // robot to the forward direction
@@ -145,7 +152,9 @@ public class RobotContainer {
 
     // Make sure susan is set to a low value because it spins really fast. It has to
     // be at least under 0.3, most likely.
-    new JoystickButton(stickFour, Constants.SUSAN_ZERO_HEADING_BUTTON).onTrue(new SusanHead(lazySusanSub, 0));
+    new JoystickButton(stickThree, 7).onTrue(new SusanHead(lazySusanSub, 0)); //CHANGETOTHREE
+    new JoystickButton(stickThree, 3).whileTrue(new ControlReach(reachArmSub, () -> 1, 75));
+    new JoystickButton(stickThree, 2).whileTrue(new ControlReach(reachArmSub, () -> -1, 75));
     // Make sure susan is set to a low value because it spins really fast. It has to
     // be at least under 0.3, most likely. -> That is what the % modifier is for.
     // Don't change the speed -CP
@@ -159,7 +168,7 @@ public class RobotContainer {
 
   public void initializeAuto() {
     ShuffleboardTab autoTab = Shuffleboard.getTab("Auto Choices");
-    autoTab.add(PathChooser);
+    // autoTab.add(PathChooser);
     // autoTab.add(AutoChooser);
     // autoTab.add(LocationChooser);
     // autoTab.add(LevelChooser);
@@ -178,7 +187,13 @@ public class RobotContainer {
     // LevelChooser.setDefaultOption("Floor", LevelPriority.Floor);
     // LevelChooser.addOption("Middle", LevelPriority.Mid);
     // LevelChooser.addOption("Top", LevelPriority.Top);
+    // PathChooser.addOption("Left One Element No Balance", PathChoice.Left_One_Element_No_Balance);
+    // PathChooser.addOption("Left Three Element Balance", PathChoice.Left_Two_Element_No_Balance);
+    // PathChooser.addOption("Left Three Element Balance", PathChoice.Left_One_Element_Balance);
+    // PathChooser.addOption("Left Three Element Balance", PathChoice.Left_Two_Element_Balance);
+    // PathChooser.addOption("Left Three Element Balance", PathChoice.Left_Three_Element_Balance);
 
+<<<<<<< Updated upstream
     PathChooser.setDefaultOption("Left One Element No Balance", PathChoice.LeftOneElement);
     PathChooser.addOption("Left Three Element Balance", PathChoice.LeftTwoElement);
     PathChooser.addOption("Left Three Element Balance", PathChoice.LeftOneElementBalance);
@@ -195,6 +210,21 @@ public class RobotContainer {
     PathChooser.addOption("Right Three Element Balance", PathChoice.RightTwoElementBalance);
     PathChooser.addOption("Right Three Element Balance", PathChoice.RightThreeElementBalance);
     PathChooser.addOption("Drive Straight", PathChoice.DriveStraight);
+=======
+    // PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_One_Element_No_Balance);
+    // PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_Two_Element_No_Balance);
+    // PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_One_Element_Balance);
+    // PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_Two_Element_Balance);
+    // PathChooser.addOption("Mid Three Element Balance", PathChoice.Mid_Three_Element_Balance);
+
+    // PathChooser.addOption("Right Three Element Balance", PathChoice.Right_One_Element_No_Balance);
+    // PathChooser.addOption("Right Three Element Balance", PathChoice.Right_Two_Element_No_Balance);
+    // PathChooser.addOption("Right Three Element Balance", PathChoice.Right_One_Element_Balance);
+    // PathChooser.addOption("Right Three Element Balance", PathChoice.Right_Two_Element_Balance);
+    // PathChooser.addOption("Right Three Element Balance", PathChoice.Right_Three_Element_Balance);
+
+    // PathChooser.addOption("Drive Straight", PathChoice.Drive_Straight);
+>>>>>>> Stashed changes
     
 
   }

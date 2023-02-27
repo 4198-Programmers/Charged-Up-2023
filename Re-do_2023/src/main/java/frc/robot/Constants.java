@@ -76,7 +76,7 @@ public final class Constants {
                         RIGHT_PLACEMENT_DEGREES = 150,
                         VERT_PICKUP_POS = 0;
 
-        public static final double VERT_ARM_NO_DROP_SPEED = 0.09;
+        public static final double VERT_ARM_NO_DROP_SPEED = 0.12;
 
         // april tags constants
         public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0.25,
