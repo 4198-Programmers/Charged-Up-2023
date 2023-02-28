@@ -161,7 +161,7 @@ public final class Constants {
       public static final int driveMotorID = 7;
       public static final int angleMotorID = 8;
       public static final int canCoderID = 12;
-      public static final double angleOffset = Math.toRadians(179.82);
+      public static final double angleOffset = -Math.toRadians(291.00);
     }
 
     /* Front Right Module - Module 1 */
@@ -169,7 +169,7 @@ public final class Constants {
       public static final int driveMotorID = 3;
       public static final int angleMotorID = 4;
       public static final int canCoderID = 11;
-      public static final double angleOffset = Math.toRadians(180.79);
+      public static final double angleOffset = -Math.toRadians(149.85);
     }
 
     /* Back Left Module - Module 2 */
@@ -177,7 +177,7 @@ public final class Constants {
       public static final int driveMotorID = 5;
       public static final int angleMotorID = 6;
       public static final int canCoderID = 9;
-      public static final double angleOffset = Math.toRadians(359.03);
+      public static final double angleOffset = -Math.toRadians(90.88);
     }
 
     /* Back Right Module - Module 3 */
@@ -185,7 +185,7 @@ public final class Constants {
       public static final int driveMotorID = 2;
       public static final int angleMotorID = 1;
       public static final int canCoderID = 10;
-      public static final double angleOffset = Math.toRadians(354.55 - 180);
+      public static final double angleOffset = -Math.toRadians(26.54);
     }
   }
 

@@ -79,10 +79,10 @@ private final SwerveModule frontLeft = new SwerveModule(
       odometer.update(getRotation2d(), positions);
       SmartDashboard.putNumber("Robot Heading", getHeading());
       SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
-      SmartDashboard.putNumber("Front Left Angle", frontLeft.getAbsoluteEncoderPosition());
-      SmartDashboard.putNumber("Front Right Angle", frontRight.getAbsoluteEncoderPosition());
-      SmartDashboard.putNumber("Back Left Angle", backLeft.getAbsoluteEncoderPosition());
-      SmartDashboard.putNumber("Back Right Angle", backRight.getAbsoluteEncoderPosition());
+      SmartDashboard.putNumber("Front Left Angle", frontLeft.getAbsoluteEncoderRadians());
+      SmartDashboard.putNumber("Front Right Angle", frontRight.getAbsoluteEncoderRadians());
+      SmartDashboard.putNumber("Back Left Angle", backLeft.getAbsoluteEncoderRadians());
+      SmartDashboard.putNumber("Back Right Angle", backRight.getAbsoluteEncoderRadians());
       
   }
   public void stopModules(){

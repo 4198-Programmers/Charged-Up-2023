@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.sensors.CANCoder;
+import com.revrobotics.AnalogInput;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -9,6 +10,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.AnalogEncoder;
 import frc.robot.Constants.AutoConstants;
 
 public class SwerveModule {
@@ -24,10 +26,14 @@ public class SwerveModule {
   private final boolean absoluteEncoderReversed;
   private final double absoluteEncoderOffset;
 
+
   public SwerveModule(int driveMotorID, int angleMotorID, int absoluteEncoderID, double absoluteEncoderOffset, boolean absoluteEncoderReversed){
     this.absoluteEncoderOffset = absoluteEncoderOffset;
     this.absoluteEncoderReversed = absoluteEncoderReversed;
     absoluteEncoder = new CANCoder(absoluteEncoderID);
+    final CTREConfigs configs = new CTREConfigs();
+    absoluteEncoder.configAllSettings(configs.coderConfiguration);
+    absoluteEncoder.configMagnetOffset(absoluteEncoderOffset);
 
     driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
     angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
@@ -60,7 +66,6 @@ public class SwerveModule {
 
   public double getAbsoluteEncoderRadians(){
     double angle = absoluteEncoder.getAbsolutePosition();
-    angle -= absoluteEncoderOffset;
     return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
   }
 
