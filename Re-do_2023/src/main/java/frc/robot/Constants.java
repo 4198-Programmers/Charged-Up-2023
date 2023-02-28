@@ -62,7 +62,7 @@ public final class Constants {
         public static final float PITCH_OFFSET = 5; // Must be a float for the gyro values
 
         // Auto Values
-        public static final double AUTO_VERT_SPEED = 0.1,
+        public static final double AUTO_VERT_SPEED = 0.2,
                         MAX_VELOCITY_METERS_PER_SECOND = 4,
                         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3,
                         VERT_SAFE_TO_SPIN_ENC_POS = 0.6, //printed at 0.5, better safe than broken

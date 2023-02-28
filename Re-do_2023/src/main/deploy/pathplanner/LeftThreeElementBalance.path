@@ -18,10 +18,12 @@
       "stopEvent": {
         "names": [
           "InitializeAutoValues",
-          "PrepElementPlacementOne"
+          "VertSafeSpin",
+          "SusanLeft",
+          "VertSidesPlace"
         ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "minimum",
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
         "waitTime": 5.0
       }
     },
@@ -47,8 +49,8 @@
         "names": [
           "PlaceElement"
         ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "minimum",
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
         "waitTime": 5.0
       }
     },
@@ -72,10 +74,12 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "PrepElementPickup"
+          "VertSafeSpin",
+          "ZeroSusan",
+          "PickupPos"
         ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "minimum",
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
         "waitTime": 5.0
       }
     },
@@ -101,8 +105,8 @@
         "names": [
           "PickupElement"
         ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "minimum",
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
         "waitTime": 5.0
       }
     },
@@ -126,10 +130,12 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "PrepElementPlacementTwo"
+          "VertSafeSpin",
+          "SusanLeft",
+          "VertSidesPlace"
         ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "minimum",
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
         "waitTime": 5.0
       }
     },
@@ -155,8 +161,8 @@
         "names": [
           "PlaceElement"
         ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "minimum",
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
         "waitTime": 5.0
       }
     },
@@ -180,10 +186,12 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "PrepElementPickup"
+          "VertSafeSpin",
+          "ZeroSusan",
+          "PickupPos"
         ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "minimum",
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
         "waitTime": 5.0
       }
     },
@@ -209,8 +217,8 @@
         "names": [
           "PickupElement"
         ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "minimum",
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
         "waitTime": 5.0
       }
     },
@@ -233,8 +241,8 @@
         "names": [
           "Balance"
         ],
-        "executionBehavior": "parallel",
-        "waitBehavior": "minimum",
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
         "waitTime": 5.0
       }
     }
@@ -243,7 +251,9 @@
     {
       "position": 0.8727272727272728,
       "names": [
-        "PrepElementPlacementOne"
+        "VertSafeSpin",
+        "SusanLeft",
+        "VertSidesPlace"
       ]
     },
     {
@@ -255,7 +265,9 @@
     {
       "position": 2.0,
       "names": [
-        "PrepElementPickup"
+        "VertSafeSpin",
+        "ZeroSusan",
+        "PickupPos"
       ]
     },
     {

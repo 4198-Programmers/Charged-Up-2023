@@ -186,6 +186,26 @@ public class PathHolder {
         // reset element pickup
     }
 
+    public static Command VertSafeSpin() {
+        return (new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.VERT_SAFE_TO_SPIN_ENC_POS));
+    }
+
+    public static Command SusanLeft() {
+        return (new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, Constants.LEFT_PLACEMENT_ENC_POS));
+    }
+
+    public static Command VertSidesPlace() {
+        return (new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC_SIDES));
+    }
+
+    public static Command ZeroSusan() {
+        return (new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0));
+    }
+
+    public static Command PickupPos() {
+        return (new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.VERT_PICKUP_POS));
+    }
+
     public HashMap<String, Command> getPathEventMap() {
         HashMap<String, Command> CPHashMap = new HashMap<>();
         CPHashMap.put("PrepElementPlacementOne", PrepElementPlacementOne());
@@ -195,6 +215,11 @@ public class PathHolder {
         CPHashMap.put("PickupElement", PickupElement());
         CPHashMap.put("Balance", Balance());
         CPHashMap.put("InitializeAutoValues", InitializeAutoValues());
+        CPHashMap.put("VertSafeSpin", VertSafeSpin());
+        CPHashMap.put("SusanLeft", SusanLeft());
+        CPHashMap.put("VertSidesPlace", VertSidesPlace());
+        CPHashMap.put("ZeroSusan", ZeroSusan());
+        CPHashMap.put("PickupPos", PickupPos());
 
         return CPHashMap;
     }
