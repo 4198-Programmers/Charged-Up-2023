@@ -83,6 +83,7 @@ public class RobotContainer {
     lazySusanSub.setDefaultCommand(
         new ZeroSusan(lazySusanSub).andThen(new ControlSusan(lazySusanSub, () -> modifyAxis(-stickFour.getX()), 50)));
     lazySusanSub.mode(IdleMode.kBrake);
+    
   }
 
   private void configureBindings() {
