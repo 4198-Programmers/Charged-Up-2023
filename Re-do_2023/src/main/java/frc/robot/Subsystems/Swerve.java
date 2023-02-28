@@ -1,127 +1,102 @@
 package frc.robot.Subsystems;
 
+
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.SwerveModule;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.Swerve.Mod0;
+import frc.robot.Constants.Swerve.Mod1;
+import frc.robot.Constants.Swerve.Mod2;
+import frc.robot.Constants.Swerve.Mod3;
 
 public class Swerve extends SubsystemBase {
-  private final AHRS gyro;
+private final SwerveModule frontLeft = new SwerveModule(
+  Mod0.driveMotorID, 
+  Mod0.angleMotorID, 
+  Mod0.canCoderID, 
+  Mod0.angleOffset, false);
 
-  private SwerveDriveOdometry swerveOdometry;
-  private SwerveModule[] mSwerveMods;
+  private final SwerveModule frontRight = new SwerveModule(
+  Mod1.driveMotorID, 
+  Mod1.angleMotorID, 
+  Mod1.canCoderID, 
+  Mod1.angleOffset, false);
+  private final SwerveModule backLeft = new SwerveModule(
+  Mod2.driveMotorID, 
+  Mod2.angleMotorID, 
+  Mod2.canCoderID, 
+  Mod2.angleOffset, false);
 
-  private Field2d field;
+  private final SwerveModule backRight = new SwerveModule(
+  Mod3.driveMotorID, 
+  Mod3.angleMotorID, 
+  Mod3.canCoderID, 
+  Mod3.angleOffset, false);
 
-  public Swerve() {
-    gyro = new AHRS(SPI.Port.kMXP, (byte) 200);
-   
-    zeroGyro();
+  private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-   
-    
-    
+  private final SwerveModulePosition[] positions = new SwerveModulePosition[]{
+    frontLeft.getPosition(),
+    frontRight.getPosition(),
+    backLeft.getPosition(),
+    backRight.getPosition()
+  };
+  private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getRotation2d(), positions);
 
-   // ADD SWERVE MOD POSITION REMOVE NULL
-
-    mSwerveMods =
-        new SwerveModule[] {
-          new SwerveModule(0, Constants.Swerve.Mod0.constants),
-          new SwerveModule(1, Constants.Swerve.Mod1.constants),
-          new SwerveModule(2, Constants.Swerve.Mod2.constants),
-          new SwerveModule(3, Constants.Swerve.Mod3.constants)
-        };
-
-    field = new Field2d();
-    SmartDashboard.putData("Field", field);
-    swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
+  public void zeroHeading(){
+    gyro.reset();
   }
 
-  public void drive(
-      Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-    SwerveModuleState[] swerveModuleStates =
-        Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-            fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                    translation.getX(), translation.getY(), rotation, getYaw())
-                : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
-
-    for (SwerveModule mod : mSwerveMods) {
-      mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
-    }
+  public double getHeading(){
+    return Math.IEEEremainder(gyro.getAngle(), 360);
   }
 
-  /* Used by SwerveControllerCommand in Auto */
-  public void setModuleStates(SwerveModuleState[] desiredStates) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
-
-    for (SwerveModule mod : mSwerveMods) {
-      mod.setDesiredState(desiredStates[mod.moduleNumber], false);
-    }
+  public Rotation2d getRotation2d(){
+    return Rotation2d.fromDegrees(getHeading());
   }
 
-  
-
-  public Pose2d getPose() {
-    return swerveOdometry.getPoseMeters();
-  }
-  public void resetOdometry(Pose2d pose) {
-    swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
-    // ADD SWERVE MOD POSITION REMOVE NULL
+  public Pose2d getPose(){
+    return odometer.getPoseMeters();
   }
 
-  public SwerveModuleState[] getStates() {
-    SwerveModuleState[] states = new SwerveModuleState[4];
-    for (SwerveModule mod : mSwerveMods) {
-      states[mod.moduleNumber] = mod.getState();
-    }
-    return states;
-  }
-
-  public SwerveModulePosition[] getModulePositions(){
-    SwerveModulePosition[] positions = new SwerveModulePosition[4];
-    for(SwerveModule mod : mSwerveMods){
-        positions[mod.moduleNumber] = mod.getPosition();
-    }
-    return positions;
-  }
-
-  public void zeroGyro() {
-    gyro.zeroYaw();
-  }
-
-  public Rotation2d getYaw() {
-    return (Constants.Swerve.invertGyro)
-        ? Rotation2d.fromDegrees(360 - gyro.getYaw())
-        : Rotation2d.fromDegrees(gyro.getYaw());
+  public void resetOdometry(Pose2d pose){
+    odometer.resetPosition(getRotation2d(), positions, pose);
   }
 
   @Override
   public void periodic() {
-    swerveOdometry.update(getYaw(), getModulePositions()); 
-    // Uncomment and fix line above for odometry. Simple needs module positions added. 
-    field.setRobotPose(getPose());
+      odometer.update(getRotation2d(), positions);
+      SmartDashboard.putNumber("Robot Heading", getHeading());
+      SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+      SmartDashboard.putNumber("Front Left Angle", frontLeft.getAbsoluteEncoderPosition());
+      SmartDashboard.putNumber("Front Right Angle", frontRight.getAbsoluteEncoderPosition());
+      SmartDashboard.putNumber("Back Left Angle", backLeft.getAbsoluteEncoderPosition());
+      SmartDashboard.putNumber("Back Right Angle", backRight.getAbsoluteEncoderPosition());
+      
+  }
+  public void stopModules(){
+   frontLeft.stop();
+   frontRight.stop();
+   backLeft.stop();
+   backRight.stop();     
+  }
 
-    for (SwerveModule mod : mSwerveMods) {
-      SmartDashboard.putNumber(
-          "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
-      SmartDashboard.putNumber(
-          "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
-      SmartDashboard.putNumber(
-          "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
-    }
+  public void setModuleStates(SwerveModuleState[] desiredStates){
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, AutoConstants.kMaxSpeedMetersPerSecond);
+    frontLeft.setDesiredState(desiredStates[0]);
+    frontRight.setDesiredState(desiredStates[1]);
+    backLeft.setDesiredState(desiredStates[2]);
+    backRight.setDesiredState(desiredStates[3]);
   }
 }

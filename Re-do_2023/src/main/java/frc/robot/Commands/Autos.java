@@ -6,17 +6,11 @@ import java.util.List;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPoint;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
@@ -147,18 +141,18 @@ public final class Autos {
             }
     }
 
-    public CommandBase moveToTarget(Pose2d targetPose){
-        Pose2d currentPose = swerve.getPose();
-        Rotation2d heading = (targetPose.getTranslation().minus(currentPose.getTranslation())).getAngle();
-        PathPlannerTrajectory trajectory = PathPlanner.generatePath(
-            new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared), 
-            new PathPoint(currentPose.getTranslation(), heading, currentPose.getRotation()),
-            new PathPoint(targetPose.getTranslation(), heading, targetPose.getRotation()));
-        return new SequentialCommandGroup(
-            autoBuilder.followPathWithEvents(trajectory),
-            new InstantCommand(() -> swerve.drive(new Translation2d(0, 0), 0, false, false))
-        );
-    }
+    // public CommandBase moveToTarget(Pose2d targetPose){
+    //     Pose2d currentPose = swerve.getPose();
+    //     Rotation2d heading = (targetPose.getTranslation().minus(currentPose.getTranslation())).getAngle();
+    //     PathPlannerTrajectory trajectory = PathPlanner.generatePath(
+    //         new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared), 
+    //         new PathPoint(currentPose.getTranslation(), heading, currentPose.getRotation()),
+    //         new PathPoint(targetPose.getTranslation(), heading, targetPose.getRotation()));
+    //     return new SequentialCommandGroup(
+    //         autoBuilder.followPathWithEvents(trajectory),
+    //         (new TeleopSwerve(swerve, () ->0, () -> 0, () -> 0, () -> false))
+    //     );
+    // }
 
     public CommandBase getAuto(){
         CommandBase auto;

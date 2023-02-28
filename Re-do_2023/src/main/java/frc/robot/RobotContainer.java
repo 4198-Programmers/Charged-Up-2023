@@ -6,7 +6,6 @@ package frc.robot;
 
 import java.util.HashMap;
 
-import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
@@ -68,9 +67,9 @@ public class RobotContainer {
     locationChooser = new SendableChooser<>();
 
     swerve.setDefaultCommand(new TeleopSwerve(swerve, 
-    () -> stickOne.getX() * 0.3, 
-    () -> stickOne.getY() * 0.3, 
-    () -> stickTwo.getX() * 0.3, 
+    () -> modifyAxis(stickOne.getX()) * 0.3, 
+    () -> modifyAxis(stickOne.getY()) * 0.3, 
+    () -> modifyAxis(stickTwo.getX()) * 0.3, 
     () -> new JoystickButton(stickOne, 1).getAsBoolean()));
     
 
@@ -82,8 +81,6 @@ public class RobotContainer {
         new ZeroVert(vertArm).andThen(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 30)));
     lazySusanSub.setDefaultCommand(
         new ZeroSusan(lazySusanSub).andThen(new ControlSusan(lazySusanSub, () -> modifyAxis(-stickFour.getX()), 50)));
-    lazySusanSub.mode(IdleMode.kBrake);
-    
   }
 
   private void configureBindings() {
