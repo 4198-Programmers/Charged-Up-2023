@@ -17,4 +17,9 @@ public class TogglePneumatics extends CommandBase {
     public void execute() {
         pneumatics.togglePneumatics(channel);
     }
+
+    @Override
+    public boolean isFinished() {
+        return pneumatics.getChannel() == channel;
+    }
 }

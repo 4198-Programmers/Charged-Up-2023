@@ -16,6 +16,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
+    m_robotContainer.initShuffleboard();
+    System.out.println("new code");
   }
 
   @Override

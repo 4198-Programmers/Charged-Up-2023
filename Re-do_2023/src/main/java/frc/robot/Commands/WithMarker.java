@@ -1,5 +1,6 @@
 package frc.robot.Commands;
 
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;

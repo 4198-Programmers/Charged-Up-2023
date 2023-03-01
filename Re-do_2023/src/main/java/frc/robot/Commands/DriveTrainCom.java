@@ -36,7 +36,6 @@ public class DriveTrainCom extends CommandBase {
                 YSupplier.getAsDouble(),
                 ZSupplier.getAsDouble(),
                 drive.getGyroRotation(fieldOrientation)));
-        System.out.println("Field Orientation: " + fieldOrientation);
         SmartDashboard.putBoolean("FieldOrientation", fieldOrientation);
     }
 
