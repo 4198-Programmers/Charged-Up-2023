@@ -113,7 +113,7 @@ public class RobotContainer {
 
   public void initializeAuto() {
     autoContainer = AutoContainer.getInstance();
-      eventMap.put("PrepElementPlacement", autoContainer.prepElementCommand());
+      eventMap.put("PrepElementPlacement", autoContainer.prepElementPlacementCommand());
       eventMap.put("PlaceElement", autoContainer.placeElementCommand());
       eventMap.put("PrepElementPickup", autoContainer.prepElementPickupCommand());
       eventMap.put("PickupElement", autoContainer.pickupElementCommand());

@@ -11,8 +11,12 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Commands.AutoVert;
+import frc.robot.Commands.SusanHead;
+import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Subsystems.Pneumatics;
@@ -265,53 +269,76 @@ public final class AutoContainer {
         return new SequentialCommandGroup(eventMap.get("PickupElement"));
     }
 
-    public CommandBase prepElementCommand(){
+    public CommandBase prepElementPlacementCommand(){
         String event = new String();
+        double heading;
+        double height;
         if(placementChooser.getSelected() == PlacementType.rightTop){
             event = "Right Top";
+            heading = -45;
+            height = Constants.VERT_TOP_SHELF_PLACEMENT_ENC;
+            
         }
         else if(placementChooser.getSelected() == PlacementType.rightMiddle){
             event = "Right Middle";
+            heading = -45;
+            height = Constants.VERT_MIDDLE_SHELF_PLACEMENT_ENC;
         }
         else if(placementChooser.getSelected() == PlacementType.rightBottom){
             event = "Right Bottom";
+            heading = -45;
+            height = Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC;
         }
         else if(placementChooser.getSelected() == PlacementType.leftTop){
             event = "Left Top";
+            heading = 45;
+            height = Constants.VERT_TOP_SHELF_PLACEMENT_ENC;
         }
         else if(placementChooser.getSelected() == PlacementType.leftMiddle){
             event = "Left Middle";
+            heading = 45;
+            height = Constants.VERT_MIDDLE_SHELF_PLACEMENT_ENC;
         }
         else if(placementChooser.getSelected() == PlacementType.leftBottom){
             event = "Left Bottom";
+            heading = 45;
+            height = Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC;
         }
         else if(placementChooser.getSelected() == PlacementType.middleTop){
             event = "Middle Top";
+            heading = 0;
+            height = Constants.VERT_TOP_SHELF_PLACEMENT_ENC;
         }
         else if(placementChooser.getSelected() == PlacementType.middleMiddle){
             event = "Middle Middle";
+            heading = 0;
+            height = Constants.VERT_MIDDLE_SHELF_PLACEMENT_ENC;
         }
-        else if(placementChooser.getSelected() == PlacementType.middleBottom){
+        else{
             event = "Middle Bottom";
+            heading = 0;
+            height = Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC;
         }
-        return new PrintCommand(event);
+        SusanHead susanHead = new SusanHead(lazySusanSub, heading);
+        AutoVert autoVert = new AutoVert(vertArm, 0.5, height);
+        return new SequentialCommandGroup(new PrintCommand(event), susanHead.alongWith(autoVert));
     }
     public CommandBase placeElementCommand(){
-        return new PrintCommand("Place Element");
-        //return new SequentialCommandGroup(new TogglePneumatics(pneumatics, true));
+        //return new PrintCommand("Place Element");
+        return new SequentialCommandGroup(new PrintCommand("Place Element"), new TogglePneumatics(pneumatics, true));
     }
     public CommandBase prepElementPickupCommand(){
-        return new PrintCommand("Prep Pickup Element");
-        //return new SequentialCommandGroup(
-    //   new InstantCommand(() -> vertArm.autoVert(0.5, Constants.VERT_PICKUP_POS), vertArm),
-    //   new InstantCommand(() -> pneumatics.togglePneumatics(true), pneumatics)
-    // ));
+        //return new PrintCommand("Prep Pickup Element");
+        return new SequentialCommandGroup(new PrintCommand("Prep Pickup Element"),
+      new InstantCommand(() -> vertArm.autoVert(0.5, Constants.VERT_PICKUP_POS), vertArm),
+      new InstantCommand(() -> pneumatics.togglePneumatics(true), pneumatics)
+    );
     }
     public CommandBase pickupElementCommand(){
-        return new PrintCommand("Pickup Element");
-        //return new SequentialCommandGroup(
-    //   new InstantCommand(() -> pneumatics.togglePneumatics(true))
-    // ));
+        // return new PrintCommand("Pickup Element");
+        return new SequentialCommandGroup(new PrintCommand("Pickup Element"), 
+      new InstantCommand(() -> pneumatics.togglePneumatics(true))
+    );
     }
 
     static List<PathPlannerTrajectory> leftOneElementPath = PathPlanner.loadPathGroup("LeftOneElement", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared));
