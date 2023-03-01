@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
@@ -40,20 +39,20 @@ public class RobotContainer {
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();
   
-  private final SequentialCommandGroup aprilTagLeft = 
-  new SusanHead(lazySusanSub, 0)
-  .andThen(new TagFollower(photonVision, mDriveTrain, 
-  Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT));
+  private final Command aprilTagLeft = 
+  //new SusanHead(lazySusanSub, 0).andThen(
+  new TagFollower(photonVision, mDriveTrain, 
+  Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT);
   
-  private final SequentialCommandGroup aprilTagRight = 
-  new SusanHead(lazySusanSub, 0)
-  .andThen(new TagFollower(photonVision, mDriveTrain, 
-  Constants.WANTED_YAW_RIGHT, Constants.WANTED_SKEW_RIGHT, Constants.WANTED_DISTANCE_RIGHT));
+  private final Command aprilTagRight = 
+  //new SusanHead(lazySusanSub, 0).andThen(
+  new TagFollower(photonVision, mDriveTrain, 
+  Constants.WANTED_YAW_RIGHT, Constants.WANTED_SKEW_RIGHT, Constants.WANTED_DISTANCE_RIGHT);
 
-  private final SequentialCommandGroup aprilTagMid = 
-  new SusanHead(lazySusanSub, 0)
-  .andThen(new TagFollower(photonVision, mDriveTrain, 
-  Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
+  private final Command aprilTagMid = 
+  //new SusanHead(lazySusanSub, 0).andThen(
+  new TagFollower(photonVision, mDriveTrain, 
+  Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID);
   
   
 

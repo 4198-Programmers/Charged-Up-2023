@@ -52,8 +52,14 @@ public final class Constants {
     public static final double WANTED_SKEW_MID = 0;
     public static final double WANTED_SKEW_RIGHT = 0;
     
-    
-    
+    //Pose estimation constants
+    public static final double ROTATION_3D_ROLL = 0;
+    public static final double ROTATION_3D_PITCH = 0;
+    public static final double ROTATION_3D_YAW = 0;
+    public static final double TRANSLATION_3D_X = 0;
+    public static final double TRANSLATION_3D_Y = 0;
+    public static final double TRANSLATION_3D_Z = 0;
+
 
 
    //Joystick 1 Buttons
