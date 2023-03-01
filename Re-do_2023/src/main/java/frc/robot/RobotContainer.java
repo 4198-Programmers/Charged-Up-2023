@@ -12,9 +12,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Commands.Autos;
+import frc.robot.AutoContainer.AutoTypes;
+import frc.robot.AutoContainer.Locations;
+import frc.robot.AutoContainer.PlacementType;
 import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
@@ -25,8 +26,6 @@ import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Commands.ZeroSusan;
 import frc.robot.Commands.ZeroVert;
 import frc.robot.Commands.zeroHeading;
-import frc.robot.Commands.Autos.AutoTypes;
-import frc.robot.Commands.Autos.Locations;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
 import frc.robot.Subsystems.Swerve;
@@ -43,10 +42,11 @@ public class RobotContainer {
   private final ReachArmSub reachArmSub = new ReachArmSub();
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();
-  private Autos autos = new Autos();
+  private AutoContainer autoContainer = new AutoContainer();
   private HashMap<String, Command> eventMap;
   private SendableChooser<AutoTypes> autoChooser;
   private SendableChooser<Locations> locationChooser;
+  private SendableChooser<PlacementType> placementChooser;
 
   // private final SequentialCommandGroup aprilTagLeft = new SusanHead(lazySusanSub, 0)
   //     .andThen(new TagFollower(photonVision, mDriveTrain,
@@ -65,6 +65,7 @@ public class RobotContainer {
     eventMap = new HashMap<>();
     autoChooser = new SendableChooser<>();
     locationChooser = new SendableChooser<>();
+    placementChooser = new SendableChooser<>();
 
     swerve.setDefaultCommand(new TeleopSwerve(swerve, 
     () -> modifyAxis(stickOne.getX()) * 0.3, 
@@ -111,41 +112,21 @@ public class RobotContainer {
   }
 
   public void initializeAuto() {
-    autos = Autos.getInstance();
-    // eventMap.put("PrepElementPlacement", new SequentialCommandGroup(new InstantCommand(() -> pneumatics.togglePneumatics(false), pneumatics), 
-    //   new InstantCommand(() -> vertArm.autoVert(0.5, Constants.MAX_VERTICAL_POSITION), vertArm)));
+    autoContainer = AutoContainer.getInstance();
+      eventMap.put("PrepElementPlacement", autoContainer.prepElementCommand());
+      eventMap.put("PlaceElement", autoContainer.placeElementCommand());
+      eventMap.put("PrepElementPickup", autoContainer.prepElementPickupCommand());
+      eventMap.put("PickupElement", autoContainer.pickupElementCommand());
 
-    // eventMap.put("PlaceElement", new SequentialCommandGroup(
-    //   new InstantCommand(() -> reachArmSub.moveReach(0.5), reachArmSub).raceWith(new WaitCommand(1)),
-    //   new InstantCommand(() -> pneumatics.togglePneumatics(true), pneumatics),
-    //   new InstantCommand(() -> pneumatics.togglePneumatics(false), pneumatics),
-    //   new InstantCommand(() -> reachArmSub.moveReach(0.5), reachArmSub).raceWith(new WaitCommand(1)),
-    //   new InstantCommand(() -> vertArm.autoVert(-0.5, Constants.MIN_VERTICAL_POSITION), vertArm)
-    // ));
-
-    // eventMap.put("PrepElementPickup", 
-    // new SequentialCommandGroup(
-    //   new InstantCommand(() -> vertArm.autoVert(0.5, Constants.VERT_PICKUP_POS), vertArm),
-    //   new InstantCommand(() -> pneumatics.togglePneumatics(true), pneumatics)
-    // ));
-
-    // eventMap.put("PickupElement", 
-    // new SequentialCommandGroup(
-    //   new InstantCommand(() -> pneumatics.togglePneumatics(true))
-    // ));
-      eventMap.put("PrepElementPlacement", new PrintCommand("Prep Element Placement"));
-      eventMap.put("PlaceElement", new PrintCommand("Place Element"));
-      eventMap.put("PrepElementPickup", new PrintCommand("Prep Element Pickup"));
-      eventMap.put("PickupElement", new PrintCommand("Pickup Element"));
-
-    autos.autoInitialize(autoChooser, locationChooser, eventMap, swerve);
+    autoContainer.autoInitialize(autoChooser, locationChooser, placementChooser, eventMap, swerve, pneumatics, vertArm, reachArmSub, lazySusanSub);
     SmartDashboard.putData(autoChooser);
     SmartDashboard.putData(locationChooser);
+    SmartDashboard.putData(placementChooser);
 
   }
 
   public Command getAutonomousCommand() {
-    return autos.getAuto();
+    return autoContainer.getAuto();
   }
 
 

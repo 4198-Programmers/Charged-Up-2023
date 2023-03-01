@@ -1,7 +1,6 @@
 package frc.robot;
 
 import com.ctre.phoenix.sensors.CANCoder;
-import com.revrobotics.AnalogInput;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -10,7 +9,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.AutoConstants;
 
 public class SwerveModule {
@@ -20,18 +19,21 @@ public class SwerveModule {
   private final RelativeEncoder driveEncoder;
   private final RelativeEncoder angleEncoder;
 
+  private final Rotation2d offset;
+
   private final PIDController anglePIDController;
 
   private final CANCoder  absoluteEncoder;
   private final boolean absoluteEncoderReversed;
-  private final double absoluteEncoderOffset;
+  final CTREConfigs configs = new CTREConfigs();
 
 
   public SwerveModule(int driveMotorID, int angleMotorID, int absoluteEncoderID, double absoluteEncoderOffset, boolean absoluteEncoderReversed){
-    this.absoluteEncoderOffset = absoluteEncoderOffset;
     this.absoluteEncoderReversed = absoluteEncoderReversed;
     absoluteEncoder = new CANCoder(absoluteEncoderID);
-    final CTREConfigs configs = new CTREConfigs();
+
+    offset = Rotation2d.fromDegrees(absoluteEncoderOffset);
+
     absoluteEncoder.configAllSettings(configs.coderConfiguration);
     absoluteEncoder.configMagnetOffset(absoluteEncoderOffset);
 
@@ -64,6 +66,11 @@ public class SwerveModule {
     return angleEncoder.getVelocity();
   }
 
+  public Rotation2d getCanCoderAngle() {
+    double unsignedAngle = (Units.degreesToRadians(absoluteEncoder.getAbsolutePosition()) - offset.getRadians()) % (2 * Math.PI);
+    return new Rotation2d(unsignedAngle);
+}
+
   public double getAbsoluteEncoderRadians(){
     double angle = absoluteEncoder.getAbsolutePosition();
     return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
@@ -71,8 +78,8 @@ public class SwerveModule {
 
   public void resetEncoders(){
     driveEncoder.setPosition(0);
-    angleEncoder.setPosition(getAbsoluteEncoderRadians());
-  }
+    angleEncoder.setPosition(getCanCoderAngle().getRadians());
+    }
 
   public SwerveModuleState getState(){
     return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAnglePosition()));
@@ -92,7 +99,7 @@ public class SwerveModule {
     angleMotor.set(0);
   }
   public Rotation2d getAngle(){
-    return Rotation2d.fromDegrees(absoluteEncoder.getPosition());
+    return Rotation2d.fromDegrees(absoluteEncoder.getAbsolutePosition());
   }
 
   public SwerveModulePosition getPosition(){

@@ -1,4 +1,4 @@
-package frc.robot.Commands;
+package frc.robot;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,14 +11,23 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Subsystems.LazySusanSub;
+import frc.robot.Subsystems.Pneumatics;
+import frc.robot.Subsystems.ReachArmSub;
 import frc.robot.Subsystems.Swerve;
+import frc.robot.Subsystems.VertArm;
 
-public final class Autos {
+public final class AutoContainer {
     public static int locationChoice;
     public static int autoChoice;
+    public static int placementChoice;
+    private Pneumatics pneumatics;
+    private VertArm vertArm;
+    private ReachArmSub reachArmSub;
+    private LazySusanSub lazySusanSub;
 
     public enum Locations{
         Right(0),
@@ -49,31 +58,57 @@ public final class Autos {
         }
 
     }
+    public enum PlacementType{
+        rightTop(0),
+        rightMiddle(1),
+        rightBottom(2),
+        middleTop(3),
+        middleMiddle(4),
+        middleBottom(5),
+        leftTop(6),
+        leftMiddle(7),
+        leftBottom(8);
+
+        private int place;
+
+        private PlacementType(int place){
+            this.place = place;
+        }
+        public int getPlacement(){
+            return place;
+        }
+    }
 
     private Swerve swerve;
     private static SwerveAutoBuilder autoBuilder;
     private HashMap<String, Command> eventMap;
     SendableChooser<AutoTypes> autoChooser; 
     SendableChooser<Locations> locationChooser;
+    SendableChooser<PlacementType> placementChooser;
 
-    private static Autos autos;
+    private static AutoContainer autos;
 
-    public static Autos getInstance(){
+    public static AutoContainer getInstance(){
         if(autos == null){
-            autos = new Autos();
+            autos = new AutoContainer();
         }
         return autos;
     }
 
 
 
-    public void autoInitialize(SendableChooser<AutoTypes> autoChooser, SendableChooser<Locations> locationChooser, HashMap<String, Command> eventMap, Swerve swerve){
+    public void autoInitialize(SendableChooser<AutoTypes> autoChooser, SendableChooser<Locations> locationChooser, SendableChooser<PlacementType> placementChooser, HashMap<String, Command> eventMap, Swerve swerve, Pneumatics pneumatics, VertArm vertArm, ReachArmSub reachArmSub, LazySusanSub lazySusanSub){
         this.swerve = swerve;
+        this.pneumatics = pneumatics;
+        this.vertArm = vertArm;
+        this.reachArmSub = reachArmSub;
+        this.lazySusanSub = lazySusanSub;
         this.eventMap = eventMap;
         this.locationChooser = locationChooser;
         this.autoChooser = autoChooser;
+        this.placementChooser = placementChooser;
 
-        Autos.autoBuilder = new SwerveAutoBuilder(
+        AutoContainer.autoBuilder = new SwerveAutoBuilder(
             swerve::getPose, 
             swerve::resetOdometry, 
             Constants.Swerve.swerveKinematics, 
@@ -93,6 +128,16 @@ public final class Autos {
             autoChooser.addOption("Two Elements", AutoTypes.TwoElement);
             autoChooser.addOption("Two Elements Balance", AutoTypes.TwoElementBalance);
             autoChooser.addOption("Three Elements Balance", AutoTypes.ThreeElementBalance);
+
+            placementChooser.setDefaultOption("Top Right Place", PlacementType.rightTop);
+            placementChooser.addOption("Middle Right Place", PlacementType.rightMiddle);
+            placementChooser.addOption("Bottom Right Place", PlacementType.rightBottom);
+            placementChooser.addOption("Top Middle Place", PlacementType.middleTop);
+            placementChooser.addOption("Middle Middle Place", PlacementType.middleMiddle);
+            placementChooser.addOption("Bottom Middle Place", PlacementType.middleBottom);
+            placementChooser.addOption("Top Left Place", PlacementType.leftTop);
+            placementChooser.addOption("Middle Left Place", PlacementType.leftMiddle);
+            placementChooser.addOption("Bottom Left Place", PlacementType.leftBottom);
 
             if(locationChooser.getSelected() == Locations.Left && autoChooser.getSelected() == AutoTypes.OneElement){
                 autoBuilder.fullAuto(leftOneElementPath);
@@ -218,6 +263,55 @@ public final class Autos {
 
     public CommandBase pickupElement(){
         return new SequentialCommandGroup(eventMap.get("PickupElement"));
+    }
+
+    public CommandBase prepElementCommand(){
+        String event = new String();
+        if(placementChooser.getSelected() == PlacementType.rightTop){
+            event = "Right Top";
+        }
+        else if(placementChooser.getSelected() == PlacementType.rightMiddle){
+            event = "Right Middle";
+        }
+        else if(placementChooser.getSelected() == PlacementType.rightBottom){
+            event = "Right Bottom";
+        }
+        else if(placementChooser.getSelected() == PlacementType.leftTop){
+            event = "Left Top";
+        }
+        else if(placementChooser.getSelected() == PlacementType.leftMiddle){
+            event = "Left Middle";
+        }
+        else if(placementChooser.getSelected() == PlacementType.leftBottom){
+            event = "Left Bottom";
+        }
+        else if(placementChooser.getSelected() == PlacementType.middleTop){
+            event = "Middle Top";
+        }
+        else if(placementChooser.getSelected() == PlacementType.middleMiddle){
+            event = "Middle Middle";
+        }
+        else if(placementChooser.getSelected() == PlacementType.middleBottom){
+            event = "Middle Bottom";
+        }
+        return new PrintCommand(event);
+    }
+    public CommandBase placeElementCommand(){
+        return new PrintCommand("Place Element");
+        //return new SequentialCommandGroup(new TogglePneumatics(pneumatics, true));
+    }
+    public CommandBase prepElementPickupCommand(){
+        return new PrintCommand("Prep Pickup Element");
+        //return new SequentialCommandGroup(
+    //   new InstantCommand(() -> vertArm.autoVert(0.5, Constants.VERT_PICKUP_POS), vertArm),
+    //   new InstantCommand(() -> pneumatics.togglePneumatics(true), pneumatics)
+    // ));
+    }
+    public CommandBase pickupElementCommand(){
+        return new PrintCommand("Pickup Element");
+        //return new SequentialCommandGroup(
+    //   new InstantCommand(() -> pneumatics.togglePneumatics(true))
+    // ));
     }
 
     static List<PathPlannerTrajectory> leftOneElementPath = PathPlanner.loadPathGroup("LeftOneElement", new PathConstraints(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared));

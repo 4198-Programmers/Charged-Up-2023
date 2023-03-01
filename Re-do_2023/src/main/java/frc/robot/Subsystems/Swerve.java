@@ -25,27 +25,30 @@ private final SwerveModule frontLeft = new SwerveModule(
   Mod0.driveMotorID, 
   Mod0.angleMotorID, 
   Mod0.canCoderID, 
-  Mod0.angleOffset, false);
+  Mod0.angleOffset, 
+  Mod0.encoderReversed);
 
   private final SwerveModule frontRight = new SwerveModule(
   Mod1.driveMotorID, 
   Mod1.angleMotorID, 
   Mod1.canCoderID, 
-  Mod1.angleOffset, false);
+  Mod1.angleOffset, 
+  Mod1.encoderReversed);
   private final SwerveModule backLeft = new SwerveModule(
   Mod2.driveMotorID, 
   Mod2.angleMotorID, 
   Mod2.canCoderID, 
-  Mod2.angleOffset, false);
+  Mod2.angleOffset, 
+  Mod2.encoderReversed);
 
   private final SwerveModule backRight = new SwerveModule(
   Mod3.driveMotorID, 
   Mod3.angleMotorID, 
   Mod3.canCoderID, 
-  Mod3.angleOffset, false);
+  Mod3.angleOffset, 
+  Mod3.encoderReversed);
 
   private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-
   private final SwerveModulePosition[] positions = new SwerveModulePosition[]{
     frontLeft.getPosition(),
     frontRight.getPosition(),
@@ -79,10 +82,10 @@ private final SwerveModule frontLeft = new SwerveModule(
       odometer.update(getRotation2d(), positions);
       SmartDashboard.putNumber("Robot Heading", getHeading());
       SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
-      SmartDashboard.putNumber("Front Left Angle", frontLeft.getAbsoluteEncoderRadians());
-      SmartDashboard.putNumber("Front Right Angle", frontRight.getAbsoluteEncoderRadians());
-      SmartDashboard.putNumber("Back Left Angle", backLeft.getAbsoluteEncoderRadians());
-      SmartDashboard.putNumber("Back Right Angle", backRight.getAbsoluteEncoderRadians());
+      SmartDashboard.putString("Front Left Cancoder Angle", frontLeft.getCanCoderAngle().toString());
+      SmartDashboard.putString("Front Right Cancoder Angle", frontRight.getCanCoderAngle().toString());
+      SmartDashboard.putString("Back Left Cancoder Angle", backLeft.getCanCoderAngle().toString());
+      SmartDashboard.putString("Back Right Cancoder Angle", backRight.getCanCoderAngle().toString());
       
   }
   public void stopModules(){
