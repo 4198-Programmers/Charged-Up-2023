@@ -73,9 +73,9 @@ public class SinglePaths /* extends CommandBase */ {
     }
 
     private String[] driveToPieceOnePathNameArr = { "LeftDriveToPieceOne", "MidDriveToPieceOne",
-            "LeftDriveToPieceOne" };
+            "RightDriveToPieceOne" };
     private String[] driveToPieceTwoPathName = { "LeftDriveToPieceTwo", "MidDriveToPieceTwo",
-            "LeftDriveToPieceTwo" };
+            "RightDriveToPieceTwo" };
     private SequentialCommandGroup[] elementsChoiceGroupsArr;
     private boolean[] balanceBool = { false, true };
     private String[] driveToPlaceTwoPathName = { "LeftDriveToPlacementTwo", "MiddleDriveToPlacementTwo",
@@ -83,7 +83,7 @@ public class SinglePaths /* extends CommandBase */ {
     private String[] driveToBalanceOne = { "LeftPickupOneToBalance", "MidPickupOneToBalance",
             "RightPickupOneToBalance" };
     private String[] driveToBalanceTwo = { "LeftPickupTwoToBalance", "MidPickupTwoToBalance",
-            "LeftPickupTwoToBalance" };
+            "RightPickupTwoToBalance" };
 
     private SequentialCommandGroup PlaceFirstElementGroup() {
         // addRequirements(vertArm, lazySusan, pneumatics);
@@ -179,6 +179,7 @@ public class SinglePaths /* extends CommandBase */ {
     }
 
     public SequentialCommandGroup GetAutoCommand() {
+        // return elementsChoiceGroupsArr[elementsChoice];
         return RunOneElement();
         // return new SequentialCommandGroup(new ZeroVert(vertArm)
         // .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,

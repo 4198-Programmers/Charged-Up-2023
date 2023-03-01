@@ -15,6 +15,7 @@ public class ManualFollowAuto extends CommandBase{
     private long timeStart;
     private double matchTime;
     private ChassisSpeeds toSwerveSpeeds;
+    boolean isFinished;
     
 
     public ManualFollowAuto(DriveTrain driveTrain, String pathToFollow){
@@ -25,8 +26,9 @@ public class ManualFollowAuto extends CommandBase{
 
     @Override
     public void initialize() {
-        path = PathPlanner.loadPath(pathName, 4, 3);
+        path = PathPlanner.loadPath(pathName, 2, 1.5);
         timeStart = System.currentTimeMillis();
+        isFinished = false;
     }
 
     @Override
@@ -35,14 +37,21 @@ public class ManualFollowAuto extends CommandBase{
         PathPlannerState state = (PathPlannerState) path.sample(matchTime);
 
         if (matchTime <= path.getTotalTimeSeconds()) {
-            toSwerveSpeeds = new ChassisSpeeds(state.velocityMetersPerSecond, 0, state.angularVelocityRadPerSec);
+            toSwerveSpeeds = new ChassisSpeeds(state.velocityMetersPerSecond * 0.5, 0, state.angularVelocityRadPerSec * 0.5);
+            //Auto way too fast
             driveTrain.drive(toSwerveSpeeds);
         } else {
             toSwerveSpeeds = new ChassisSpeeds(0, 0, 0);
             driveTrain.drive(toSwerveSpeeds);
+            isFinished = true;
             System.out.println("Stop Auto");
         }
 
+    }
+
+    @Override
+    public boolean isFinished() {
+        return isFinished;
     }
     
 }

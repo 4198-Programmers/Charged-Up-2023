@@ -101,7 +101,7 @@ public class RobotContainer {
     // -stickThree.getRawAxis(1), 75)); //CHANGETOTHREE
     reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> 0, 0));
     pneumatics.Pressurize();
-    //new zeroHeading(mDriveTrain); // This sets the robot front to be the forward direction
+    new zeroHeading(mDriveTrain); // This sets the robot front to be the forward direction
     pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
     vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 30));
     lazySusanSub.setDefaultCommand(

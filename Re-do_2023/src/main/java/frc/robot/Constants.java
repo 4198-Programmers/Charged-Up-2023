@@ -67,14 +67,14 @@ public final class Constants {
                         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3,
                         VERT_SAFE_TO_SPIN_ENC_POS = 0.6, //printed at 0.5, better safe than broken
                         AUTO_SUSAN_SPEED = 0.3,
-                        LEFT_PLACEMENT_ENC_POS = 12.071479,
+                        LEFT_PLACEMENT_ENC_POS = 10,
                         VERT_BOTTOM_SHELF_PLACEMENT_ENC_MID = 0.603176,
                         VERT_BOTTOM_SHELF_PLACEMENT_ENC_SIDES = 0.9972,
                         MID_PLACEMENT_ENC_POS = 0,
-                        RIGHT_PLACEMENT_ENC_POS = -12.071479,
+                        RIGHT_PLACEMENT_ENC_POS = -10,
                         VERT_PICKUP_POS = 0,
                         AUTO_ENC_OFFSET = 0.05,
-                        SUSAN_180_ENC_POS = 60;
+                        SUSAN_180_ENC_POS = 50;
 
         public static final double VERT_ARM_NO_DROP_SPEED = 0.12;
 
