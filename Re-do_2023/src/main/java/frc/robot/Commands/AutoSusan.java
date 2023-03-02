@@ -18,9 +18,10 @@ public class AutoSusan extends CommandBase {
 
     @Override
     public void execute() {
-        if (lazySusanSub.getLocation() < wantedPos - Constants.AUTO_ENC_OFFSET) {
+        if (lazySusanSub.getLocation() < wantedPos - Constants.AUTO_ENC_OFFSET && lazySusanSub.getLocation() <= 80) {
             lazySusanSub.spinSusan(speed);
-        } else if (lazySusanSub.getLocation() > wantedPos + Constants.AUTO_ENC_OFFSET) {
+        } else if (lazySusanSub.getLocation() > wantedPos + Constants.AUTO_ENC_OFFSET
+                && lazySusanSub.getLocation() >= -80) {
             lazySusanSub.spinSusan(-speed);
         } else {
             lazySusanSub.spinSusan(0);

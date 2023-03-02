@@ -40,7 +40,28 @@ public final class Constants {
       MAX_SUSAN_LEFT_POSITION = -37,
       MAX_SUSAN_RIGHT_POSITION = 34;
 
-  // april tags constants
+        // Joystick 1 Buttons
+        public static final int APRIL_TAG_LEFT_BUTTON = 1;
+        public static final int NO_SLIP_DRIVE_BUTTON = 2;
+        public static final int FIELD_ORIENTATION_BUTTON = 11;
+        public static final int ROBOT_ORIENTATION_BUTTON = 12;
+
+        // Joystick 2 Buttons
+        public static final int APRIL_TAG_RIGHT_BUTTON = 1;
+        public static final int APRIL_TAG_TOP_LEFT_BUTTON = 7,
+                                APRIL_TAG_TOP_RIGHT_BUTTON = 8,
+                                APRIL_TAG_MID_LEFT_BUTTON = 9,
+                                APRIL_TAG_MID_RIGHT_BUTTON = 10;
+
+        // Joystick 3 Buttons
+        public static final int TOGGLE_CLAW_BUTTON = 1,
+                                REACH_OUT_BUTTON = 3, 
+                                REACH_IN_BUTTON = 2, 
+                                ZERO_SUSAN_HEADING_BUTTON = 4, 
+                                ONE_EIGHTY_SUSAN_HEADING_BUTTON = 5;
+
+        //Joystick 4 Button
+        public static final int TOGGLE_SUSAN_DIRECTION_BUTTON = 1;
 
   // Pose estimation constants
   public static final double ROTATION_3D_ROLL = 0;
@@ -50,45 +71,28 @@ public final class Constants {
   public static final double TRANSLATION_3D_Y = 0;
   public static final double TRANSLATION_3D_Z = 0;
 
-  // Joystick 1 Buttons
-  public static final int APRIL_TAG_LEFT_BUTTON = 1;
-  public static final int APRIL_TAG_TOP_LEFT_BUTTON = 7,
-                          APRIL_TAG_TOP_RIGHT_BUTTON = 8,
-                          APRIL_TAG_MID_LEFT_BUTTON = 9,
-                          APRIL_TAG_MID_RIGHT_BUTTON = 10;
-  public static final int FIELD_ORIENTATION_BUTTON = 11;
-  public static final int ROBOT_ORIENTATION_BUTTON = 12;
+        
 
-  // Joystick 2 Buttons
-  public static final int APRIL_TAG_RIGHT_BUTTON = 1;
-
-  // Joystick 3 Buttons
-  public static final int TOGGLE_CLAW_BUTTON = 1;
-
-  // Joystick 4 Buttons
-  public static final int SUSAN_ZERO_HEADING_BUTTON = 3,
-      TOGGLE_SUSAN_DIRECTION_BUTTON = 4;
+        // Auto Values
+        public static final double AUTO_VERT_SPEED = 0.15,
+                        MAX_VELOCITY_METERS_PER_SECOND = 4,
+                        MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3,
+                        VERT_SAFE_TO_SPIN_ENC_POS = 0.6, // printed at 0.5, better safe than broken
+                        AUTO_SUSAN_SPEED = 0.3,
+                        LEFT_PLACEMENT_ENC_POS = 10,
+                        VERT_BOTTOM_SHELF_PLACEMENT_ENC_MID = 0.603176,
+                        VERT_BOTTOM_SHELF_PLACEMENT_ENC_SIDES = 0.9972,
+                        MID_PLACEMENT_ENC_POS = 0,
+                        RIGHT_PLACEMENT_ENC_POS = -10,
+                        VERT_PICKUP_POS = 0.2,
+                        AUTO_ENC_OFFSET = 0.05,
+                        SUSAN_180_ENC_POS = 50;
 
   // Turret Values
   public static final double SUSAN_CIRCUMFERENCE = 0,
       MOTOR_ROTATIONS_PER_360_SUSAN = 104.7272727273, // gear ratio = 16 sprocket ratio = 7 + (6/11)
       BALANCE_SPEED = 0.1;
   public static final float PITCH_OFFSET = 5; // Must be a float for the gyro values
-
-  // Auto Values
-  public static final double AUTO_VERT_SPEED = 0.15,
-      MAX_VELOCITY_METERS_PER_SECOND = 4,
-      MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3,
-      VERT_SAFE_TO_SPIN_ENC_POS = 0.6, // printed at 0.5, better safe than broken
-      AUTO_SUSAN_SPEED = 0.3,
-      LEFT_PLACEMENT_ENC_POS = 10,
-      VERT_BOTTOM_SHELF_PLACEMENT_ENC_MID = 0.603176,
-      VERT_BOTTOM_SHELF_PLACEMENT_ENC_SIDES = 0.9972,
-      MID_PLACEMENT_ENC_POS = 0,
-      RIGHT_PLACEMENT_ENC_POS = -10,
-      VERT_PICKUP_POS = 0,
-      AUTO_ENC_OFFSET = 0.05,
-      SUSAN_180_ENC_POS = 50;
 
   public static final double VERT_ARM_NO_DROP_SPEED = 0.12;
 

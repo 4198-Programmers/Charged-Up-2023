@@ -24,15 +24,12 @@ public class AutoVert extends CommandBase {
 
     @Override
     public void execute() {
-        System.out.println(vertArm.getLocation() + " Auto Vert");
         if (vertArm.getLocation() < wantedPos) {// (wantedPos - Constants.AUTO_ENC_OFFSET)
-            vertArm.moveArm(0.15);
-            System.out.println("try top");
+            vertArm.moveArm(0.17);
         } else if (vertArm.getLocation() > (wantedPos + 0.05)) {
             vertArm.moveArm(-0.1);
-            System.out.println("try low");
         } else if (vertArm.getLocation() >= wantedPos
-                && vertArm.getLocation() <= wantedPos + 0.05) {
+                && vertArm.getLocation() <= (wantedPos + 0.05)) {
             vertArm.moveArm(Constants.VERT_ARM_NO_DROP_SPEED);
             System.out.println("Finished Vert Auto");
             isFinished = true;
