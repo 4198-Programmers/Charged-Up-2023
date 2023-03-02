@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Commands.AutoSusan;
+import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.Balance;
 import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
@@ -54,20 +56,74 @@ public class RobotContainer {
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();
 
-  private final Command aprilTagLeft =
-      // new SusanHead(lazySusanSub, 0).andThen(
+  // april tag commands
+  private final Command aprilTagLeft = new AutoSusan(lazySusanSub, 0.25, 0).andThen(
       new TagFollower(photonVision, mDriveTrain,
-          Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT);
+          Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT));
 
-  private final Command aprilTagRight =
-      // new SusanHead(lazySusanSub, 0).andThen(
-      new TagFollower(photonVision, mDriveTrain,
-          Constants.WANTED_YAW_RIGHT, Constants.WANTED_SKEW_RIGHT, Constants.WANTED_DISTANCE_RIGHT);
+  private final Command aprilTagLeftTopLeft = new AutoVert(vertArm, 0.25, Constants.LEVEL_ARM)
+      .andThen(new AutoSusan(lazySusanSub, 0.25, 0))
+      .andThen(new TagFollower(photonVision, mDriveTrain,
+          Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT))
+      .andThen(new AutoSusan(lazySusanSub, 0.25, 0));
 
-  private final Command aprilTagMid =
-      // new SusanHead(lazySusanSub, 0).andThen(
+  private final Command aprilTagLeftTopRight = new AutoVert(vertArm, 0.25, Constants.LEVEL_ARM)
+      .andThen(new AutoSusan(lazySusanSub, 0.25, 0))
+      .andThen(new TagFollower(photonVision, mDriveTrain,
+          Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT))
+      .andThen(new AutoSusan(lazySusanSub, 0.25,
+          Maths.degreesToRotations_Susan(Math.toDegrees(Math.tanh((Constants.CUBE_TO_CONE_NODE_WIDTH)
+              / (Constants.CAMERA_TO_DRIVEBASE_OFFSET + Constants.END_OF_BOT_TO_TOP_NODE_LENGTH))))));
+
+  private final Command aprilTagLeftMidLeft = new AutoVert(vertArm, 0.25, Constants.LEVEL_ARM)
+      .andThen(new AutoSusan(lazySusanSub, 0.25, 0))
+      .andThen(new TagFollower(photonVision, mDriveTrain,
+          Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT))
+      .andThen(new AutoSusan(lazySusanSub, 0.25, 0));
+
+  private final Command aprilTagLeftMidRight = new AutoVert(vertArm, 0.25, Constants.LEVEL_ARM)
+      .andThen(new AutoSusan(lazySusanSub, 0.25, 0))
+      .andThen(new TagFollower(photonVision, mDriveTrain,
+          Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT))
+      .andThen(new AutoSusan(lazySusanSub, 0.25,
+          Maths.degreesToRotations_Susan(Math.toDegrees(Math.tanh((Constants.CUBE_TO_CONE_NODE_WIDTH)
+              / (Constants.CAMERA_TO_DRIVEBASE_OFFSET + Constants.END_OF_BOT_TO_MID_NODE_LENGTH))))));
+
+  private final Command aprilTagRight = new AutoSusan(lazySusanSub, 0.25, 0).andThen(
       new TagFollower(photonVision, mDriveTrain,
-          Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID);
+          Constants.WANTED_YAW_RIGHT, Constants.WANTED_SKEW_RIGHT, Constants.WANTED_DISTANCE_RIGHT));
+
+  private final Command aprilTagRightTopLeft = new AutoVert(vertArm, 0.25, Constants.LEVEL_ARM)
+      .andThen(new AutoSusan(lazySusanSub, 0.25, 0))
+      .andThen(new TagFollower(photonVision, mDriveTrain,
+          Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT))
+      .andThen(new AutoSusan(lazySusanSub, 0.25, 0));
+
+  private final Command aprilTagRightTopRight = new AutoVert(vertArm, 0.25, Constants.LEVEL_ARM)
+      .andThen(new AutoSusan(lazySusanSub, 0.25, 0))
+      .andThen(new TagFollower(photonVision, mDriveTrain,
+          Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT))
+      .andThen(new AutoSusan(lazySusanSub, 0.25,
+          Maths.degreesToRotations_Susan(Math.toDegrees(Math.tanh((Constants.CUBE_TO_CONE_NODE_WIDTH)
+              / (Constants.CAMERA_TO_DRIVEBASE_OFFSET + Constants.END_OF_BOT_TO_TOP_NODE_LENGTH))))));
+
+  private final Command aprilTagRightMidLeft = new AutoVert(vertArm, 0.25, Constants.LEVEL_ARM)
+      .andThen(new AutoSusan(lazySusanSub, 0.25, 0))
+      .andThen(new TagFollower(photonVision, mDriveTrain,
+          Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT))
+      .andThen(new AutoSusan(lazySusanSub, 0.25, 0));
+
+  private final Command aprilTagRightMidRight = new AutoVert(vertArm, 0.25, Constants.LEVEL_ARM)
+      .andThen(new AutoSusan(lazySusanSub, 0.25, 0))
+      .andThen(new TagFollower(photonVision, mDriveTrain,
+          Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT, Constants.WANTED_DISTANCE_LEFT))
+      .andThen(new AutoSusan(lazySusanSub, 0.25,
+          Maths.degreesToRotations_Susan(Math.toDegrees(Math.tanh((Constants.CUBE_TO_CONE_NODE_WIDTH)
+              / (Constants.CAMERA_TO_DRIVEBASE_OFFSET + Constants.END_OF_BOT_TO_MID_NODE_LENGTH))))));
+
+  private final Command aprilTagMid = new AutoSusan(lazySusanSub, 0.25, 0).andThen(
+      new TagFollower(photonVision, mDriveTrain,
+          Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID, Constants.WANTED_DISTANCE_MID));
 
   private final PathHolder mPath = new PathHolder(vertArm, pneumatics, reachArmSub, lazySusanSub);
   private final SinglePaths singlePaths = new SinglePaths(mDriveTrain, vertArm, lazySusanSub, pneumatics);
@@ -157,6 +213,38 @@ public class RobotContainer {
     new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
         .and(new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON))
         .whileTrue(aprilTagMid);
+    // april tags spot choosers begin
+    // left top left
+    new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
+        .and(new JoystickButton(stickTwo, Constants.APRIL_TAG_TOP_LEFT_BUTTON))
+        .whileTrue(aprilTagLeftTopLeft);
+    // left top right
+    new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
+        .and(new JoystickButton(stickTwo, Constants.APRIL_TAG_TOP_RIGHT_BUTTON))
+        .whileTrue(aprilTagLeftTopRight);
+    // left mid left
+    new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
+        .and(new JoystickButton(stickTwo, Constants.APRIL_TAG_MID_LEFT_BUTTON))
+        .whileTrue(aprilTagLeftMidLeft);
+    // left mid right
+    new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
+        .and(new JoystickButton(stickTwo, Constants.APRIL_TAG_MID_RIGHT_BUTTON))
+        .whileTrue(aprilTagLeftMidRight);
+    // right top left
+    new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON)
+        .and(new JoystickButton(stickOne, Constants.APRIL_TAG_TOP_LEFT_BUTTON))
+        .whileTrue(aprilTagLeftTopRight);
+    // right top right
+    new JoystickButton(stickOne, Constants.APRIL_TAG_RIGHT_BUTTON)
+        .and(new JoystickButton(stickTwo, Constants.APRIL_TAG_TOP_RIGHT_BUTTON))
+        .whileTrue(aprilTagRightTopRight);
+    //right mid left
+    new JoystickButton(stickOne, Constants.APRIL_TAG_RIGHT_BUTTON).and(new JoystickButton(stickTwo, Constants.APRIL_TAG_MID_LEFT_BUTTON))
+        .whileTrue(aprilTagRightMidLeft);
+    //right mid right
+    new JoystickButton(stickOne, Constants.APRIL_TAG_RIGHT_BUTTON).and(new JoystickButton(stickTwo, Constants.APRIL_TAG_MID_RIGHT_BUTTON))
+        .whileTrue(aprilTagRightMidRight);
+    // april tag spot choosers end
 
     // This lets a person press single button and open and close the claw every
     // other time.

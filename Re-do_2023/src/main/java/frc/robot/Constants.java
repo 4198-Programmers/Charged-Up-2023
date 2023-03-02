@@ -52,6 +52,10 @@ public final class Constants {
 
   // Joystick 1 Buttons
   public static final int APRIL_TAG_LEFT_BUTTON = 1;
+  public static final int APRIL_TAG_TOP_LEFT_BUTTON = 7,
+                          APRIL_TAG_TOP_RIGHT_BUTTON = 8,
+                          APRIL_TAG_MID_LEFT_BUTTON = 9,
+                          APRIL_TAG_MID_RIGHT_BUTTON = 10;
   public static final int FIELD_ORIENTATION_BUTTON = 11;
   public static final int ROBOT_ORIENTATION_BUTTON = 12;
 
@@ -90,7 +94,11 @@ public final class Constants {
 
   // april tags constants
   public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0.25,
-      CAMERA_TO_DRIVEBASE_OFFSET = 14,
+      CUBE_TO_CONE_NODE_WIDTH = 21,
+      END_OF_BOT_TO_TOP_NODE_LENGTH = 37,
+      END_OF_BOT_TO_MID_NODE_LENGTH = 23,
+      CAMERA_TO_DRIVEBASE_OFFSET = 18.75,
+      LEVEL_ARM = 0,
       WANTED_DISTANCE_LEFT = 16 + CAMERA_TO_DRIVEBASE_OFFSET,
       WANTED_DISTANCE_MID = 16 + CAMERA_TO_DRIVEBASE_OFFSET,
       WANTED_DISTANCE_RIGHT = 16 + CAMERA_TO_DRIVEBASE_OFFSET,
