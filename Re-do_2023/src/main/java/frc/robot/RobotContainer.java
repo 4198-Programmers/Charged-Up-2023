@@ -131,6 +131,7 @@ public class RobotContainer {
       vertArm, 
       reachArmSub, 
       lazySusanSub);
+      
       eventMap.put("InitializeValues", autoContainer.initializeCommand());
       eventMap.put("PrepElementPlacement", autoContainer.prepElementPlacementCommand());
       eventMap.put("PlaceElement", autoContainer.placeElementCommand());

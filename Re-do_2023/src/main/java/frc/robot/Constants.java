@@ -10,7 +10,7 @@ public final class Constants {
   public static final double DRIVETRAIN_LENGTH_METERS = 0.62;
   // Motor IDs and Pneumatics Ports
   public static final int SUSAN_MOTOR_ID = 15,
-      PNEUMATICS_PORT = 0,
+      PNEUMATICS_PORT = 0, //Has to be 0 
       PNEUMATICS_SINGLE_CHANNEL = 7,
       VERTICAL_MOVER_MOTOR_ID = 14,
       IN_OUT_MOTOR_ID = 13,
