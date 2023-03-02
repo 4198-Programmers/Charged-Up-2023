@@ -14,7 +14,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Commands.AutoSusan;
 import frc.robot.Commands.AutoVert;
+import frc.robot.Commands.BalanceCommand;
 import frc.robot.Commands.SusanHead;
 import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Constants.AutoConstants;
@@ -28,10 +30,15 @@ public final class AutoContainer {
     public static int locationChoice;
     public static int autoChoice;
     public static int placementChoice;
+    public static int balanceChoice;
+
     private Pneumatics pneumatics;
     private VertArm vertArm;
     private ReachArmSub reachArmSub;
     private LazySusanSub lazySusanSub;
+
+    public double vertArmHeight;
+    public double susanHeading;
 
     public enum Locations{
         Right(0),
@@ -48,10 +55,8 @@ public final class AutoContainer {
 
     public enum AutoTypes{
         OneElement(0),
-        OneElementBalance(1),
-        TwoElement(2),
-        TwoElementBalance(3),
-        ThreeElementBalance(4);
+        TwoElement(1),
+        ThreeElement(2);
 
         private AutoTypes(int autoChoicePassIn){
             autoChoice = autoChoicePassIn;
@@ -62,33 +67,60 @@ public final class AutoContainer {
         }
 
     }
-    public enum PlacementType{
-        rightTop(0),
-        rightMiddle(1),
-        rightBottom(2),
-        middleTop(3),
-        middleMiddle(4),
-        middleBottom(5),
-        leftTop(6),
-        leftMiddle(7),
-        leftBottom(8);
+    public enum Balance{
+        balance(1),
+        noBalance(0);
+        private Balance(int balancePassIn){
+            balanceChoice = balancePassIn;
+        }
+        public int getBalanceChoice(){
+            return balanceChoice;
+        }
 
-        private int place;
+    }
+    public enum PlacementLevel{
+        bottom(0),
+        middle(1),
+        top(2);
 
-        private PlacementType(int place){
-            this.place = place;
+        private int placeLevel;
+
+        private PlacementLevel(int place){
+            this.placeLevel = place;
         }
         public int getPlacement(){
-            return place;
+            return placeLevel;
         }
     }
+
+    public enum PlacementSide{
+        right(0),
+        middle(1),
+        left(2);
+        private int placeSide;
+        
+        private PlacementSide(int place){
+            this.placeSide = place;
+        }
+
+        public int getPlacement(){
+            return placeSide;
+        }
+    }
+    
+
+    public CommandBase[][][] auto;
+    public double[] placementSide;
+    public double[] placementLevel;
 
     private Swerve swerve;
     private static SwerveAutoBuilder autoBuilder;
     private HashMap<String, Command> eventMap;
-    SendableChooser<AutoTypes> autoChooser; 
-    SendableChooser<Locations> locationChooser;
-    SendableChooser<PlacementType> placementChooser;
+    SendableChooser<Integer> autoChooser; 
+    SendableChooser<Integer> locationChooser;
+    SendableChooser<Integer> placementLevelChooser;
+    SendableChooser<Integer> placementSideChooser;
+    SendableChooser<Integer> balanceChooser;
 
     private static AutoContainer autos;
 
@@ -101,7 +133,7 @@ public final class AutoContainer {
 
 
 
-    public void autoInitialize(SendableChooser<AutoTypes> autoChooser, SendableChooser<Locations> locationChooser, SendableChooser<PlacementType> placementChooser, HashMap<String, Command> eventMap, Swerve swerve, Pneumatics pneumatics, VertArm vertArm, ReachArmSub reachArmSub, LazySusanSub lazySusanSub){
+    public void autoInitialize(SendableChooser<Integer> autoChooser, SendableChooser<Integer> locationChooser, SendableChooser<Integer> placementLevelChooser, SendableChooser<Integer> placementSideChooser, SendableChooser<Integer> balanceChooser, HashMap<String, Command> eventMap, Swerve swerve, Pneumatics pneumatics, VertArm vertArm, ReachArmSub reachArmSub, LazySusanSub lazySusanSub){
         this.swerve = swerve;
         this.pneumatics = pneumatics;
         this.vertArm = vertArm;
@@ -110,7 +142,9 @@ public final class AutoContainer {
         this.eventMap = eventMap;
         this.locationChooser = locationChooser;
         this.autoChooser = autoChooser;
-        this.placementChooser = placementChooser;
+        this.placementLevelChooser = placementLevelChooser;
+        this.placementSideChooser = placementSideChooser;
+        this.balanceChooser = balanceChooser;
 
         AutoContainer.autoBuilder = new SwerveAutoBuilder(
             swerve::getPose, 
@@ -123,71 +157,53 @@ public final class AutoContainer {
             false,
             swerve);
 
-            locationChooser.setDefaultOption("Right", Locations.Right);
-            locationChooser.addOption("Middle", Locations.Middle);
-            locationChooser.addOption("Left", Locations.Left);
+            locationChooser.setDefaultOption("Right", Locations.Right.getLocation());
+            locationChooser.addOption("Middle", Locations.Middle.getLocation());
+            locationChooser.addOption("Left", Locations.Left.getLocation());
 
-            autoChooser.setDefaultOption("One Element", AutoTypes.OneElement);
-            autoChooser.addOption("One Element Balance", AutoTypes.OneElementBalance);
-            autoChooser.addOption("Two Elements", AutoTypes.TwoElement);
-            autoChooser.addOption("Two Elements Balance", AutoTypes.TwoElementBalance);
-            autoChooser.addOption("Three Elements Balance", AutoTypes.ThreeElementBalance);
+            autoChooser.setDefaultOption("One Element", AutoTypes.OneElement.getAutoType());
+            autoChooser.addOption("Two Elements", AutoTypes.TwoElement.getAutoType());
+            autoChooser.addOption("Three Elements", AutoTypes.ThreeElement.getAutoType());
 
-            placementChooser.setDefaultOption("Top Right Place", PlacementType.rightTop);
-            placementChooser.addOption("Middle Right Place", PlacementType.rightMiddle);
-            placementChooser.addOption("Bottom Right Place", PlacementType.rightBottom);
-            placementChooser.addOption("Top Middle Place", PlacementType.middleTop);
-            placementChooser.addOption("Middle Middle Place", PlacementType.middleMiddle);
-            placementChooser.addOption("Bottom Middle Place", PlacementType.middleBottom);
-            placementChooser.addOption("Top Left Place", PlacementType.leftTop);
-            placementChooser.addOption("Middle Left Place", PlacementType.leftMiddle);
-            placementChooser.addOption("Bottom Left Place", PlacementType.leftBottom);
+            placementLevelChooser.setDefaultOption("Bottom Level", PlacementLevel.bottom.getPlacement());
+            placementLevelChooser.addOption("Middle Level", PlacementLevel.middle.getPlacement());
+            placementLevelChooser.addOption("Top Level", PlacementLevel.top.getPlacement());
 
-            if(locationChooser.getSelected() == Locations.Left && autoChooser.getSelected() == AutoTypes.OneElement){
-                autoBuilder.fullAuto(leftOneElementPath);
-            }
-            else if(locationChooser.getSelected() == Locations.Left && autoChooser.getSelected() == AutoTypes.OneElementBalance){
-                autoBuilder.fullAuto(leftOneElementBalancePath);
-            }
-            else if(locationChooser.getSelected() == Locations.Left && autoChooser.getSelected() == AutoTypes.TwoElement){
-                autoBuilder.fullAuto(leftTwoElementPath);
-            }
-            else if(locationChooser.getSelected() == Locations.Left && autoChooser.getSelected() == AutoTypes.TwoElementBalance){
-                autoBuilder.fullAuto(leftTwoElementBalancePath);
-            }
-            else if(locationChooser.getSelected() == Locations.Left && autoChooser.getSelected() == AutoTypes.ThreeElementBalance){
-                autoBuilder.fullAuto(leftThreeElementBalancePath);
-            }
-            else if(locationChooser.getSelected() == Locations.Middle && autoChooser.getSelected() == AutoTypes.OneElement){
-                autoBuilder.fullAuto(middleOneElementPath);
-            }
-            else if(locationChooser.getSelected() == Locations.Middle && autoChooser.getSelected() == AutoTypes.OneElementBalance){
-                autoBuilder.fullAuto(middleOneElementBalancePath);
-            }
-            else if(locationChooser.getSelected() == Locations.Middle && autoChooser.getSelected() == AutoTypes.TwoElement){
-                autoBuilder.fullAuto(middleTwoElementPath);
-            }
-            else if(locationChooser.getSelected() == Locations.Middle && autoChooser.getSelected() == AutoTypes.TwoElementBalance){
-                autoBuilder.fullAuto(middleTwoElementBalancePath);
-            }
-            else if(locationChooser.getSelected() == Locations.Middle && autoChooser.getSelected() == AutoTypes.ThreeElementBalance){
-                autoBuilder.fullAuto(middleThreeElementBalancePath);
-            }
-            else if(locationChooser.getSelected() == Locations.Right && autoChooser.getSelected() == AutoTypes.OneElement){
-                autoBuilder.fullAuto(rightOneElementPath);
-            }
-            else if(locationChooser.getSelected() == Locations.Right && autoChooser.getSelected() == AutoTypes.OneElementBalance){
-                autoBuilder.fullAuto(rightOneElementBalancePath);
-            }
-            else if(locationChooser.getSelected() == Locations.Right && autoChooser.getSelected() == AutoTypes.TwoElement){
-                autoBuilder.fullAuto(rightTwoElementPath);
-            }
-            else if(locationChooser.getSelected() == Locations.Right && autoChooser.getSelected() == AutoTypes.TwoElementBalance){
-                autoBuilder.fullAuto(rightTwoElementBalancePath);
-            }
-            else if(locationChooser.getSelected() == Locations.Right && autoChooser.getSelected() == AutoTypes.ThreeElementBalance){
-                autoBuilder.fullAuto(rightThreeElementBalancePath);
-            }
+            placementSideChooser.setDefaultOption("Left Location", PlacementSide.left.getPlacement());
+            placementSideChooser.addOption("Middle Location", PlacementSide.middle.getPlacement());
+            placementSideChooser.addOption("Right Location", PlacementSide.right.getPlacement());
+
+            balanceChooser.setDefaultOption("No Balance", Balance.noBalance.getBalanceChoice());
+            balanceChooser.addOption("Balance", Balance.balance.getBalanceChoice());
+
+            //auto[location(0 = right, 1 = middle, 2 = left)][autoType(0 =  1Element, 1 = 2Element, 2 = 3Element)][Balance(1 = Balance, 0 = no Blance)]
+            auto[0][0][0] = autoBuilder.fullAuto(rightOneElementPath);
+            auto[0][0][1] = autoBuilder.fullAuto(rightOneElementBalancePath);
+            auto[0][1][0] = autoBuilder.fullAuto(rightTwoElementPath);
+            auto[0][1][1] = autoBuilder.fullAuto(rightTwoElementBalancePath);
+            auto[0][2][1] = autoBuilder.fullAuto(rightThreeElementBalancePath);
+
+            auto[1][0][0] = autoBuilder.fullAuto(middleOneElementPath);
+            auto[1][0][1] = autoBuilder.fullAuto(middleOneElementBalancePath);
+            auto[1][1][0] = autoBuilder.fullAuto(middleTwoElementPath);
+            auto[1][1][1] = autoBuilder.fullAuto(middleTwoElementBalancePath);
+            auto[1][2][1] = autoBuilder.fullAuto(middleThreeElementBalancePath);
+
+            auto[2][0][0] = autoBuilder.fullAuto(leftOneElementPath);
+            auto[2][0][1] = autoBuilder.fullAuto(leftOneElementBalancePath);
+            auto[2][1][0] = autoBuilder.fullAuto(leftTwoElementPath);
+            auto[2][1][1] = autoBuilder.fullAuto(leftTwoElementBalancePath);
+            auto[2][2][1] = autoBuilder.fullAuto(leftThreeElementBalancePath);
+
+            placementLevel[0] = Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC;
+            placementLevel[1] = Constants.VERT_MIDDLE_SHELF_PLACEMENT_ENC;
+            placementLevel[2] = Constants.VERT_TOP_SHELF_PLACEMENT_ENC;
+
+            placementSide[0] = Constants.SUSAN_RIGHT_HEADING;
+            placementSide[1] = Constants.SUSAN_MIDDLE_HEADING;
+            placementSide[2] = Constants.SUSAN_LEFT_HEADING;
+
+            
     }
 
     // public CommandBase moveToTarget(Pose2d targetPose){
@@ -204,59 +220,24 @@ public final class AutoContainer {
     // }
 
     public CommandBase getAuto(){
-        CommandBase auto;
+        if(balanceChooser.getSelected() == Balance.balance.getBalanceChoice()){
+            return new SequentialCommandGroup(auto[locationChooser.getSelected()][autoChooser.getSelected()][balanceChooser.getSelected()], new BalanceCommand(swerve));
+        }else{
+        return auto[locationChooser.getSelected()][autoChooser.getSelected()][balanceChooser.getSelected()];   
+        }
+    } 
 
-        if(locationChooser.getSelected() == Locations.Left && autoChooser.getSelected() == AutoTypes.OneElement){
-            auto = autoBuilder.fullAuto(leftOneElementPath);
-        }
-        else if(locationChooser.getSelected() == Locations.Left && autoChooser.getSelected() == AutoTypes.OneElementBalance){
-            auto = autoBuilder.fullAuto(leftOneElementBalancePath);
-        }
-        else if(locationChooser.getSelected() == Locations.Left && autoChooser.getSelected() == AutoTypes.TwoElement){
-            auto = autoBuilder.fullAuto(leftTwoElementPath);
-        }
-        else if(locationChooser.getSelected() == Locations.Left && autoChooser.getSelected() == AutoTypes.TwoElementBalance){
-            auto = autoBuilder.fullAuto(leftTwoElementBalancePath);
-        }
-        else if(locationChooser.getSelected() == Locations.Left && autoChooser.getSelected() == AutoTypes.ThreeElementBalance){
-            auto = autoBuilder.fullAuto(leftThreeElementBalancePath);
-        }
-        else if(locationChooser.getSelected() == Locations.Middle && autoChooser.getSelected() == AutoTypes.OneElement){
-            auto = autoBuilder.fullAuto(middleOneElementPath);
-        }
-        else if(locationChooser.getSelected() == Locations.Middle && autoChooser.getSelected() == AutoTypes.OneElementBalance){
-            auto = autoBuilder.fullAuto(middleOneElementBalancePath);
-        }
-        else if(locationChooser.getSelected() == Locations.Middle && autoChooser.getSelected() == AutoTypes.TwoElement){
-            auto = autoBuilder.fullAuto(middleTwoElementPath);
-        }
-        else if(locationChooser.getSelected() == Locations.Middle && autoChooser.getSelected() == AutoTypes.TwoElementBalance){
-            auto = autoBuilder.fullAuto(middleTwoElementBalancePath);
-        }
-        else if(locationChooser.getSelected() == Locations.Middle && autoChooser.getSelected() == AutoTypes.ThreeElementBalance){
-            auto = autoBuilder.fullAuto(middleThreeElementBalancePath);
-        }
-        else if(locationChooser.getSelected() == Locations.Right && autoChooser.getSelected() == AutoTypes.OneElement){
-            auto = autoBuilder.fullAuto(rightOneElementPath);
-        }
-        else if(locationChooser.getSelected() == Locations.Right && autoChooser.getSelected() == AutoTypes.OneElementBalance){
-            auto = autoBuilder.fullAuto(rightOneElementBalancePath);
-        }
-        else if(locationChooser.getSelected() == Locations.Right && autoChooser.getSelected() == AutoTypes.TwoElement){
-            auto = autoBuilder.fullAuto(rightTwoElementPath);
-        }
-        else if(locationChooser.getSelected() == Locations.Right && autoChooser.getSelected() == AutoTypes.TwoElementBalance){
-            auto = autoBuilder.fullAuto(rightTwoElementBalancePath);
-        }
-        else{
-            auto = autoBuilder.fullAuto(rightThreeElementBalancePath);
-        }
-        return auto;
+    public double getPlacementLevel(){
+        return placementLevel[placementLevelChooser.getSelected()];
     }
+
+    public double getPlacementSide(){
+        return placementSide[placementSideChooser.getSelected()];
+    }
+
     public CommandBase prepElementPlacement(){
-        return new SequentialCommandGroup(eventMap.get("PrepElementPlacement"));
+        return new SequentialCommandGroup(eventMap.get("InitializeValues"), eventMap.get("PrepElementPlacement"));
     }
-    
     public CommandBase placeElement(){
         return new SequentialCommandGroup(eventMap.get("PlaceElement"));
     }
@@ -269,62 +250,17 @@ public final class AutoContainer {
         return new SequentialCommandGroup(eventMap.get("PickupElement"));
     }
 
+    public CommandBase initializeCommand(){
+        return new SequentialCommandGroup(new InstantCommand(() -> swerve.zeroHeading()), new InstantCommand(() -> vertArm.ZeroArm()), new InstantCommand(() -> lazySusanSub.zeroPosition()));
+    }
+
     public CommandBase prepElementPlacementCommand(){
         String event = new String();
-        double heading;
-        double height;
-        if(placementChooser.getSelected() == PlacementType.rightTop){
-            event = "Right Top";
-            heading = -45;
-            height = Constants.VERT_TOP_SHELF_PLACEMENT_ENC;
-            
-        }
-        else if(placementChooser.getSelected() == PlacementType.rightMiddle){
-            event = "Right Middle";
-            heading = -45;
-            height = Constants.VERT_MIDDLE_SHELF_PLACEMENT_ENC;
-        }
-        else if(placementChooser.getSelected() == PlacementType.rightBottom){
-            event = "Right Bottom";
-            heading = -45;
-            height = Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC;
-        }
-        else if(placementChooser.getSelected() == PlacementType.leftTop){
-            event = "Left Top";
-            heading = 45;
-            height = Constants.VERT_TOP_SHELF_PLACEMENT_ENC;
-        }
-        else if(placementChooser.getSelected() == PlacementType.leftMiddle){
-            event = "Left Middle";
-            heading = 45;
-            height = Constants.VERT_MIDDLE_SHELF_PLACEMENT_ENC;
-        }
-        else if(placementChooser.getSelected() == PlacementType.leftBottom){
-            event = "Left Bottom";
-            heading = 45;
-            height = Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC;
-        }
-        else if(placementChooser.getSelected() == PlacementType.middleTop){
-            event = "Middle Top";
-            heading = 0;
-            height = Constants.VERT_TOP_SHELF_PLACEMENT_ENC;
-        }
-        else if(placementChooser.getSelected() == PlacementType.middleMiddle){
-            event = "Middle Middle";
-            heading = 0;
-            height = Constants.VERT_MIDDLE_SHELF_PLACEMENT_ENC;
-        }
-        else{
-            event = "Middle Bottom";
-            heading = 0;
-            height = Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC;
-        }
-        SusanHead susanHead = new SusanHead(lazySusanSub, heading);
-        AutoVert autoVert = new AutoVert(vertArm, 0.5, height);
-        return new SequentialCommandGroup(new PrintCommand(event), susanHead.alongWith(autoVert));
+        AutoSusan autoSusan = new AutoSusan(lazySusanSub, 0.3, getPlacementSide());
+        AutoVert autoVert = new AutoVert(vertArm, 0.5, getPlacementLevel());
+        return new SequentialCommandGroup(new PrintCommand(event), autoSusan.alongWith(autoVert));
     }
     public CommandBase placeElementCommand(){
-        //return new PrintCommand("Place Element");
         return new SequentialCommandGroup(new PrintCommand("Place Element"), new TogglePneumatics(pneumatics, true));
     }
     public CommandBase prepElementPickupCommand(){
@@ -337,7 +273,8 @@ public final class AutoContainer {
     public CommandBase pickupElementCommand(){
         // return new PrintCommand("Pickup Element");
         return new SequentialCommandGroup(new PrintCommand("Pickup Element"), 
-      new InstantCommand(() -> pneumatics.togglePneumatics(true))
+      new InstantCommand(() -> pneumatics.togglePneumatics(true)),
+      new InstantCommand(() -> vertArm.autoVert(0.5, Constants.VERT_SAFE_TO_SPIN_ENC_POS))
     );
     }
 

@@ -9,7 +9,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.AutoConstants;
 
 public class SwerveModule {
@@ -19,20 +18,15 @@ public class SwerveModule {
   private final RelativeEncoder driveEncoder;
   private final RelativeEncoder angleEncoder;
 
-  private final Rotation2d offset;
-
   private final PIDController anglePIDController;
 
   private final CANCoder  absoluteEncoder;
-  private final boolean absoluteEncoderReversed;
   final CTREConfigs configs = new CTREConfigs();
 
 
-  public SwerveModule(int driveMotorID, int angleMotorID, int absoluteEncoderID, double absoluteEncoderOffset, boolean absoluteEncoderReversed){
-    this.absoluteEncoderReversed = absoluteEncoderReversed;
+  public SwerveModule(int driveMotorID, int angleMotorID, int absoluteEncoderID, double absoluteEncoderOffset){
     absoluteEncoder = new CANCoder(absoluteEncoderID);
 
-    offset = Rotation2d.fromDegrees(absoluteEncoderOffset);
 
     absoluteEncoder.configAllSettings(configs.coderConfiguration);
     absoluteEncoder.configMagnetOffset(absoluteEncoderOffset);
@@ -46,17 +40,12 @@ public class SwerveModule {
    anglePIDController = new PIDController(AutoConstants.kPXController, 0, 0);
    anglePIDController.enableContinuousInput(-Math.PI, Math.PI);
 
-   resetEncoders();
   }
   public double getDrivePosition(){
     return driveEncoder.getPosition();
   }
   public double getAnglePosition(){
     return angleEncoder.getPosition();
-  }
-
-  public double getAbsoluteEncoderPosition(){
-    return absoluteEncoder.getAbsolutePosition();
   }
 
   public double getDriveVelocity(){
@@ -66,45 +55,35 @@ public class SwerveModule {
     return angleEncoder.getVelocity();
   }
 
-  public Rotation2d getCanCoderAngle() {
-    double unsignedAngle = (Units.degreesToRadians(absoluteEncoder.getAbsolutePosition()) - offset.getRadians()) % (2 * Math.PI);
-    return new Rotation2d(unsignedAngle);
-}
-
-  public double getAbsoluteEncoderRadians(){
-    double angle = absoluteEncoder.getAbsolutePosition();
-    return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
+  public double getAbsoluteEncoderPosition(){
+    return absoluteEncoder.getAbsolutePosition();
   }
 
-  public void resetEncoders(){
-    driveEncoder.setPosition(0);
-    angleEncoder.setPosition(getCanCoderAngle().getRadians());
-    }
+  public Rotation2d getAngle(){
+    return Rotation2d.fromDegrees(getAbsoluteEncoderPosition());
+  }
 
   public SwerveModuleState getState(){
     return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAnglePosition()));
   }
 
-  public void setDesiredState(SwerveModuleState state){
-    if(Math.abs(state.speedMetersPerSecond) < 0.001){
+  public void setDesiredState(SwerveModuleState desiredState){
+    if(Math.abs(desiredState.speedMetersPerSecond) < 0.001){
       stop();
       return;
     }
-    state = SwerveModuleState.optimize(state, getState().angle);
-    driveMotor.set(state.speedMetersPerSecond / AutoConstants.kMaxSpeedMetersPerSecond);
-    angleMotor.set(anglePIDController.calculate(getAnglePosition(), state.angle.getRadians()));
+    desiredState = SwerveModuleState.optimize(desiredState, getState().angle);
+    driveMotor.set(desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed);
+    angleMotor.set(anglePIDController.calculate(getAnglePosition(), desiredState.angle.getRotations()));
   }
+
   public void stop(){
     driveMotor.set(0);
     angleMotor.set(0);
   }
-  public Rotation2d getAngle(){
-    return Rotation2d.fromDegrees(absoluteEncoder.getAbsolutePosition());
-  }
 
   public SwerveModulePosition getPosition(){
-    return new SwerveModulePosition(
-      (driveEncoder.getPosition() / Constants.Swerve.driveGearRatio * 4),
-      getAngle());
+    return new SwerveModulePosition(getDrivePosition(), getAngle());
   }
+
 }

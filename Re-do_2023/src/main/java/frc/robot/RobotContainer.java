@@ -12,10 +12,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.AutoContainer.AutoTypes;
-import frc.robot.AutoContainer.Locations;
-import frc.robot.AutoContainer.PlacementType;
 import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
@@ -44,9 +42,11 @@ public class RobotContainer {
   private final Pneumatics pneumatics = new Pneumatics();
   private AutoContainer autoContainer = new AutoContainer();
   private HashMap<String, Command> eventMap;
-  private SendableChooser<AutoTypes> autoChooser;
-  private SendableChooser<Locations> locationChooser;
-  private SendableChooser<PlacementType> placementChooser;
+  private SendableChooser<Integer> autoChooser;
+  private SendableChooser<Integer> locationChooser;
+  private SendableChooser<Integer> placementLevelChooser;
+  private SendableChooser<Integer> placementSideChooser;
+  private SendableChooser<Integer> balanceChooser;
 
   // private final SequentialCommandGroup aprilTagLeft = new SusanHead(lazySusanSub, 0)
   //     .andThen(new TagFollower(photonVision, mDriveTrain,
@@ -65,7 +65,9 @@ public class RobotContainer {
     eventMap = new HashMap<>();
     autoChooser = new SendableChooser<>();
     locationChooser = new SendableChooser<>();
-    placementChooser = new SendableChooser<>();
+    placementLevelChooser = new SendableChooser<>();
+    placementSideChooser = new SendableChooser<>();
+    balanceChooser = new SendableChooser<>();
 
     swerve.setDefaultCommand(new TeleopSwerve(swerve, 
     () -> modifyAxis(stickOne.getX()) * 0.3, 
@@ -98,6 +100,8 @@ public class RobotContainer {
     // other time.
     new JoystickButton(stickFour, Constants.TOGGLE_CLAW_BUTTON)
         .toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel()));
+      
+    new JoystickButton(stickOne, 4).toggleOnFalse(new InstantCommand(() -> swerve.printModuleAngles()));
 
 
       new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnTrue(new zeroHeading(swerve));
@@ -113,15 +117,16 @@ public class RobotContainer {
 
   public void initializeAuto() {
     autoContainer = AutoContainer.getInstance();
+      eventMap.put("InitializeValues", autoContainer.initializeCommand());
       eventMap.put("PrepElementPlacement", autoContainer.prepElementPlacementCommand());
       eventMap.put("PlaceElement", autoContainer.placeElementCommand());
       eventMap.put("PrepElementPickup", autoContainer.prepElementPickupCommand());
       eventMap.put("PickupElement", autoContainer.pickupElementCommand());
 
-    autoContainer.autoInitialize(autoChooser, locationChooser, placementChooser, eventMap, swerve, pneumatics, vertArm, reachArmSub, lazySusanSub);
+    autoContainer.autoInitialize(autoChooser, locationChooser, placementLevelChooser, placementSideChooser, balanceChooser, eventMap, swerve, pneumatics, vertArm, reachArmSub, lazySusanSub);
     SmartDashboard.putData(autoChooser);
     SmartDashboard.putData(locationChooser);
-    SmartDashboard.putData(placementChooser);
+    SmartDashboard.putData(placementLevelChooser);
 
   }
 

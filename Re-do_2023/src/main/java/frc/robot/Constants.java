@@ -81,6 +81,9 @@ public final class Constants {
   public static final double DRIVE_ROTATIONS_TO_METERS = 0;
 public static final double VERT_TOP_SHELF_PLACEMENT_ENC = 0;
 public static final double VERT_MIDDLE_SHELF_PLACEMENT_ENC = 0;
+public static final double SUSAN_RIGHT_HEADING = 0;
+public static final double SUSAN_MIDDLE_HEADING = 0;
+public static final double SUSAN_LEFT_HEADING = 0;
 
   public static final class Swerve {
     public static final double stickDeadband = 0.1;
