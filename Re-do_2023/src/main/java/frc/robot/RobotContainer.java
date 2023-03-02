@@ -20,6 +20,7 @@ import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.DriveTrainCom;
+import frc.robot.Commands.SlightTurnDrive;
 import frc.robot.Commands.SusanHead;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
@@ -62,9 +63,9 @@ public class RobotContainer {
   // private final SendableChooser<LevelPriority> LevelChooser = new
   // SendableChooser<>();
   private final SendableChooser<String> PathChooser = new SendableChooser<>();
-  private final SendableChooser<Location> LocationChooser = new SendableChooser<>();
-  private final SendableChooser<Elements> ElementsChooser = new SendableChooser<>();
-  private final SendableChooser<BalanceSP> BalanceChooser = new SendableChooser<>();
+  private final SendableChooser<Integer> LocationChooser = new SendableChooser<>();
+  private final SendableChooser<Integer> ElementsChooser = new SendableChooser<>();
+  private final SendableChooser<Integer> BalanceChooser = new SendableChooser<>();
 
   // private final SequentialCommandGroup aprilTagLeft = new
   // SusanHead(lazySusanSub, 0)
@@ -109,7 +110,7 @@ public class RobotContainer {
     lazySusanSub.mode(IdleMode.kBrake);
   }
 
-  public void initShuffleboard(){
+  public void initShuffleboard() {
     ShuffleboardTab autoTab = Shuffleboard.getTab("Auto Choices");
     autoTab.add("Autonomous", PathChooser);
     PathChooser.setDefaultOption("Left One Element No Balance", "LeftOneElement");
@@ -130,19 +131,20 @@ public class RobotContainer {
     PathChooser.addOption("Drive Straight", "DriveStraight");
 
     autoTab.add("Location", LocationChooser);
-    LocationChooser.setDefaultOption("Left", Location.Left);
-    LocationChooser.addOption("Middle", Location.Middle);
-    LocationChooser.addOption("Right", Location.Right);
+    LocationChooser.setDefaultOption("Left", 0);
+    LocationChooser.addOption("Middle", 1);
+    LocationChooser.addOption("Right", 2);
 
     autoTab.add("Elements", ElementsChooser);
-    ElementsChooser.setDefaultOption("No Elements", Elements.Zero);
-    ElementsChooser.addOption("One Element", Elements.One);
-    ElementsChooser.addOption("Two Elements", Elements.Two);
-    ElementsChooser.addOption("Three Elements", Elements.Three);
+    ElementsChooser.addOption("Just Drive", 0);
+    ElementsChooser.setDefaultOption("Place 1", 1);
+    ElementsChooser.addOption("Place 1, Hold 1", 2);
+    ElementsChooser.addOption("Place 2", 3);
+    ElementsChooser.addOption("Place 2, Hold 1", 4);
 
     autoTab.add("Balance?", BalanceChooser);
-    BalanceChooser.setDefaultOption("No Balance", BalanceSP.No_Balance);
-    BalanceChooser.addOption("Balance", BalanceSP.Balance);
+    BalanceChooser.setDefaultOption("No Balance", 0);
+    BalanceChooser.addOption("Balance", 1);
 
     vertArm.ZeroArm();
   }
@@ -163,6 +165,7 @@ public class RobotContainer {
         .toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel())); // CHANGETOTHREE
 
     new JoystickButton(stickThree, Constants.TOGGLE_SUSAN_DIRECTION_BUTTON).toggleOnTrue(new ToggleSusan(lazySusanSub));// CHANGETOTHREE
+    new JoystickButton(stickFour, Constants.NO_SLIP_DRIVE_BUTTON).whileTrue(new SlightTurnDrive(mDriveTrain));
 
     // This resets the robot to field orientation and sets the current front of the
     // robot to the forward direction
@@ -222,6 +225,10 @@ public class RobotContainer {
     // return mAutoContainer.autoRunCommand();
     // return new RunPathAuto(mPath, mDriveTrain);
     // return new WithMarker(mDriveTrain, mPath);
+    System.out.println(singlePaths.GetAutoCommand() + "auto");
+    Location.setLocation(LocationChooser.getSelected());
+    Elements.setElements(ElementsChooser.getSelected());
+    BalanceSP.setBalance(BalanceChooser.getSelected());
     return singlePaths.GetAutoCommand();
   }
 
