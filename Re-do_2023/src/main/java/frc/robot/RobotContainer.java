@@ -14,14 +14,16 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Commands.AutoSusan;
+import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.Balance;
 import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.DriveTrainCom;
 import frc.robot.Commands.SlightTurnDrive;
-import frc.robot.Commands.SusanHead;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Subsystems.PathHolder;
@@ -106,7 +108,7 @@ public class RobotContainer {
     pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
     vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 30));
     lazySusanSub.setDefaultCommand(
-        new ZeroSusan(lazySusanSub).andThen(new ControlSusan(lazySusanSub, () -> modifyAxis(-stickThree.getX()), 30)));// CHANGETOTHREE
+        new ControlSusan(lazySusanSub, () -> modifyAxis(-stickThree.getX()), 30));// CHANGETOTHREE
     lazySusanSub.mode(IdleMode.kBrake);
   }
 
@@ -147,6 +149,7 @@ public class RobotContainer {
     BalanceChooser.addOption("Balance", 1);
 
     vertArm.ZeroArm();
+    lazySusanSub.zeroPosition();
   }
 
   private void configureBindings() {
@@ -165,7 +168,15 @@ public class RobotContainer {
         .toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel())); // CHANGETOTHREE
 
     new JoystickButton(stickThree, Constants.TOGGLE_SUSAN_DIRECTION_BUTTON).toggleOnTrue(new ToggleSusan(lazySusanSub));// CHANGETOTHREE
-    new JoystickButton(stickFour, Constants.NO_SLIP_DRIVE_BUTTON).whileTrue(new SlightTurnDrive(mDriveTrain));
+    new JoystickButton(stickOne, Constants.NO_SLIP_DRIVE_BUTTON).whileTrue(new SlightTurnDrive(mDriveTrain));
+    new JoystickButton(stickThree, Constants.ZERO_SUSAN_HEADING_BUTTON)
+        .onTrue(new SequentialCommandGroup(
+            new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.VERT_SAFE_TO_SPIN_ENC_POS)
+                .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, 0))));
+    new JoystickButton(stickThree, Constants.ONE_EIGHTY_SUSAN_HEADING_BUTTON)
+        .onTrue(new SequentialCommandGroup(
+            new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.VERT_SAFE_TO_SPIN_ENC_POS)
+                .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.SUSAN_180_ENC_POS))));
 
     // This resets the robot to field orientation and sets the current front of the
     // robot to the forward direction
@@ -202,9 +213,8 @@ public class RobotContainer {
 
     // Make sure susan is set to a low value because it spins really fast. It has to
     // be at least under 0.3, most likely.
-    new JoystickButton(stickThree, 7).onTrue(new SusanHead(lazySusanSub, 0)); // CHANGETOTHREE
-    new JoystickButton(stickThree, 3).whileTrue(new ControlReach(reachArmSub, () -> 1, 75));
-    new JoystickButton(stickThree, 2).whileTrue(new ControlReach(reachArmSub, () -> -1, 75));
+    new JoystickButton(stickThree, Constants.REACH_OUT_BUTTON).whileTrue(new ControlReach(reachArmSub, () -> 1, 75));
+    new JoystickButton(stickThree, Constants.REACH_IN_BUTTON).whileTrue(new ControlReach(reachArmSub, () -> -1, 75));
     // Make sure susan is set to a low value because it spins really fast. It has to
     // be at least under 0.3, most likely. -> That is what the % modifier is for.
     // Don't change the speed -CP

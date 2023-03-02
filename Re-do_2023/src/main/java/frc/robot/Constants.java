@@ -50,16 +50,20 @@ public final class Constants {
         public static final int APRIL_TAG_RIGHT_BUTTON = 1;
 
         // Joystick 3 Buttons
-        public static final int TOGGLE_CLAW_BUTTON = 1;
+        public static final int TOGGLE_CLAW_BUTTON = 1,
+        REACH_OUT_BUTTON = 3, 
+        REACH_IN_BUTTON = 2, 
+        ZERO_SUSAN_HEADING_BUTTON = 4, 
+        ONE_EIGHTY_SUSAN_HEADING_BUTTON = 5;
 
         // Joystick 4 Buttons
-        public static final int SUSAN_ZERO_HEADING_BUTTON = 3,
+        public static final int 
                         TOGGLE_SUSAN_DIRECTION_BUTTON = 4;
 
         // Turret Values
         public static final double SUSAN_CIRCUMFERENCE = 0,
                         MOTOR_ROTATIONS_PER_360_SUSAN = 104.7272727273, // gear ratio = 16 sprocket ratio = 7 + (6/11)
-                        BALANCE_SPEED = 0.1;
+                        BALANCE_SPEED = 0.5;
         public static final float PITCH_OFFSET = 5; // Must be a float for the gyro values
 
         // Auto Values

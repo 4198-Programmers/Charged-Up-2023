@@ -15,6 +15,7 @@ public class LazySusanSub extends SubsystemBase {
     int susanDirectionToggle = 1;
 
     public double getLocation() {
+        System.out.println(susanEncoder.getPosition());
         return susanEncoder.getPosition();
     }
 
