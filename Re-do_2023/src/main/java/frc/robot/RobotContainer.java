@@ -42,6 +42,7 @@ public class RobotContainer {
   private final Pneumatics pneumatics = new Pneumatics();
   private AutoContainer autoContainer = new AutoContainer();
   private HashMap<String, Command> eventMap;
+
   private SendableChooser<Integer> autoChooser;
   private SendableChooser<Integer> locationChooser;
   private SendableChooser<Integer> placementLevelChooser;
@@ -101,7 +102,7 @@ public class RobotContainer {
     new JoystickButton(stickFour, Constants.TOGGLE_CLAW_BUTTON)
         .toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel()));
       
-    new JoystickButton(stickOne, 4).toggleOnFalse(new InstantCommand(() -> swerve.printModuleAngles()));
+    new JoystickButton(stickThree, 9).toggleOnFalse(new InstantCommand(() -> swerve.printModuleAngles()));
 
 
       new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnTrue(new zeroHeading(swerve));
@@ -117,16 +118,29 @@ public class RobotContainer {
 
   public void initializeAuto() {
     autoContainer = AutoContainer.getInstance();
+
+    autoContainer.autoInitialize(
+      autoChooser, 
+      locationChooser, 
+      placementLevelChooser, 
+      placementSideChooser, 
+      balanceChooser, 
+      eventMap, 
+      swerve, 
+      pneumatics, 
+      vertArm, 
+      reachArmSub, 
+      lazySusanSub);
       eventMap.put("InitializeValues", autoContainer.initializeCommand());
       eventMap.put("PrepElementPlacement", autoContainer.prepElementPlacementCommand());
       eventMap.put("PlaceElement", autoContainer.placeElementCommand());
       eventMap.put("PrepElementPickup", autoContainer.prepElementPickupCommand());
       eventMap.put("PickupElement", autoContainer.pickupElementCommand());
-
-    autoContainer.autoInitialize(autoChooser, locationChooser, placementLevelChooser, placementSideChooser, balanceChooser, eventMap, swerve, pneumatics, vertArm, reachArmSub, lazySusanSub);
     SmartDashboard.putData(autoChooser);
     SmartDashboard.putData(locationChooser);
     SmartDashboard.putData(placementLevelChooser);
+    SmartDashboard.putData(placementSideChooser);
+    SmartDashboard.putData(balanceChooser);
 
   }
 

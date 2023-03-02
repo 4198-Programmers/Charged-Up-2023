@@ -31,6 +31,9 @@ public final class AutoContainer {
     public static int autoChoice;
     public static int placementChoice;
     public static int balanceChoice;
+    public static double vertArmHeight;
+    public static double susanHeading;
+    public static double reachTime;
 
     private Pneumatics pneumatics;
     private VertArm vertArm;
@@ -51,10 +54,6 @@ public final class AutoContainer {
     public double[] placementSide;
     public double[] placementLevel;
     public PlacementSettings[][] placement;
-
-    public static double vertArmHeight;
-    public static double susanHeading;
-    public static double reachTime;
 
     public enum Locations{
         Right(0),
@@ -175,6 +174,13 @@ public final class AutoContainer {
         this.placementLevelChooser = placementLevelChooser;
         this.placementSideChooser = placementSideChooser;
         this.balanceChooser = balanceChooser;
+
+        auto = new CommandBase[3][3][2];
+        placementSide = new double[3];
+        placementLevel = new double[3];
+        placement = new PlacementSettings[3][3];
+
+
 
         AutoContainer.autoBuilder = new SwerveAutoBuilder(
             swerve::getPose, 
