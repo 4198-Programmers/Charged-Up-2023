@@ -84,6 +84,9 @@ public static final double VERT_MIDDLE_SHELF_PLACEMENT_ENC = 0;
 public static final double SUSAN_RIGHT_HEADING = 0;
 public static final double SUSAN_MIDDLE_HEADING = 0;
 public static final double SUSAN_LEFT_HEADING = 0;
+public static final double REACH_TOP_TIME = 0;
+public static final double REACH_MIDDLE_TIME = 0;
+public static final double REACH_BOTTOM_TIME = 0;
 
   public static final class Swerve {
     public static final double stickDeadband = 0.1;

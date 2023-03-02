@@ -14,10 +14,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Commands.AutoReach;
 import frc.robot.Commands.AutoSusan;
 import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.BalanceCommand;
-import frc.robot.Commands.SusanHead;
 import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Subsystems.LazySusanSub;
@@ -36,9 +36,25 @@ public final class AutoContainer {
     private VertArm vertArm;
     private ReachArmSub reachArmSub;
     private LazySusanSub lazySusanSub;
+    private Swerve swerve;
 
-    public double vertArmHeight;
-    public double susanHeading;
+    private static SwerveAutoBuilder autoBuilder;
+    private HashMap<String, Command> eventMap;
+
+    SendableChooser<Integer> autoChooser; 
+    SendableChooser<Integer> locationChooser;
+    SendableChooser<Integer> placementLevelChooser;
+    SendableChooser<Integer> placementSideChooser;
+    SendableChooser<Integer> balanceChooser;
+    
+    public CommandBase[][][] auto;
+    public double[] placementSide;
+    public double[] placementLevel;
+    public PlacementSettings[][] placement;
+
+    public static double vertArmHeight;
+    public static double susanHeading;
+    public static double reachTime;
 
     public enum Locations{
         Right(0),
@@ -107,21 +123,35 @@ public final class AutoContainer {
             return placeSide;
         }
     }
+
+    public enum PlacementSettings{
+        rightTop(Constants.SUSAN_RIGHT_HEADING, Constants.VERT_TOP_SHELF_PLACEMENT_ENC, Constants.REACH_TOP_TIME),
+        rightMiddle(Constants.SUSAN_RIGHT_HEADING, Constants.VERT_MIDDLE_SHELF_PLACEMENT_ENC, Constants.REACH_MIDDLE_TIME),
+        rightBottom(Constants.SUSAN_RIGHT_HEADING, Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC, Constants.REACH_BOTTOM_TIME),
+
+        middleTop(Constants.SUSAN_MIDDLE_HEADING, Constants.VERT_TOP_SHELF_PLACEMENT_ENC, Constants.REACH_TOP_TIME),
+        middleMiddle(Constants.SUSAN_MIDDLE_HEADING, Constants.VERT_MIDDLE_SHELF_PLACEMENT_ENC, Constants.REACH_MIDDLE_TIME),
+        middleBottom(Constants.SUSAN_MIDDLE_HEADING, Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC, Constants.REACH_BOTTOM_TIME),
+
+        leftTop(Constants.SUSAN_LEFT_HEADING, Constants.VERT_TOP_SHELF_PLACEMENT_ENC, Constants.REACH_TOP_TIME),
+        leftMiddle(Constants.SUSAN_LEFT_HEADING, Constants.VERT_MIDDLE_SHELF_PLACEMENT_ENC, Constants.REACH_MIDDLE_TIME),
+        leftBottom(Constants.SUSAN_LEFT_HEADING, Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC, Constants.REACH_BOTTOM_TIME);
+        private PlacementSettings(double headingPassIn, double heightPassIn, double timePassIn){
+            susanHeading = headingPassIn;
+            vertArmHeight = heightPassIn;
+            reachTime = timePassIn;
+        }
+        public double getHeading(){
+            return susanHeading;
+        }
+        public double getHeight(){
+            return vertArmHeight;
+        }
+        public double getTime(){
+            return reachTime;
+        }
+    }
     
-
-    public CommandBase[][][] auto;
-    public double[] placementSide;
-    public double[] placementLevel;
-
-    private Swerve swerve;
-    private static SwerveAutoBuilder autoBuilder;
-    private HashMap<String, Command> eventMap;
-    SendableChooser<Integer> autoChooser; 
-    SendableChooser<Integer> locationChooser;
-    SendableChooser<Integer> placementLevelChooser;
-    SendableChooser<Integer> placementSideChooser;
-    SendableChooser<Integer> balanceChooser;
-
     private static AutoContainer autos;
 
     public static AutoContainer getInstance(){
@@ -195,13 +225,17 @@ public final class AutoContainer {
             auto[2][1][1] = autoBuilder.fullAuto(leftTwoElementBalancePath);
             auto[2][2][1] = autoBuilder.fullAuto(leftThreeElementBalancePath);
 
-            placementLevel[0] = Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC;
-            placementLevel[1] = Constants.VERT_MIDDLE_SHELF_PLACEMENT_ENC;
-            placementLevel[2] = Constants.VERT_TOP_SHELF_PLACEMENT_ENC;
+            placement[0][0] = PlacementSettings.rightTop;
+            placement[0][1] = PlacementSettings.rightMiddle;
+            placement[0][2] = PlacementSettings.rightBottom;
 
-            placementSide[0] = Constants.SUSAN_RIGHT_HEADING;
-            placementSide[1] = Constants.SUSAN_MIDDLE_HEADING;
-            placementSide[2] = Constants.SUSAN_LEFT_HEADING;
+            placement[1][0] = PlacementSettings.middleTop;
+            placement[1][1] = PlacementSettings.middleMiddle;
+            placement[1][2] = PlacementSettings.middleBottom;
+
+            placement[2][0] = PlacementSettings.leftTop;
+            placement[2][1] = PlacementSettings.leftMiddle;
+            placement[2][2] = PlacementSettings.leftBottom;
 
             
     }
@@ -227,14 +261,6 @@ public final class AutoContainer {
         }
     } 
 
-    public double getPlacementLevel(){
-        return placementLevel[placementLevelChooser.getSelected()];
-    }
-
-    public double getPlacementSide(){
-        return placementSide[placementSideChooser.getSelected()];
-    }
-
     public CommandBase prepElementPlacement(){
         return new SequentialCommandGroup(eventMap.get("InitializeValues"), eventMap.get("PrepElementPlacement"));
     }
@@ -255,13 +281,16 @@ public final class AutoContainer {
     }
 
     public CommandBase prepElementPlacementCommand(){
-        String event = new String();
-        AutoSusan autoSusan = new AutoSusan(lazySusanSub, 0.3, getPlacementSide());
-        AutoVert autoVert = new AutoVert(vertArm, 0.5, getPlacementLevel());
-        return new SequentialCommandGroup(new PrintCommand(event), autoSusan.alongWith(autoVert));
+        PlacementSettings settings = placement[placementSideChooser.getSelected()][placementLevelChooser.getSelected()];
+        AutoSusan autoSusan = new AutoSusan(lazySusanSub, 0.3, settings.getHeading());
+        AutoVert autoVert = new AutoVert(vertArm, 0.5, settings.getHeight());
+        AutoReach autoReach = new AutoReach(reachArmSub, 0.5, settings.getTime());
+        return new SequentialCommandGroup(new PrintCommand("Prep Element Placement"), autoVert, autoSusan, autoReach);
     }
     public CommandBase placeElementCommand(){
-        return new SequentialCommandGroup(new PrintCommand("Place Element"), new TogglePneumatics(pneumatics, true));
+        PlacementSettings settings = placement[placementSideChooser.getSelected()][placementLevelChooser.getSelected()];
+        AutoVert autoVert = new AutoVert(vertArm, -0.5, settings.getTime());
+        return new SequentialCommandGroup(new PrintCommand("Place Element"), new TogglePneumatics(pneumatics, true), autoVert);
     }
     public CommandBase prepElementPickupCommand(){
         //return new PrintCommand("Prep Pickup Element");
