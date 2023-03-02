@@ -12,23 +12,22 @@ import frc.robot.Maths;
 public class LazySusanSub extends SubsystemBase {
     private final CANSparkMax susanMotor = new CANSparkMax(Constants.SUSAN_MOTOR_ID, MotorType.kBrushless);
     private final RelativeEncoder susanEncoder = susanMotor.getEncoder();
+    int susanDirectionToggle = 1;
 
     public double getLocation() {
         return susanEncoder.getPosition();
     }
 
-    public void spinSusan(double speed) {
-        double expectedSpeed = speed;
-        if (getLocation() >= Constants.MAX_SUSAN_RIGHT_POSITION && speed > 0) {
-            expectedSpeed = 0;
-        } else if (getLocation() <= Constants.MAX_SUSAN_LEFT_POSITION && speed < 0) {
-            expectedSpeed = 0;
-        }
-        susanMotor.set(expectedSpeed);
+    public void zeroPosition(){
+        susanEncoder.setPosition(0);
     }
 
     public void stopSusan() {
         susanMotor.set(0);
+    }
+
+    public void toggleSusan(){
+        susanDirectionToggle *= -1;
     }
 
     public void mode(IdleMode mode) {
@@ -39,11 +38,34 @@ public class LazySusanSub extends SubsystemBase {
         return Maths.arcLengthToRotations(susanEncoder.getPosition());
     }
 
-    public void spinSusanWithAngles(double speed, double wantedDegrees, double currentDegrees) {
-        if (currentDegrees - wantedDegrees < -0.5) {
+    public void spinSusanWithAngles(double speed, double wantedDegrees) {
+        if (getLocation() - wantedDegrees < -0.5) {
             susanMotor.set(-speed);
-        } else if (currentDegrees - wantedDegrees > 0.5) {
+        } else if (getLocation() - wantedDegrees > 0.5) {
             susanMotor.set(speed);
+        }
+    }
+
+    public void spinSusan(double speed) { // counterclockwise = negative
+
+        double expectedSpeed = speed * susanDirectionToggle;
+
+        // if (getLocation() >= Maths.degreesToRotations_Susan(Constants.SUSAN_MAX_ANGLE) && speed > 0) {
+        //     expectedSpeed = 0;
+        // } else if (getLocation() <= Maths.degreesToRotations_Susan(-Constants.SUSAN_MAX_ANGLE) && speed < 0) {
+        //     expectedSpeed = 0;
+        // }
+
+        susanMotor.set(expectedSpeed);
+    }
+
+    public void setSusanAngleCP(double wantedAngle) { // counterclockwise = negative
+        if (getLocation() < Maths.degreesToRotations_Susan(wantedAngle) - Maths.degreesToRotations_Susan(5)) {
+            spinSusan(0.3);
+        } else if (getLocation() > Maths.degreesToRotations_Susan(wantedAngle) + Maths.degreesToRotations_Susan(5)) {
+            spinSusan(-0.3);
+        } else {
+            spinSusan(0);
         }
     }
 }

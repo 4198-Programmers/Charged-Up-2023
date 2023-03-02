@@ -8,27 +8,25 @@ import frc.robot.Subsystems.ReachArmSub;
 public class ControlReach extends CommandBase {
     private final ReachArmSub reach;
     private final DoubleSupplier speedSupplier;
+    private double percentSpeed;
+    private double speedScalar;
 
-    public ControlReach(ReachArmSub reachArg, DoubleSupplier supplier) {
+    public ControlReach(ReachArmSub reachArg, DoubleSupplier supplier, double percentSpeed) {
         reach = reachArg;
         speedSupplier = supplier;
-
+        this.percentSpeed = percentSpeed;
         addRequirements(reachArg);
     }
 
     @Override
     public void initialize() {
+        speedScalar = Math.abs(percentSpeed / 100);
     }
 
     @Override
     public void execute() {
-        reach.moveReach(speedSupplier.getAsDouble());
+        reach.moveReach(speedSupplier.getAsDouble() * speedScalar);
 
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        reach.moveReach(0);
     }
 
     @Override

@@ -15,16 +15,13 @@ public class VertArm extends SubsystemBase {
         return verticalEncoder.getPosition();
     }
 
+    public void ZeroArm() {
+        verticalEncoder.setPosition(0);
+    }
+
     public void moveArm(double speed) {
-        double expectedSpeed = speed;
-        if (getLocation() >= Constants.MAX_VERTICAL_POSITION && speed > 0) {
-            expectedSpeed = 0;
-        } else if (getLocation() <= Constants.MIN_VERTICAL_POSITION && speed < 0) { // taken out because with the drift
-                                                                                    // after robot is disabled, values
-                                                                                    // are unreliable 2-14
-            expectedSpeed = 0;
-        }
-        verticalMotor.set(expectedSpeed);
+        verticalMotor.set(speed);
+        System.out.println(getLocation());
     }
 
     public double getSpeed() {
@@ -32,6 +29,7 @@ public class VertArm extends SubsystemBase {
     }
 
     public void stopArm() {
-        verticalMotor.set(0);
+        verticalMotor.set(Constants.VERT_ARM_NO_DROP_SPEED);
     }
+
 }

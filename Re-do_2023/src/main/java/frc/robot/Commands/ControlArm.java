@@ -8,20 +8,24 @@ import frc.robot.Subsystems.VertArm;
 public class ControlArm extends CommandBase {
     private final VertArm upArmSub;
     private final DoubleSupplier speedSupplier;
-    private final double speedScalar;
+    private double speedScalar;
+    private double percentSpeed;
 
-    public ControlArm(VertArm upArmArg, DoubleSupplier supplier, int percentSpeed) {
+    public ControlArm(VertArm upArmArg, DoubleSupplier supplier, double percentSpeed) {
         upArmSub = upArmArg;
         speedSupplier = supplier;
-        speedScalar = percentSpeed / 100;
+        this.percentSpeed = percentSpeed;
         addRequirements(upArmArg);
+    }
+
+    @Override
+    public void initialize() {
+        speedScalar = percentSpeed / 100;
     }
 
     @Override
     public void execute() {
         upArmSub.moveArm(speedSupplier.getAsDouble() * speedScalar);
-        System.out.println("VertArm " + upArmSub.getLocation());
-
     }
 
 }

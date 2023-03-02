@@ -44,6 +44,9 @@ public class DriveTrain extends SubsystemBase {
                         // Back Right
                         new Translation2d(-Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
                                         -Constants.DRIVETRAIN_LENGTH_METERS / 2.0));
+        public SwerveDriveKinematics getKinematics(){
+                return mkinematics;
+        }
 
         private final AHRS NavX = new AHRS(SPI.Port.kMXP, (byte) 200); // initializes the gyro to the board port (MXP)
 
@@ -109,7 +112,31 @@ public class DriveTrain extends SubsystemBase {
                                                            // direction at all times.
                 }
 
-                // return Rotation2d.fromDegrees(90);
+        }
+
+        public double BalanceDrive() {
+                float pitch = NavX.getPitch();
+                if (pitch > Constants.PITCH_OFFSET) {
+                        return Constants.BALANCE_SPEED;
+                } else if (pitch < -Constants.PITCH_OFFSET) {
+                        return -Constants.BALANCE_SPEED;
+                } else {
+                        return 0;
+                }
+        }
+
+        public void StopDrive(){
+                ChassisSpeeds noMove = new ChassisSpeeds(0,0,0);
+                drive(noMove);
+        }
+
+        public void ZeroDrive() {
+                // code to zero drive
+        }
+
+        public double[] DrivePos() {
+                double[] positions = { 0, 0, 0, 0 };
+                return positions;
         }
 
         public void drive(ChassisSpeeds speeds) { // passes in speeds to be used in periodic

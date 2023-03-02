@@ -1,0 +1,310 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 2.9956714080094837,
+        "y": 4.300387350774702
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.7034120734908145,
+        "y": 4.286470239607147
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "InitializeAutoValues",
+          "VertSafeSpin",
+          "SusanLeft",
+          "VertSidesPlace"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 5.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.7570485140970291,
+        "y": 4.425641351282703
+      },
+      "prevControl": {
+        "x": 1.9801126257995636,
+        "y": 4.425641351282703
+      },
+      "nextControl": {
+        "x": 1.9801126257995636,
+        "y": 4.425641351282703
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "PlaceElement"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 5.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.4228247812245,
+        "y": 4.615076404463602
+      },
+      "prevControl": {
+        "x": 4.4228247812245,
+        "y": 4.615076404463602
+      },
+      "nextControl": {
+        "x": 6.4228247812245,
+        "y": 4.615076404463602
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "VertSafeSpin",
+          "ZeroSusan",
+          "PickupPos"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 5.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.781125645584624,
+        "y": 4.592646685293372
+      },
+      "prevControl": {
+        "x": 6.002752694448336,
+        "y": 4.592646685293372
+      },
+      "nextControl": {
+        "x": 6.002752694448336,
+        "y": 4.592646685293372
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "PickupElement"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 5.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 3.96986918973838,
+        "y": 4.425641351282703
+      },
+      "prevControl": {
+        "x": 5.946545193872078,
+        "y": 4.425641351282703
+      },
+      "nextControl": {
+        "x": 1.9931931856046794,
+        "y": 4.425641351282703
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "VertSafeSpin",
+          "SusanLeft",
+          "VertSidesPlace"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 5.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.7570485140970291,
+        "y": 4.425641351282703
+      },
+      "prevControl": {
+        "x": 2.4111527389721457,
+        "y": 4.286470239607147
+      },
+      "nextControl": {
+        "x": 2.4111527389721457,
+        "y": 4.286470239607147
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "PlaceElement"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 5.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.015684531369063,
+        "y": 3.910708238083144
+      },
+      "prevControl": {
+        "x": 5.779975683083548,
+        "y": 4.827353759193485
+      },
+      "nextControl": {
+        "x": 6.140938531877063,
+        "y": 3.423609347218696
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "VertSafeSpin",
+          "ZeroSusan",
+          "PickupPos"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 5.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.767208534417069,
+        "y": 3.381858013716028
+      },
+      "prevControl": {
+        "x": 6.11692180928522,
+        "y": 3.381858013716028
+      },
+      "nextControl": {
+        "x": 6.11692180928522,
+        "y": 3.381858013716028
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "PickupElement"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 5.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 3.900283633900602,
+        "y": 3.646283125899586
+      },
+      "prevControl": {
+        "x": 4.40749293076166,
+        "y": 3.646283125899586
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Balance"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 5.0
+      }
+    }
+  ],
+  "markers": [
+    {
+      "position": 0.8727272727272728,
+      "names": [
+        "VertSafeSpin",
+        "SusanLeft",
+        "VertSidesPlace"
+      ]
+    },
+    {
+      "position": 1.0,
+      "names": [
+        "PlaceElement"
+      ]
+    },
+    {
+      "position": 2.0,
+      "names": [
+        "VertSafeSpin",
+        "ZeroSusan",
+        "PickupPos"
+      ]
+    },
+    {
+      "position": 3.0,
+      "names": [
+        "PickupElement"
+      ]
+    },
+    {
+      "position": 4.000000000000001,
+      "names": [
+        "PrepElementPlacementTwo"
+      ]
+    },
+    {
+      "position": 5.0,
+      "names": [
+        "PlaceElement"
+      ]
+    },
+    {
+      "position": 6.0,
+      "names": [
+        "PrepElementPickup"
+      ]
+    },
+    {
+      "position": 7.0,
+      "names": [
+        "PickupElement"
+      ]
+    },
+    {
+      "position": 8.0,
+      "names": [
+        "Balance"
+      ]
+    }
+  ]
+}

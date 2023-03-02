@@ -1,85 +1,104 @@
 package frc.robot;
 
 public final class Constants {
+  // Drive Train Values
+  public static final double DRIVETRAIN_WIDTH_METERS = 0.62;
+  public static final double DRIVETRAIN_LENGTH_METERS = 0.62;
+  // Front Left Swerve Values
+  public static final int FRONT_LEFT_DRIVE = 7,
+      FRONT_LEFT_STEER = 8,
+      FRONT_LEFT_ENCODER = 12;
+  public static final double FRONT_LEFT_STEER_OFFSET = -Math.toRadians(291.18);
+  // Front Right Swerve Values
+  public static final int FRONT_RIGHT_DRIVE = 3,
+      FRONT_RIGHT_STEER = 4,
+      FRONT_RIGHT_ENCODER = 11;
+  public static final double FRONT_RIGHT_STEER_OFFSET = -Math.toRadians(150 - 180);
+  // Back Left Swerve Values
+  public static final int BACK_LEFT_DRIVE = 5,
+      BACK_LEFT_STEER = 6,
+      BACK_LEFT_ENCODER = 9;
+  public static final double BACK_LEFT_STEER_OFFSET = -Math.toRadians(272.63);
+  // Back Right Swerve Values
+  public static final int BACK_RIGHT_DRIVE = 2,
+      BACK_RIGHT_STEER = 1,
+      BACK_RIGHT_ENCODER = 10;
+  public static final double BACK_RIGHT_STEER_OFFSET = -Math.toRadians(197.75 - 180);
+  // Motor IDs and Pneumatics Ports
+  public static final int SUSAN_MOTOR_ID = 15,
+      PNEUMATICS_PORT = 0,
+      PNEUMATICS_SINGLE_CHANNEL = 7,
+      VERTICAL_MOVER_MOTOR_ID = 14,
+      IN_OUT_MOTOR_ID = 13,
+      LED_CAN_ID = 0;
+  // Vert Arm and Reach Arm Encoder Values [Inaccurate as the vert arm drifts
+  // after you turn off the robot 2-17]
+  public static final double MAX_REACH = 1000,
+      MIN_REACH = -1000,
+      MAX_VERTICAL_POSITION = 2.16,
+      MIN_VERTICAL_POSITION = 0.1,
+      MAX_SUSAN_LEFT_POSITION = -37,
+      MAX_SUSAN_RIGHT_POSITION = 34;
 
-    public static final double DRIVETRAIN_WIDTH_METERS = 0.62;
-    public static final double DRIVETRAIN_LENGTH_METERS = 0.62;
+  // april tags constants
 
-    public static final int FRONT_LEFT_DRIVE = 7,
-            FRONT_LEFT_STEER = 8,
-            FRONT_LEFT_ENCODER = 12;
-    public static final double FRONT_LEFT_STEER_OFFSET = -Math.toRadians(291.18);
+  // Pose estimation constants
+  public static final double ROTATION_3D_ROLL = 0;
+  public static final double ROTATION_3D_PITCH = 0;
+  public static final double ROTATION_3D_YAW = 0;
+  public static final double TRANSLATION_3D_X = 0;
+  public static final double TRANSLATION_3D_Y = 0;
+  public static final double TRANSLATION_3D_Z = 0;
 
-    public static final int FRONT_RIGHT_DRIVE = 3,
-            FRONT_RIGHT_STEER = 4,
-            FRONT_RIGHT_ENCODER = 11;
-    public static final double FRONT_RIGHT_STEER_OFFSET = -Math.toRadians(150 - 180);
+  // Joystick 1 Buttons
+  public static final int APRIL_TAG_LEFT_BUTTON = 1;
+  public static final int FIELD_ORIENTATION_BUTTON = 11;
+  public static final int ROBOT_ORIENTATION_BUTTON = 12;
 
-    public static final int BACK_LEFT_DRIVE = 5,
-            BACK_LEFT_STEER = 6,
-            BACK_LEFT_ENCODER = 9;
-    public static final double BACK_LEFT_STEER_OFFSET = -Math.toRadians(272.63);
+  // Joystick 2 Buttons
+  public static final int APRIL_TAG_RIGHT_BUTTON = 1;
 
-    public static final int BACK_RIGHT_DRIVE = 2,
-            BACK_RIGHT_STEER = 1,
-            BACK_RIGHT_ENCODER = 10;
-    public static final double BACK_RIGHT_STEER_OFFSET = -Math.toRadians(197.75 - 180);
+  // Joystick 3 Buttons
+  public static final int TOGGLE_CLAW_BUTTON = 1;
 
-    public static final int SUSAN_MOTOR_ID = 15,
-            PNEUMATICS_PORT = 0,
-            PNEUMATICS_FORWARD_CHANNEL = 4,
-            PNEUMATICS_REVERSE_CHANNEL = 5,
-            PNEUMATICS_SINGLE_CHANNEL = 7,
-            VERTICAL_MOVER_MOTOR_ID = 14,
-            IN_OUT_MOTOR_ID = 13;
-    public static final double MAX_REACH = 1000;
-    public static final double MIN_REACH = -1000;
-    public static final double MAX_VERTICAL_POSITION = 2.16;
-    public static final double MIN_VERTICAL_POSITION = 0.1;
-    public static final double MAX_SUSAN_LEFT_POSITION = -37;
-    public static final double MAX_SUSAN_RIGHT_POSITION = 34;
+  // Joystick 4 Buttons
+  public static final int SUSAN_ZERO_HEADING_BUTTON = 3,
+      TOGGLE_SUSAN_DIRECTION_BUTTON = 4;
 
-    //april tags constants
-    public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0.25;
-    public static final double CAMERA_TO_DRIVEBASE_OFFSET = 14;
-    public static final double WANTED_DISTANCE_LEFT = 16 + CAMERA_TO_DRIVEBASE_OFFSET;
-    public static final double WANTED_DISTANCE_MID = 16 + CAMERA_TO_DRIVEBASE_OFFSET;
-    public static final double WANTED_DISTANCE_RIGHT = 16 + CAMERA_TO_DRIVEBASE_OFFSET;
-    public static final double WANTED_YAW_LEFT = (90-Math.tanh((16 + CAMERA_TO_DRIVEBASE_OFFSET) / 21.75));
-    public static final double WANTED_YAW_MID = 0;
-    public static final double WANTED_YAW_RIGHT = -WANTED_YAW_LEFT;
-    public static final double WANTED_SKEW_LEFT = 0;
-    public static final double WANTED_SKEW_MID = 0;
-    public static final double WANTED_SKEW_RIGHT = 0;
-    
-    //Pose estimation constants
-    public static final double ROTATION_3D_ROLL = 0;
-    public static final double ROTATION_3D_PITCH = 0;
-    public static final double ROTATION_3D_YAW = 0;
-    public static final double TRANSLATION_3D_X = 0;
-    public static final double TRANSLATION_3D_Y = 0;
-    public static final double TRANSLATION_3D_Z = 0;
+  // Turret Values
+  public static final double SUSAN_CIRCUMFERENCE = 0,
+      MOTOR_ROTATIONS_PER_360_SUSAN = 104.7272727273, // gear ratio = 16 sprocket ratio = 7 + (6/11)
+      BALANCE_SPEED = 0.1;
+  public static final float PITCH_OFFSET = 5; // Must be a float for the gyro values
 
+  // Auto Values
+  public static final double AUTO_VERT_SPEED = 0.15,
+      MAX_VELOCITY_METERS_PER_SECOND = 4,
+      MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3,
+      VERT_SAFE_TO_SPIN_ENC_POS = 0.6, // printed at 0.5, better safe than broken
+      AUTO_SUSAN_SPEED = 0.3,
+      LEFT_PLACEMENT_ENC_POS = 10,
+      VERT_BOTTOM_SHELF_PLACEMENT_ENC_MID = 0.603176,
+      VERT_BOTTOM_SHELF_PLACEMENT_ENC_SIDES = 0.9972,
+      MID_PLACEMENT_ENC_POS = 0,
+      RIGHT_PLACEMENT_ENC_POS = -10,
+      VERT_PICKUP_POS = 0,
+      AUTO_ENC_OFFSET = 0.05,
+      SUSAN_180_ENC_POS = 50;
 
+  public static final double VERT_ARM_NO_DROP_SPEED = 0.12;
 
-   //Joystick 1 Buttons
-        public static final int APRIL_TAG_LEFT_BUTTON = 1;
-        public static final int FIELD_ORIENTATION_BUTTON = 11;
-        public static final int ROBOT_ORIENTATION_BUTTON = 12;
-        
-   //Joystick 2 Buttons
-        public static final int APRIL_TAG_RIGHT_BUTTON = 1;
+  // april tags constants
+  public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0.25,
+      CAMERA_TO_DRIVEBASE_OFFSET = 14,
+      WANTED_DISTANCE_LEFT = 16 + CAMERA_TO_DRIVEBASE_OFFSET,
+      WANTED_DISTANCE_MID = 16 + CAMERA_TO_DRIVEBASE_OFFSET,
+      WANTED_DISTANCE_RIGHT = 16 + CAMERA_TO_DRIVEBASE_OFFSET,
+      WANTED_YAW_LEFT = (90 - Math.tanh((16 + CAMERA_TO_DRIVEBASE_OFFSET) / 21.75)),
+      WANTED_YAW_MID = 0,
+      WANTED_YAW_RIGHT = -WANTED_YAW_LEFT,
+      WANTED_SKEW_LEFT = 0,
+      WANTED_SKEW_MID = 0,
+      WANTED_SKEW_RIGHT = 0;
 
-   //Joystick 3 Buttons
-        public static final int TOGGLE_CLAW_BUTTON = 1;
-   //Joystick 4 Buttons
-        public static final int LAZY_SUSAN_LEFT_BUTTON = 3;
-        public static final int LAZY_SUSAN_RIGHT_BUTTON = 4;
-        public static final int SUSAN_BRAKE_BUTTON = 11;
-        public static final int SUSAN_COAST_BUTTON = 12;
-        public static final int SUSAN_ZERO_HEADING_BUTTON = 9;
-        public static final double SUSAN_CIRCUMFERENCE = 0;
-        public static final int ANGLE_OFFSET = 0;
-
-        public static final int MOTOR_ROTATIONS_PER_360_SUSAN = 0;
 }
