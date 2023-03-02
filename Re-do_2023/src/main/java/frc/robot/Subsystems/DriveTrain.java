@@ -44,7 +44,8 @@ public class DriveTrain extends SubsystemBase {
                         // Back Right
                         new Translation2d(-Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
                                         -Constants.DRIVETRAIN_LENGTH_METERS / 2.0));
-        public SwerveDriveKinematics getKinematics(){
+
+        public SwerveDriveKinematics getKinematics() {
                 return mkinematics;
         }
 
@@ -125,8 +126,8 @@ public class DriveTrain extends SubsystemBase {
                 }
         }
 
-        public void StopDrive(){
-                ChassisSpeeds noMove = new ChassisSpeeds(0,0,0);
+        public void StopDrive() {
+                ChassisSpeeds noMove = new ChassisSpeeds(0, 0, 0);
                 drive(noMove);
         }
 
