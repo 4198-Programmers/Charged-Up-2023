@@ -1,15 +1,18 @@
 package frc.robot;
 
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Subsystems.Swerve;
 
 public class SwerveModule {
   private final CANSparkMax driveMotor;
@@ -19,17 +22,20 @@ public class SwerveModule {
   private final RelativeEncoder angleEncoder;
 
   private final PIDController anglePIDController;
+  private final Rotation2d offset;
 
   private final CANCoder  absoluteEncoder;
-  final CTREConfigs configs = new CTREConfigs();
 
 
   public SwerveModule(int driveMotorID, int angleMotorID, int absoluteEncoderID, double absoluteEncoderOffset){
     absoluteEncoder = new CANCoder(absoluteEncoderID);
+    offset = Rotation2d.fromRotations(absoluteEncoderOffset);
 
 
-    absoluteEncoder.configAllSettings(configs.coderConfiguration);
-    absoluteEncoder.configMagnetOffset(absoluteEncoderOffset);
+
+    CANCoderConfiguration angleEncoderConfiguration = Swerve.ctreConfigs.coderConfiguration;
+    angleEncoderConfiguration.magnetOffsetDegrees = -offset.getRotations();
+    absoluteEncoder.getAllConfigs(angleEncoderConfiguration);
 
     driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
     angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
@@ -39,8 +45,8 @@ public class SwerveModule {
 
    anglePIDController = new PIDController(AutoConstants.kPXController, 0, 0);
    anglePIDController.enableContinuousInput(-Math.PI, Math.PI);
-
   }
+
   public double getDrivePosition(){
     return driveEncoder.getPosition();
   }
@@ -63,8 +69,16 @@ public class SwerveModule {
     return Rotation2d.fromDegrees(getAbsoluteEncoderPosition());
   }
 
+  public Rotation2d getRotation(){
+    return Rotation2d.fromRotations(MathUtil.inputModulus(getAnglePosition(), -0.5, 0.5));
+  }
+
   public SwerveModuleState getState(){
-    return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAnglePosition()));
+    return new SwerveModuleState(getDriveVelocity(), getRotation());
+  }
+
+  public SwerveModulePosition getPosition(){
+    return new SwerveModulePosition(getDrivePosition(), getRotation());
   }
 
   public void setDesiredState(SwerveModuleState desiredState){
@@ -82,8 +96,5 @@ public class SwerveModule {
     angleMotor.set(0);
   }
 
-  public SwerveModulePosition getPosition(){
-    return new SwerveModulePosition(getDrivePosition(), getAngle());
-  }
 
 }

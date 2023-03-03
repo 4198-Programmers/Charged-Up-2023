@@ -10,7 +10,7 @@ public class CTREConfigs{
 
     public CTREConfigs(){
         coderConfiguration = new CANCoderConfiguration();
-        coderConfiguration.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
+        coderConfiguration.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180; // Unsigned_0_to_360 when using Swerve Module; Signed_PlusMinus180 when using SwerveModuleTest
         coderConfiguration.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
         coderConfiguration.sensorTimeBase = SensorTimeBase.PerSecond;
     }

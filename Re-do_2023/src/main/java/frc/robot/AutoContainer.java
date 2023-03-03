@@ -8,6 +8,7 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -27,10 +28,6 @@ import frc.robot.Subsystems.Swerve;
 import frc.robot.Subsystems.VertArm;
 
 public final class AutoContainer {
-    public static int locationChoice;
-    public static int autoChoice;
-    public static int placementChoice;
-    public static int balanceChoice;
     public static double vertArmHeight;
     public static double susanHeading;
     public static double reachTime;
@@ -59,6 +56,8 @@ public final class AutoContainer {
         Right(0),
         Middle(1),
         Left(2);
+        private int locationChoice;
+
 
         private Locations(int locationChoicePassIn){
             locationChoice = locationChoicePassIn;
@@ -72,6 +71,7 @@ public final class AutoContainer {
         OneElement(0),
         TwoElement(1),
         ThreeElement(2);
+        private int autoChoice;
 
         private AutoTypes(int autoChoicePassIn){
             autoChoice = autoChoicePassIn;
@@ -85,6 +85,10 @@ public final class AutoContainer {
     public enum Balance{
         balance(1),
         noBalance(0);
+
+        private int balanceChoice;
+
+
         private Balance(int balancePassIn){
             balanceChoice = balancePassIn;
         }
@@ -242,7 +246,6 @@ public final class AutoContainer {
             placement[2][0] = PlacementSettings.leftTop;
             placement[2][1] = PlacementSettings.leftMiddle;
             placement[2][2] = PlacementSettings.leftBottom;
-
             
     }
 

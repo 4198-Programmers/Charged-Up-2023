@@ -1,4 +1,5 @@
 package frc.robot;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -10,7 +11,7 @@ public final class Constants {
   public static final double DRIVETRAIN_LENGTH_METERS = 0.62;
   // Motor IDs and Pneumatics Ports
   public static final int SUSAN_MOTOR_ID = 15,
-      PNEUMATICS_PORT = 0, //Has to be 0 
+      PNEUMATICS_PORT = 0, //Has to be 0
       PNEUMATICS_SINGLE_CHANNEL = 7,
       VERTICAL_MOVER_MOTOR_ID = 14,
       IN_OUT_MOTOR_ID = 13,
@@ -123,37 +124,45 @@ public static final double REACH_BOTTOM_TIME = 0;
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
     public static final class Mod0 {
+      public static final String moduleName = "FrontLeftModule";
       public static final int driveMotorID = 7;
       public static final int angleMotorID = 8;
       public static final int canCoderID = 12;
       public static final double angleOffset = -0;
+      public static final Rotation2d rotationOffSet = Rotation2d.fromDegrees(0);
       public static final boolean encoderReversed = false;
     }
 
     /* Front Right Module - Module 1 */
     public static final class Mod1 {
+      public static final String moduleName = "FrontRightModule";
       public static final int driveMotorID = 3;
       public static final int angleMotorID = 4;
       public static final int canCoderID = 11;
       public static final double angleOffset = -0;
+      public static final Rotation2d rotationOffSet = Rotation2d.fromDegrees(0);
       public static final boolean encoderReversed = false;
     }
 
     /* Back Left Module - Module 2 */
     public static final class Mod2 {
+      public static final String moduleName = "BackLeftModule";
       public static final int driveMotorID = 5;
       public static final int angleMotorID = 6;
       public static final int canCoderID = 9;
       public static final double angleOffset = -0;
+      public static final Rotation2d rotationOffSet = Rotation2d.fromDegrees(0);
       public static final boolean encoderReversed = false;
     }
 
     /* Back Right Module - Module 3 */
     public static final class Mod3 {
+      public static final String moduleName = "BackRightModule";
       public static final int driveMotorID = 2;
       public static final int angleMotorID = 1;
       public static final int canCoderID = 10;
       public static final double angleOffset = -0;
+      public static final Rotation2d rotationOffSet = Rotation2d.fromDegrees(0);
       public static final boolean encoderReversed = false;
     }
   }
