@@ -129,7 +129,7 @@ public static final int GRABBER_OUT_BUTTON = 8;
       public static final int driveMotorID = 7;
       public static final int angleMotorID = 8;
       public static final int canCoderID = 12;
-      public static final double angleOffset = -110.39;
+      public static final double angleOffset = -291.01;
       public static final boolean encoderReversed = false;
     }
 
@@ -138,7 +138,7 @@ public static final int GRABBER_OUT_BUTTON = 8;
       public static final int driveMotorID = 3;
       public static final int angleMotorID = 4;
       public static final int canCoderID = 11;
-      public static final double angleOffset = -151.34;
+      public static final double angleOffset = -152.05;
       public static final boolean encoderReversed = false;
     }
 
@@ -147,7 +147,7 @@ public static final int GRABBER_OUT_BUTTON = 8;
       public static final int driveMotorID = 5;
       public static final int angleMotorID = 6;
       public static final int canCoderID = 9;
-      public static final double angleOffset = -267.54;
+      public static final double angleOffset = -272.37;
       public static final boolean encoderReversed = false;
     }
 
@@ -156,7 +156,7 @@ public static final int GRABBER_OUT_BUTTON = 8;
       public static final int driveMotorID = 2;
       public static final int angleMotorID = 1;
       public static final int canCoderID = 10;
-      public static final double angleOffset = -197.92;
+      public static final double angleOffset = -17.84;
       public static final boolean encoderReversed = false;
     }
   }

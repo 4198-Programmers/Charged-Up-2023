@@ -63,7 +63,7 @@ private final SwerveModule frontLeft = new SwerveModule(
   }
 
   public Rotation2d getRotation2d(){
-    return Rotation2d.fromDegrees(getHeading());
+    return Rotation2d.fromDegrees(getHeading() - (45/360));
   }
 
   public Pose2d getPose(){
@@ -76,7 +76,7 @@ private final SwerveModule frontLeft = new SwerveModule(
     backLeft.stop();
     backRight.stop();     
    }
-   
+
    public void setModuleStates(SwerveModuleState[] desiredStates){
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, AutoConstants.kMaxSpeedMetersPerSecond);
     frontLeft.setDesiredState(desiredStates[0]);

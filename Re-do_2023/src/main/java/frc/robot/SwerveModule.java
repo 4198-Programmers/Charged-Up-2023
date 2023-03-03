@@ -67,7 +67,7 @@ public class SwerveModule {
 
   public void resetEncoders(){
     driveEncoder.setPosition(0);
-    angleEncoder.setPosition(getAbsoluteEncoderPosition());
+    angleEncoder.setPosition(getState().angle.getRadians());
   }
 
   public SwerveModuleState getState(){
