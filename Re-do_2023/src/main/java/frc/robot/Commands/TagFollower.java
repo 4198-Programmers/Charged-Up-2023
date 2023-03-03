@@ -30,6 +30,8 @@ public class TagFollower extends CommandBase{
         PhotonTrackedTarget target = this.vision.getBestTarget();
         if(target == null) {
             return;
+        } else {
+            System.out.println(target.getFiducialId());
         }
         //for Chassis Speeds, +vx is foreward, +vy is left, and +omegaRadians is counterclockwise
 

@@ -1,6 +1,7 @@
 package frc.robot.Subsystems;
 
 import java.io.IOException;
+import java.lang.annotation.Target;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -59,20 +60,6 @@ public class PhotonVision extends SubsystemBase {
         return target;
     }
 
-    public double getYaw() {
-        this.yaw = this.target.getYaw();
-        return this.yaw;
-    }
-
-    public double getPitch() {
-        this.pitch = this.target.getPitch();
-        return this.pitch;
-    }
-
-    public double getSkew() {
-        this.skew = this.target.getSkew();
-        return this.skew;
-    }
 
     public Optional<EstimatedRobotPose> update() {
         return estimator.update();
@@ -80,10 +67,20 @@ public class PhotonVision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        getBestTarget();
-        SmartDashboard.putNumber("Pitch: ", getPitch());
-        SmartDashboard.putNumber("Yaw: ", getYaw());
-        SmartDashboard.putNumber("Skew: ", getSkew());
+        var target = getBestTarget();
         update();
+        if(target == null) {
+            SmartDashboard.putString("Target: ", "No Target");
+            SmartDashboard.putNumber("Pitch: ", 0);
+            SmartDashboard.putNumber("Yaw: ", 0);
+            SmartDashboard.putNumber("Skew: ", 0);
+            return;
+        } 
+        SmartDashboard.putString("Target: ", "ID: " + target.getFiducialId());
+        SmartDashboard.putNumber("Pitch: ", target.getPitch());
+        SmartDashboard.putNumber("Yaw: ", target.getYaw());
+        SmartDashboard.putNumber("Skew: ", target.getSkew());  
+        
+        
     }
 }
