@@ -10,7 +10,7 @@ public class CTREConfigs{
 
     public CTREConfigs(){
         coderConfiguration = new CANCoderConfiguration();
-        coderConfiguration.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
+        coderConfiguration.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
         coderConfiguration.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
         coderConfiguration.sensorTimeBase = SensorTimeBase.PerSecond;
     }

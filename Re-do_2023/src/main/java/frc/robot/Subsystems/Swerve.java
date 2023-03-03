@@ -3,10 +3,8 @@ package frc.robot.Subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -72,20 +70,20 @@ private final SwerveModule frontLeft = new SwerveModule(
     return odometer.getPoseMeters();
   }
 
-  public void setModuleStates(SwerveModuleState[] desiredStates){
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, AutoConstants.kMaxSpeedMetersPerSecond);
-    frontLeft.setDesiredState(desiredStates[0]);
-    frontRight.setDesiredState(desiredStates[1]);
-    backLeft.setDesiredState(desiredStates[2]);
-    backRight.setDesiredState(desiredStates[3]);
-  }
-
   public void stopModules(){
     frontLeft.stop();
     frontRight.stop();
     backLeft.stop();
     backRight.stop();     
    }
+   
+   public void setModuleStates(SwerveModuleState[] desiredStates){
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, AutoConstants.kMaxSpeedMetersPerSecond);
+    frontLeft.setDesiredState(desiredStates[0]);
+    frontRight.setDesiredState(desiredStates[1]);
+    backLeft.setDesiredState(desiredStates[2]);
+    backRight.setDesiredState(desiredStates[3]);
+  }
 
   public void resetOdometry(Pose2d pose){
     odometer.resetPosition(getRotation2d(), positions, pose);
@@ -98,26 +96,6 @@ private final SwerveModule frontLeft = new SwerveModule(
     System.out.println("Back Right Module: " + backRight.getAbsoluteEncoderPosition());
   }
 
-  public void drive(double xSpeed, double ySpeed, double angleSpeed, boolean fieldOrentation){
-    final SlewRateLimiter xLimiter, yLimiter, angleLimiter;
-    xLimiter = new SlewRateLimiter(4.0);
-    yLimiter = new SlewRateLimiter(4.0);;
-    angleLimiter = new SlewRateLimiter(4.0);
-
-    xSpeed = xLimiter.calculate(xSpeed) * AutoConstants.kMaxSpeedMetersPerSecond;
-    ySpeed = yLimiter.calculate(ySpeed) * AutoConstants.kMaxSpeedMetersPerSecond;
-    angleSpeed = angleLimiter.calculate(angleSpeed) * AutoConstants.kMaxSpeedMetersPerSecond;
-
-    ChassisSpeeds chassisSpeeds;
-    if(fieldOrentation){
-      chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, angleSpeed, getRotation2d());
-    }else{
-      chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, angleSpeed);
-    }
-    SwerveModuleState[] moduleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(chassisSpeeds);
-    setModuleStates(moduleStates);
-    
-  }
 
   public double balance(){
     double speed;

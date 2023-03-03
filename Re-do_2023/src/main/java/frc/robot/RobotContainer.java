@@ -15,10 +15,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Commands.ControlArm;
+import frc.robot.Commands.ControlGrabber;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.SusanHead;
 import frc.robot.Commands.TeleopSwerve;
+import frc.robot.Subsystems.Grabber;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Commands.ZeroSusan;
@@ -41,6 +43,7 @@ public class RobotContainer {
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();
   private AutoContainer autoContainer = new AutoContainer();
+  private final Grabber grabber = new Grabber();
   private HashMap<String, Command> eventMap;
 
   private SendableChooser<Integer> autoChooser;
@@ -74,17 +77,18 @@ public class RobotContainer {
     () -> modifyAxis(stickOne.getX()) * 0.3, 
     () -> modifyAxis(stickOne.getY()) * 0.3, 
     () -> modifyAxis(stickTwo.getX()) * 0.3, 
-    () -> new JoystickButton(stickOne, 1).getAsBoolean()));
+    () ->! new JoystickButton(stickOne, 1).getAsBoolean()));
     
 
     reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> -stickFour.getRawAxis(1), 75));
-    pneumatics.Pressurize();
+    //pneumatics.Pressurize();
     new zeroHeading(swerve);
     pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
     vertArm.setDefaultCommand(
         new ZeroVert(vertArm).andThen(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 30)));
     lazySusanSub.setDefaultCommand(
         new ZeroSusan(lazySusanSub).andThen(new ControlSusan(lazySusanSub, () -> modifyAxis(-stickFour.getX()), 50)));
+    grabber.setDefaultCommand(new ControlGrabber(grabber, 0));
   }
 
   private void configureBindings() {
@@ -102,7 +106,7 @@ public class RobotContainer {
     new JoystickButton(stickFour, Constants.TOGGLE_CLAW_BUTTON)
         .toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel()));
       
-    new JoystickButton(stickThree, 9).toggleOnFalse(new InstantCommand(() -> swerve.printModuleAngles()));
+    new JoystickButton(stickTwo, 9).toggleOnFalse(new InstantCommand(() -> swerve.printModuleAngles()));
 
 
       new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnTrue(new zeroHeading(swerve));
@@ -111,6 +115,9 @@ public class RobotContainer {
 
     new JoystickButton(stickFour, Constants.SUSAN_TOGGLE_BUTTON).whileTrue(new ControlSusan(lazySusanSub, () -> - stickFour.getX(), 100));
     new JoystickButton(stickFour, Constants.SUSAN_TOGGLE_BUTTON).whileFalse(new ControlSusan(lazySusanSub, () -> stickFour.getX(), 100));
+
+    new JoystickButton(stickThree, Constants.GRABBER_IN_BUTTON).whileTrue(new ControlGrabber(grabber, 0.5));
+    new JoystickButton(stickThree, Constants.GRABBER_OUT_BUTTON).whileTrue(new ControlGrabber(grabber, -0.5));
 
 
 

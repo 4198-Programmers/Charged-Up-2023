@@ -40,6 +40,8 @@ public class SwerveModule {
    anglePIDController = new PIDController(AutoConstants.kPXController, 0, 0);
    anglePIDController.enableContinuousInput(-Math.PI, Math.PI);
 
+   resetEncoders();
+
   }
   public double getDrivePosition(){
     return driveEncoder.getPosition();
@@ -63,18 +65,23 @@ public class SwerveModule {
     return Rotation2d.fromDegrees(getAbsoluteEncoderPosition());
   }
 
+  public void resetEncoders(){
+    driveEncoder.setPosition(0);
+    angleEncoder.setPosition(getAbsoluteEncoderPosition());
+  }
+
   public SwerveModuleState getState(){
     return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAnglePosition()));
   }
 
-  public void setDesiredState(SwerveModuleState desiredState){
-    if(Math.abs(desiredState.speedMetersPerSecond) < 0.001){
+  public void setDesiredState(SwerveModuleState state){
+    if(Math.abs(state.speedMetersPerSecond) < 0.001){
       stop();
       return;
     }
-    desiredState = SwerveModuleState.optimize(desiredState, getState().angle);
-    driveMotor.set(desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed);
-    angleMotor.set(anglePIDController.calculate(getAnglePosition(), desiredState.angle.getRotations()));
+    state = SwerveModuleState.optimize(state, getState().angle);
+    driveMotor.set(state.speedMetersPerSecond / AutoConstants.kMaxSpeedMetersPerSecond);
+    angleMotor.set(anglePIDController.calculate(getAnglePosition(), state.angle.getRadians()));
   }
 
   public void stop(){
