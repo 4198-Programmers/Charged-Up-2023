@@ -24,13 +24,16 @@ public final class Constants {
                         BACK_RIGHT_STEER = 1,
                         BACK_RIGHT_ENCODER = 10;
         public static final double BACK_RIGHT_STEER_OFFSET = -Math.toRadians(197.75 - 180);
+
         // Motor IDs and Pneumatics Ports
         public static final int SUSAN_MOTOR_ID = 15,
                         PNEUMATICS_PORT = 0,
                         PNEUMATICS_SINGLE_CHANNEL = 7,
                         VERTICAL_MOVER_MOTOR_ID = 14,
                         IN_OUT_MOTOR_ID = 13,
-                        LED_CAN_ID = 0;
+                        LED_CAN_ID = 0,
+                        INTAKE_MOTOR_ID = 16;  
+
         // Vert Arm and Reach Arm Encoder Values [Inaccurate as the vert arm drifts
         // after you turn off the robot 2-17]
         public static final double MAX_REACH = 1000,

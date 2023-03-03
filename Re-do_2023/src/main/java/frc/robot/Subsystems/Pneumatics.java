@@ -19,7 +19,8 @@ public class Pneumatics extends SubsystemBase {
     // DoubleSolenoid(PneumaticsModuleType.CTREPCM, 7, 7);
 
     public void Pressurize() {
-        airCompressor.enableDigital();
+        // airCompressor.enableDigital();
+        airCompressor.disable();
         System.out.println("Pressure: " + airCompressor.getPressure());
     }
 

@@ -23,8 +23,10 @@ import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.DriveTrainCom;
+import frc.robot.Commands.RunIntake;
 import frc.robot.Commands.SlightTurnDrive;
 import frc.robot.Subsystems.DriveTrain;
+import frc.robot.Subsystems.Intake;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Subsystems.PathHolder;
 import frc.robot.Commands.TogglePneumatics;
@@ -55,6 +57,7 @@ public class RobotContainer {
   private final Pneumatics pneumatics = new Pneumatics();
   private final PathHolder mPath = new PathHolder(vertArm, pneumatics, reachArmSub, lazySusanSub);
   private final SinglePaths singlePaths = new SinglePaths(mDriveTrain, vertArm, lazySusanSub, pneumatics);
+  private final Intake intakeSub = new Intake();
 
   // private AutoContainer mAutoContainer = new AutoContainer(mDriveTrain,
   // lazySusanSub, pneumatics, reachArmSub, vertArm);
@@ -105,11 +108,12 @@ public class RobotContainer {
     reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> 0, 0));
     pneumatics.Pressurize();
     new zeroHeading(mDriveTrain); // This sets the robot front to be the forward direction
-    pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
-    vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 30));
+    // pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
+    vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));
     lazySusanSub.setDefaultCommand(
         new ControlSusan(lazySusanSub, () -> modifyAxis(-stickThree.getX()), 30));// CHANGETOTHREE
     lazySusanSub.mode(IdleMode.kBrake);
+    intakeSub.setDefaultCommand(new RunIntake(intakeSub, 0));
   }
 
   public void initShuffleboard() {
@@ -166,6 +170,11 @@ public class RobotContainer {
     // other time.
     new JoystickButton(stickThree, Constants.TOGGLE_CLAW_BUTTON)
         .toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel())); // CHANGETOTHREE
+
+        new JoystickButton(stickFour, 3)
+        .whileTrue(new RunIntake(intakeSub, 0.7)); 
+        new JoystickButton(stickFour, 4)
+        .whileTrue(new RunIntake(intakeSub, -0.7)); 
 
     new JoystickButton(stickThree, Constants.TOGGLE_SUSAN_DIRECTION_BUTTON).toggleOnTrue(new ToggleSusan(lazySusanSub));// CHANGETOTHREE
     new JoystickButton(stickOne, Constants.NO_SLIP_DRIVE_BUTTON).whileTrue(new SlightTurnDrive(mDriveTrain));
