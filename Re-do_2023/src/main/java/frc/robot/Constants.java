@@ -1,5 +1,4 @@
 package frc.robot;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -15,7 +14,8 @@ public final class Constants {
       PNEUMATICS_SINGLE_CHANNEL = 7,
       VERTICAL_MOVER_MOTOR_ID = 14,
       IN_OUT_MOTOR_ID = 13,
-      LED_CAN_ID = 0;
+      LED_CAN_ID = 0,
+      GRABBER_MOTOR_ID = 16;
   // Vert Arm and Reach Arm Encoder Values [Inaccurate as the vert arm drifts
   // after you turn off the robot 2-17]
   public static final double MAX_REACH = 1000,
@@ -88,6 +88,8 @@ public static final double SUSAN_LEFT_HEADING = 0;
 public static final double REACH_TOP_TIME = 0;
 public static final double REACH_MIDDLE_TIME = 0;
 public static final double REACH_BOTTOM_TIME = 0;
+public static final int GRABBER_IN_BUTTON = 9;
+public static final int GRABBER_OUT_BUTTON = 8;
 
   public static final class Swerve {
     public static final double stickDeadband = 0.1;
@@ -128,8 +130,7 @@ public static final double REACH_BOTTOM_TIME = 0;
       public static final int driveMotorID = 7;
       public static final int angleMotorID = 8;
       public static final int canCoderID = 12;
-      public static final double angleOffset = -0;
-      public static final Rotation2d rotationOffSet = Rotation2d.fromDegrees(0);
+      public static final double angleOffset = -291.01;
       public static final boolean encoderReversed = false;
     }
 
@@ -139,8 +140,7 @@ public static final double REACH_BOTTOM_TIME = 0;
       public static final int driveMotorID = 3;
       public static final int angleMotorID = 4;
       public static final int canCoderID = 11;
-      public static final double angleOffset = -0;
-      public static final Rotation2d rotationOffSet = Rotation2d.fromDegrees(0);
+      public static final double angleOffset = -152.05;
       public static final boolean encoderReversed = false;
     }
 
@@ -150,8 +150,7 @@ public static final double REACH_BOTTOM_TIME = 0;
       public static final int driveMotorID = 5;
       public static final int angleMotorID = 6;
       public static final int canCoderID = 9;
-      public static final double angleOffset = -0;
-      public static final Rotation2d rotationOffSet = Rotation2d.fromDegrees(0);
+      public static final double angleOffset = -272.37;
       public static final boolean encoderReversed = false;
     }
 
@@ -161,8 +160,7 @@ public static final double REACH_BOTTOM_TIME = 0;
       public static final int driveMotorID = 2;
       public static final int angleMotorID = 1;
       public static final int canCoderID = 10;
-      public static final double angleOffset = -0;
-      public static final Rotation2d rotationOffSet = Rotation2d.fromDegrees(0);
+      public static final double angleOffset = -17.84;
       public static final boolean encoderReversed = false;
     }
   }

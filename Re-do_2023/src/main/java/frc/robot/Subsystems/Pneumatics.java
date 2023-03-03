@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Pneumatics extends SubsystemBase {
-    private final Compressor airCompressor;
+  //  private final Compressor airCompressor;
     private final Solenoid singleSolenoid;
 
     public Pneumatics() {
-        airCompressor = new Compressor(Constants.PNEUMATICS_PORT, PneumaticsModuleType.CTREPCM);
+      //  airCompressor = new Compressor(Constants.PNEUMATICS_PORT, PneumaticsModuleType.CTREPCM);
         singleSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.PNEUMATICS_SINGLE_CHANNEL);
     }
 
@@ -19,8 +19,8 @@ public class Pneumatics extends SubsystemBase {
     // DoubleSolenoid(PneumaticsModuleType.CTREPCM, 7, 7);
 
     public void Pressurize() {
-        airCompressor.enableDigital();
-        System.out.println("Pressure: " + airCompressor.getPressure());
+       // airCompressor.enableDigital();
+    //    System.out.println("Pressure: " + airCompressor.getPressure());
     }
 
     public boolean getChannel() {
