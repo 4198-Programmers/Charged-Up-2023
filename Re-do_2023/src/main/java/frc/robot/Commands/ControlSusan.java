@@ -30,17 +30,13 @@ public class ControlSusan extends CommandBase {
         double wantedSpeed = speedSupplier.getAsDouble() * speedScalar;
         if (lazySusan.getLocation() <= 80 && wantedSpeed > 0.05) {
             lazySusan.spinSusan(wantedSpeed);
-        } else if(lazySusan.getLocation() >= -80 && wantedSpeed < -0.05){
+        } else if (lazySusan.getLocation() >= -80 && wantedSpeed < -0.05) {
             lazySusan.spinSusan(wantedSpeed);
-        }
-                
-        else {
+        } else {
             lazySusan.spinSusan(0);
         }
-            // lazySusan.spinSusan(wantedSpeed);
-            // System.out.println(lazySusan.getLocation() + "location");
-
-
+        // lazySusan.spinSusan(wantedSpeed);
+        // System.out.println(lazySusan.getLocation() + "location");
 
     }
 

@@ -6,13 +6,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.VertArm;
 
 public class ControlArm extends CommandBase {
-    private final VertArm upArmSub;
+    private final VertArm vertArm;
     private final DoubleSupplier speedSupplier;
     private double speedScalar;
     private double percentSpeed;
 
     public ControlArm(VertArm upArmArg, DoubleSupplier supplier, double percentSpeed) {
-        upArmSub = upArmArg;
+        vertArm = upArmArg;
         speedSupplier = supplier;
         this.percentSpeed = percentSpeed;
         addRequirements(upArmArg);
@@ -25,7 +25,13 @@ public class ControlArm extends CommandBase {
 
     @Override
     public void execute() {
-        upArmSub.moveArm(speedSupplier.getAsDouble() * speedScalar);
-    }
+        double wantedSpeed = speedSupplier.getAsDouble() * speedScalar;
+        if (vertArm.getLocation() <= MAX_VALUE_FOR_ARM && wantedSpeed > 0.05) {
+            vertArm.moveArm(wantedSpeed);
+        } else if (vertArm.getLocation() > 0 && wantedSpeed < -0.05) {
+            vertArm.moveArm(wantedSpeed);
+        } else {
+            vertArm.moveArm(0);
+        }    }
 
 }
