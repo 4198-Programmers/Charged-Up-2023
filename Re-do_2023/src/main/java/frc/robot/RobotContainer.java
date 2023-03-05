@@ -97,9 +97,9 @@ public class RobotContainer {
     pipeline.setDouble(0);
     mDriveTrain.setDefaultCommand(new DriveTrainCom(
         mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
+        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
+        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
+        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.7,
         true)); // ATTENTION These values were multiplied by Oren to make the bot not die while
                 // testing the three * .5 terms should be deleted
 
@@ -111,7 +111,7 @@ public class RobotContainer {
     // pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
     vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));
     lazySusanSub.setDefaultCommand(
-        new ControlSusan(lazySusanSub, () -> modifyAxis(-stickThree.getX()), 30));// CHANGETOTHREE
+        new ControlSusan(lazySusanSub, () -> smallerModifyAxis(-stickThree.getX()), 30));// CHANGETOTHREE
     lazySusanSub.mode(IdleMode.kBrake);
     intakeSub.setDefaultCommand(new RunIntake(intakeSub, 0));
   }
@@ -171,21 +171,17 @@ public class RobotContainer {
     new JoystickButton(stickThree, Constants.TOGGLE_CLAW_BUTTON)
         .toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel())); // CHANGETOTHREE
 
-        new JoystickButton(stickFour, 3)
-        .whileTrue(new RunIntake(intakeSub, 0.7)); 
-        new JoystickButton(stickFour, 4)
-        .whileTrue(new RunIntake(intakeSub, -0.7)); 
+    new JoystickButton(stickThree, 1)
+        .whileTrue(new RunIntake(intakeSub, 0.7));
+    new JoystickButton(stickThree, 2)
+        .whileTrue(new RunIntake(intakeSub, -0.7));
 
     new JoystickButton(stickThree, Constants.TOGGLE_SUSAN_DIRECTION_BUTTON).toggleOnTrue(new ToggleSusan(lazySusanSub));// CHANGETOTHREE
-    new JoystickButton(stickOne, Constants.NO_SLIP_DRIVE_BUTTON).whileTrue(new SlightTurnDrive(mDriveTrain));
+    new JoystickButton(stickTwo, Constants.NO_SLIP_DRIVE_BUTTON).whileTrue(new SlightTurnDrive(mDriveTrain));
     new JoystickButton(stickThree, Constants.ZERO_SUSAN_HEADING_BUTTON)
         .onTrue(new SequentialCommandGroup(
             new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.VERT_SAFE_TO_SPIN_ENC_POS)
                 .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, 0))));
-    new JoystickButton(stickThree, Constants.ONE_EIGHTY_SUSAN_HEADING_BUTTON)
-        .onTrue(new SequentialCommandGroup(
-            new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.VERT_SAFE_TO_SPIN_ENC_POS)
-                .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.SUSAN_180_ENC_POS))));
 
     // This resets the robot to field orientation and sets the current front of the
     // robot to the forward direction
@@ -271,6 +267,15 @@ public class RobotContainer {
   private static double modifyAxis(double value) {
     // Deadband
     value = deadband(value, 0.1);
+    // Square the axis
+    value = Math.copySign(value * value, value);
+
+    return value;
+  }
+
+  private static double smallerModifyAxis(double value) {
+    // Deadband
+    value = deadband(value, 0.05);
     // Square the axis
     value = Math.copySign(value * value, value);
 

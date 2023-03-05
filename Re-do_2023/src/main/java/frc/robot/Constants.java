@@ -32,7 +32,7 @@ public final class Constants {
                         VERTICAL_MOVER_MOTOR_ID = 14,
                         IN_OUT_MOTOR_ID = 13,
                         LED_CAN_ID = 0,
-                        INTAKE_MOTOR_ID = 16;  
+                        INTAKE_MOTOR_ID = 16;
 
         // Vert Arm and Reach Arm Encoder Values [Inaccurate as the vert arm drifts
         // after you turn off the robot 2-17]
@@ -45,23 +45,22 @@ public final class Constants {
 
         // Joystick 1 Buttons
         public static final int APRIL_TAG_LEFT_BUTTON = 1;
-        public static final int NO_SLIP_DRIVE_BUTTON = 2;
         public static final int FIELD_ORIENTATION_BUTTON = 11;
         public static final int ROBOT_ORIENTATION_BUTTON = 12;
 
         // Joystick 2 Buttons
         public static final int APRIL_TAG_RIGHT_BUTTON = 1;
+        public static final int NO_SLIP_DRIVE_BUTTON = 2;
 
         // Joystick 3 Buttons
         public static final int TOGGLE_CLAW_BUTTON = 1,
-        REACH_OUT_BUTTON = 3, 
-        REACH_IN_BUTTON = 2, 
-        ZERO_SUSAN_HEADING_BUTTON = 4, 
-        ONE_EIGHTY_SUSAN_HEADING_BUTTON = 5;
+                        REACH_OUT_BUTTON = 5,
+                        REACH_IN_BUTTON = 3,
+                        ZERO_SUSAN_HEADING_BUTTON = 4,
+                        ONE_EIGHTY_SUSAN_HEADING_BUTTON = 5;
 
         // Joystick 4 Buttons
-        public static final int 
-                        TOGGLE_SUSAN_DIRECTION_BUTTON = 4;
+        public static final int TOGGLE_SUSAN_DIRECTION_BUTTON = 4;
 
         // Turret Values
         public static final double SUSAN_CIRCUMFERENCE = 0,
@@ -73,7 +72,7 @@ public final class Constants {
         public static final double AUTO_VERT_SPEED = 0.15,
                         MAX_VELOCITY_METERS_PER_SECOND = 4,
                         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3,
-                        VERT_SAFE_TO_SPIN_ENC_POS = 0.6, // printed at 0.5, better safe than broken
+                        VERT_SAFE_TO_SPIN_ENC_POS = 3, // printed at 0.5, better safe than broken
                         AUTO_SUSAN_SPEED = 0.3,
                         LEFT_PLACEMENT_ENC_POS = 10,
                         VERT_BOTTOM_SHELF_PLACEMENT_ENC_MID = 0.603176,
@@ -84,7 +83,7 @@ public final class Constants {
                         AUTO_ENC_OFFSET = 0.05,
                         SUSAN_180_ENC_POS = 50;
 
-        public static final double VERT_ARM_NO_DROP_SPEED = 0.12;
+        public static final double VERT_ARM_NO_DROP_SPEED = 0.01;
 
         // april tags constants
         public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0.25,
