@@ -26,12 +26,12 @@ public class ControlArm extends CommandBase {
     @Override
     public void execute() {
         double wantedSpeed = speedSupplier.getAsDouble() * speedScalar;
-        if (vertArm.getLocation() <= 7.9124 && wantedSpeed > 0.05) {
+        if (vertArm.getLocation() <= 7.925 && wantedSpeed > 0.05) {
             vertArm.moveArm(wantedSpeed);
         } else if (vertArm.getLocation() > 0 && wantedSpeed < -0.05) {
             vertArm.moveArm(wantedSpeed);
         } else {
-            vertArm.moveArm(0);
+            vertArm.moveArm(.25*wantedSpeed);
         }    }
 
 }

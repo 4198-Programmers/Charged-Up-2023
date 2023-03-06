@@ -56,11 +56,11 @@ public final class Constants {
         public static final int TOGGLE_CLAW_BUTTON = 1,
                         REACH_OUT_BUTTON = 5,
                         REACH_IN_BUTTON = 3,
-                        ZERO_SUSAN_HEADING_BUTTON = 4,
+                        ZERO_SUSAN_HEADING_BUTTON = 11, // was 4
                         ONE_EIGHTY_SUSAN_HEADING_BUTTON = 5;
 
         // Joystick 4 Buttons
-        public static final int TOGGLE_SUSAN_DIRECTION_BUTTON = 4;
+        public static final int TOGGLE_SUSAN_DIRECTION_BUTTON = 11;
 
         // Turret Values
         public static final double SUSAN_CIRCUMFERENCE = 0,

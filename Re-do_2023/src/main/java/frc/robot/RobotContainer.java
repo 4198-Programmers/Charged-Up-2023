@@ -173,7 +173,7 @@ public class RobotContainer {
 
     new JoystickButton(stickThree, 1)
         .whileTrue(new RunIntake(intakeSub, 0.7));
-    new JoystickButton(stickThree, 2)
+    new JoystickButton(stickThree, 4)
         .whileTrue(new RunIntake(intakeSub, -0.7));
 
     new JoystickButton(stickThree, Constants.TOGGLE_SUSAN_DIRECTION_BUTTON).toggleOnTrue(new ToggleSusan(lazySusanSub));// CHANGETOTHREE
