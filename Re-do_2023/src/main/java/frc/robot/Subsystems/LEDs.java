@@ -1,34 +1,49 @@
-/*package frc.robot.Subsystems;
+package frc.robot.Subsystems;
 
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class LEDs extends SubsystemBase {
-    private final CANdle lights = new CANdle(Constants.LED_CAN_ID);
-    private final CANdleConfiguration configLight = new CANdleConfiguration();
+    // private final CANdle lights = new CANdle(Constants.LED_CAN_ID);
+    // private final CANdleConfiguration configLight = new CANdleConfiguration();
+    AddressableLED leds = new AddressableLED(0);
+    AddressableLEDBuffer buffer = new AddressableLEDBuffer(15);
 
-    public LEDs(double brightness) { // brightness is 0-1 reflecting 0-100%
-        configLight.stripType = LEDStripType.RGB;
-        configLight.brightnessScalar = brightness;
-        lights.configAllSettings(configLight);
+    public void startLEDS() {
+        leds.setLength(buffer.getLength());
+        leds.setData(buffer);
+        leds.start();
     }
 
-    public void setColor(int R, int G, int B) {
-        lights.setLEDs(R, G, B);
+    public void redLED() {
+        // for (var i = 0; i < buffer.getLength(); i++) {
+        //     buffer.setRGB(i, 255, 0, 0);
+        // }
+        buffer.setRGB(1, 255, 0, 0);
+        buffer.setRGB(2, 255, 0, 0);
+        buffer.setRGB(3, 255, 0, 0);
+        buffer.setRGB(4, 255, 0, 0);
+        buffer.setRGB(5, 255, 0, 0);
+        buffer.setRGB(6, 255, 0, 0);
+        buffer.setRGB(7, 255, 0, 0);
+        buffer.setRGB(8, 255, 0, 0);
+        buffer.setRGB(9, 255, 0, 0);
+        buffer.setRGB(10, 255, 0, 0);
+        // buffer.setRGB(11, 255, 0, 0);
+        // buffer.setRGB(12, 255, 0, 0);
+        // buffer.setRGB(13, 255, 0, 0);
+        // buffer.setRGB(14, 255, 0, 0);
+        // buffer.setRGB(15, 255, 0, 0);
+        leds.start();
+        leds.setData(buffer);
+        System.out.println("running leds");
     }
 
-    public void changeBrightness(double brightness) {
-        configLight.brightnessScalar = brightness;
-    }
-
-    public void rainbowLights(double brightness, double speed, int numberOfLights) {
-        RainbowAnimation rainbow = new RainbowAnimation(brightness, speed, numberOfLights);
-        lights.animate(rainbow);
-    }
 }
-**/

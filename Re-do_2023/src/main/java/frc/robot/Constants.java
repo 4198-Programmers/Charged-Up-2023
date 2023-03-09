@@ -8,22 +8,25 @@ public final class Constants {
         public static final int FRONT_LEFT_DRIVE = 7,
                         FRONT_LEFT_STEER = 8,
                         FRONT_LEFT_ENCODER = 12;
-        public static final double FRONT_LEFT_STEER_OFFSET = -Math.toRadians(291.18);
+        public static final double FRONT_LEFT_STEER_OFFSET = -Math.toRadians(291.1816467335055);
+
         // Front Right Swerve Values
         public static final int FRONT_RIGHT_DRIVE = 3,
                         FRONT_RIGHT_STEER = 4,
                         FRONT_RIGHT_ENCODER = 11;
-        public static final double FRONT_RIGHT_STEER_OFFSET = -Math.toRadians(150 - 180);
+        public static final double FRONT_RIGHT_STEER_OFFSET = -Math.toRadians(329.7656585624743);
+
         // Back Left Swerve Values
         public static final int BACK_LEFT_DRIVE = 5,
                         BACK_LEFT_STEER = 6,
                         BACK_LEFT_ENCODER = 9;
-        public static final double BACK_LEFT_STEER_OFFSET = -Math.toRadians(272.63);
+        public static final double BACK_LEFT_STEER_OFFSET = -Math.toRadians(272.4609451619576);
+
         // Back Right Swerve Values
         public static final int BACK_RIGHT_DRIVE = 2,
                         BACK_RIGHT_STEER = 1,
                         BACK_RIGHT_ENCODER = 10;
-        public static final double BACK_RIGHT_STEER_OFFSET = -Math.toRadians(197.75 - 180);
+        public static final double BACK_RIGHT_STEER_OFFSET = -Math.toRadians(17.31445270635416);
 
         // Motor IDs and Pneumatics Ports
         public static final int SUSAN_MOTOR_ID = 15,
@@ -56,11 +59,8 @@ public final class Constants {
         public static final int TOGGLE_CLAW_BUTTON = 1,
                         REACH_OUT_BUTTON = 5,
                         REACH_IN_BUTTON = 3,
-                        ZERO_SUSAN_HEADING_BUTTON = 11, // was 4
-                        ONE_EIGHTY_SUSAN_HEADING_BUTTON = 5;
-
-        // Joystick 4 Buttons
-        public static final int TOGGLE_SUSAN_DIRECTION_BUTTON = 11;
+                        ZERO_SUSAN_BUTTON = 12,
+                        SLOW_SUSAN_BUTTON = 11;
 
         // Turret Values
         public static final double SUSAN_CIRCUMFERENCE = 0,
@@ -69,21 +69,30 @@ public final class Constants {
         public static final float PITCH_OFFSET = 5; // Must be a float for the gyro values
 
         // Auto Values
-        public static final double AUTO_VERT_SPEED = 0.15,
+        public static final double AUTO_VERT_SPEED = 0.75,
                         MAX_VELOCITY_METERS_PER_SECOND = 4,
                         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3,
-                        VERT_SAFE_TO_SPIN_ENC_POS = 3, // printed at 0.5, better safe than broken
-                        AUTO_SUSAN_SPEED = 0.3,
-                        LEFT_PLACEMENT_ENC_POS = 10,
-                        VERT_BOTTOM_SHELF_PLACEMENT_ENC_MID = 0.603176,
-                        VERT_BOTTOM_SHELF_PLACEMENT_ENC_SIDES = 0.9972,
+                        VERT_SAFE_TO_SPIN_ENC_POS = 3.67, // printed at 0.5, better safe than broken
+                        AUTO_SUSAN_SPEED = 0.15,
+                        LEFT_PLACEMENT_ENC_POS = 6,
+                        VERT_MID_SHELF_PLACEMENT_ENC_MID = 6.5,
+                        VERT_MID_SHELF_PLACEMENT_ENC_SIDES = 7,
                         MID_PLACEMENT_ENC_POS = 0,
-                        RIGHT_PLACEMENT_ENC_POS = -10,
-                        VERT_PICKUP_POS = 0.2,
+                        RIGHT_PLACEMENT_ENC_POS = -6,
+                        VERT_PICKUP_POS = 2.75,
                         AUTO_ENC_OFFSET = 0.05,
-                        SUSAN_180_ENC_POS = 50;
+                        SUSAN_180_ENC_POS = 56,
+                        INTAKE_OUT_SPEED = -0.7,
+                        INTAKE_IN_SPEED = 0.7,
+                        AUTO_REACH_SPEED_OUT = 1,
+                        AUTO_REACH_SPEED_IN = -1;
 
-        public static final double VERT_ARM_NO_DROP_SPEED = 0.01;
+        // Auto AprilTags Values
+        public static final double DISTANCE_FROM_TAG = 0,
+                        DISTANCE_TOLERANCE_VALUE = 0.05,
+                        ANGLE_SKEW = 0;
+
+        public static final double VERT_ARM_NO_DROP_SPEED = 0.03;
 
         // april tags constants
         public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0.25,

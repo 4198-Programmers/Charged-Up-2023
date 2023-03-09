@@ -25,9 +25,9 @@ public class AutoVert extends CommandBase {
     @Override
     public void execute() {
         if (vertArm.getLocation() < wantedPos) {// (wantedPos - Constants.AUTO_ENC_OFFSET)
-            vertArm.moveArm(0.17);
+            vertArm.moveArm(0.5);
         } else if (vertArm.getLocation() > (wantedPos + 0.05)) {
-            vertArm.moveArm(-0.1);
+            vertArm.moveArm(-0.25);
         } else if (vertArm.getLocation() >= wantedPos
                 && vertArm.getLocation() <= (wantedPos + 0.05)) {
             vertArm.moveArm(Constants.VERT_ARM_NO_DROP_SPEED);

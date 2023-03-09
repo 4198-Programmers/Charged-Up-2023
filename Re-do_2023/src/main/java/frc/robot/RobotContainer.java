@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -14,6 +16,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Commands.AutoSusan;
@@ -27,6 +30,7 @@ import frc.robot.Commands.RunIntake;
 import frc.robot.Commands.SlightTurnDrive;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.Intake;
+import frc.robot.Subsystems.LEDs;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Subsystems.PathHolder;
 import frc.robot.Commands.TogglePneumatics;
@@ -42,6 +46,8 @@ import frc.robot.Subsystems.SinglePaths.BalanceSP;
 import frc.robot.Subsystems.SinglePaths.Elements;
 // import frc.robot.Subsystems.PathHolder.PathChoice;
 import frc.robot.Subsystems.SinglePaths.Location;
+import frc.robot.Subsystems.SinglePaths.SideChoice;
+import frc.robot.Tags.PhotonVision;
 
 public class RobotContainer {
   private final Joystick stickOne = new Joystick(0);
@@ -49,15 +55,18 @@ public class RobotContainer {
   private final Joystick stickThree = new Joystick(2);
   private final Joystick stickFour = new Joystick(3);
 
-  // private final PhotonVision photonVision = new PhotonVision();
+  private final PhotonVision photonVision = new PhotonVision();
   private final DriveTrain mDriveTrain = new DriveTrain();
   private final LazySusanSub lazySusanSub = new LazySusanSub();
   private final ReachArmSub reachArmSub = new ReachArmSub();
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();
   private final PathHolder mPath = new PathHolder(vertArm, pneumatics, reachArmSub, lazySusanSub);
-  private final SinglePaths singlePaths = new SinglePaths(mDriveTrain, vertArm, lazySusanSub, pneumatics);
   private final Intake intakeSub = new Intake();
+  private final SinglePaths singlePaths = new SinglePaths(mDriveTrain, vertArm, lazySusanSub, pneumatics, intakeSub,
+      reachArmSub);
+  private LEDs leds = new LEDs();
+  UsbCamera cam = CameraServer.startAutomaticCapture();
 
   // private AutoContainer mAutoContainer = new AutoContainer(mDriveTrain,
   // lazySusanSub, pneumatics, reachArmSub, vertArm);
@@ -67,10 +76,11 @@ public class RobotContainer {
   // SendableChooser<>();
   // private final SendableChooser<LevelPriority> LevelChooser = new
   // SendableChooser<>();
-  private final SendableChooser<String> PathChooser = new SendableChooser<>();
+  // private final SendableChooser<String> PathChooser = new SendableChooser<>();
   private final SendableChooser<Integer> LocationChooser = new SendableChooser<>();
   private final SendableChooser<Integer> ElementsChooser = new SendableChooser<>();
   private final SendableChooser<Integer> BalanceChooser = new SendableChooser<>();
+  private final SendableChooser<Integer> SideChooser = new SendableChooser<>();
 
   // private final SequentialCommandGroup aprilTagLeft = new
   // SusanHead(lazySusanSub, 0)
@@ -97,8 +107,8 @@ public class RobotContainer {
     pipeline.setDouble(0);
     mDriveTrain.setDefaultCommand(new DriveTrainCom(
         mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
+        () -> -modifyAxis(stickOne.getX()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
+        () -> -modifyAxis(stickOne.getY()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
         () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.7,
         true)); // ATTENTION These values were multiplied by Oren to make the bot not die while
                 // testing the three * .5 terms should be deleted
@@ -111,30 +121,36 @@ public class RobotContainer {
     // pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
     vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));
     lazySusanSub.setDefaultCommand(
-        new ControlSusan(lazySusanSub, () -> smallerModifyAxis(-stickThree.getX()), 30));// CHANGETOTHREE
+        new ControlSusan(lazySusanSub, () -> smallerModifyAxis(-stickThree.getX()), 50));// CHANGETOTHREE
     lazySusanSub.mode(IdleMode.kBrake);
     intakeSub.setDefaultCommand(new RunIntake(intakeSub, 0));
   }
 
   public void initShuffleboard() {
     ShuffleboardTab autoTab = Shuffleboard.getTab("Auto Choices");
-    autoTab.add("Autonomous", PathChooser);
-    PathChooser.setDefaultOption("Left One Element No Balance", "LeftOneElement");
-    PathChooser.addOption("Left Two Element No Balance", "LeftTwoElement");
-    PathChooser.addOption("Left One Element Balance", "LeftOneElementBalance");
-    PathChooser.addOption("Left Two Element Balance", "LeftTwoElementBalance");
-    PathChooser.addOption("Left Three Element Balance", "LeftThreeElementBalance");
-    PathChooser.addOption("Mid One Element No Balance", "MiddleOneElement");
-    PathChooser.addOption("Mid Two Element No Balance", "MiddleTwoElement");
-    PathChooser.addOption("Mid One Element Balance", "MiddleOneElementBalance");
-    PathChooser.addOption("Mid Two Element Balance", "MiddleTwoElementBalance");
-    PathChooser.addOption("Mid Three Element Balance", "MiddleThreeElementBalance");
-    PathChooser.addOption("Right One Element No Balance", "RightOneElement");
-    PathChooser.addOption("Right Two Element No Balance", "RightTwoElement");
-    PathChooser.addOption("Right One Element No Balance", "RightOneElementBalance");
-    PathChooser.addOption("Right Two Element No Balance", "RightTwoElementBalance");
-    PathChooser.addOption("Right Three Element No Balance", "RightThreeElementBalance");
-    PathChooser.addOption("Drive Straight", "DriveStraight");
+    // autoTab.add("Autonomous", PathChooser);
+    // PathChooser.setDefaultOption("Left One Element No Balance",
+    // "LeftOneElement");
+    // PathChooser.addOption("Left Two Element No Balance", "LeftTwoElement");
+    // PathChooser.addOption("Left One Element Balance", "LeftOneElementBalance");
+    // PathChooser.addOption("Left Two Element Balance", "LeftTwoElementBalance");
+    // PathChooser.addOption("Left Three Element Balance",
+    // "LeftThreeElementBalance");
+    // PathChooser.addOption("Mid One Element No Balance", "MiddleOneElement");
+    // PathChooser.addOption("Mid Two Element No Balance", "MiddleTwoElement");
+    // PathChooser.addOption("Mid One Element Balance", "MiddleOneElementBalance");
+    // PathChooser.addOption("Mid Two Element Balance", "MiddleTwoElementBalance");
+    // PathChooser.addOption("Mid Three Element Balance",
+    // "MiddleThreeElementBalance");
+    // PathChooser.addOption("Right One Element No Balance", "RightOneElement");
+    // PathChooser.addOption("Right Two Element No Balance", "RightTwoElement");
+    // PathChooser.addOption("Right One Element No Balance",
+    // "RightOneElementBalance");
+    // PathChooser.addOption("Right Two Element No Balance",
+    // "RightTwoElementBalance");
+    // PathChooser.addOption("Right Three Element No Balance",
+    // "RightThreeElementBalance");
+    // PathChooser.addOption("Drive Straight", "DriveStraight");
 
     autoTab.add("Location", LocationChooser);
     LocationChooser.setDefaultOption("Left", 0);
@@ -151,6 +167,10 @@ public class RobotContainer {
     autoTab.add("Balance?", BalanceChooser);
     BalanceChooser.setDefaultOption("No Balance", 0);
     BalanceChooser.addOption("Balance", 1);
+
+    autoTab.add("Color", SideChooser);
+    SideChooser.setDefaultOption("Red", 0);
+    SideChooser.addOption("Blue", 1);
 
     vertArm.ZeroArm();
     lazySusanSub.zeroPosition();
@@ -171,14 +191,15 @@ public class RobotContainer {
     new JoystickButton(stickThree, Constants.TOGGLE_CLAW_BUTTON)
         .toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel())); // CHANGETOTHREE
 
+    new JoystickButton(stickThree, Constants.SLOW_SUSAN_BUTTON)
+        .whileTrue(new ControlSusan(lazySusanSub, () -> smallerModifyAxis(-stickThree.getX()), 15));
     new JoystickButton(stickThree, 1)
         .whileTrue(new RunIntake(intakeSub, 0.7));
     new JoystickButton(stickThree, 4)
         .whileTrue(new RunIntake(intakeSub, -0.7));
 
-    new JoystickButton(stickThree, Constants.TOGGLE_SUSAN_DIRECTION_BUTTON).toggleOnTrue(new ToggleSusan(lazySusanSub));// CHANGETOTHREE
     new JoystickButton(stickTwo, Constants.NO_SLIP_DRIVE_BUTTON).whileTrue(new SlightTurnDrive(mDriveTrain));
-    new JoystickButton(stickThree, Constants.ZERO_SUSAN_HEADING_BUTTON)
+    new JoystickButton(stickThree, Constants.ZERO_SUSAN_BUTTON)
         .onTrue(new SequentialCommandGroup(
             new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.VERT_SAFE_TO_SPIN_ENC_POS)
                 .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, 0))));
@@ -188,32 +209,32 @@ public class RobotContainer {
     new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new zeroHeading(mDriveTrain));
     new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
         mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
+        () -> -modifyAxis(stickOne.getX()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
+        () -> -modifyAxis(stickOne.getY()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
+        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .7,
         true));
 
     new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new zeroHeading(mDriveTrain));
     new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).toggleOnFalse(new DriveTrainCom(
         mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
+        () -> -modifyAxis(stickOne.getX()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
+        () -> -modifyAxis(stickOne.getY()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
+        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .7,
         true));
 
     // This makes the front of the robot always the forward direction.
     // When fieldOrientation is false, it is in robotOrientation.
     new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
         mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
+        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
+        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
+        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .7,
         false));
     new JoystickButton(stickOne, Constants.ROBOT_ORIENTATION_BUTTON).toggleOnFalse(new DriveTrainCom(
         mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * .5,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .5,
+        () -> -modifyAxis(stickOne.getX()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
+        () -> -modifyAxis(stickOne.getY()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
+        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .7,
         false));
 
     // Make sure susan is set to a low value because it spins really fast. It has to
@@ -232,7 +253,7 @@ public class RobotContainer {
   }
 
   public void initializeAuto() {
-    mPath.setPath(PathChooser.getSelected());
+    // mPath.setPath(PathChooser.getSelected());
 
   }
 
@@ -240,10 +261,11 @@ public class RobotContainer {
     // return mAutoContainer.autoRunCommand();
     // return new RunPathAuto(mPath, mDriveTrain);
     // return new WithMarker(mDriveTrain, mPath);
-    System.out.println(singlePaths.GetAutoCommand() + "auto");
     Location.setLocation(LocationChooser.getSelected());
     Elements.setElements(ElementsChooser.getSelected());
     BalanceSP.setBalance(BalanceChooser.getSelected());
+    SideChoice.setSide(SideChooser.getSelected());
+    System.out.println(singlePaths.GetAutoCommand() + "auto");
     return singlePaths.GetAutoCommand();
   }
 

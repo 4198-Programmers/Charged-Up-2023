@@ -28,9 +28,9 @@ public class ControlSusan extends CommandBase {
     @Override
     public void execute() {
         double wantedSpeed = speedSupplier.getAsDouble() * speedScalar;
-        if (lazySusan.getLocation() <= 80 && wantedSpeed > 0.025) {
+        if (lazySusan.getLocation() <= 80 && wantedSpeed > 0.000001) {
             lazySusan.spinSusan(wantedSpeed);
-        } else if (lazySusan.getLocation() >= -80 && wantedSpeed < -0.025) {
+        } else if (lazySusan.getLocation() >= -80 && wantedSpeed < -0.00001) {
             lazySusan.spinSusan(wantedSpeed);
         } else {
             lazySusan.spinSusan(0);

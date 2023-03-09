@@ -47,8 +47,10 @@ public class ManualFollowAuto extends CommandBase {
         }
 
         if (matchTime <= path.getTotalTimeSeconds()) {
-            toSwerveSpeeds = new ChassisSpeeds(state.velocityMetersPerSecond * 0.25 * driveMod, 0,
-                    state.angularVelocityRadPerSec * 0.25);
+            toSwerveSpeeds = new ChassisSpeeds(state.velocityMetersPerSecond * driveMod, -state.angularVelocityRadPerSec * driveMod, //state.velocityMetersPerSecond * driveMod
+            0);
+            System.out.println(state.angularVelocityRadPerSec -0.071 + "angular");
+            System.out.println(state.velocityMetersPerSecond + "drive");
             // Auto way too fast
             driveTrain.drive(toSwerveSpeeds);
         } else {

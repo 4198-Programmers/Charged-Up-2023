@@ -100,7 +100,7 @@ public class PathHolder {
                         Constants.LEFT_PLACEMENT_ENC_POS))
                 .andThen(new PrintCommand("In Between"))
                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                        Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC_SIDES))
+                        Constants.VERT_MID_SHELF_PLACEMENT_ENC_SIDES))
                 .andThen(new PrintCommand("In Between"))
                 .andThen(new StopArm(vertArm))
                 .andThen(new PrintCommand("Done")));
@@ -124,7 +124,7 @@ public class PathHolder {
                         Constants.RIGHT_PLACEMENT_ENC_POS))
                 .andThen(new PrintCommand("In Between"))
                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                        Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC_SIDES))
+                        Constants.VERT_MID_SHELF_PLACEMENT_ENC_SIDES))
                 .andThen(new PrintCommand("In Between"))
                 .andThen(new StopArm(vertArm))
                 .andThen(new PrintCommand("Done")));
@@ -195,7 +195,7 @@ public class PathHolder {
     }
 
     public static Command VertSidesPlace() {
-        return (new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC_SIDES));
+        return (new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.VERT_MID_SHELF_PLACEMENT_ENC_SIDES));
     }
 
     public static Command ZeroSusan() {

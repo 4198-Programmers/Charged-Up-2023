@@ -2,10 +2,14 @@ package frc.robot.Commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.Subsystems.DriveTrain;
 
 public class Balance extends CommandBase {
     private DriveTrain driveTrain;
+    float pitch;
+    double speed;
+    double pitchDouble;
 
     public Balance(DriveTrain driveArg) {
         driveTrain = driveArg;
@@ -14,12 +18,24 @@ public class Balance extends CommandBase {
 
     @Override
     public void execute() {
-        driveTrain.drive(new ChassisSpeeds(driveTrain.BalanceDrive(), 0, 0));
+        pitch = driveTrain.getPitch();
+        speed = 0;
+        pitchDouble = (double) pitch;
+
+        if (pitchDouble < 90 || pitchDouble > -90) {
+            speed = (pitchDouble / 90);
+        } else if (pitchDouble > 90 || pitchDouble < -90) {
+            speed = 1;
+        } else {
+            speed = 0;
+        }
+        driveTrain.drive(new ChassisSpeeds(speed, 0, 0));
     }
 
     @Override
     public boolean isFinished() {
-        return driveTrain.BalanceDrive() == 0;
+        return false;
+        // return driveTrain.BalanceDrive() == 0;
     }
 
     @Override
