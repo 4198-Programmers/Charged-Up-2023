@@ -85,6 +85,8 @@ public class RobotContainer {
   public final SendableChooser<Integer> ElementsChooser = new SendableChooser<>();
   public final SendableChooser<Integer> BalanceChooser = new SendableChooser<>();
   public final SendableChooser<Integer> SideChooser = new SendableChooser<>();
+  public final SendableChooser<Integer> AutoChooser = new SendableChooser<>();
+
 
   // private final SequentialCommandGroup aprilTagLeft = new
   // SusanHead(lazySusanSub, 0)
@@ -184,30 +186,40 @@ public class RobotContainer {
     // "RightThreeElementBalance");
     // PathChooser.addOption("Drive Straight", "DriveStraight");
 
-    autoTab.add("Location", LocationChooser);
-    LocationChooser.setDefaultOption("Left", 0);
-    LocationChooser.addOption("Right", 1);
-    LocationChooser.addOption("Middle", 2);
+    // autoTab.add("Location", LocationChooser);
+    // LocationChooser.setDefaultOption("Left", 0);
+    // LocationChooser.addOption("Right", 1);
+    // LocationChooser.addOption("Middle", 2);
 
-    autoTab.add("Elements", ElementsChooser);
-    ElementsChooser.addOption("Just Drive", 0);
-    ElementsChooser.setDefaultOption("Place 1", 1);
-    ElementsChooser.addOption("Place 1, Hold 1", 2);
-    ElementsChooser.addOption("Place 2", 3);
-    ElementsChooser.addOption("Place 2, Hold 1", 4);
-    ElementsChooser.addOption("Just Place", 5);
-    ElementsChooser.addOption("Charge Staion", 6);
-    ElementsChooser.addOption("Place Drive Charge", 7);
-    ElementsChooser.addOption("Place Drive Charge mid", 8);
+    // autoTab.add("Elements", ElementsChooser);
+    // ElementsChooser.addOption("Just Drive", 0);
+    // ElementsChooser.setDefaultOption("Place 1", 1);
+    // ElementsChooser.addOption("Place 1, Hold 1", 2);
+    // ElementsChooser.addOption("Place 2", 3);
+    // ElementsChooser.addOption("Place 2, Hold 1", 4);
+    // ElementsChooser.addOption("Just Place", 5);
+    // ElementsChooser.addOption("Charge Staion", 6);
+    // ElementsChooser.addOption("Place Drive Charge", 7);
+    // ElementsChooser.addOption("Place Drive Charge mid", 8);
 
 
-    autoTab.add("Balance?", BalanceChooser);
-    BalanceChooser.setDefaultOption("No Balance", 0);
-    BalanceChooser.addOption("Balance", 1);
+    // autoTab.add("Balance?", BalanceChooser);
+    // BalanceChooser.setDefaultOption("No Balance", 0);
+    // BalanceChooser.addOption("Balance", 1);
 
-    autoTab.add("Color", SideChooser);
-    SideChooser.setDefaultOption("Red", 0);
-    SideChooser.addOption("Blue", 1);
+    // autoTab.add("Color", SideChooser);
+    // SideChooser.setDefaultOption("Red", 0);
+    // SideChooser.addOption("Blue", 1);
+
+    autoTab.add("Auto", AutoChooser);
+    AutoChooser.setDefaultOption("Middle Auto", 0);
+    AutoChooser.addOption("Blue Left Auto, Charge", 1);
+    AutoChooser.addOption("Just Place, No Drive", 2);
+    AutoChooser.addOption("Red Right Auto, Charge", 3);
+    AutoChooser.addOption("Blue Right Auto, Charge", 4);
+    AutoChooser.addOption("Red Left Auto, Charge", 5);
+    AutoChooser.addOption("Place + Drive, No Charge", 6);
+    AutoChooser.addOption("Just Drive, No Place, No Charge, R/L Only", 7);
 
     vertArm.ZeroArm();
     lazySusanSub.zeroPosition();
@@ -308,10 +320,11 @@ public class RobotContainer {
     // return mAutoContainer.autoRunCommand();
     // return new RunPathAuto(mPath, mDriveTrain);
     // return new WithMarker(mDriveTrain, mPath);
-    Location.setLocation(LocationChooser.getSelected());
-    Elements.setElements(ElementsChooser.getSelected());
-    BalanceSP.setBalance(BalanceChooser.getSelected());
-    SideChoice.setSide(SideChooser.getSelected());
+    // Location.setLocation(LocationChooser.getSelected());
+    // Elements.setElements(ElementsChooser.getSelected());
+    // BalanceSP.setBalance(BalanceChooser.getSelected());
+    // SideChoice.setSide(SideChooser.getSelected());
+    singlePaths.setAutoChoice(AutoChooser.getSelected());
     System.out.println(singlePaths.GetAutoCommand() + "auto");
     return singlePaths.GetAutoCommand();
   }
