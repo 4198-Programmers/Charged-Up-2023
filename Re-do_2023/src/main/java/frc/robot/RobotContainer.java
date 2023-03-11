@@ -27,6 +27,9 @@ import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.DriveTrainCom;
+import frc.robot.Commands.AutoDrive;
+import frc.robot.Commands.AutoDriveBalance;
+import frc.robot.Commands.AutoDriveDock;
 import frc.robot.Commands.RunIntake;
 import frc.robot.Commands.SlightTurnDrive;
 import frc.robot.Subsystems.DriveTrain;
@@ -159,6 +162,16 @@ public class RobotContainer {
 
   private final SequentialCommandGroup upToSubStation = new SequentialCommandGroup(
       new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.SUBSTATION_UP_POS_VERT));
+
+  private final SequentialCommandGroup autoPlaceThenBalance = new AutoVert(vertArm, 0.25, 6)
+  .andThen(new AutoDrive(mDriveTrain, 0, 0, 0, 1000))
+  .andThen(elementTopRight)
+  .andThen(new RunIntake(intakeSub, Constants.INTAKE_OUT_SPEED))
+  .andThen(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, 0))
+  .andThen(new ZeroSusan(lazySusanSub))
+  .andThen(new AutoDriveDock(mDriveTrain, -0.25, 0, 0))
+  .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 1))
+  .andThen(new AutoDriveBalance(mDriveTrain, -0.25, 0, 0));
 
   public void initShuffleboard() {
     ShuffleboardTab autoTab = Shuffleboard.getTab("Auto Choices");
@@ -324,9 +337,13 @@ public class RobotContainer {
     // Elements.setElements(ElementsChooser.getSelected());
     // BalanceSP.setBalance(BalanceChooser.getSelected());
     // SideChoice.setSide(SideChooser.getSelected());
+
+    // return autoPlaceThenBalance;
+    
     singlePaths.setAutoChoice(AutoChooser.getSelected());
     System.out.println(singlePaths.GetAutoCommand() + "auto");
     return singlePaths.GetAutoCommand();
+
   }
 
   /*
