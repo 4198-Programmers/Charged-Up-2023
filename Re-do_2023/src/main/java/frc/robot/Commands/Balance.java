@@ -22,9 +22,9 @@ public class Balance extends CommandBase {
         speed = 0;
         pitchDouble = (double) pitch;
 
-        if (pitchDouble < 90 || pitchDouble > -90) {
-            speed = (pitchDouble / 90);
-        } else if (pitchDouble > 90 || pitchDouble < -90) {
+        if (pitchDouble < 45 || pitchDouble > -45) {
+            speed = (pitchDouble / 45);
+        } else if (pitchDouble > 45 || pitchDouble < -45) {
             speed = 1;
         } else {
             speed = 0;

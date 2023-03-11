@@ -15,10 +15,15 @@ import frc.robot.Commands.Balance;
 import frc.robot.Commands.ManualFollowAuto;
 import frc.robot.Commands.RunIntake;
 import frc.robot.Commands.RunPathAuto;
+import frc.robot.Commands.SlightTurnDrive;
+import frc.robot.Commands.SlowManualFollowAuto;
 import frc.robot.Commands.StopArm;
+import frc.robot.Commands.TimedAuto;
 import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Commands.ZeroSusan;
 import frc.robot.Commands.ZeroVert;
+import frc.robot.Tags.CenterSusanPhoton;
+import frc.robot.Tags.PhotonVision;
 
 public class SinglePaths /* extends CommandBase */ {
         private DriveTrain driveTrain;
@@ -27,6 +32,7 @@ public class SinglePaths /* extends CommandBase */ {
         private Pneumatics pneumatics;
         private Intake intake;
         private ReachArmSub reachArm;
+        private PhotonVision vision;
         private static int locationChoice;
         private static int elementsChoice;
         private static int balanceChoice;
@@ -36,8 +42,8 @@ public class SinglePaths /* extends CommandBase */ {
         public enum Location {
 
                 Left(0),
-                Middle(1),
-                Right(2);
+                Right(1),
+                Middle(2);
 
                 private Location(int location) {
                         locationChoice = location;
@@ -45,6 +51,10 @@ public class SinglePaths /* extends CommandBase */ {
 
                 public static void setLocation(int location) {
                         locationChoice = location;
+                }
+
+                public static int getLocationChoice() {
+                        return locationChoice;
                 }
         }
 
@@ -54,7 +64,11 @@ public class SinglePaths /* extends CommandBase */ {
                 One(1),
                 OneHold(2),
                 Two(3),
-                TwoHold(4);
+                TwoHold(4),
+                justPlace(5),
+                ChargeStation(6),
+                PlaceDriveCharge(7),
+                PlaceDriveChargeMid(8);
 
                 private Elements(int elements) {
                         elementsChoice = elements;
@@ -93,35 +107,57 @@ public class SinglePaths /* extends CommandBase */ {
         }
 
         public SinglePaths(DriveTrain driveTrain, VertArm vertArm, LazySusanSub lazySusan, Pneumatics pneumatics,
-                        Intake intake, ReachArmSub reachArm) {
+                        Intake intake, ReachArmSub reachArm, PhotonVision vision) {
                 this.driveTrain = driveTrain;
                 this.vertArm = vertArm;
                 this.lazySusan = lazySusan;
                 this.pneumatics = pneumatics;
                 this.intake = intake;
                 this.reachArm = reachArm;
+                this.vision = vision;
                 this.elementsChoiceGroupsArr = new SequentialCommandGroup[] {
                                 DriveCommunity(),
                                 PlaceDrive(),
                                 RunOneElement(),
                                 RunTwoElement(),
-                                RunThreeElement()
+                                RunThreeElement(),
+                                justPlace(),
+                                PlaceChargeStation(),
+                                PlaceDriveCharge(),
+                                PlaceDriveChargeMid()
                 };
         }
 
-        private String[] driveToPieceOnePathName = { "LeftDriveToPieceOne", "MidDriveToPieceOne",
-                        // Some are subbed out because they are the same path
-                        "RightDriveToPieceOne" };
-        private String[] driveToPieceTwoPathName = { "LeftDriveToPieceTwo", "MidDriveToPieceTwo",
-                        "RightDriveToPieceTwo" };
-        private String[] driveStraight = { "StraightToPieceLeft", "StraightToPieceMid", "StraightToPieceRight" };
+        private String[] driveToPieceTwoPathName = { "LeftDriveToPieceTwo", "RightDriveToPieceTwo",
+                        "MidDriveToPieceTwo", };
+        private String[] driveStraight = { "StraightToPieceLeft", "StraightToPieceRight", "StraightToPieceMid", };
         private boolean[] balanceBool = { false, true };
-        private String[] driveToPlaceTwoPathName = { "LeftDriveToPlacementTwo", "MidDriveToPlacementTwo",
-                        "RightDriveToPlacementTwo" };
-        private String[] driveToBalanceOne = { "LeftPickupOneToBalance", "MidPickupOneToBalance",
-                        "RightPickupOneToBalance" };
+        private String[] driveToPlaceTwoPathName = { "LeftDriveToPlacementTwo", "RightDriveToPlacementTwo",
+                        "MidDriveToPlacementTwo", };
+        private String[] driveToBalanceOne = { "LeftPickupOneToBalance", "RightPickupOneToBalance",
+                        "MidPickupOneToBalance", };
         private String[] driveToBalanceTwo = { "MidPickupOneToBalace", "MidPickupTwoToBalance",
-                        "MidPickupTwoToBalance" }; // neg cc
+                        "MidPickupTwoToBalance" }; // neg cc susan
+                                                   // Some are subbed out because they are the same path
+
+        private String[] driveToPieceOneNameBlue = { "ClearDriveToPieceOne", // Left is 0
+                        "CableDriveToPieceOne" };
+        private String[] driveToPieceOneNameRed = { "CableDriveToPieceOne", // Left is 0
+                        "ClearDriveToPieceOne" };
+
+        private double[] sideToPlace = { Constants.RIGHT_TOP_PLACEMENT_SUSAN, Constants.LEFT_TOP_PLACEMENT_SUSAN };
+
+        private String drivePieceOne(int location, int side) {
+                String mid = "MidDriveToPieceOne";
+                if (location != 2) {
+                        if (side == 0) {
+                                return driveToPieceOneNameRed[location];
+                        } else if (side == 1) {
+                                return driveToPieceOneNameBlue[location];
+                        }
+                }
+                return mid;
+        }
 
         private double safeSpinSpeed(int location, int side) {
                 double[] sideSafeSpinRight = { -Constants.AUTO_SUSAN_SPEED, Constants.AUTO_SUSAN_SPEED };
@@ -136,38 +172,68 @@ public class SinglePaths /* extends CommandBase */ {
 
         }
 
-        private SequentialCommandGroup PlaceFirstElementGroup() { // places on left
+        private SequentialCommandGroup PlaceLeftElementGroup() { // places on left
                 return new SequentialCommandGroup(new PrintCommand("Place Element 1 Placement")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                Constants.VERT_SAFE_TO_SPIN_ENC_POS))
+                                                Constants.PLACE_TOP_VERT))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                Constants.VERT_MID_SHELF_PLACEMENT_ENC_SIDES)
+                                                Constants.PLACE_TOP_VERT)
                                                 .alongWith(new AutoReach(reachArm,
-                                                                Constants.AUTO_REACH_SPEED_OUT, 2000))
+                                                                Constants.AUTO_REACH_SPEED,
+                                                                Constants.TOP_REACH_PLACEMENT))
                                                 .alongWith(new AutoRunIntake(intake, Constants.INTAKE_IN_SPEED)))
-                                .andThen(new AutoSusan(lazySusan, safeSpinSpeed(locationChoice, sideChoice),
-                                                Constants.LEFT_PLACEMENT_ENC_POS)
+                                .andThen(new ManualFollowAuto(driveTrain, "ShortForward", false))
+                                .andThen(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED,
+                                                Constants.RIGHT_MID_PLACEMENT_SUSAN)
                                                 .alongWith(new AutoRunIntake(intake, Constants.INTAKE_IN_SPEED)))
                                 .andThen(new WaitCommand(0.5))
                                 .andThen(new AutoRunIntake(intake, Constants.INTAKE_OUT_SPEED))
-                                .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED_IN, 2000))
+                                .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0))
+                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+                                                Constants.VERT_SAFE_TO_SPIN_ENC_POS))
                                 .andThen(new PrintCommand("Done Placing")));
         }
 
-        private SequentialCommandGroup PlaceSecondElementGroup() { // places on mid
+        private SequentialCommandGroup justPlace() {
+                return new SequentialCommandGroup(PlaceLeftElementGroup());
+        }
+
+        // private SequentialCommandGroup PlaceLeftElementApril() {
+        // return new SequentialCommandGroup(
+        // new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+        // Constants.VISIBLE_TAG_VERT_ENC)
+        // .andThen(new CenterSusanPhoton(vision, driveTrain, lazySusan, 0, 0,
+        // Constants.DISTANCE_FROM_TAG))
+        // .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+        // Constants.VERT_MID_SHELF_PLACEMENT_ENC_MID)
+        // .alongWith(new AutoReach(reachArm,
+        // Constants.AUTO_REACH_SPEED, 5450))
+        // .alongWith(new AutoRunIntake(intake,
+        // Constants.INTAKE_IN_SPEED)))
+        // .andThen(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED,
+        // Constants.SUSAN_LEFT_FROM_TAG_ENC))
+        // .andThen(new WaitCommand(0.5))
+        // .andThen(new AutoRunIntake(intake, Constants.INTAKE_OUT_SPEED))
+        // .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)));
+        // }
+
+        private SequentialCommandGroup PlaceSecondElementGroup() { // places on right DOESNT WORK
                 return new SequentialCommandGroup(new PrintCommand("Place Element 2 Placement")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                Constants.VERT_MID_SHELF_PLACEMENT_ENC_SIDES)
+                                                Constants.PLACE_TOP_VERT)
                                                 .alongWith(new AutoReach(reachArm,
-                                                                Constants.AUTO_REACH_SPEED_OUT, 2000))
+                                                                Constants.AUTO_REACH_SPEED,
+                                                                Constants.TOP_REACH_PLACEMENT))
                                                 .alongWith(new AutoRunIntake(intake, Constants.INTAKE_IN_SPEED)))
-                                .andThen(new AutoSusan(lazySusan, safeSpinSpeed(locationChoice, sideChoice), 0)
+                                .andThen(new ManualFollowAuto(driveTrain, "ShortForward", true))
+                                .andThen(new AutoSusan(lazySusan, safeSpinSpeed(locationChoice, sideChoice),
+                                                Constants.LEFT_TOP_PLACEMENT_SUSAN)
                                                 .alongWith(new AutoRunIntake(intake, Constants.INTAKE_IN_SPEED)))
                                 .andThen(new WaitCommand(0.5))
                                 .andThen(new AutoRunIntake(intake, Constants.INTAKE_OUT_SPEED))
-                                .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED_IN, 2000))
+                                .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0))
                                 .andThen(new PrintCommand("Done Placing")));
         }
 
@@ -192,14 +258,14 @@ public class SinglePaths /* extends CommandBase */ {
 
         private SequentialCommandGroup PickupElement() {
                 return new SequentialCommandGroup(new PrintCommand("Pickup Element")
-                                .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED_OUT,
+                                .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED,
                                                 750))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.VERT_PICKUP_POS)
                                                 .alongWith(new AutoRunIntake(intake, Constants.INTAKE_IN_SPEED)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS)
                                                 .alongWith(new RunIntake(intake, Constants.INTAKE_IN_SPEED)))
-                                .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED_IN, 1500)));
+                                .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)));
         }
 
         private SequentialCommandGroup balanceOne() {
@@ -224,6 +290,16 @@ public class SinglePaths /* extends CommandBase */ {
                 }
         }
 
+        private SequentialCommandGroup PlaceChargeStation() {
+                return new SequentialCommandGroup(PlaceLeftElementGroup()
+                                .andThen(new SlowManualFollowAuto(driveTrain, "OnCharge", false))
+                                .andThen(new WaitCommand(0.5))
+                                .andThen(new SlowManualFollowAuto(driveTrain, "OffCharge", false))
+                                .andThen(new WaitCommand(0.5))
+                                .andThen(new SlowManualFollowAuto(driveTrain, "BackToCharge", true))
+                                .andThen(new SlightTurnDrive(driveTrain)));
+        }
+
         private SequentialCommandGroup DriveCommunity() {
                 return new SequentialCommandGroup(new PrintCommand("Drive Community")
                                 .andThen(new ManualFollowAuto(driveTrain, driveStraight[locationChoice],
@@ -235,10 +311,36 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Place Drive")
                                 .andThen(new ZeroVert(vertArm))
                                 .andThen(new ZeroSusan(lazySusan))
-                                .andThen(PlaceFirstElementGroup())
+                                .andThen(PlaceLeftElementGroup())
                                 .andThen(new ManualFollowAuto(driveTrain,
-                                                driveToPieceOnePathName[locationChoice], false))
-                                .andThen(balanceOne()));
+                                                drivePieceOne(locationChoice, sideChoice), false))
+                                .andThen(balanceOne())
+                                .andThen(new SlightTurnDrive(driveTrain)));
+        }
+
+        private SequentialCommandGroup PlaceDriveCharge() { // Left
+                return new SequentialCommandGroup(new PrintCommand("Cruelty")
+                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+                                                Constants.VERT_SAFE_TO_SPIN_ENC_POS))
+                                .andThen(new TimedAuto(driveTrain, 750, -0.5, 0))
+                                .andThen(PlaceLeftElementGroup())
+                                .andThen(new TimedAuto(driveTrain, 4000, 1, 0))
+                                .andThen(new TimedAuto(driveTrain, 2500, 0, 1))
+                                .andThen(new TimedAuto(driveTrain, 2000, -1, 0)));
+
+        }
+
+        private SequentialCommandGroup PlaceDriveChargeMid() { // Left
+                return new SequentialCommandGroup(new PrintCommand("Cruelty")
+                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+                                                Constants.PLACE_TOP_VERT))
+                                .andThen(new TimedAuto(driveTrain, 750, -0.5, 0))
+                                .andThen(PlaceLeftElementGroup())
+                                .andThen(new TimedAuto(driveTrain, 2750, 1, 0))
+                                .andThen(new TimedAuto(driveTrain, 2750, 1, 0))
+                                .andThen(new TimedAuto(driveTrain, 3000, -1, 0))
+                                .andThen(new SlightTurnDrive(driveTrain)));
+
         }
 
         private SequentialCommandGroup RunOneElement() {
@@ -246,12 +348,13 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Run One Element")
                                 .andThen(new ZeroVert(vertArm))
                                 .andThen(new ZeroSusan(lazySusan))
-                                .andThen(PlaceFirstElementGroup())
-                                .andThen(new ManualFollowAuto(driveTrain, driveToPieceOnePathName[locationChoice],
+                                .andThen(PlaceLeftElementGroup())
+                                .andThen(new ManualFollowAuto(driveTrain, drivePieceOne(locationChoice, sideChoice),
                                                 false)
                                                 .alongWith(PrepareToPickupElement()))
                                 .andThen(PickupElement())
-                                .andThen(balanceOne()));
+                                .andThen(balanceOne())
+                                .andThen(new SlightTurnDrive(driveTrain)));
         }
 
         private SequentialCommandGroup RunTwoElement() {
@@ -259,8 +362,8 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Run Two Element")
                                 .andThen(new ZeroVert(vertArm))
                                 .andThen(new ZeroSusan(lazySusan))
-                                .andThen(PlaceFirstElementGroup())
-                                .andThen(new ManualFollowAuto(driveTrain, driveToPieceOnePathName[locationChoice],
+                                .andThen(PlaceLeftElementGroup())
+                                .andThen(new ManualFollowAuto(driveTrain, drivePieceOne(locationChoice, sideChoice),
                                                 false)
                                                 .alongWith(PrepareToPickupElement()))
                                 .andThen(PickupElement())
@@ -269,7 +372,8 @@ public class SinglePaths /* extends CommandBase */ {
                                 .andThen(PlaceSecondElementGroup())
                                 .andThen(new ManualFollowAuto(driveTrain, driveToPieceTwoPathName[locationChoice],
                                                 false))
-                                .andThen(balanceTwo()));
+                                .andThen(balanceTwo())
+                                .andThen(new SlightTurnDrive(driveTrain)));
         }
 
         private SequentialCommandGroup RunThreeElement() {
@@ -277,8 +381,8 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Run Three Element")
                                 .andThen(new ZeroVert(vertArm))
                                 .andThen(new ZeroSusan(lazySusan))
-                                .andThen(PlaceFirstElementGroup())
-                                .andThen(new ManualFollowAuto(driveTrain, driveToPieceOnePathName[locationChoice],
+                                .andThen(PlaceLeftElementGroup())
+                                .andThen(new ManualFollowAuto(driveTrain, drivePieceOne(locationChoice, sideChoice),
                                                 false)
                                                 .alongWith(PrepareToPickupElement()))
                                 .andThen(PickupElement())
@@ -289,7 +393,8 @@ public class SinglePaths /* extends CommandBase */ {
                                                 false)
                                                 .alongWith(PrepareToPickupElement()))
                                 .andThen(PickupElement())
-                                .andThen(balanceTwo()));
+                                .andThen(balanceTwo())
+                                .andThen(new SlightTurnDrive(driveTrain)));
         }
 
         public SequentialCommandGroup GetAutoCommand() {

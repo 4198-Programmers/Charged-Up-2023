@@ -32,10 +32,10 @@ public class DistanceTag extends CommandBase {
         }
         double distanceFromTarget = Maths.DistanceFromTarget(vision.getPitch());
         double distanceToTarget = wantedDistance - distanceFromTarget;
-        if (distanceToTarget < -Constants.DISTANCE_TOLERANCE_VALUE) {
+        if (distanceToTarget < -Constants.PHOTON_TOLERANCE_VALUE) {
             swerveDrive.drive(new ChassisSpeeds(-0.5, 0, 0));
             ;
-        } else if (distanceToTarget > Constants.DISTANCE_TOLERANCE_VALUE) {
+        } else if (distanceToTarget > Constants.PHOTON_TOLERANCE_VALUE) {
             swerveDrive.drive(new ChassisSpeeds(0.5, 0, 0));
             ;
         } else {

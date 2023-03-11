@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Commands.AutoReach;
 import frc.robot.Commands.AutoSusan;
 import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.Balance;
@@ -47,7 +48,9 @@ import frc.robot.Subsystems.SinglePaths.Elements;
 // import frc.robot.Subsystems.PathHolder.PathChoice;
 import frc.robot.Subsystems.SinglePaths.Location;
 import frc.robot.Subsystems.SinglePaths.SideChoice;
+import frc.robot.Tags.CenterSusanPhoton;
 import frc.robot.Tags.PhotonVision;
+import frc.robot.Tags.TagFollower;
 
 public class RobotContainer {
   private final Joystick stickOne = new Joystick(0);
@@ -63,8 +66,9 @@ public class RobotContainer {
   private final Pneumatics pneumatics = new Pneumatics();
   private final PathHolder mPath = new PathHolder(vertArm, pneumatics, reachArmSub, lazySusanSub);
   private final Intake intakeSub = new Intake();
+  private final PhotonVision visionSub = new PhotonVision();
   private final SinglePaths singlePaths = new SinglePaths(mDriveTrain, vertArm, lazySusanSub, pneumatics, intakeSub,
-      reachArmSub);
+      reachArmSub, visionSub);
   private LEDs leds = new LEDs();
   UsbCamera cam = CameraServer.startAutomaticCapture();
 
@@ -77,10 +81,10 @@ public class RobotContainer {
   // private final SendableChooser<LevelPriority> LevelChooser = new
   // SendableChooser<>();
   // private final SendableChooser<String> PathChooser = new SendableChooser<>();
-  private final SendableChooser<Integer> LocationChooser = new SendableChooser<>();
-  private final SendableChooser<Integer> ElementsChooser = new SendableChooser<>();
-  private final SendableChooser<Integer> BalanceChooser = new SendableChooser<>();
-  private final SendableChooser<Integer> SideChooser = new SendableChooser<>();
+  public final SendableChooser<Integer> LocationChooser = new SendableChooser<>();
+  public final SendableChooser<Integer> ElementsChooser = new SendableChooser<>();
+  public final SendableChooser<Integer> BalanceChooser = new SendableChooser<>();
+  public final SendableChooser<Integer> SideChooser = new SendableChooser<>();
 
   // private final SequentialCommandGroup aprilTagLeft = new
   // SusanHead(lazySusanSub, 0)
@@ -102,6 +106,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
+    reachArmSub.zeroEncoder();
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     NetworkTableEntry pipeline = table.getEntry("pipeline");
     pipeline.setDouble(0);
@@ -125,6 +130,33 @@ public class RobotContainer {
     lazySusanSub.mode(IdleMode.kBrake);
     intakeSub.setDefaultCommand(new RunIntake(intakeSub, 0));
   }
+
+  private final SequentialCommandGroup elementTopLeft = new SequentialCommandGroup(
+      new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, 0)
+          .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.PLACE_TOP_VERT))
+          .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.LEFT_TOP_PLACEMENT_SUSAN))
+          .andThen(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.TOP_REACH_PLACEMENT)));
+
+  private final SequentialCommandGroup elementMidLeft = new SequentialCommandGroup(
+      new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, 0)
+          .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.PLACE_MID_VERT))
+          .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.LEFT_MID_PLACEMENT_SUSAN))
+          .andThen(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.MID_REACH_PLACEMENT)));
+
+  private final SequentialCommandGroup elementTopRight = new SequentialCommandGroup(
+      new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, 0)
+          .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.PLACE_TOP_VERT))
+          .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.RIGHT_TOP_PLACEMENT_SUSAN))
+          .andThen(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.TOP_REACH_PLACEMENT)));
+
+  private final SequentialCommandGroup elementMidRight = new SequentialCommandGroup(
+      new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, 0)
+          .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.PLACE_MID_VERT))
+          .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.RIGHT_MID_PLACEMENT_SUSAN))
+          .andThen(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.MID_REACH_PLACEMENT)));
+
+  private final SequentialCommandGroup upToSubStation = new SequentialCommandGroup(
+      new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.SUBSTATION_UP_POS_VERT));
 
   public void initShuffleboard() {
     ShuffleboardTab autoTab = Shuffleboard.getTab("Auto Choices");
@@ -154,8 +186,8 @@ public class RobotContainer {
 
     autoTab.add("Location", LocationChooser);
     LocationChooser.setDefaultOption("Left", 0);
-    LocationChooser.addOption("Middle", 1);
-    LocationChooser.addOption("Right", 2);
+    LocationChooser.addOption("Right", 1);
+    LocationChooser.addOption("Middle", 2);
 
     autoTab.add("Elements", ElementsChooser);
     ElementsChooser.addOption("Just Drive", 0);
@@ -163,6 +195,11 @@ public class RobotContainer {
     ElementsChooser.addOption("Place 1, Hold 1", 2);
     ElementsChooser.addOption("Place 2", 3);
     ElementsChooser.addOption("Place 2, Hold 1", 4);
+    ElementsChooser.addOption("Just Place", 5);
+    ElementsChooser.addOption("Charge Staion", 6);
+    ElementsChooser.addOption("Place Drive Charge", 7);
+    ElementsChooser.addOption("Place Drive Charge mid", 8);
+
 
     autoTab.add("Balance?", BalanceChooser);
     BalanceChooser.setDefaultOption("No Balance", 0);
@@ -193,10 +230,15 @@ public class RobotContainer {
 
     new JoystickButton(stickThree, Constants.SLOW_SUSAN_BUTTON)
         .whileTrue(new ControlSusan(lazySusanSub, () -> smallerModifyAxis(-stickThree.getX()), 15));
-    new JoystickButton(stickThree, 1)
+    new JoystickButton(stickThree, Constants.INTAKE_BUTTON)
         .whileTrue(new RunIntake(intakeSub, 0.7));
-    new JoystickButton(stickThree, 4)
+    new JoystickButton(stickThree, Constants.OUTTAKE_BUTTON)
         .whileTrue(new RunIntake(intakeSub, -0.7));
+
+    new JoystickButton(stickTwo, Constants.TEST_SUSAN_PHOTON)
+        .whileTrue(new CenterSusanPhoton(visionSub, mDriveTrain, lazySusanSub, 0, 0, 1.2));
+    new JoystickButton(stickTwo, Constants.TEST_DRIVE_CENTER_PHOTON)
+        .whileTrue(new TagFollower(visionSub, mDriveTrain, 0, 0, 1.2));
 
     new JoystickButton(stickTwo, Constants.NO_SLIP_DRIVE_BUTTON).whileTrue(new SlightTurnDrive(mDriveTrain));
     new JoystickButton(stickThree, Constants.ZERO_SUSAN_BUTTON)
@@ -241,6 +283,11 @@ public class RobotContainer {
     // be at least under 0.3, most likely.
     new JoystickButton(stickThree, Constants.REACH_OUT_BUTTON).whileTrue(new ControlReach(reachArmSub, () -> 1, 75));
     new JoystickButton(stickThree, Constants.REACH_IN_BUTTON).whileTrue(new ControlReach(reachArmSub, () -> -1, 75));
+    new JoystickButton(stickThree, Constants.PLACE_TOP_LEFT_BTN).whileTrue(elementTopLeft);
+    new JoystickButton(stickThree, Constants.PLACE_MID_LEFT_BTN).whileTrue(elementMidLeft);
+    new JoystickButton(stickThree, Constants.PLACE_TOP_RIGHT_BTN).whileTrue(elementTopRight);
+    new JoystickButton(stickThree, Constants.PLACE_MID_RIGHT_BIN).whileTrue(elementMidRight);
+    new JoystickButton(stickThree, Constants.SUSTATION_UP_BUTTON).whileTrue(upToSubStation);
     // Make sure susan is set to a low value because it spins really fast. It has to
     // be at least under 0.3, most likely. -> That is what the % modifier is for.
     // Don't change the speed -CP

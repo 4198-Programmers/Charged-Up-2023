@@ -31,10 +31,10 @@ public class CenterTag extends CommandBase {
         }
         double yaw = target.getYaw();
         double distanceToCenter = wantedDistance - yaw;
-        if (distanceToCenter < -Constants.DISTANCE_TOLERANCE_VALUE) {
+        if (distanceToCenter < -Constants.PHOTON_TOLERANCE_VALUE) {
             swerveDrive.drive(new ChassisSpeeds(0, -0.5, 0));
             ;
-        } else if (distanceToCenter > Constants.DISTANCE_TOLERANCE_VALUE) {
+        } else if (distanceToCenter > Constants.PHOTON_TOLERANCE_VALUE) {
             swerveDrive.drive(new ChassisSpeeds(0, 0.5, 0));
         } else {
             isfinished = true;

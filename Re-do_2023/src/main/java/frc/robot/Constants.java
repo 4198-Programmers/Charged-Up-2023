@@ -54,18 +54,27 @@ public final class Constants {
         // Joystick 2 Buttons
         public static final int APRIL_TAG_RIGHT_BUTTON = 1;
         public static final int NO_SLIP_DRIVE_BUTTON = 2;
+        public static final int TEST_SUSAN_PHOTON = 7;
+        public static final int TEST_DRIVE_CENTER_PHOTON = 8;
 
         // Joystick 3 Buttons
         public static final int TOGGLE_CLAW_BUTTON = 1,
                         REACH_OUT_BUTTON = 5,
                         REACH_IN_BUTTON = 3,
+                        OUTTAKE_BUTTON = 4,
+                        INTAKE_BUTTON = 1,
+                        SUSTATION_UP_BUTTON = 2,
                         ZERO_SUSAN_BUTTON = 12,
+                        PLACE_TOP_LEFT_BTN = 7,
+                        PLACE_TOP_RIGHT_BTN = 8,
+                        PLACE_MID_LEFT_BTN = 9,
+                        PLACE_MID_RIGHT_BIN = 10,
                         SLOW_SUSAN_BUTTON = 11;
 
         // Turret Values
         public static final double SUSAN_CIRCUMFERENCE = 0,
                         MOTOR_ROTATIONS_PER_360_SUSAN = 104.7272727273, // gear ratio = 16 sprocket ratio = 7 + (6/11)
-                        BALANCE_SPEED = 0.5;
+                        BALANCE_SPEED = 0.75;
         public static final float PITCH_OFFSET = 5; // Must be a float for the gyro values
 
         // Auto Values
@@ -74,22 +83,23 @@ public final class Constants {
                         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3,
                         VERT_SAFE_TO_SPIN_ENC_POS = 3.67, // printed at 0.5, better safe than broken
                         AUTO_SUSAN_SPEED = 0.15,
-                        LEFT_PLACEMENT_ENC_POS = 6,
+                        LEFT_PLACEMENT_ENC_POS = 6.0476,
                         VERT_MID_SHELF_PLACEMENT_ENC_MID = 6.5,
                         VERT_MID_SHELF_PLACEMENT_ENC_SIDES = 7,
                         MID_PLACEMENT_ENC_POS = 0,
-                        RIGHT_PLACEMENT_ENC_POS = -6,
+                        RIGHT_PLACEMENT_ENC_POS = -6.0476,
                         VERT_PICKUP_POS = 2.75,
                         AUTO_ENC_OFFSET = 0.05,
                         SUSAN_180_ENC_POS = 56,
                         INTAKE_OUT_SPEED = -0.7,
                         INTAKE_IN_SPEED = 0.7,
-                        AUTO_REACH_SPEED_OUT = 1,
-                        AUTO_REACH_SPEED_IN = -1;
+                        AUTO_REACH_SPEED = 1,
+                        VISIBLE_TAG_VERT_ENC = 4,
+                        SUSAN_LEFT_FROM_TAG_ENC = 6;
 
         // Auto AprilTags Values
         public static final double DISTANCE_FROM_TAG = 0,
-                        DISTANCE_TOLERANCE_VALUE = 0.05,
+                        PHOTON_TOLERANCE_VALUE = 0.05,
                         ANGLE_SKEW = 0;
 
         public static final double VERT_ARM_NO_DROP_SPEED = 0.03;
@@ -106,5 +116,16 @@ public final class Constants {
                         WANTED_SKEW_LEFT = 0,
                         WANTED_SKEW_MID = 0,
                         WANTED_SKEW_RIGHT = 0;
+        public static final double REACH_ENCODER_WHEEL_DIAMETER = 0.25,
+                        REACH_ENCODER_TOLERANCE = 15,
+                        TOP_REACH_PLACEMENT = 5775,
+                        PLACE_TOP_VERT = 7.97,
+                        PLACE_MID_VERT = 7.05,
+                        MID_REACH_PLACEMENT = 822,
+                        RIGHT_MID_PLACEMENT_SUSAN = -5.57,
+                        LEFT_MID_PLACEMENT_SUSAN = 6.64,
+                        RIGHT_TOP_PLACEMENT_SUSAN = -3.78,
+                        LEFT_TOP_PLACEMENT_SUSAN = 4,
+                        SUBSTATION_UP_POS_VERT = 7.92;
 
 }

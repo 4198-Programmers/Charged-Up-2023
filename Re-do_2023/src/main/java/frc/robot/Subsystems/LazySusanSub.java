@@ -49,6 +49,7 @@ public class LazySusanSub extends SubsystemBase {
     public void spinSusan(double speed) { // counterclockwise = negative
 
         double expectedSpeed = speed * susanDirectionToggle;
+        // System.out.println(getLocation() + "susan");
 
         // if (getLocation() >= Maths.degreesToRotations_Susan(Constants.SUSAN_MAX_ANGLE) && speed > 0) {
         //     expectedSpeed = 0;

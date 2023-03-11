@@ -9,47 +9,38 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.DriveTrain;
 
-public class ManualFollowAuto extends CommandBase {
+public class TimedAuto extends CommandBase {
     private DriveTrain driveTrain;
-    private PathPlannerTrajectory path;
-    private String pathName;
-    private long timeStart;
+    private long timeEnd;
     private double matchTime;
+    private long timeToRun;
+    private double vx;
+    private double vy;
     private ChassisSpeeds toSwerveSpeeds;
     boolean isFinished;
     boolean flipPath;
+    long currentTime;
 
-    public ManualFollowAuto(DriveTrain driveTrain, String pathToFollow, boolean flipPath) {
+    public TimedAuto(DriveTrain driveTrain, long timeToRun, double vx, double vy) {
         this.driveTrain = driveTrain;
-        pathName = pathToFollow;
-        this.flipPath = flipPath;
+        this.timeToRun = timeToRun;
+        this.vx = vx;
+        this.vy = vy;
         addRequirements(driveTrain);
     }
 
     @Override
     public void initialize() {
-        path = PathPlanner.loadPath(pathName, 4, 3);
-        timeStart = System.currentTimeMillis();
+        timeEnd = System.currentTimeMillis() + timeToRun;
         isFinished = false;
     }
 
     @Override
     public void execute() {
-        matchTime = (double) ((System.currentTimeMillis() - timeStart) / 1000);
-        PathPlannerState state = (PathPlannerState) path.sample(matchTime);
-        double driveMod;
-        if (flipPath) {
-            driveMod = -1;
-        } else if (!flipPath) {
-            driveMod = 1;
-        } else {
-            driveMod = 0;
-        }
+        currentTime = System.currentTimeMillis();
 
-        if (matchTime <= path.getTotalTimeSeconds()) {
-            toSwerveSpeeds = new ChassisSpeeds(state.velocityMetersPerSecond * driveMod, -state.angularVelocityRadPerSec * driveMod, //state.velocityMetersPerSecond * driveMod
-            0);
-            // Auto way too fast
+        if ( currentTime < timeEnd) {
+            toSwerveSpeeds = new ChassisSpeeds(vx, vy, 0);
             driveTrain.drive(toSwerveSpeeds);
         } else {
             toSwerveSpeeds = new ChassisSpeeds(0, 0, 0);

@@ -20,7 +20,7 @@ public class VertArm extends SubsystemBase {
     }
 
     public void moveArm(double speed) {
-        System.out.println(getLocation());
+        // System.out.println(getLocation() + "vert");
         verticalMotor.set(speed);
     }
 
