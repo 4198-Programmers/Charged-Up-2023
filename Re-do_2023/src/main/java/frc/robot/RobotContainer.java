@@ -59,6 +59,7 @@ import frc.robot.Subsystems.SinglePaths.Elements;
 import frc.robot.Subsystems.SinglePaths.Location;
 import frc.robot.Subsystems.SinglePaths.SideChoice;
 import frc.robot.Tags.CenterSusanPhoton;
+import frc.robot.Tags.CheckPhotonTarget;
 import frc.robot.Tags.PhotonVision;
 import frc.robot.Tags.TagFollower;
 
@@ -352,6 +353,8 @@ public class RobotContainer {
     new JoystickButton(stickOne, Constants.AUTO_LOCK_LEFT_BTN)
         .and(new JoystickButton(stickTwo, Constants.AUTO_LOCK_RIGHT_BTN))
         .whileTrue(new ConditionalLock(mDriveTrain));
+
+    new JoystickButton(stickTwo, Constants.APRIL_TAG_TEST_BUTTON).whileTrue(new CheckPhotonTarget(photonVision));
   }
 
   public void initializeAuto() {

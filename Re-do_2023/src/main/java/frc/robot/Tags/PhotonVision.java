@@ -22,6 +22,7 @@ public class PhotonVision extends SubsystemBase {
     public PhotonTrackedTarget getTarget() {
         if (result.hasTargets()) {
             target = result.getBestTarget();
+            System.out.println("Target Data: " + target.toString());
         } else {
             target = null;
         }

@@ -58,6 +58,7 @@ public final class Constants {
         public static final int NO_SLIP_DRIVE_BUTTON = 2;
         public static final int TEST_SUSAN_PHOTON = 7;
         public static final int TEST_DRIVE_CENTER_PHOTON = 8;
+        public static final int APRIL_TAG_TEST_BUTTON = 11;
 
         // Joystick 3 Buttons
         public static final int TOGGLE_CLAW_BUTTON = 1,
