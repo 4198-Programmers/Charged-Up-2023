@@ -60,7 +60,6 @@ public class Balance extends CommandBase {
             System.out.println("Stop " + timer.get());
         }
 
-
     }
 
     @Override
