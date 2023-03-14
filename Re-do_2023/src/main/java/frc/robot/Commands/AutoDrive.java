@@ -37,10 +37,7 @@ public class AutoDrive extends CommandBase {
     @Override
     public void execute() {
         if(System.currentTimeMillis() - startTime < timeRun) {
-        drive.drive(new ChassisSpeeds(
-                XSupplier,
-                YSupplier,
-                ZSupplier));
+        drive.drive(new ChassisSpeeds(XSupplier, YSupplier, ZSupplier));
         } else {
             drive.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
             isFinished = true;

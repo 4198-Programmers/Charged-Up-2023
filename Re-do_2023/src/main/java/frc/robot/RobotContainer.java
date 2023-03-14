@@ -164,7 +164,7 @@ public class RobotContainer {
       new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.SUBSTATION_UP_POS_VERT));
 
   private final SequentialCommandGroup autoPlaceThenBalance = new AutoVert(vertArm, 0.25, 6)
-  .andThen(new AutoDrive(mDriveTrain, 0, 0, 0, 1000))
+  .andThen(new AutoDrive(mDriveTrain, 0, 0, 0, 200))
   .andThen(elementTopRight)
   .andThen(new RunIntake(intakeSub, Constants.INTAKE_OUT_SPEED))
   .andThen(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, 0))
