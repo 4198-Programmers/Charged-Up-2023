@@ -32,7 +32,7 @@ public class AutoDriveDock extends CommandBase {
 
     @Override
     public void execute() {
-        if(drive.getPitch() < 16) {
+        if(drive.getPitch() < 10) {
         drive.drive(new ChassisSpeeds(
                 XSupplier,
                 YSupplier,

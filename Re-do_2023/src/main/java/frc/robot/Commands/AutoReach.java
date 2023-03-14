@@ -9,8 +9,8 @@ public class AutoReach extends CommandBase {
     double speed;
     boolean isFinished;
     double wantedPos;
-    long startTime;
-    long timeRun;
+    // long startTime;
+    // long timeRun;
 
     public AutoReach(ReachArmSub reachArm, double speed, double wantedPos) {
         this.reachArm = reachArm;

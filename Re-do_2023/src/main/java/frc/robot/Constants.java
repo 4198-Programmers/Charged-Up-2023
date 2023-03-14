@@ -48,11 +48,13 @@ public final class Constants {
 
         // Joystick 1 Buttons
         public static final int APRIL_TAG_LEFT_BUTTON = 1;
+        public static final int AUTO_LOCK_LEFT_BTN = 1;
         public static final int FIELD_ORIENTATION_BUTTON = 11;
         public static final int ROBOT_ORIENTATION_BUTTON = 12;
 
         // Joystick 2 Buttons
         public static final int APRIL_TAG_RIGHT_BUTTON = 1;
+        public static final int AUTO_LOCK_RIGHT_BTN = 1;
         public static final int NO_SLIP_DRIVE_BUTTON = 2;
         public static final int TEST_SUSAN_PHOTON = 7;
         public static final int TEST_DRIVE_CENTER_PHOTON = 8;

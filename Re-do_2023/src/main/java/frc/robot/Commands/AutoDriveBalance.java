@@ -34,12 +34,13 @@ public class AutoDriveBalance extends CommandBase {
 
     @Override
     public void execute() {
-        if(starngPitch > 10) {
+        if(starngPitch > drive.getPitch()) {
             drive.drive(new ChassisSpeeds(
                     XSupplier,
                     YSupplier,
                     ZSupplier));
             } else {
+                drive.drive(new ChassisSpeeds(0.0, 0.0, 0.01));
                 drive.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
                 isFinished = true;
             }
