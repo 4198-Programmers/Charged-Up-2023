@@ -39,7 +39,7 @@ public class TimedAuto extends CommandBase {
     public void execute() {
         currentTime = System.currentTimeMillis();
 
-        if ( currentTime < timeEnd) {
+        if (currentTime < timeEnd) {
             toSwerveSpeeds = new ChassisSpeeds(vx, vy, 0);
             driveTrain.drive(toSwerveSpeeds);
         } else {

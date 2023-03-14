@@ -36,11 +36,11 @@ public class AutoReach extends CommandBase {
         // }
         if (reachArm.getPosition() < wantedPos + Constants.REACH_ENCODER_TOLERANCE
                 && reachArm.getPosition() > wantedPos - Constants.REACH_ENCODER_TOLERANCE) {
-                reachArm.moveReach(0);
+            reachArm.moveReach(0);
             isFinished = true;
         } else if (reachArm.getPosition() < wantedPos - Constants.REACH_ENCODER_TOLERANCE) {
             reachArm.moveReach(speed);
-        } else if (reachArm.getPosition() > wantedPos+Constants.REACH_ENCODER_TOLERANCE) {
+        } else if (reachArm.getPosition() > wantedPos + Constants.REACH_ENCODER_TOLERANCE) {
             reachArm.moveReach(-speed);
         }
 
