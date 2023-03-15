@@ -117,6 +117,7 @@ public class RobotContainer {
   // Constants.WANTED_DISTANCE_MID));
 
   public RobotContainer() {
+    // modifyDriveTrainSpeed(speed);
     configureBindings();
     reachArmSub.zeroEncoder();
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -198,6 +199,8 @@ public class RobotContainer {
       .andThen(new AutoDriveDock(mDriveTrain, -0.25, 0, 0))
       .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 1))
       .andThen(new AutoDriveBalance(mDriveTrain, -0.25, 0, 0));
+
+      
 
   public void initShuffleboard() {
     ShuffleboardTab autoTab = Shuffleboard.getTab("Auto Choices");
@@ -355,6 +358,7 @@ public class RobotContainer {
         .whileTrue(new ConditionalLock(mDriveTrain));
 
     new JoystickButton(stickTwo, Constants.APRIL_TAG_TEST_BUTTON).whileTrue(new CheckPhotonTarget(photonVision));
+    // new JoystickButton(stickTwo, Constants.CHANGE_DRIVE_SPEED_BUTTON).whileTrue(modifyDriveTrainSpeed(1));
   }
 
   public void initializeAuto() {
@@ -425,6 +429,18 @@ public class RobotContainer {
     } else {
       return value;
     } // changed to remove confusing math and limit for now [2-18 CP]
+  }
+  
+  private double modifyDriveTrainSpeed(double currentSpeedSupplier) {
+    double currentSpeedMultiplier = currentSpeedSupplier;
+    if(currentSpeedMultiplier == 1) {
+      currentSpeedMultiplier = 0.25;
+      return currentSpeedMultiplier;
+    } else if (currentSpeedMultiplier == 0.25) {
+      currentSpeedMultiplier = 1;
+      return currentSpeedMultiplier;
+    }
+    return currentSpeedMultiplier;
   }
 
 }
