@@ -68,10 +68,10 @@ public final class Constants {
                         INTAKE_BUTTON = 1,
                         SUSTATION_UP_BUTTON = 2,
                         ZERO_SUSAN_BUTTON = 12,
-                        PLACE_TOP_LEFT_BTN = 7,
-                        PLACE_TOP_RIGHT_BTN = 8,
-                        PLACE_MID_LEFT_BTN = 9,
-                        PLACE_MID_RIGHT_BIN = 10,
+                        PLACE_TOP_LEFT_BTN = 9,
+                        PLACE_TOP_RIGHT_BTN = 10,
+                        PLACE_MID_LEFT_BTN = 7,
+                        PLACE_MID_RIGHT_BIN = 8,
                         SLOW_SUSAN_BUTTON = 11;
 
         // Turret Values
