@@ -19,7 +19,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Commands.AutoDrive;
+import frc.robot.Commands.AutoDriveBalance;
+import frc.robot.Commands.AutoDriveDock;
 import frc.robot.Commands.AutoReach;
+import frc.robot.Commands.AutoRunIntake;
 import frc.robot.Commands.AutoSusan;
 import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.Balance;
@@ -33,6 +37,7 @@ import frc.robot.Commands.AutoDriveBalance;
 import frc.robot.Commands.AutoDriveDock;
 import frc.robot.Commands.RunIntake;
 import frc.robot.Commands.SlightTurnDrive;
+import frc.robot.Commands.TimedAuto;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.Intake;
 import frc.robot.Subsystems.LEDs;
@@ -40,6 +45,7 @@ import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Subsystems.PathHolder;
 import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Commands.ToggleSusan;
+import frc.robot.Commands.ZeroGyro;
 import frc.robot.Commands.ZeroSusan;
 import frc.robot.Commands.ZeroVert;
 import frc.robot.Commands.zeroHeading;
@@ -135,6 +141,7 @@ public class RobotContainer {
         new ControlSusan(lazySusanSub, () -> smallerModifyAxis(-stickThree.getX()), 50));// CHANGETOTHREE
     lazySusanSub.mode(IdleMode.kBrake);
     intakeSub.setDefaultCommand(new RunIntake(intakeSub, 0));
+    
   }
 
   private final SequentialCommandGroup elementTopLeft = new SequentialCommandGroup(
@@ -161,8 +168,26 @@ public class RobotContainer {
           .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.RIGHT_MID_PLACEMENT_SUSAN))
           .andThen(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.MID_REACH_PLACEMENT)));
 
-  private final SequentialCommandGroup upToSubStation = new SequentialCommandGroup(
-      new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.SUBSTATION_UP_POS_VERT));
+  private final SequentialCommandGroup elementTopRightAuto = new SequentialCommandGroup(
+      new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, 0)
+          .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.PLACE_TOP_VERT))
+          .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.RIGHT_TOP_PLACEMENT_SUSAN))
+          .andThen(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.TOP_REACH_PLACEMENT)));
+
+  private final SequentialCommandGroup autoPlaceTopLeftThenBlance = new SequentialCommandGroup(
+      new AutoVert(vertArm, 0.25, 6)
+          .andThen(new AutoDrive(mDriveTrain, -0.25, 0, 0, 3000))
+          .andThen(elementTopRightAuto)
+          .andThen(new AutoRunIntake(intakeSub, Constants.INTAKE_OUT_SPEED))
+          .andThen(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, 0))
+          .andThen(new AutoDriveDock(mDriveTrain, 0.6, 0, 0))
+          .andThen(new TimedAuto(mDriveTrain, 5000, 0.25, 0))
+          .andThen(new TimedAuto(mDriveTrain, 1000, -0.25, 0))
+          .andThen(new SlightTurnDrive(mDriveTrain)));
+
+  private final Command upToSubStation = new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+      Constants.SUBSTATION_UP_POS_VERT)
+      .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.SUBSTATION_REACH_POS));
 
   private final SequentialCommandGroup autoPlaceThenBalance = new AutoVert(vertArm, 0.25, 6)
       .andThen(new AutoDrive(mDriveTrain, 0, 0, 0, 200))
@@ -225,7 +250,7 @@ public class RobotContainer {
     // SideChooser.addOption("Blue", 1);
 
     autoTab.add("Auto", AutoChooser);
-    AutoChooser.setDefaultOption("Middle Auto", 0);
+    AutoChooser.setDefaultOption("Middle Auto, Exit Community", 0);
     AutoChooser.addOption("Blue Left Auto, Charge", 1);
     AutoChooser.addOption("Just Place, No Drive", 2);
     AutoChooser.addOption("Red Right Auto, Charge", 3);
@@ -233,6 +258,9 @@ public class RobotContainer {
     AutoChooser.addOption("Red Left Auto, Charge", 5);
     AutoChooser.addOption("Place + Drive, No Charge", 6);
     AutoChooser.addOption("Just Drive, No Place, No Charge, R/L Only", 7);
+    AutoChooser.addOption("Middle Auto, No Exit Community", 8);
+
+    autoTab.addFloat("Pitch", () -> mDriveTrain.getPitch());
 
     vertArm.ZeroArm();
     lazySusanSub.zeroPosition();
@@ -335,6 +363,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+
     // return mAutoContainer.autoRunCommand();
     // return new RunPathAuto(mPath, mDriveTrain);
     // return new WithMarker(mDriveTrain, mPath);

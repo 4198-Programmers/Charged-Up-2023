@@ -98,7 +98,8 @@ public final class Constants {
                         INTAKE_IN_SPEED = 0.7,
                         AUTO_REACH_SPEED = 1,
                         VISIBLE_TAG_VERT_ENC = 4,
-                        SUSAN_LEFT_FROM_TAG_ENC = 6;
+                        SUSAN_LEFT_FROM_TAG_ENC = 6,
+                        SUBSTATION_REACH_POS = 60;
 
         // Auto AprilTags Values
         public static final double DISTANCE_FROM_TAG = 0,
