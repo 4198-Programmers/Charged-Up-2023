@@ -1,10 +1,8 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
 import frc.robot.Subsystems.DriveTrain;
 
 public class Balance extends CommandBase {
@@ -12,7 +10,7 @@ public class Balance extends CommandBase {
     float pitch;
     double speed;
     double pitchDouble;
-    Timer timer;
+    boolean done;
 
     public Balance(DriveTrain driveArg) {
         driveTrain = driveArg;
@@ -20,7 +18,7 @@ public class Balance extends CommandBase {
     }
     @Override
     public void initialize() {
-        timer = new Timer();
+        done = false;
     }
 
     @Override
@@ -49,23 +47,17 @@ public class Balance extends CommandBase {
         // } else {
         //     speed = 0;
         // }
-        while(timer.get() < 0.5){
-           driveTrain.drive(new ChassisSpeeds(speed, 0, 0));
-           System.out.println("Balance " + timer.get());
-        }
-        
-        timer.reset();
-        while(timer.get() < 0.5){
-            driveTrain.drive(new ChassisSpeeds(0, 0, 0));
-            System.out.println("Stop " + timer.get());
-        }
 
+            driveTrain.drive(new ChassisSpeeds(speed, 0, 0));
+            System.out.println("Pitch: "+ pitch);
+            new WaitCommand(0.5);
     }
 
     @Override
     public boolean isFinished() {
-        return pitchDouble >= -0.5 && pitchDouble <= 0.5;
+        //return pitchDouble >= -0.5 && pitchDouble <= 0.5;
         // return driveTrain.BalanceDrive() == 0;
+        return false;
     }
 
     @Override

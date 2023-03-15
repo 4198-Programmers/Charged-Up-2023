@@ -353,6 +353,7 @@ public class RobotContainer {
     // .whileTrue(new ControlSusan(lazySusanSub, () -> -1, 10));
 
     new JoystickButton(stickOne, 1).whileTrue(new Balance(mDriveTrain));
+    
     new JoystickButton(stickOne, Constants.AUTO_LOCK_LEFT_BTN)
         .and(new JoystickButton(stickTwo, Constants.AUTO_LOCK_RIGHT_BTN))
         .whileTrue(new ConditionalLock(mDriveTrain));
