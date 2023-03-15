@@ -120,6 +120,11 @@ public class DriveTrain extends SubsystemBase {
                 return pitch;
         }
 
+        public boolean isMoving() {
+                boolean isMoving = NavX.isMoving();
+                return isMoving;
+        }
+
         public void StopDrive() {
                 ChassisSpeeds noMove = new ChassisSpeeds(0, 0, 0);
                 drive(noMove);

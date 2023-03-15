@@ -23,6 +23,7 @@ import frc.robot.Commands.AutoReach;
 import frc.robot.Commands.AutoSusan;
 import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.Balance;
+import frc.robot.Commands.ConditionalLock;
 import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
@@ -89,7 +90,6 @@ public class RobotContainer {
   public final SendableChooser<Integer> BalanceChooser = new SendableChooser<>();
   public final SendableChooser<Integer> SideChooser = new SendableChooser<>();
   public final SendableChooser<Integer> AutoChooser = new SendableChooser<>();
-
 
   // private final SequentialCommandGroup aprilTagLeft = new
   // SusanHead(lazySusanSub, 0)
@@ -164,14 +164,14 @@ public class RobotContainer {
       new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.SUBSTATION_UP_POS_VERT));
 
   private final SequentialCommandGroup autoPlaceThenBalance = new AutoVert(vertArm, 0.25, 6)
-  .andThen(new AutoDrive(mDriveTrain, 0, 0, 0, 200))
-  .andThen(elementTopRight)
-  .andThen(new RunIntake(intakeSub, Constants.INTAKE_OUT_SPEED))
-  .andThen(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, 0))
-  .andThen(new ZeroSusan(lazySusanSub))
-  .andThen(new AutoDriveDock(mDriveTrain, -0.25, 0, 0))
-  .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 1))
-  .andThen(new AutoDriveBalance(mDriveTrain, -0.25, 0, 0));
+      .andThen(new AutoDrive(mDriveTrain, 0, 0, 0, 200))
+      .andThen(elementTopRight)
+      .andThen(new RunIntake(intakeSub, Constants.INTAKE_OUT_SPEED))
+      .andThen(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, 0))
+      .andThen(new ZeroSusan(lazySusanSub))
+      .andThen(new AutoDriveDock(mDriveTrain, -0.25, 0, 0))
+      .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 1))
+      .andThen(new AutoDriveBalance(mDriveTrain, -0.25, 0, 0));
 
   public void initShuffleboard() {
     ShuffleboardTab autoTab = Shuffleboard.getTab("Auto Choices");
@@ -214,7 +214,6 @@ public class RobotContainer {
     // ElementsChooser.addOption("Charge Staion", 6);
     // ElementsChooser.addOption("Place Drive Charge", 7);
     // ElementsChooser.addOption("Place Drive Charge mid", 8);
-
 
     // autoTab.add("Balance?", BalanceChooser);
     // BalanceChooser.setDefaultOption("No Balance", 0);
@@ -322,6 +321,9 @@ public class RobotContainer {
     // .whileTrue(new ControlSusan(lazySusanSub, () -> -1, 10));
 
     new JoystickButton(stickOne, 1).whileTrue(new Balance(mDriveTrain));
+    new JoystickButton(stickOne, Constants.AUTO_LOCK_LEFT_BTN)
+        .and(new JoystickButton(stickTwo, Constants.AUTO_LOCK_RIGHT_BTN))
+        .whileTrue(new ConditionalLock(mDriveTrain));
   }
 
   public void initializeAuto() {
@@ -339,7 +341,7 @@ public class RobotContainer {
     // SideChoice.setSide(SideChooser.getSelected());
 
     // return autoPlaceThenBalance;
-    
+
     singlePaths.setAutoChoice(AutoChooser.getSelected());
     System.out.println(singlePaths.GetAutoCommand() + "auto");
     return singlePaths.GetAutoCommand();
