@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -119,6 +120,7 @@ public class RobotContainer {
   public RobotContainer() {
     // modifyDriveTrainSpeed(speed);
     configureBindings();
+    new zeroHeading(mDriveTrain);     // This sets the robot front to be the forward direction
     reachArmSub.zeroEncoder();
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     NetworkTableEntry pipeline = table.getEntry("pipeline");
@@ -133,9 +135,9 @@ public class RobotContainer {
 
     // reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () ->
     // -stickThree.getRawAxis(1), 75)); //CHANGETOTHREE
+    new zeroHeading(mDriveTrain);     // This sets the robot front to be the forward direction
     reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () -> 0, 0));
     pneumatics.Pressurize();
-    new zeroHeading(mDriveTrain); // This sets the robot front to be the forward direction
     // pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
     vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));
     lazySusanSub.setDefaultCommand(
@@ -442,6 +444,15 @@ public class RobotContainer {
       return currentSpeedMultiplier;
     }
     return currentSpeedMultiplier;
+  }
+
+  private double linearEquation(double reachArmSpeed, double reachArmPosition){
+    double a = 0;
+    double b = 0;
+    double c = 0;
+    double speed;
+   speed =  a * reachArmPosition + b* reachArmSpeed + c;
+    return speed;
   }
 
 }

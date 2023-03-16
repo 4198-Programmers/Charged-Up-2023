@@ -50,14 +50,13 @@ public class Balance extends CommandBase {
 
             driveTrain.drive(new ChassisSpeeds(speed, 0, 0));
             System.out.println("Pitch: "+ pitch);
-            new WaitCommand(0.5);
     }
 
     @Override
     public boolean isFinished() {
-        //return pitchDouble >= -0.5 && pitchDouble <= 0.5;
+        return pitchDouble >= -0.5 && pitchDouble <= 0.5;
         // return driveTrain.BalanceDrive() == 0;
-        return false;
+        //return false;
     }
 
     @Override
