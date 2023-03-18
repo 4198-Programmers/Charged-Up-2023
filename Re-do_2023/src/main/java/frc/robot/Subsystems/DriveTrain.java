@@ -120,6 +120,14 @@ public class DriveTrain extends SubsystemBase {
                 return pitch;
         }
 
+        public float getXAccel() {
+                return NavX.getWorldLinearAccelX();
+        }
+
+        public float getYAccel(){
+                return NavX.getWorldLinearAccelY();
+        }
+
         public boolean isMoving() {
                 boolean isMoving = NavX.isMoving();
                 return isMoving;
@@ -135,7 +143,7 @@ public class DriveTrain extends SubsystemBase {
         }
 
         public void drive(ChassisSpeeds speeds) { // passes in speeds to be used in periodic
-                //System.out.println(getPitch());
+                // System.out.println(getPitch());
                 chassisSpeeds = speeds;
         }
 

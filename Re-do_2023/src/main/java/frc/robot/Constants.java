@@ -49,6 +49,7 @@ public final class Constants {
         // Joystick 1 Buttons
         public static final int APRIL_TAG_LEFT_BUTTON = 1;
         public static final int AUTO_LOCK_LEFT_BTN = 1;
+        public static final int BALANCE_BUTTON = 7;
         public static final int FIELD_ORIENTATION_BUTTON = 11;
         public static final int ROBOT_ORIENTATION_BUTTON = 12;
 
@@ -59,8 +60,8 @@ public final class Constants {
         public static final int TEST_SUSAN_PHOTON = 7;
         public static final int TEST_DRIVE_CENTER_PHOTON = 8;
         public static final int APRIL_TAG_TEST_BUTTON = 11;
-        public static final int CHANGE_DRIVE__QUARTER_SPEED_BUTTON = 3;
-        public static final int CHANGE_DRIVE__FULL_SPEED_BUTTON = 5;
+        public static final int CHANGE_DRIVE_QUARTER_SPEED_BUTTON = 3;
+        public static final int CHANGE_DRIVE_FULL_SPEED_BUTTON = 5;
 
         // Joystick 3 Buttons
         public static final int TOGGLE_CLAW_BUTTON = 1,
@@ -69,12 +70,13 @@ public final class Constants {
                         OUTTAKE_BUTTON = 4,
                         INTAKE_BUTTON = 1,
                         SUSTATION_UP_BUTTON = 2,
-                        ZERO_SUSAN_BUTTON = 12,
-                        PLACE_TOP_LEFT_BTN = 9,
-                        PLACE_TOP_RIGHT_BTN = 10,
-                        PLACE_MID_LEFT_BTN = 7,
-                        PLACE_MID_RIGHT_BIN = 8,
-                        SLOW_SUSAN_BUTTON = 11;
+                        ZERO_SUSAN_BUTTON = 6,
+                        PLACE_TOP_LEFT_BTN = 10,
+                        PLACE_TOP_RIGHT_BTN = 9,
+                        PLACE_MID_LEFT_BTN = 8,
+                        PLACE_MID_RIGHT_BIN = 7,
+                        SLOW_SUSAN_BUTTON = 11,
+                        STRAIGHT_DOWN_INTAKE_BUTTON = 12;
 
         // Turret Values
         public static final double SUSAN_CIRCUMFERENCE = 0,
@@ -124,10 +126,10 @@ public final class Constants {
                         WANTED_SKEW_RIGHT = 0;
         public static final double REACH_ENCODER_WHEEL_DIAMETER = 0.25,
                         REACH_ENCODER_TOLERANCE = 15,
-                        TOP_REACH_PLACEMENT = 5775,
+                        TOP_REACH_PLACEMENT = 5250,
                         PLACE_TOP_VERT = 7.97,
                         PLACE_MID_VERT = 7.05,
-                        MID_REACH_PLACEMENT = 822,
+                        MID_REACH_PLACEMENT = 300,
                         RIGHT_MID_PLACEMENT_SUSAN = -5.57,
                         LEFT_MID_PLACEMENT_SUSAN = 6.64,
                         RIGHT_TOP_PLACEMENT_SUSAN = -3.78,

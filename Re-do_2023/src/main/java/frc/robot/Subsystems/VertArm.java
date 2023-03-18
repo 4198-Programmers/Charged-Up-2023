@@ -28,6 +28,10 @@ public class VertArm extends SubsystemBase {
         return verticalMotor.get();
     }
 
+    public double getPosition() {
+        return verticalEncoder.getPosition();
+    }
+
     public void stopArm() {
         verticalMotor.set(Constants.VERT_ARM_NO_DROP_SPEED);
     }
