@@ -65,7 +65,7 @@ public class RobotContainer {
   private final Joystick stickOne = new Joystick(0);
   private final Joystick stickTwo = new Joystick(1);
   private final Joystick stickThree = new Joystick(2);
-  private final Joystick stickFour = new Joystick(3);
+  // private final Joystick stickFour = new Joystick(3);
 
   private final PhotonVision photonVision = new PhotonVision();
   private final DriveTrain mDriveTrain = new DriveTrain();
@@ -274,10 +274,7 @@ public class RobotContainer {
     // .and(new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON))
     // .whileTrue(aprilTagMid);
 
-    // This lets a person press single button and open and close the claw every
-    // other time.
-    new JoystickButton(stickThree, Constants.TOGGLE_CLAW_BUTTON)
-        .toggleOnTrue(new TogglePneumatics(pneumatics, !pneumatics.getChannel())); // CHANGETOTHREE
+    new JoystickButton(stickTwo, Constants.TARGET_TEST_BUTTON).whileTrue(new CheckPhotonTarget(photonVision));
 
     new JoystickButton(stickThree, Constants.STRAIGHT_DOWN_INTAKE_BUTTON).whileTrue(
         new ControlVertStraightDown(vertArm, reachArmSub, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));

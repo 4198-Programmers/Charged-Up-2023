@@ -50,6 +50,7 @@ public final class Constants {
         public static final int APRIL_TAG_LEFT_BUTTON = 1;
         public static final int AUTO_LOCK_LEFT_BTN = 1;
         public static final int BALANCE_BUTTON = 7;
+        public static final int TARGET_TEST_BUTTON = 8;
         public static final int FIELD_ORIENTATION_BUTTON = 11;
         public static final int ROBOT_ORIENTATION_BUTTON = 12;
 
@@ -125,7 +126,7 @@ public final class Constants {
                         WANTED_SKEW_MID = 0,
                         WANTED_SKEW_RIGHT = 0;
         public static final double REACH_ENCODER_WHEEL_DIAMETER = 0.25,
-                        REACH_ENCODER_TOLERANCE = 15,
+                        REACH_ENCODER_TOLERANCE = 25,
                         TOP_REACH_PLACEMENT = 5250,
                         PLACE_TOP_VERT = 7.97,
                         PLACE_MID_VERT = 7.05,

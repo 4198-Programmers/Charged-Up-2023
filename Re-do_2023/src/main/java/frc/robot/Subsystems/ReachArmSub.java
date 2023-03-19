@@ -14,10 +14,11 @@ public class ReachArmSub extends SubsystemBase {
 
     public ReachArmSub() {
         encoder.setDistancePerPulse((Constants.REACH_ENCODER_WHEEL_DIAMETER * Math.PI));
+        reachMotor.setClosedLoopRampRate(0.5);
     }
 
     public void moveReach(double speed) {
-        System.out.println(encoder.getDistance() +"Reach");
+        // System.out.println(encoder.getDistance() +"Reach");
         reachMotor.set(speed);
     }
 

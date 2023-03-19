@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PhotonVision extends SubsystemBase {
     // set up the camera object
-    PhotonCamera camera = new PhotonCamera("Limelight");
+    PhotonCamera camera = new PhotonCamera("photonvision");
     // essentially collects the latest data from the camera
-    PhotonPipelineResult result = camera.getLatestResult();
+    PhotonPipelineResult result;
 
     PhotonTrackedTarget target;
     double skew;
@@ -20,9 +20,10 @@ public class PhotonVision extends SubsystemBase {
     double fiducialId;
 
     public PhotonTrackedTarget getTarget() {
+        result = camera.getLatestResult();
         if (result.hasTargets()) {
             target = result.getBestTarget();
-            System.out.println("Target Data: " + target.toString());
+            System.out.println("Target Data: " + target.getFiducialId());
         } else {
             target = null;
         }
@@ -30,6 +31,7 @@ public class PhotonVision extends SubsystemBase {
     }
 
     public double getYaw() {
+        result = camera.getLatestResult();
         if (result.hasTargets()) {
             yaw = target.getYaw();
         } else {
@@ -39,6 +41,7 @@ public class PhotonVision extends SubsystemBase {
     }
 
     public double getPitch() {
+        result = camera.getLatestResult();
         if (result.hasTargets()) {
             pitch = target.getPitch();
         } else {
@@ -48,6 +51,7 @@ public class PhotonVision extends SubsystemBase {
     }
 
     public double getSkew() {
+        result = camera.getLatestResult();
         if (result.hasTargets()) {
             skew = target.getSkew();
         } else {

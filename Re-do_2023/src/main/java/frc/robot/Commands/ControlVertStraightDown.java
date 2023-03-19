@@ -13,6 +13,14 @@ public class ControlVertStraightDown extends CommandBase {
     private double speedScalar;
     private double percentSpeed;
     private final ReachArmSub reachArm;
+    private double initialReachPos;
+    private double wantedSpeed;
+    private double reachWantedPos;
+    private double r = 3805.44;
+    private double b = -0.721424;
+    private double a = 0.485838;
+    private double vertArmPos;
+    private double reachArmPos;
 
     public ControlVertStraightDown(VertArm upArmArg, ReachArmSub reachArm, DoubleSupplier supplier,
             double percentSpeed) {
@@ -26,34 +34,39 @@ public class ControlVertStraightDown extends CommandBase {
     @Override
     public void initialize() {
         speedScalar = percentSpeed / 100;
+        initialReachPos = reachArm.getPosition();
     }
 
     @Override
     public void execute() {
-        double wantedSpeed = speedSupplier.getAsDouble() * speedScalar;
-        double reachWantedPos = 15907.1 * (Math.pow(0.5007, vertArm.getLocation()));
+        wantedSpeed = speedSupplier.getAsDouble() * speedScalar;
+        vertArmPos = vertArm.getLocation();
+        reachArmPos = reachArm.getPosition();
+        // double reachWantedPos = 15907.1 * (Math.pow(0.5007, vertArm.getLocation()));
+        // // old
+        reachWantedPos = (r + initialReachPos)
+                * (1 - (b * Math.cos(a * vertArmPos)));
 
-        if (reachArm.getPosition() < reachWantedPos - Constants.REACH_ENCODER_TOLERANCE) {
-            reachArm.moveReach(0.5);
-        } 
-        // else if (reachArm.getPosition() > reachWantedPos + Constants.REACH_ENCODER_TOLERANCE) {
-        //     reachArm.moveReach(-wantedSpeed);
-        // } 
-        else {
-            reachArm.moveReach(0);
-        }
-
-        System.out.println(reachWantedPos + "Equation Pos");
-        System.out.println(reachArm.getPosition() + "Current Pos");
-
-        if (vertArm.getLocation() <= 7.925 && wantedSpeed > 0.05) {
+        if (vertArmPos <= 7.925 && wantedSpeed > 0.05) {
             vertArm.moveArm(wantedSpeed);
-        } else if (vertArm.getLocation() > 0 && wantedSpeed < -0.05) {
+        } else if (vertArmPos > 0 && wantedSpeed < -0.05) {
             vertArm.moveArm(wantedSpeed);
         } else {
             vertArm.moveArm(.25 * wantedSpeed);
             reachArm.moveReach(0);
         }
+
+        if (reachArmPos < reachWantedPos - 50) {
+            reachArm.moveReach(0.75);
+        } else if (reachArmPos > reachWantedPos + 50) { // encoder tolerance for less shake
+            reachArm.moveReach(-1);
+        } else {
+            reachArm.moveReach(0);
+        }
+
+        // System.out.println(reachWantedPos + "Equation Pos");
+        // System.out.println(reachArm.getPosition() + "Current Pos");
+
     }
 
 }
