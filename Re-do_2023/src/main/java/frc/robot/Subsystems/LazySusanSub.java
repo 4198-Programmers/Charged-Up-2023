@@ -45,11 +45,12 @@ public class LazySusanSub extends SubsystemBase {
     }
 
     public void spinSusanWithAngles(double speed, double wantedDegrees) {
-        if (getLocation() - wantedDegrees < -0.5) {
-            susanMotor.set(-speed);
-        } else if (getLocation() - wantedDegrees > 0.5) {
-            susanMotor.set(speed);
-        }
+        // if (getLocation() - wantedDegrees < -0.5) {
+        //     susanMotor.set(-speed);
+        // } else if (getLocation() - wantedDegrees > 0.5) {
+        //     susanMotor.set(speed);
+        // }
+        susanMotor.set(0);
     }
 
     public void spinSusan(double speed) { // counterclockwise = negative
@@ -66,16 +67,18 @@ public class LazySusanSub extends SubsystemBase {
             zeroPosition();
         }
 
-        susanMotor.set(expectedSpeed);
+        // susanMotor.set(expectedSpeed);
+        susanMotor.set(0);
     }
 
     public void setSusanAngleCP(double wantedAngle) { // counterclockwise = negative
-        if (getLocation() < Maths.degreesToRotations_Susan(wantedAngle) - Maths.degreesToRotations_Susan(5)) {
-            spinSusan(0.3);
-        } else if (getLocation() > Maths.degreesToRotations_Susan(wantedAngle) + Maths.degreesToRotations_Susan(5)) {
-            spinSusan(-0.3);
-        } else {
-            spinSusan(0);
-        }
+        // if (getLocation() < Maths.degreesToRotations_Susan(wantedAngle) - Maths.degreesToRotations_Susan(5)) {
+        //     spinSusan(0.3);
+        // } else if (getLocation() > Maths.degreesToRotations_Susan(wantedAngle) + Maths.degreesToRotations_Susan(5)) {
+        //     spinSusan(-0.3);
+        // } else {
+        //     spinSusan(0);
+        // }
+        susanMotor.set(0);
     }
 }
