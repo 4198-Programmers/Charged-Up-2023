@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Maths;
@@ -13,7 +14,11 @@ public class LazySusanSub extends SubsystemBase {
     private final CANSparkMax susanMotor = new CANSparkMax(Constants.SUSAN_MOTOR_ID, MotorType.kBrushless);
     private final RelativeEncoder susanEncoder = susanMotor.getEncoder();
     int susanDirectionToggle = 1;
+   private DigitalInput sensor = new DigitalInput(Constants.SUSAN_SENSOR_CHANNEL);
 
+   public boolean getSensorValue(){
+    return sensor.get();
+   }
     public double getLocation() {
         return susanEncoder.getPosition();
     }
@@ -56,6 +61,9 @@ public class LazySusanSub extends SubsystemBase {
         // } else if (getLocation() <= Maths.degreesToRotations_Susan(-Constants.SUSAN_MAX_ANGLE) && speed < 0) {
         //     expectedSpeed = 0;
         // }
+        if(getSensorValue()){
+            zeroPosition();
+        }
 
         susanMotor.set(expectedSpeed);
     }

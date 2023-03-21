@@ -138,5 +138,6 @@ public final class Constants {
                         RIGHT_TOP_PLACEMENT_SUSAN = -4,
                         LEFT_TOP_PLACEMENT_SUSAN = 4,
                         SUBSTATION_UP_POS_VERT = 7.92;
+        public static final int SUSAN_SENSOR_CHANNEL = 0;
 
 }
