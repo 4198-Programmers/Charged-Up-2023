@@ -9,17 +9,12 @@ import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Commands.AutoReach;
 import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.Balance;
 import frc.robot.Commands.ControlReach;
-import frc.robot.Commands.StopDrive;
 import frc.robot.Commands.TogglePneumatics;
-import frc.robot.Commands.ZeroDrive;
-import frc.robot.Commands.ZeroVert;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Subsystems.Pneumatics;
@@ -28,9 +23,6 @@ import frc.robot.Subsystems.VertArm;
 
 //All auto is bot oriented
 public class AutoContainer {
-    private static int autoType;
-    private static int locationChoose;
-    private static int priorityLocal;
 
     /**
      * public enum Location {
@@ -105,14 +97,6 @@ public class AutoContainer {
     static ReachArmSub reachArmSub = new ReachArmSub();
     static VertArm vertArm = new VertArm();
 
-    public AutoContainer(DriveTrain driveTrain, LazySusanSub lazySusanSub, Pneumatics pneumatics,
-            ReachArmSub reachArmSub, VertArm vertArm) {
-        this.driveTrain = driveTrain;
-        this.lazySusanSub = lazySusanSub;
-        this.pneumatics = pneumatics;
-        this.reachArmSub = reachArmSub;
-        this.vertArm = vertArm;
-    }
 
     /*
      * int[] locationVarOneArray = { 27, 84, 17 };

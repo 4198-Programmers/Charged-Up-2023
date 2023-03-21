@@ -1,8 +1,5 @@
 package frc.robot.Subsystems;
 
-import java.util.List;
-
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -12,34 +9,19 @@ import frc.robot.Commands.AutoRunIntake;
 import frc.robot.Commands.AutoSusan;
 import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.Balance;
-import frc.robot.Commands.ManualFollowAuto;
-import frc.robot.Commands.RunIntake;
-import frc.robot.Commands.RunPathAuto;
 import frc.robot.Commands.SlightTurnDrive;
-import frc.robot.Commands.SlowManualFollowAuto;
-import frc.robot.Commands.StopArm;
 import frc.robot.Commands.TimedAuto;
-import frc.robot.Commands.TogglePneumatics;
 import frc.robot.Commands.SetRobotHeading;
 import frc.robot.Commands.ZeroSusan;
 import frc.robot.Commands.ZeroVert;
-import frc.robot.Tags.CenterSusanPhoton;
-import frc.robot.Tags.PhotonVision;
 
 public class SinglePaths /* extends CommandBase */ {
         private DriveTrain driveTrain;
         private VertArm vertArm;
         private LazySusanSub lazySusan;
-        private Pneumatics pneumatics;
         private Intake intake;
         private ReachArmSub reachArm;
-        private PhotonVision vision;
-        private static int locationChoice;
-        private static int elementsChoice;
-        private static int balanceChoice;
-        private static int sideChoice;
         private static int autoChoice;
-        private SequentialCommandGroup[] elementsChoiceGroupsArr;
         private SequentialCommandGroup[] autoChoiceGroupsArr;
 
         // public enum Location {
@@ -111,15 +93,13 @@ public class SinglePaths /* extends CommandBase */ {
         // }
         // }
 
-        public SinglePaths(DriveTrain driveTrain, VertArm vertArm, LazySusanSub lazySusan, Pneumatics pneumatics,
-                        Intake intake, ReachArmSub reachArm, PhotonVision vision) {
+        public SinglePaths(DriveTrain driveTrain, VertArm vertArm, LazySusanSub lazySusan,
+                        Intake intake, ReachArmSub reachArm) {
                 this.driveTrain = driveTrain;
                 this.vertArm = vertArm;
                 this.lazySusan = lazySusan;
-                this.pneumatics = pneumatics;
                 this.intake = intake;
                 this.reachArm = reachArm;
-                this.vision = vision;
                 // this.elementsChoiceGroupsArr = new SequentialCommandGroup[] {
                 // // DriveCommunity(),
                 // // PlaceDrive(),
@@ -188,18 +168,6 @@ public class SinglePaths /* extends CommandBase */ {
         // return mid;
         // }
 
-        private double safeSpinSpeed(int location, int side) {
-                double[] sideSafeSpinRight = { -Constants.AUTO_SUSAN_SPEED, Constants.AUTO_SUSAN_SPEED };
-                double[] sideSafeSpinLeft = { Constants.AUTO_SUSAN_SPEED, -Constants.AUTO_SUSAN_SPEED };
-                if (location == 0) {
-                        return sideSafeSpinLeft[side];
-                } else if (location == 1 || location == 2) {
-                        return sideSafeSpinRight[side];
-                } else {
-                        return 0;
-                }
-
-        }
 
         private SequentialCommandGroup PlaceTopRightElementGroup() {
                 return new SequentialCommandGroup(new PrintCommand("Place Element 1 Placement")
@@ -286,37 +254,7 @@ public class SinglePaths /* extends CommandBase */ {
         // .andThen(new PrintCommand("Done Placing")));
         // }
 
-        private SequentialCommandGroup PrepareToPickupElement() {
-                return new SequentialCommandGroup(new PrintCommand("Prepare To Pickup Element")
-                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                Constants.VERT_SAFE_TO_SPIN_ENC_POS))
-                                .andThen(new AutoSusan(lazySusan, safeSpinSpeed(locationChoice, sideChoice),
-                                                Constants.SUSAN_180_ENC_POS)
-                                                .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                                Constants.VERT_SAFE_TO_SPIN_ENC_POS))));
-        }
-
-        private SequentialCommandGroup PrepareToPlaceElement() {
-                return new SequentialCommandGroup(new PrintCommand("Prepare To Place Element")
-                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                Constants.VERT_SAFE_TO_SPIN_ENC_POS))
-                                .andThen(new AutoSusan(lazySusan, safeSpinSpeed(locationChoice, sideChoice), 0)
-                                                .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                                Constants.VERT_SAFE_TO_SPIN_ENC_POS))));
-        }
-
-        private SequentialCommandGroup PickupElement() {
-                return new SequentialCommandGroup(new PrintCommand("Pickup Element")
-                                .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED,
-                                                750))
-                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.VERT_PICKUP_POS)
-                                                .alongWith(new AutoRunIntake(intake, Constants.INTAKE_IN_SPEED)))
-                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                Constants.VERT_SAFE_TO_SPIN_ENC_POS)
-                                                .alongWith(new RunIntake(intake, Constants.INTAKE_IN_SPEED)))
-                                .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)));
-        }
-
+        
         // private SequentialCommandGroup balanceOne() {
         // if (balanceBool[balanceChoice]) {
         // return new SequentialCommandGroup(new PrintCommand("Balance")

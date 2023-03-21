@@ -1,36 +1,25 @@
 package frc.robot.Subsystems;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Commands.AutoSusan;
 import frc.robot.Commands.AutoVert;
-import frc.robot.Commands.Balance;
-import frc.robot.Commands.RunPathAuto;
 import frc.robot.Commands.StopArm;
 import frc.robot.Commands.TogglePneumatics;
 
 public class PathHolder {
     private static VertArm vertArm;
     private static Pneumatics pneumatics;
-    private ReachArmSub reachArm;
     private static LazySusanSub lazySusan;
-    private static int nPlacement;
     private static String pathChosen;
 
     // public enum PathChoice {
@@ -59,14 +48,6 @@ public class PathHolder {
 
     public void setPath(String path) {
         pathChosen = path;
-    }
-
-    public PathHolder(VertArm vertArm, Pneumatics pneumatics, ReachArmSub reachArm,
-            LazySusanSub lazySusan) {
-        this.vertArm = vertArm;
-        this.pneumatics = pneumatics;
-        this.reachArm = reachArm;
-        this.lazySusan = lazySusan;
     }
 
     public double[] getPathVelocities(double matchTime) {
