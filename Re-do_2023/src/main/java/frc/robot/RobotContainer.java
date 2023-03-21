@@ -50,7 +50,7 @@ public class RobotContainer {
 
   private final PhotonVision photonVision = new PhotonVision();
   private final DriveTrain mDriveTrain = new DriveTrain();
-  private final LazySusanSub lazySusanSub = new LazySusanSub();
+  private final LazySusanSub lazySusanSub = new LazySusanSub(true);
   private final ReachArmSub reachArmSub = new ReachArmSub();
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();

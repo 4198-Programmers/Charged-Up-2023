@@ -30,7 +30,7 @@ public class AutoSusan extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (lazySusanSub.getLocation() >= wantedPos - Constants.AUTO_ENC_OFFSET
-                && lazySusanSub.getLocation() <= wantedPos + Constants.AUTO_ENC_OFFSET);
+        return lazySusanSub.susanDisable || (lazySusanSub.getLocation() >= wantedPos - Constants.AUTO_ENC_OFFSET
+                && lazySusanSub.getLocation() <= wantedPos + Constants.AUTO_ENC_OFFSET );
     }
 }
