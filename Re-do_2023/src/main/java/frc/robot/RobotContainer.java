@@ -94,7 +94,6 @@ public class RobotContainer {
     // modifyDriveTrainSpeed(speed);
     configureBindings();
     mDriveTrain.zeroGyro();
-    mDriveTrain.resetGyro();
     reachArmSub.zeroEncoder();
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     NetworkTableEntry pipeline = table.getEntry("pipeline");
@@ -109,7 +108,6 @@ public class RobotContainer {
 
     // reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () ->
     // -stickThree.getRawAxis(1), 75)); //CHANGETOTHREE
-    new ZeroGyro(mDriveTrain); // This sets the robot front to be the forward direction
     pneumatics.Pressurize();
     // pneumatics.setDefaultCommand(new TogglePneumatics(pneumatics, false));
     vertArm.setDefaultCommand(new ControlArm(vertArm, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));

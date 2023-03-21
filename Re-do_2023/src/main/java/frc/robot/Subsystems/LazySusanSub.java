@@ -14,10 +14,11 @@ public class LazySusanSub extends SubsystemBase {
     private final CANSparkMax susanMotor = new CANSparkMax(Constants.SUSAN_MOTOR_ID, MotorType.kBrushless);
     private final RelativeEncoder susanEncoder = susanMotor.getEncoder();
     int susanDirectionToggle = 1;
-   private DigitalInput sensor = new DigitalInput(Constants.SUSAN_SENSOR_CHANNEL);
+//    private DigitalInput sensor = new DigitalInput(Constants.SUSAN_SENSOR_CHANNEL);
 
    public boolean getSensorValue(){
-    return sensor.get();
+    // return sensor.get();
+    return false;
    }
     public double getLocation() {
         return susanEncoder.getPosition();
