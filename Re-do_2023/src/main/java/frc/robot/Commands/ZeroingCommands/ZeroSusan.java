@@ -1,4 +1,4 @@
-package frc.robot.Commands;
+package frc.robot.Commands.ZeroingCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.LazySusanSub;
@@ -19,7 +19,7 @@ public class ZeroSusan extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return susan.getLocation() == 0;
+        return Math.abs(susan.getLocation()) < 0.05;
     }
     
 }

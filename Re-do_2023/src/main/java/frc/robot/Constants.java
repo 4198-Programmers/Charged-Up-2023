@@ -90,6 +90,7 @@ public static final double REACH_MIDDLE_TIME = 0;
 public static final double REACH_BOTTOM_TIME = 0;
 public static final int GRABBER_IN_BUTTON = 9;
 public static final int GRABBER_OUT_BUTTON = 8;
+public static final int LED_LENGTH = 0;
 
   public static final class Swerve {
     public static final double stickDeadband = 0.1;
@@ -132,6 +133,7 @@ public static final int GRABBER_OUT_BUTTON = 8;
       public static final int canCoderID = 12;
       public static final double angleOffset = -291.01;
       public static final boolean encoderReversed = false;
+      public static final SwerveModule module = new SwerveModule(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
 
     /* Front Right Module - Module 1 */
@@ -142,6 +144,7 @@ public static final int GRABBER_OUT_BUTTON = 8;
       public static final int canCoderID = 11;
       public static final double angleOffset = -152.05;
       public static final boolean encoderReversed = false;
+      public static final SwerveModule module = new SwerveModule(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
 
     /* Back Left Module - Module 2 */
@@ -152,6 +155,7 @@ public static final int GRABBER_OUT_BUTTON = 8;
       public static final int canCoderID = 9;
       public static final double angleOffset = -272.37;
       public static final boolean encoderReversed = false;
+      public static final SwerveModule module = new SwerveModule(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
 
     /* Back Right Module - Module 3 */
@@ -162,6 +166,7 @@ public static final int GRABBER_OUT_BUTTON = 8;
       public static final int canCoderID = 10;
       public static final double angleOffset = -17.84;
       public static final boolean encoderReversed = false;
+      public static final SwerveModule module = new SwerveModule(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
   }
 

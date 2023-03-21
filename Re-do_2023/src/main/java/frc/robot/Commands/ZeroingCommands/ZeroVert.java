@@ -1,4 +1,4 @@
-package frc.robot.Commands;
+package frc.robot.Commands.ZeroingCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.VertArm;

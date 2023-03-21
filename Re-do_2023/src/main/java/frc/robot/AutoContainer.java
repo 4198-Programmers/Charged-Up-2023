@@ -15,11 +15,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Commands.AutoReach;
-import frc.robot.Commands.AutoSusan;
-import frc.robot.Commands.AutoVert;
-import frc.robot.Commands.BalanceCommand;
-import frc.robot.Commands.TogglePneumatics;
+import frc.robot.Commands.AutoCommands.AutoReach;
+import frc.robot.Commands.AutoCommands.AutoSusan;
+import frc.robot.Commands.AutoCommands.AutoVert;
+import frc.robot.Commands.AutoCommands.BalanceCommand;
+import frc.robot.Commands.ManipulatorCommands.TogglePneumatics;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Subsystems.Pneumatics;
@@ -28,10 +28,6 @@ import frc.robot.Subsystems.Swerve;
 import frc.robot.Subsystems.VertArm;
 
 public final class AutoContainer {
-    public static double vertArmHeight;
-    public static double susanHeading;
-    public static double reachTime;
-
     private Pneumatics pneumatics;
     private VertArm vertArm;
     private ReachArmSub reachArmSub;
@@ -139,10 +135,15 @@ public final class AutoContainer {
         leftTop(Constants.SUSAN_LEFT_HEADING, Constants.VERT_TOP_SHELF_PLACEMENT_ENC, Constants.REACH_TOP_TIME),
         leftMiddle(Constants.SUSAN_LEFT_HEADING, Constants.VERT_MIDDLE_SHELF_PLACEMENT_ENC, Constants.REACH_MIDDLE_TIME),
         leftBottom(Constants.SUSAN_LEFT_HEADING, Constants.VERT_BOTTOM_SHELF_PLACEMENT_ENC, Constants.REACH_BOTTOM_TIME);
+        
+        private double susanHeading;
+        private double vertArmHeight;
+        private double reachTime;
+        
         private PlacementSettings(double headingPassIn, double heightPassIn, double timePassIn){
-            susanHeading = headingPassIn;
-            vertArmHeight = heightPassIn;
-            reachTime = timePassIn;
+            this.susanHeading = headingPassIn;
+            this.vertArmHeight = heightPassIn;
+            this.reachTime = timePassIn;
         }
         public double getHeading(){
             return susanHeading;

@@ -1,34 +1,40 @@
-/*package frc.robot.Subsystems;
+// package frc.robot.Subsystems;
 
-import com.ctre.phoenix.led.CANdle;
-import com.ctre.phoenix.led.CANdleConfiguration;
-import com.ctre.phoenix.led.RainbowAnimation;
-import com.ctre.phoenix.led.CANdle.LEDStripType;
+// import edu.wpi.first.wpilibj.AddressableLED;
+// import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+// import edu.wpi.first.wpilibj2.command.SubsystemBase;
+// import frc.robot.Constants;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+// public class LEDs extends SubsystemBase {
 
-public class LEDs extends SubsystemBase {
-    private final CANdle lights = new CANdle(Constants.LED_CAN_ID);
-    private final CANdleConfiguration configLight = new CANdleConfiguration();
+//     private AddressableLED lights;
+//     private AddressableLEDBuffer LEDBuffer;
+//     public LEDs(int LEDCount){
+//         lights = new AddressableLED(Constants.LED_CAN_ID);
+//         LEDBuffer = new AddressableLEDBuffer(LEDCount);
+//         lights.setLength(LEDCount);
+//     }
 
-    public LEDs(double brightness) { // brightness is 0-1 reflecting 0-100%
-        configLight.stripType = LEDStripType.RGB;
-        configLight.brightnessScalar = brightness;
-        lights.configAllSettings(configLight);
-    }
+//     public void dataSetter(){
+//         lights.setData(LEDBuffer);
+//         lights.start();
+//     }
 
-    public void setColor(int R, int G, int B) {
-        lights.setLEDs(R, G, B);
-    }
-
-    public void changeBrightness(double brightness) {
-        configLight.brightnessScalar = brightness;
-    }
-
-    public void rainbowLights(double brightness, double speed, int numberOfLights) {
-        RainbowAnimation rainbow = new RainbowAnimation(brightness, speed, numberOfLights);
-        lights.animate(rainbow);
-    }
-}
-**/
+//     public void setOneLightRGB(int index, int R, int G, int B){
+//         LEDBuffer.setRGB(index, R, G, B);
+//     }
+//     public void setLights(int start, int end, int R, int G, int B){
+//         for(int i = start; i < end; i++){
+//             setOneLightRGB(i, R, G, B);
+//         }
+//     }
+//     public void turnLightsOff(){
+//         for(int i = 0; i < LEDBuffer.getLength(); i++){
+//             setOneLightRGB(i, 0, 0, 0);
+//         }
+//     }
+//     @Override
+//     public void periodic() {
+//         dataSetter();
+//     }
+// }

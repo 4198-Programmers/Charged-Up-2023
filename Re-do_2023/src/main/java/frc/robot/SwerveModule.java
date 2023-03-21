@@ -27,11 +27,14 @@ public class SwerveModule {
   private final CANCoder  absoluteEncoder;
 
 
-  public SwerveModule(int driveMotorID, int angleMotorID, int absoluteEncoderID, double absoluteEncoderOffset){
+  public SwerveModule(
+    int driveMotorID, 
+    int angleMotorID, 
+    int absoluteEncoderID, 
+    double absoluteEncoderOffset){
     absoluteEncoder = new CANCoder(absoluteEncoderID);
+
     offset = Rotation2d.fromRotations(absoluteEncoderOffset);
-
-
 
     CANCoderConfiguration angleEncoderConfiguration = Swerve.ctreConfigs.coderConfiguration;
     angleEncoderConfiguration.magnetOffsetDegrees = -offset.getRotations();
@@ -68,17 +71,8 @@ public class SwerveModule {
     return absoluteEncoder.getAbsolutePosition();
   }
 
-  public Rotation2d getAngle(){
-    return Rotation2d.fromDegrees(getAbsoluteEncoderPosition());
-  }
-
   public Rotation2d getRotation(){
     return Rotation2d.fromRotations(MathUtil.inputModulus(getAnglePosition(), -0.5, 0.5));
-  }
-  
-  public void resetEncoders(){
-    driveEncoder.setPosition(0);
-    angleEncoder.setPosition(getState().angle.getRadians());
   }
 
   public SwerveModuleState getState(){
@@ -89,15 +83,31 @@ public class SwerveModule {
     return new SwerveModulePosition(getDrivePosition(), getRotation());
   }
 
-  public void setDesiredState(SwerveModuleState state){
-    if(Math.abs(state.speedMetersPerSecond) < 0.001){
+  public void resetEncoders(){
+    driveEncoder.setPosition(0);
+    angleEncoder.setPosition(getState().angle.getRadians());
+  }
+
+  public void setDesiredState(SwerveModuleState desiredState){
+    if(Math.abs(desiredState.speedMetersPerSecond) < 0.001){
       stop();
       return;
     }
-    state = SwerveModuleState.optimize(state, getState().angle);
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState, getRotation());
     driveMotor.set(state.speedMetersPerSecond / AutoConstants.kMaxSpeedMetersPerSecond);
-    angleMotor.set(anglePIDController.calculate(getAnglePosition(), state.angle.getRadians()));
+    angleMotor.set(anglePIDController.calculate(getAnglePosition(), MathUtil.inputModulus(state.angle.getRotations(), -0.5, 0.5)));
   }
+  
+//Original, but want to try the one above.
+  // public void setDesiredState(SwerveModuleState state){
+  //   if(Math.abs(state.speedMetersPerSecond) < 0.001){
+  //     stop();
+  //     return;
+  //   }
+  //   state = SwerveModuleState.optimize(state, getState().angle);
+  //   driveMotor.set(state.speedMetersPerSecond / AutoConstants.kMaxSpeedMetersPerSecond);
+  //   angleMotor.set(anglePIDController.calculate(getAnglePosition(), state.angle.getRotations()));
+  // }
 
   public void stop(){
     driveMotor.set(0);
