@@ -16,12 +16,13 @@ public class TimedAuto extends CommandBase {
     private long timeToRun;
     private double vx;
     private double vy;
+    private double vz;
     private ChassisSpeeds toSwerveSpeeds;
     boolean isFinished;
     boolean flipPath;
     long currentTime;
 
-    public TimedAuto(DriveTrain driveTrain, long timeToRun, double vx, double vy) {
+    public TimedAuto(DriveTrain driveTrain, long timeToRun, double vx, double vy, double vz) {
         this.driveTrain = driveTrain;
         this.timeToRun = timeToRun;
         this.vx = vx;
@@ -40,11 +41,9 @@ public class TimedAuto extends CommandBase {
         currentTime = System.currentTimeMillis();
 
         if (currentTime < timeEnd) {
-            toSwerveSpeeds = new ChassisSpeeds(vx, vy, 0);
-            driveTrain.drive(toSwerveSpeeds);
+            driveTrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vz, driveTrain.getGyroRotation(true)));
         } else {
-            toSwerveSpeeds = new ChassisSpeeds(0, 0, 0);
-            driveTrain.drive(toSwerveSpeeds);
+            driveTrain.drive(new ChassisSpeeds(0, 0, 0));
             isFinished = true;
             System.out.println("Stop Auto");
         }

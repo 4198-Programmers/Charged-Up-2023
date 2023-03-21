@@ -95,8 +95,13 @@ public class DriveTrain extends SubsystemBase {
                 NavX.zeroYaw();
         }
 
+        public void resetGyro(){
+                NavX.calibrate();
+        }
+
         // We are passing in a boolean so that it can easily switch from field to robot
         // orientation.
+        // true is field oriented
         public Rotation2d getGyroRotation(boolean fieldOrientation) { // Manually returns the gyro position as a
                                                                       // Rotation2d so that wpi can use
                 // it to do math for us
@@ -115,6 +120,10 @@ public class DriveTrain extends SubsystemBase {
 
         }
 
+        public float getYaw() {
+                return (NavX.getYaw());
+        }
+
         public float getPitch() {
                 float pitch = NavX.getPitch();
                 return pitch;
@@ -124,7 +133,7 @@ public class DriveTrain extends SubsystemBase {
                 return NavX.getWorldLinearAccelX();
         }
 
-        public float getYAccel(){
+        public float getYAccel() {
                 return NavX.getWorldLinearAccelY();
         }
 
@@ -155,7 +164,7 @@ public class DriveTrain extends SubsystemBase {
                 // makes sure the wheels aren't passed a speed faster than they can go
                 SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
                 // puts the gyro angle on the dashboard for debugging
-                SmartDashboard.putNumber("Gyro Angle", NavX.getAngle());
+                SmartDashboard.putNumber("Gyro Angle", NavX.getYaw());
 
                 // sets each wheel to their assigned speed from an array, this must be done in
                 // the same order as the kinematic was made

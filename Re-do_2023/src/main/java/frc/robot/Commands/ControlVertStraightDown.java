@@ -47,7 +47,7 @@ public class ControlVertStraightDown extends CommandBase {
         reachWantedPos = (r + initialReachPos)
                 * (1 - (b * Math.cos(a * vertArmPos)));
 
-        if (vertArmPos <= 7.925 && wantedSpeed > 0.05) {
+        if (vertArmPos <= 8.25 && wantedSpeed > 0.05) {
             vertArm.moveArm(wantedSpeed);
         } else if (vertArmPos > 0 && wantedSpeed < -0.05) {
             vertArm.moveArm(wantedSpeed);

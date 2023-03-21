@@ -20,6 +20,7 @@ import frc.robot.Commands.SlowManualFollowAuto;
 import frc.robot.Commands.StopArm;
 import frc.robot.Commands.TimedAuto;
 import frc.robot.Commands.TogglePneumatics;
+import frc.robot.Commands.ZeroRobotHeading;
 import frc.robot.Commands.ZeroSusan;
 import frc.robot.Commands.ZeroVert;
 import frc.robot.Tags.CenterSusanPhoton;
@@ -208,13 +209,10 @@ public class SinglePaths /* extends CommandBase */ {
                                                 Constants.PLACE_TOP_VERT)
                                                 .alongWith(new AutoReach(reachArm,
                                                                 Constants.AUTO_REACH_SPEED,
-                                                                Constants.TOP_REACH_PLACEMENT))
+                                                                Constants.TOP_REACH_RIGHT_PLACEMENT))
                                                 .alongWith(new AutoRunIntake(intake, Constants.INTAKE_IN_SPEED))
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED,
                                                                 Constants.RIGHT_TOP_PLACEMENT_SUSAN)))
-                                // .andThen(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED,
-                                // Constants.RIGHT_TOP_PLACEMENT_SUSAN)
-                                // .alongWith(new AutoRunIntake(intake, Constants.INTAKE_IN_SPEED)))
                                 .andThen(new WaitCommand(0.5))
                                 .andThen(new AutoRunIntake(intake, Constants.INTAKE_OUT_SPEED))
                                 .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0))
@@ -229,13 +227,10 @@ public class SinglePaths /* extends CommandBase */ {
                                                 Constants.PLACE_TOP_VERT)
                                                 .alongWith(new AutoReach(reachArm,
                                                                 Constants.AUTO_REACH_SPEED,
-                                                                Constants.TOP_REACH_PLACEMENT))
+                                                                Constants.TOP_REACH_LEFT_PLACEMENT))
                                                 .alongWith(new AutoRunIntake(intake, Constants.INTAKE_IN_SPEED))
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED,
                                                                 Constants.LEFT_TOP_PLACEMENT_SUSAN)))
-                                // .andThen(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED,
-                                // Constants.LEFT_TOP_PLACEMENT_SUSAN)
-                                // .alongWith(new AutoRunIntake(intake, Constants.INTAKE_IN_SPEED)))
                                 .andThen(new WaitCommand(0.5))
                                 .andThen(new AutoRunIntake(intake, Constants.INTAKE_OUT_SPEED))
                                 .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0))
@@ -375,17 +370,18 @@ public class SinglePaths /* extends CommandBase */ {
         private SequentialCommandGroup PlaceDriveChargeLeftNoCable() { // Left No Cable
                 return new SequentialCommandGroup(new PrintCommand("Place Drive Charge")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                Constants.PLACE_TOP_VERT))
-                                .andThen(new TimedAuto(driveTrain, 1250, -0.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 750, 0, -0.5))
+                                                Constants.PLACE_TOP_VERT).raceWith(new WaitCommand(2)))
+                                .andThen(new TimedAuto(driveTrain, 1250, 0, -0.5, 0))
+                                .andThen(new TimedAuto(driveTrain, 750, 0.5, 0, 0))
                                 .andThen(PlaceTopRightElementGroup())
-                                .andThen(new TimedAuto(driveTrain, 3000, 1.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 1500, 0, -1.1)
+                                .andThen(new TimedAuto(driveTrain, 3000, 0, 2, 0))
+                                .andThen(new TimedAuto(driveTrain, 1500, 2, 0, 0)
                                                 .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS))
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
+                                .andThen(new ZeroRobotHeading(driveTrain).raceWith(new WaitCommand(1)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 1815, -1.1, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 1500, 0, -1.25, 0)))
                                 .andThen(new Balance(driveTrain))
                                 .andThen(new SlightTurnDrive(driveTrain)));
 
@@ -395,12 +391,13 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Place Charge")
                                 .andThen(new ZeroSusan(lazySusan).alongWith(new ZeroVert(vertArm)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                Constants.PLACE_TOP_VERT))
-                                .andThen(new TimedAuto(driveTrain, 1250, -0.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 750, 0, -0.5))
+                                                Constants.PLACE_TOP_VERT)
+                                                .raceWith(new WaitCommand(2)))
+                                .andThen(new TimedAuto(driveTrain, 1250, 0, -0.5, 0))
+                                .andThen(new TimedAuto(driveTrain, 750, 0.5, 0, 0))
                                 .andThen(PlaceTopRightElementGroup())
-                                .andThen(new TimedAuto(driveTrain, 1000, 1.25, 0))
-                                .andThen(new TimedAuto(driveTrain, 1950, 1.25, 0)
+                                .andThen(new TimedAuto(driveTrain, 1000, 0, 1.25, 0))
+                                .andThen(new TimedAuto(driveTrain, 1950, 0, 1.25, 0)
                                                 .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS))
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
@@ -414,17 +411,19 @@ public class SinglePaths /* extends CommandBase */ {
         private SequentialCommandGroup PlaceDriveChargeRightNoCable() {
                 return new SequentialCommandGroup(new PrintCommand("Charge Right")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                Constants.PLACE_TOP_VERT))
-                                .andThen(new TimedAuto(driveTrain, 1250, -0.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 750, 0, -0.5))
+                                                Constants.PLACE_TOP_VERT)
+                                                .raceWith(new WaitCommand(2)))
+                                .andThen(new TimedAuto(driveTrain, 750, 0, -0.75, 0))
+                                .andThen(new TimedAuto(driveTrain, 250, 1, 0, 0))
                                 .andThen(PlaceTopLeftElementGroup())
-                                .andThen(new TimedAuto(driveTrain, 3000, 1.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 1500, 0, 1.1)
-                                                .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                                Constants.VERT_SAFE_TO_SPIN_ENC_POS))
+                                .andThen(new TimedAuto(driveTrain, 2000, 0, 2.5, 0))
+                                .andThen((new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+                                                Constants.VERT_SAFE_TO_SPIN_ENC_POS)
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 750, -2.5, 0, 0)))
+                                .andThen(new ZeroRobotHeading(driveTrain).raceWith(new WaitCommand(1)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 1815, -1.1, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 1500, 0, -1.25, 0)))
                                 .andThen(new Balance(driveTrain))
                                 .andThen(new SlightTurnDrive(driveTrain)));
 
@@ -433,17 +432,18 @@ public class SinglePaths /* extends CommandBase */ {
         private SequentialCommandGroup PlaceDriveChargeLeftCable() {
                 return new SequentialCommandGroup(new PrintCommand("Charge Left")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                Constants.PLACE_TOP_VERT))
-                                .andThen(new TimedAuto(driveTrain, 1250, -0.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 750, 0, -0.5))
+                                                Constants.PLACE_TOP_VERT).raceWith(new WaitCommand(2)))
+                                .andThen(new TimedAuto(driveTrain, 1250, 0, -0.5, 0))
+                                .andThen(new TimedAuto(driveTrain, 750, 0.5, 0, 0))
                                 .andThen(PlaceTopRightElementGroup())
-                                .andThen(new TimedAuto(driveTrain, 3500, 1.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 1500, 0, -1.1)
+                                .andThen(new TimedAuto(driveTrain, 3500, 0, 1.5, 0))
+                                .andThen(new TimedAuto(driveTrain, 2000, 1.5, 0, 0)
                                                 .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS))
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
+                                .andThen(new ZeroRobotHeading(driveTrain).raceWith(new WaitCommand(1)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 1815, -1.1, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 1815, 0, -1.1, 0)))
                                 .andThen(new Balance(driveTrain))
                                 .andThen(new SlightTurnDrive(driveTrain)));
 
@@ -452,17 +452,18 @@ public class SinglePaths /* extends CommandBase */ {
         private SequentialCommandGroup PlaceDriveChargeRightCable() {
                 return new SequentialCommandGroup(new PrintCommand("Charge Right")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                Constants.PLACE_TOP_VERT))
-                                .andThen(new TimedAuto(driveTrain, 1250, -0.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 750, 0, -0.5))
+                                                Constants.PLACE_TOP_VERT).raceWith(new WaitCommand(2)))
+                                .andThen(new TimedAuto(driveTrain, 1250, 0, -0.5, 0))
+                                .andThen(new TimedAuto(driveTrain, 750, 0.5, 0, 0))
                                 .andThen(PlaceTopLeftElementGroup())
-                                .andThen(new TimedAuto(driveTrain, 3500, 1.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 1500, 0, 1.1)
+                                .andThen(new TimedAuto(driveTrain, 3500, 0, 1.5, 0))
+                                .andThen(new TimedAuto(driveTrain, 1500, -1.1, 0, 0)
                                                 .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS))
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
+                                .andThen(new ZeroRobotHeading(driveTrain).raceWith(new WaitCommand(1)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 1815, -1.1, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 1815, 0, -1.1, 0)))
                                 .andThen(new Balance(driveTrain))
                                 .andThen(new SlightTurnDrive(driveTrain)));
 
@@ -471,17 +472,19 @@ public class SinglePaths /* extends CommandBase */ {
         private SequentialCommandGroup PlaceDriveChargeMid() { // Mid
                 return new SequentialCommandGroup(new PrintCommand("Charge Mid")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                Constants.PLACE_TOP_VERT))
-                                .andThen(new TimedAuto(driveTrain, 1250, -0.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 750, 0, -0.5))
+                                                Constants.PLACE_TOP_VERT).raceWith(new WaitCommand(2)))
+                                .andThen(new TimedAuto(driveTrain, 1250, 0, -0.5, 0))
+                                .andThen(new TimedAuto(driveTrain, 750, 0.5, 0, 0))
                                 .andThen(PlaceTopRightElementGroup())
-                                .andThen(new TimedAuto(driveTrain, 2500, 1.1, 0))
-                                .andThen(new TimedAuto(driveTrain, 2500, 1.1, 0)
+                                .andThen(new TimedAuto(driveTrain, 25, 0, 0, -2))
+                                .andThen(new TimedAuto(driveTrain, 2500, 0, 1.1, 0))
+                                .andThen(new TimedAuto(driveTrain, 2500, 0, 1.1, 0)
                                                 .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS))
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
+                                .andThen(new ZeroRobotHeading(driveTrain).raceWith(new WaitCommand(1)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 2950, -1.1, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 2950, 0, -1.1, 0)))
                                 .andThen(new Balance(driveTrain))
                                 .andThen(new SlightTurnDrive(driveTrain)));
 
@@ -490,16 +493,18 @@ public class SinglePaths /* extends CommandBase */ {
         private SequentialCommandGroup PlaceDriveNew() {
                 return new SequentialCommandGroup(new PrintCommand("Place Drive")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-                                                Constants.PLACE_TOP_VERT))
-                                .andThen(new TimedAuto(driveTrain, 1250, -0.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 750, 0, -0.5))
+                                                Constants.PLACE_TOP_VERT).raceWith(new WaitCommand(2)))
+                                .andThen(new TimedAuto(driveTrain, 1250, 0, -0.5, 0))
+                                .andThen(new TimedAuto(driveTrain, 750, 0.5, 0, 0))
                                 .andThen(PlaceTopRightElementGroup())
-                                .andThen(new TimedAuto(driveTrain, 4000, 1.1, 0)));
+                                .andThen(new TimedAuto(driveTrain, 2000, 0, 1.5, 0))
+                                .andThen(new ZeroRobotHeading(driveTrain).raceWith(new WaitCommand(1)))
+                                .andThen(new TimedAuto(driveTrain, 2000, 0, 1.5, 0)));
         }
 
         private SequentialCommandGroup JustDrive() {
                 return new SequentialCommandGroup(new PrintCommand("Just Drive")
-                                .andThen(new TimedAuto(driveTrain, 4000, 1.1, 0)));
+                                .andThen(new TimedAuto(driveTrain, 4000, 0, 1.5, 0)));
         }
 
         // private SequentialCommandGroup RunOneElement() {

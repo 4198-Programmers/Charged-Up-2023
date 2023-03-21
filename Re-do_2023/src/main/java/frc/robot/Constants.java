@@ -60,6 +60,7 @@ public final class Constants {
         public static final int NO_SLIP_DRIVE_BUTTON = 2;
         public static final int TEST_SUSAN_PHOTON = 7;
         public static final int TEST_DRIVE_CENTER_PHOTON = 8;
+        public static final int TEST_ZERO_DRIVE_HEADING_BUTTON = 9;
         public static final int APRIL_TAG_TEST_BUTTON = 11;
         public static final int CHANGE_DRIVE_QUARTER_SPEED_BUTTON = 3;
         public static final int CHANGE_DRIVE_FULL_SPEED_BUTTON = 5;
@@ -86,7 +87,7 @@ public final class Constants {
         public static final float PITCH_OFFSET = 5; // Must be a float for the gyro values
 
         // Auto Values
-        public static final double AUTO_VERT_SPEED = 0.75,
+        public static final double AUTO_VERT_SPEED = 1,
                         MAX_VELOCITY_METERS_PER_SECOND = 4,
                         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3,
                         VERT_SAFE_TO_SPIN_ENC_POS = 3.67, // printed at 0.5, better safe than broken
@@ -127,13 +128,14 @@ public final class Constants {
                         WANTED_SKEW_RIGHT = 0;
         public static final double REACH_ENCODER_WHEEL_DIAMETER = 0.25,
                         REACH_ENCODER_TOLERANCE = 25,
-                        TOP_REACH_PLACEMENT = 5250,
-                        PLACE_TOP_VERT = 7.97,
+                        TOP_REACH_LEFT_PLACEMENT = 3535,
+                        TOP_REACH_RIGHT_PLACEMENT = 4250,
+                        PLACE_TOP_VERT = 8.15,
                         PLACE_MID_VERT = 7.05,
-                        MID_REACH_PLACEMENT = 300,
+                        MID_REACH_PLACEMENT = 0,
                         RIGHT_MID_PLACEMENT_SUSAN = -5.57,
                         LEFT_MID_PLACEMENT_SUSAN = 6.64,
-                        RIGHT_TOP_PLACEMENT_SUSAN = -3.78,
+                        RIGHT_TOP_PLACEMENT_SUSAN = -4,
                         LEFT_TOP_PLACEMENT_SUSAN = 4,
                         SUBSTATION_UP_POS_VERT = 7.92;
 
