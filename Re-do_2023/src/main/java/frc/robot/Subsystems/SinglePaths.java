@@ -312,12 +312,12 @@ public class SinglePaths /* extends CommandBase */ {
                                 .andThen(new TimedAuto(driveTrain, 750, 0, -0.75, 0, 0))
                                 .andThen(new TimedAuto(driveTrain, 250, 1, 0, 0, 0))
                                 .andThen(PlaceTopRightElementGroup())
-                                .andThen(new TimedAuto(driveTrain, 3000, 0, 2, 0, 0))
+                                .andThen(new TimedAuto(driveTrain, 2000, 0, 2.5, 0, 0)) // drive out past station
                                 .andThen((new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS) // pulls arm down to balance easier
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
                                                 // spins susan so arm can sit in robot
-                                                .raceWith(new TimedAuto(driveTrain, 750, -2.5, 0, 0, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 750, 2.5, 0, 0, 0)))
                                 .andThen(new SetRobotHeading(driveTrain, 0).raceWith(new WaitCommand(1)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0) // move arm in to safety
                                                 .raceWith(new TimedAuto(driveTrain, 1500, 0, -1.25, 0, 0)))
@@ -380,12 +380,12 @@ public class SinglePaths /* extends CommandBase */ {
                                 .andThen(new TimedAuto(driveTrain, 750, 0, -0.75, 0, 0))
                                 .andThen(new TimedAuto(driveTrain, 250, 1, 0, 0, 0))
                                 .andThen(PlaceTopRightElementGroup())
-                                .andThen(new TimedAuto(driveTrain, 3500, 0, 1.5, 0, 0))
+                                .andThen(new TimedAuto(driveTrain, 2000, 0, 2.5, 0, 0)) // drive out past station
                                 .andThen((new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS) // pulls arm down to balance easier
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
                                                 // spins susan so arm can sit in robot
-                                                .raceWith(new TimedAuto(driveTrain, 750, -2.5, 0, 0, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 750, 2.5, 0, 0, 0)))
                                 .andThen(new SetRobotHeading(driveTrain, 0).raceWith(new WaitCommand(1)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0) // move arm in to safety
                                                 .raceWith(new TimedAuto(driveTrain, 1500, 0, -1.25, 0, 0)))
@@ -402,7 +402,7 @@ public class SinglePaths /* extends CommandBase */ {
                                 .andThen(new TimedAuto(driveTrain, 750, 0, -0.75, 0, 0))
                                 .andThen(new TimedAuto(driveTrain, 250, 1, 0, 0, 0))
                                 .andThen(PlaceTopLeftElementGroup())
-                                .andThen(new TimedAuto(driveTrain, 3500, 0, 1.5, 0, 0))
+                                .andThen(new TimedAuto(driveTrain, 2000, 0, 2.5, 0, 0)) // drive out past station
                                 .andThen((new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS) // pulls arm down to balance easier
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
@@ -445,8 +445,8 @@ public class SinglePaths /* extends CommandBase */ {
                                 .andThen(new TimedAuto(driveTrain, 750, 0, -0.75, 0, 0))
                                 .andThen(new TimedAuto(driveTrain, 250, 1, 0, 0, 0))
                                 .andThen(PlaceTopRightElementGroup())
-                                .andThen(new TimedAuto(driveTrain, 2000, 0, 1.5, 0, 0))
-                                .andThen(new TimedAuto(driveTrain, 2000, 0, 1.5, 0, 0)));
+                                .andThen(new TimedAuto(driveTrain, 2000, 0, 2.5, 0, 0))); // drive out past station
+
         }
 
         private SequentialCommandGroup JustDrive() {

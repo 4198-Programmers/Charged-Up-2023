@@ -31,8 +31,8 @@ public class ControlArm extends CommandBase {
         } else if (vertArm.getLocation() > 0 && wantedSpeed < -0.05) {
             vertArm.moveArm(wantedSpeed);
         } else {
-            vertArm.moveArm(.25*wantedSpeed);
-        }    
+            vertArm.moveArm(.25 * wantedSpeed);
+        }
         // System.out.println("Arm Speed: " + vertArm.getSpeed());
         // System.out.println("Vert Arm Position: " + vertArm.getPosition());
     }
