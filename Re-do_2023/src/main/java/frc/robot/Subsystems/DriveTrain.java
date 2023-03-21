@@ -98,6 +98,9 @@ public class DriveTrain extends SubsystemBase {
         public void resetGyro(){
                 NavX.calibrate();
         }
+        public boolean calibratingGyro(){
+                return NavX.isCalibrating();
+        }
 
         // We are passing in a boolean so that it can easily switch from field to robot
         // orientation.
@@ -153,6 +156,7 @@ public class DriveTrain extends SubsystemBase {
 
         public void drive(ChassisSpeeds speeds) { // passes in speeds to be used in periodic
                 // System.out.println(getPitch());
+                System.out.println("Gyro Calibrating: " + calibratingGyro());
                 chassisSpeeds = speeds;
         }
 
