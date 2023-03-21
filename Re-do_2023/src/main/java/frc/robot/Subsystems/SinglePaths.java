@@ -371,8 +371,8 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Place Drive Charge")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                 Constants.PLACE_TOP_VERT).raceWith(new WaitCommand(2)))
-                                .andThen(new TimedAuto(driveTrain, 1250, 0, -0.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 750, 0.5, 0, 0))
+                                .andThen(new TimedAuto(driveTrain, 750, 0, -0.75, 0))
+                                .andThen(new TimedAuto(driveTrain, 250, 1, 0, 0))
                                 .andThen(PlaceTopRightElementGroup())
                                 .andThen(new TimedAuto(driveTrain, 3000, 0, 2, 0))
                                 .andThen(new TimedAuto(driveTrain, 1500, 2, 0, 0)
@@ -393,8 +393,8 @@ public class SinglePaths /* extends CommandBase */ {
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                 Constants.PLACE_TOP_VERT)
                                                 .raceWith(new WaitCommand(2)))
-                                .andThen(new TimedAuto(driveTrain, 1250, 0, -0.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 750, 0.5, 0, 0))
+                                .andThen(new TimedAuto(driveTrain, 750, 0, -0.75, 0))
+                                .andThen(new TimedAuto(driveTrain, 250, 1, 0, 0))
                                 .andThen(PlaceTopRightElementGroup())
                                 .andThen(new TimedAuto(driveTrain, 1000, 0, 1.25, 0))
                                 .andThen(new TimedAuto(driveTrain, 1950, 0, 1.25, 0)
@@ -408,7 +408,7 @@ public class SinglePaths /* extends CommandBase */ {
 
         }
 
-        private SequentialCommandGroup PlaceDriveChargeRightNoCable() {
+        private SequentialCommandGroup PlaceDriveChargeRightNoCable() { //fast one
                 return new SequentialCommandGroup(new PrintCommand("Charge Right")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                 Constants.PLACE_TOP_VERT)
@@ -433,8 +433,8 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Charge Left")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                 Constants.PLACE_TOP_VERT).raceWith(new WaitCommand(2)))
-                                .andThen(new TimedAuto(driveTrain, 1250, 0, -0.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 750, 0.5, 0, 0))
+                                .andThen(new TimedAuto(driveTrain, 750, 0, -0.75, 0))
+                                .andThen(new TimedAuto(driveTrain, 250, 1, 0, 0))
                                 .andThen(PlaceTopRightElementGroup())
                                 .andThen(new TimedAuto(driveTrain, 3500, 0, 1.5, 0))
                                 .andThen(new TimedAuto(driveTrain, 2000, 1.5, 0, 0)
@@ -453,8 +453,8 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Charge Right")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                 Constants.PLACE_TOP_VERT).raceWith(new WaitCommand(2)))
-                                .andThen(new TimedAuto(driveTrain, 1250, 0, -0.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 750, 0.5, 0, 0))
+                                .andThen(new TimedAuto(driveTrain, 750, 0, -0.75, 0))
+                                .andThen(new TimedAuto(driveTrain, 250, 1, 0, 0))
                                 .andThen(PlaceTopLeftElementGroup())
                                 .andThen(new TimedAuto(driveTrain, 3500, 0, 1.5, 0))
                                 .andThen(new TimedAuto(driveTrain, 1500, -1.1, 0, 0)
@@ -473,8 +473,8 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Charge Mid")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                 Constants.PLACE_TOP_VERT).raceWith(new WaitCommand(2)))
-                                .andThen(new TimedAuto(driveTrain, 1250, 0, -0.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 750, 0.5, 0, 0))
+                                .andThen(new TimedAuto(driveTrain, 750, 0, -0.75, 0))
+                                .andThen(new TimedAuto(driveTrain, 250, 1, 0, 0))
                                 .andThen(PlaceTopRightElementGroup())
                                 .andThen(new TimedAuto(driveTrain, 25, 0, 0, -2))
                                 .andThen(new TimedAuto(driveTrain, 2500, 0, 1.1, 0))
@@ -494,8 +494,8 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Place Drive")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                 Constants.PLACE_TOP_VERT).raceWith(new WaitCommand(2)))
-                                .andThen(new TimedAuto(driveTrain, 1250, 0, -0.5, 0))
-                                .andThen(new TimedAuto(driveTrain, 750, 0.5, 0, 0))
+                                .andThen(new TimedAuto(driveTrain, 750, 0, -0.75, 0))
+                                .andThen(new TimedAuto(driveTrain, 250, 1, 0, 0))
                                 .andThen(PlaceTopRightElementGroup())
                                 .andThen(new TimedAuto(driveTrain, 2000, 0, 1.5, 0))
                                 .andThen(new ZeroRobotHeading(driveTrain).raceWith(new WaitCommand(1)))
