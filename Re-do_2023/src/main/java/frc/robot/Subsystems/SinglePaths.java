@@ -20,7 +20,7 @@ import frc.robot.Commands.SlowManualFollowAuto;
 import frc.robot.Commands.StopArm;
 import frc.robot.Commands.TimedAuto;
 import frc.robot.Commands.TogglePneumatics;
-import frc.robot.Commands.ZeroRobotHeading;
+import frc.robot.Commands.SetRobotHeading;
 import frc.robot.Commands.ZeroSusan;
 import frc.robot.Commands.ZeroVert;
 import frc.robot.Tags.CenterSusanPhoton;
@@ -379,7 +379,7 @@ public class SinglePaths /* extends CommandBase */ {
                                                 .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS))
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
-                                .andThen(new ZeroRobotHeading(driveTrain).raceWith(new WaitCommand(1)))
+                                .andThen(new SetRobotHeading(driveTrain, 0).raceWith(new WaitCommand(1)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
                                                 .raceWith(new TimedAuto(driveTrain, 1500, 0, -1.25, 0)))
                                 .andThen(new Balance(driveTrain))
@@ -421,7 +421,7 @@ public class SinglePaths /* extends CommandBase */ {
                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS)
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
                                                 .raceWith(new TimedAuto(driveTrain, 750, -2.5, 0, 0)))
-                                .andThen(new ZeroRobotHeading(driveTrain).raceWith(new WaitCommand(1)))
+                                .andThen(new SetRobotHeading(driveTrain, 0).raceWith(new WaitCommand(1)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
                                                 .raceWith(new TimedAuto(driveTrain, 1500, 0, -1.25, 0)))
                                 .andThen(new Balance(driveTrain))
@@ -441,7 +441,7 @@ public class SinglePaths /* extends CommandBase */ {
                                                 .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS))
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
-                                .andThen(new ZeroRobotHeading(driveTrain).raceWith(new WaitCommand(1)))
+                                .andThen(new SetRobotHeading(driveTrain, 0).raceWith(new WaitCommand(1)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
                                                 .raceWith(new TimedAuto(driveTrain, 1815, 0, -1.1, 0)))
                                 .andThen(new Balance(driveTrain))
@@ -461,7 +461,7 @@ public class SinglePaths /* extends CommandBase */ {
                                                 .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS))
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
-                                .andThen(new ZeroRobotHeading(driveTrain).raceWith(new WaitCommand(1)))
+                                .andThen(new SetRobotHeading(driveTrain, 0).raceWith(new WaitCommand(1)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
                                                 .raceWith(new TimedAuto(driveTrain, 1815, 0, -1.1, 0)))
                                 .andThen(new Balance(driveTrain))
@@ -482,7 +482,7 @@ public class SinglePaths /* extends CommandBase */ {
                                                 .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS))
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
-                                .andThen(new ZeroRobotHeading(driveTrain).raceWith(new WaitCommand(1)))
+                                .andThen(new SetRobotHeading(driveTrain, 0).raceWith(new WaitCommand(1)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
                                                 .raceWith(new TimedAuto(driveTrain, 2950, 0, -1.1, 0)))
                                 .andThen(new Balance(driveTrain))
@@ -498,7 +498,7 @@ public class SinglePaths /* extends CommandBase */ {
                                 .andThen(new TimedAuto(driveTrain, 750, 0.5, 0, 0))
                                 .andThen(PlaceTopRightElementGroup())
                                 .andThen(new TimedAuto(driveTrain, 2000, 0, 1.5, 0))
-                                .andThen(new ZeroRobotHeading(driveTrain).raceWith(new WaitCommand(1)))
+                                .andThen(new SetRobotHeading(driveTrain, 0).raceWith(new WaitCommand(1)))
                                 .andThen(new TimedAuto(driveTrain, 2000, 0, 1.5, 0)));
         }
 

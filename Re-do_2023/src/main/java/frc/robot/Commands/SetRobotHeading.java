@@ -4,13 +4,16 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.DriveTrain;
 
-public class ZeroRobotHeading extends CommandBase {
+public class SetRobotHeading extends CommandBase {
     DriveTrain driveTrain;
     boolean done;
     float gyroRotation;
+    double wantedDegrees;
 
-    public ZeroRobotHeading(DriveTrain driveTrain) {
+    public SetRobotHeading(DriveTrain driveTrain, double wantedDegrees) {
         this.driveTrain = driveTrain;
+        this.wantedDegrees = wantedDegrees;
+        addRequirements(driveTrain);
     }
 
     @Override
@@ -23,10 +26,10 @@ public class ZeroRobotHeading extends CommandBase {
         gyroRotation = driveTrain.getYaw(); 
 
         System.out.println("straightening");
-        if (gyroRotation < -3) {
+        if (gyroRotation < wantedDegrees - 3) {
             driveTrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 1, 
             driveTrain.getGyroRotation(true)));
-        } else if(gyroRotation > 3){
+        } else if(gyroRotation > wantedDegrees + 3){
             driveTrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, -1, 
             driveTrain.getGyroRotation(true)));
         } else{
