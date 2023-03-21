@@ -21,12 +21,16 @@ public class TimedAuto extends CommandBase {
     boolean isFinished;
     boolean flipPath;
     long currentTime;
+    double gyroRotation;
+    double wantedDegrees;
+    double vzAdd;
 
-    public TimedAuto(DriveTrain driveTrain, long timeToRun, double vx, double vy, double vz) {
+    public TimedAuto(DriveTrain driveTrain, long timeToRun, double vx, double vy, double vz, double wantedDegrees) {
         this.driveTrain = driveTrain;
         this.timeToRun = timeToRun;
         this.vx = vx;
         this.vy = vy;
+        this.wantedDegrees = wantedDegrees;
         addRequirements(driveTrain);
     }
 
@@ -39,9 +43,18 @@ public class TimedAuto extends CommandBase {
     @Override
     public void execute() {
         currentTime = System.currentTimeMillis();
+        gyroRotation = driveTrain.getYaw();
+
+        if (gyroRotation < wantedDegrees - 3) {
+            vzAdd = 1;
+        } else if (gyroRotation > wantedDegrees + 3) {
+            vzAdd = -1;
+        } else {
+            vzAdd = 0;
+        }
 
         if (currentTime < timeEnd) {
-            driveTrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vz, driveTrain.getGyroRotation(true)));
+            driveTrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vz + vzAdd, driveTrain.getGyroRotation(true)));
         } else {
             driveTrain.drive(new ChassisSpeeds(0, 0, 0));
             isFinished = true;
