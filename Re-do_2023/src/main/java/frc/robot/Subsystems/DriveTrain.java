@@ -120,7 +120,6 @@ public class DriveTrain extends SubsystemBase {
                         return Rotation2d.fromDegrees(90); // This sets the front of the robot to be the front/forward
                                                            // direction at all times.
                 }
-
         }
 
         public float getYaw() {
@@ -156,7 +155,6 @@ public class DriveTrain extends SubsystemBase {
 
         public void drive(ChassisSpeeds speeds) { // passes in speeds to be used in periodic
                 // System.out.println(getPitch());
-                System.out.println("Gyro Calibrating: " + calibratingGyro());
                 chassisSpeeds = speeds;
         }
 

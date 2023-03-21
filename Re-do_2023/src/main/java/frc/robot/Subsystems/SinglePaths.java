@@ -168,7 +168,6 @@ public class SinglePaths /* extends CommandBase */ {
         // return mid;
         // }
 
-
         private SequentialCommandGroup PlaceTopRightElementGroup() {
                 return new SequentialCommandGroup(new PrintCommand("Place Element 1 Placement")
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
@@ -254,7 +253,6 @@ public class SinglePaths /* extends CommandBase */ {
         // .andThen(new PrintCommand("Done Placing")));
         // }
 
-        
         // private SequentialCommandGroup balanceOne() {
         // if (balanceBool[balanceChoice]) {
         // return new SequentialCommandGroup(new PrintCommand("Balance")
@@ -322,7 +320,7 @@ public class SinglePaths /* extends CommandBase */ {
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0) // move arm in to safety
                                                 .raceWith(new TimedAuto(driveTrain, 1500, 0, -1.25, 0, 0)))
                                 // drives onto charge station
-                                .andThen(new Balance(driveTrain))
+                                .andThen(new Balance(driveTrain).raceWith(new WaitCommand(3)))
                                 .andThen(new SlightTurnDrive(driveTrain)));
 
         }
@@ -341,9 +339,10 @@ public class SinglePaths /* extends CommandBase */ {
                                                 .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS))
                                                 .alongWith(new AutoSusan(lazySusan, Constants.AUTO_SUSAN_SPEED, 0)))
-                                .andThen(new Balance(driveTrain)
+                                .andThen((new Balance(driveTrain)
                                                 .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                                 0)))
+                                                .raceWith(new WaitCommand(3)))
                                 .andThen(new SlightTurnDrive(driveTrain)));
 
         }
@@ -355,7 +354,7 @@ public class SinglePaths /* extends CommandBase */ {
                                                 .raceWith(new WaitCommand(2)))
                                 .andThen(new TimedAuto(driveTrain, 750, 0, -0.75, 0, 0)) // drive into placement
                                 .andThen(new TimedAuto(driveTrain, 250, 1, 0, 0, 0)) // drive right to placement
-                                .andThen(PlaceTopLeftElementGroup()) // place element
+                                // .andThen(PlaceTopLeftElementGroup()) // place element //TODO
                                 .andThen(new TimedAuto(driveTrain, 2000, 0, 2.5, 0, 0)) // drive out past station
                                 .andThen((new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS) // pulls arm down to balance easier
@@ -368,7 +367,8 @@ public class SinglePaths /* extends CommandBase */ {
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0) // move arm in to safety
                                                 .raceWith(new TimedAuto(driveTrain, 1500, 0, -1.25, 0, 0)))
                                 // drives onto charge station
-                                .andThen(new Balance(driveTrain)) // balances charge station
+                                .andThen(new Balance(driveTrain).raceWith(new WaitCommand(3))) // balances charge
+                                                                                               // station
                                 .andThen(new SlightTurnDrive(driveTrain))); // locks wheels
 
         }
@@ -390,7 +390,7 @@ public class SinglePaths /* extends CommandBase */ {
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0) // move arm in to safety
                                                 .raceWith(new TimedAuto(driveTrain, 1500, 0, -1.25, 0, 0)))
                                 // drives onto charge station
-                                .andThen(new Balance(driveTrain))
+                                .andThen(new Balance(driveTrain).raceWith(new WaitCommand(3)))
                                 .andThen(new SlightTurnDrive(driveTrain)));
 
         }
@@ -401,7 +401,7 @@ public class SinglePaths /* extends CommandBase */ {
                                                 Constants.PLACE_TOP_VERT).raceWith(new WaitCommand(2)))
                                 .andThen(new TimedAuto(driveTrain, 750, 0, -0.75, 0, 0))
                                 .andThen(new TimedAuto(driveTrain, 250, 1, 0, 0, 0))
-                                .andThen(PlaceTopLeftElementGroup())
+                                // .andThen(PlaceTopLeftElementGroup()) //TODO
                                 .andThen(new TimedAuto(driveTrain, 2000, 0, 2.5, 0, 0)) // drive out past station
                                 .andThen((new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
                                                 Constants.VERT_SAFE_TO_SPIN_ENC_POS) // pulls arm down to balance easier
@@ -412,7 +412,7 @@ public class SinglePaths /* extends CommandBase */ {
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0) // move arm in to safety
                                                 .raceWith(new TimedAuto(driveTrain, 1500, 0, -1.25, 0, 0)))
                                 // drives onto charge station
-                                .andThen(new Balance(driveTrain))
+                                .andThen(new Balance(driveTrain).raceWith(new WaitCommand(3)))
                                 .andThen(new SlightTurnDrive(driveTrain)));
 
         }
@@ -433,7 +433,7 @@ public class SinglePaths /* extends CommandBase */ {
                                 .andThen(new SetRobotHeading(driveTrain, 0).raceWith(new WaitCommand(1)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
                                                 .raceWith(new TimedAuto(driveTrain, 2950, 0, -1.1, 0, 0)))
-                                .andThen(new Balance(driveTrain))
+                                .andThen(new Balance(driveTrain).raceWith(new WaitCommand(3)))
                                 .andThen(new SlightTurnDrive(driveTrain)));
 
         }

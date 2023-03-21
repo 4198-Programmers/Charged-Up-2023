@@ -50,7 +50,7 @@ public final class Constants {
         public static final int APRIL_TAG_LEFT_BUTTON = 1;
         public static final int AUTO_LOCK_LEFT_BTN = 1;
         public static final int BALANCE_BUTTON = 7;
-        public static final int TARGET_TEST_BUTTON = 8;
+        public static final int ZERO_GYRO_BUTTON = 8;
         public static final int FIELD_ORIENTATION_BUTTON = 11;
         public static final int ROBOT_ORIENTATION_BUTTON = 12;
 
@@ -87,7 +87,7 @@ public final class Constants {
         public static final float PITCH_OFFSET = 5; // Must be a float for the gyro values
 
         // Auto Values
-        public static final double AUTO_VERT_SPEED = 1,
+        public static final double AUTO_VERT_SPEED = 0.75,
                         MAX_VELOCITY_METERS_PER_SECOND = 4,
                         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3,
                         VERT_SAFE_TO_SPIN_ENC_POS = 3.67, // printed at 0.5, better safe than broken

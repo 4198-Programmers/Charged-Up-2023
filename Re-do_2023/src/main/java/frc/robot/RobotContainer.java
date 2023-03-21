@@ -257,7 +257,7 @@ public class RobotContainer {
     // Constants.TEST_ZERO_DRIVE_HEADING_BUTTON).whileTrue(new
     // ZeroRobotHeading(mDriveTrain));
 
-    new JoystickButton(stickTwo, Constants.TARGET_TEST_BUTTON).whileTrue(new CheckPhotonTarget(photonVision));
+    // new JoystickButton(stickTwo, Constants.TARGET_TEST_BUTTON).whileTrue(new CheckPhotonTarget(photonVision));
 
     new JoystickButton(stickThree, Constants.STRAIGHT_DOWN_INTAKE_BUTTON).whileTrue(
         new ControlVertStraightDown(vertArm, reachArmSub, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));
@@ -283,15 +283,7 @@ public class RobotContainer {
 
     // This resets the robot to field orientation and sets the current front of the
     // robot to the forward direction
-    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new ZeroGyro(mDriveTrain));
-    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
-        mDriveTrain,
-        () -> -modifyAxis(stickOne.getX()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
-        () -> -modifyAxis(stickOne.getY()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
-        () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 1,
-        true));
-
-    new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new ZeroGyro(mDriveTrain));
+    new JoystickButton(stickOne, Constants.ZERO_GYRO_BUTTON).onTrue(new ZeroGyro(mDriveTrain));
     new JoystickButton(stickOne, Constants.FIELD_ORIENTATION_BUTTON).onTrue(new DriveTrainCom(
         mDriveTrain,
         () -> -modifyAxis(stickOne.getX()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
