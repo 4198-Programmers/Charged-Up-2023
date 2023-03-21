@@ -1,10 +1,5 @@
 package frc.robot.Commands;
 
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
-
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.DriveTrain;
@@ -12,12 +7,10 @@ import frc.robot.Subsystems.DriveTrain;
 public class TimedAuto extends CommandBase {
     private DriveTrain driveTrain;
     private long timeEnd;
-    private double matchTime;
     private long timeToRun;
     private double vx;
     private double vy;
     private double vz;
-    private ChassisSpeeds toSwerveSpeeds;
     boolean isFinished;
     boolean flipPath;
     long currentTime;

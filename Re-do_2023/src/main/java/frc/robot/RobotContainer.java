@@ -20,7 +20,6 @@ import frc.robot.Commands.AutoReach;
 import frc.robot.Commands.AutoSusan;
 import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.Balance;
-import frc.robot.Commands.CalibrateGyro;
 import frc.robot.Commands.ConditionalLock;
 import frc.robot.Commands.ControlArm;
 import frc.robot.Commands.ControlReach;
@@ -31,9 +30,7 @@ import frc.robot.Commands.RunIntake;
 import frc.robot.Commands.SlightTurnDrive;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.Intake;
-import frc.robot.Subsystems.LEDs;
 import frc.robot.Subsystems.LazySusanSub;
-import frc.robot.Subsystems.PathHolder;
 import frc.robot.Commands.ZeroGyro;
 import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
@@ -57,12 +54,10 @@ public class RobotContainer {
   private final ReachArmSub reachArmSub = new ReachArmSub();
   private final VertArm vertArm = new VertArm();
   private final Pneumatics pneumatics = new Pneumatics();
-  private final PathHolder mPath = new PathHolder(vertArm, pneumatics, reachArmSub, lazySusanSub);
   private final Intake intakeSub = new Intake();
   private final PhotonVision visionSub = new PhotonVision();
-  private final SinglePaths singlePaths = new SinglePaths(mDriveTrain, vertArm, lazySusanSub, pneumatics, intakeSub,
-      reachArmSub, visionSub);
-  private LEDs leds = new LEDs();
+  private final SinglePaths singlePaths = new SinglePaths(mDriveTrain, vertArm, lazySusanSub, intakeSub,
+      reachArmSub);
   UsbCamera cam = CameraServer.startAutomaticCapture();
 
   // private AutoContainer mAutoContainer = new AutoContainer(mDriveTrain,

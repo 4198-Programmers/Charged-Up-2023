@@ -1,14 +1,8 @@
 package frc.robot.Subsystems;
 
-import com.ctre.phoenix.led.CANdle;
-import com.ctre.phoenix.led.CANdleConfiguration;
-import com.ctre.phoenix.led.RainbowAnimation;
-import com.ctre.phoenix.led.CANdle.LEDStripType;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class LEDs extends SubsystemBase {
     // private final CANdle lights = new CANdle(Constants.LED_CAN_ID);

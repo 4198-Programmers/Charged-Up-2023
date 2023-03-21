@@ -3,8 +3,6 @@ package frc.robot.Commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.Maths;
 import frc.robot.Subsystems.LazySusanSub;
 
 public class ControlSusan extends CommandBase {
