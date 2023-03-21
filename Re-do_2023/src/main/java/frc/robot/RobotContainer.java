@@ -80,23 +80,20 @@ public class RobotContainer {
   public final SendableChooser<Integer> SideChooser = new SendableChooser<>();
   public final SendableChooser<Integer> AutoChooser = new SendableChooser<>();
 
-  // private final SequentialCommandGroup aprilTagLeft = new
-  // SusanHead(lazySusanSub, 0)
-  // .andThen(new TagFollower(photonVision, mDriveTrain,
+  // private final SequentialCommandGroup aprilTagLeft = 
+  // new TagFollower(photonVision, mDriveTrain,
   // Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT,
   // Constants.WANTED_DISTANCE_LEFT));
 
-  // private final SequentialCommandGroup aprilTagRight = new
-  // SusanHead(lazySusanSub, 0)
-  // .andThen(new TagFollower(photonVision, mDriveTrain,
+  // private final SequentialCommandGroup aprilTagRight =
+  // new TagFollower(photonVision, mDriveTrain,
   // Constants.WANTED_YAW_RIGHT, Constants.WANTED_SKEW_RIGHT,
   // Constants.WANTED_DISTANCE_RIGHT));
 
-  // private final SequentialCommandGroup aprilTagMid = new
-  // SusanHead(lazySusanSub, 0)
-  // .andThen(new TagFollower(photonVision, mDriveTrain,
-  // Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID,
-  // Constants.WANTED_DISTANCE_MID));
+  private final Command aprilTagMid = 
+  new TagFollower(photonVision, mDriveTrain,
+  Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID,
+  Constants.WANTED_DISTANCE_MID);
 
   public RobotContainer() {
     // modifyDriveTrainSpeed(speed);
@@ -256,13 +253,12 @@ public class RobotContainer {
 
   private void configureBindings() {
     // april tags auto performance buttons
-    // new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
+    // new JoystickButton(stickTwo, Constants.APRIL_TAG_TEST_BUTTON)
     // .whileTrue(aprilTagLeft);
-    // new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON)
+    // new JoystickButton(stickTwo, Constants.APRIL_TAG_TEST_BUTTON)
     // .whileTrue(aprilTagRight);
-    // new JoystickButton(stickOne, Constants.APRIL_TAG_LEFT_BUTTON)
-    // .and(new JoystickButton(stickTwo, Constants.APRIL_TAG_RIGHT_BUTTON))
-    // .whileTrue(aprilTagMid);
+    new JoystickButton(stickTwo, Constants.APRIL_TAG_TEST_BUTTON)
+    .whileTrue(aprilTagMid);
 
     // new JoystickButton(stickTwo,
     // Constants.TEST_ZERO_DRIVE_HEADING_BUTTON).whileTrue(new
