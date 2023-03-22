@@ -237,6 +237,8 @@ public class RobotContainer {
     AutoChooser.addOption("Just Taxi, No Place, No Charge, R/L Only", 7);
     AutoChooser.addOption("Middle Auto, No Exit Community, Charge", 8);
     AutoChooser.addOption("Just Place Left, No Taxi, No Charge", 9);
+    AutoChooser.addOption("Spit and Run Left", 10);
+    AutoChooser.addOption("Spit and Run Right", 11);
 
     autoTab.addFloat("Pitch", () -> mDriveTrain.getPitch());
 
