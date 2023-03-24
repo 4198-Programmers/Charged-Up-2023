@@ -16,10 +16,10 @@ public class DriveTrainCom extends CommandBase {
 
     public DriveTrainCom(DriveTrain driveArg, DoubleSupplier XArg,
             DoubleSupplier YArg, DoubleSupplier ZArg, boolean fieldOrientation) {
-        drive = driveArg;
-        XSupplier = XArg;
-        YSupplier = YArg;
-        ZSupplier = ZArg;
+        this.drive = driveArg;
+        this.XSupplier = XArg;
+        this.YSupplier = YArg;
+        this.ZSupplier = ZArg;
         this.fieldOrientation = fieldOrientation;
 
         addRequirements(driveArg);
