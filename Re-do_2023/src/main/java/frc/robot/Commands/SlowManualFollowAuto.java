@@ -8,7 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.DriveTrain;
 
-public class ManualFollowAuto extends CommandBase {
+public class SlowManualFollowAuto extends CommandBase {
     private DriveTrain driveTrain;
     private PathPlannerTrajectory path;
     private String pathName;
@@ -18,7 +18,7 @@ public class ManualFollowAuto extends CommandBase {
     boolean isFinished;
     boolean flipPath;
 
-    public ManualFollowAuto(DriveTrain driveTrain, String pathToFollow, boolean flipPath) {
+    public SlowManualFollowAuto(DriveTrain driveTrain, String pathToFollow, boolean flipPath) {
         this.driveTrain = driveTrain;
         pathName = pathToFollow;
         this.flipPath = flipPath;
@@ -46,7 +46,7 @@ public class ManualFollowAuto extends CommandBase {
         }
 
         if (matchTime <= path.getTotalTimeSeconds()) {
-            toSwerveSpeeds = new ChassisSpeeds(state.velocityMetersPerSecond * driveMod, -state.angularVelocityRadPerSec * driveMod, //state.velocityMetersPerSecond * driveMod
+            toSwerveSpeeds = new ChassisSpeeds(state.velocityMetersPerSecond * driveMod*.75, -state.angularVelocityRadPerSec * driveMod*.75, //state.velocityMetersPerSecond * driveMod
             0);
             // Auto way too fast
             driveTrain.drive(toSwerveSpeeds);

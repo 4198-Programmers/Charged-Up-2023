@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Subsystems.LazySusanSub;
 
-public class AutoSusan extends CommandBase {
+public class HoldSusan extends CommandBase {
     LazySusanSub lazySusanSub;
     double speed;
     double wantedPos;
 
-    public AutoSusan(LazySusanSub lazySusanSub, double speed, double wantedPos) {
+    public HoldSusan(LazySusanSub lazySusanSub, double speed, double wantedPos) {
         this.lazySusanSub = lazySusanSub;
         this.speed = speed;
         this.wantedPos = wantedPos;
@@ -38,7 +38,6 @@ public class AutoSusan extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (lazySusanSub.susanDisable || (lazySusanSub.getLocation() >= wantedPos - 0.05
-                && lazySusanSub.getLocation() <= wantedPos +0.05));
+        return lazySusanSub.susanDisable || false;
     }
 }

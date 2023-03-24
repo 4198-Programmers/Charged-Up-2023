@@ -20,12 +20,23 @@ public class VertArm extends SubsystemBase {
     }
 
     public void moveArm(double speed) {
-        System.out.println(getLocation());
+        // System.out.println(getLocation() + "vert");
         verticalMotor.set(speed);
+    }
+
+    public void vertEquationSpin(double wantedPos, double maxSpeed) {
+        double differenceDistance = wantedPos - verticalEncoder.getPosition();
+        double speedMod = (Math.abs(differenceDistance) * 0.4) + 0.25;// m on the linear curve
+        verticalMotor.set(speedMod * maxSpeed);
+        System.out.println(speedMod * maxSpeed);
     }
 
     public double getSpeed() {
         return verticalMotor.get();
+    }
+
+    public double getPosition() {
+        return verticalEncoder.getPosition();
     }
 
     public void stopArm() {
