@@ -23,7 +23,7 @@ public class AutoRunIntake extends CommandBase {
 
     @Override
     public void execute() {
-        if (System.currentTimeMillis() - timeStart < 750) {
+        if (System.currentTimeMillis() - timeStart < 500) {
             intake.SetSpeed(speed);
         } else {
             intake.SetSpeed(0);

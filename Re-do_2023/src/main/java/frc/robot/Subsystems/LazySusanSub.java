@@ -2,6 +2,7 @@ package frc.robot.Subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -15,17 +16,21 @@ public class LazySusanSub extends SubsystemBase {
     private final RelativeEncoder susanEncoder;
     int susanDirectionToggle = 1;
     public boolean susanDisable;
+    // private final SparkMaxPIDController susanController;
 
     // private DigitalInput sensor = new
     // DigitalInput(Constants.SUSAN_SENSOR_CHANNEL);
     public LazySusanSub(boolean susanDisable) {
         this.susanDisable = susanDisable;
-        if(!susanDisable){
+        if (!susanDisable) {
             susanMotor = new CANSparkMax(Constants.SUSAN_MOTOR_ID, MotorType.kBrushless);
             susanEncoder = susanMotor.getEncoder();
-        } else{
+            // this.susanController = susanMotor.getPIDController();
+            // susanController.setOutputRange(-1, 1);
+        } else {
             susanMotor = null;
             susanEncoder = null;
+            // this.susanController = null;
         }
 
     }
@@ -36,42 +41,42 @@ public class LazySusanSub extends SubsystemBase {
     }
 
     public double getLocation() {
-        if(susanDisable){
+        if (susanDisable) {
             return 0;
         }
         return susanEncoder.getPosition();
     }
 
     public void zeroPosition() {
-        if(susanDisable){
+        if (susanDisable) {
             return;
         }
         susanEncoder.setPosition(0);
     }
 
     public void stopSusan() {
-        if(susanDisable){
+        if (susanDisable) {
             return;
         }
         susanMotor.set(0);
     }
 
     public void toggleSusan() {
-        if(susanDisable){
+        if (susanDisable) {
             return;
         }
         susanDirectionToggle *= -1;
     }
 
     public void mode(IdleMode mode) {
-        if(susanDisable){
+        if (susanDisable) {
             return;
         }
         susanMotor.setIdleMode(mode);
     }
 
     public double getRotation() {
-        if(susanDisable){
+        if (susanDisable) {
             return 0;
         }
         return Maths.arcLengthToRotations(susanEncoder.getPosition());
@@ -83,14 +88,14 @@ public class LazySusanSub extends SubsystemBase {
         // } else if (getLocation() - wantedDegrees > 0.5) {
         // susanMotor.set(speed);
         // }
-        if(susanDisable){
+        if (susanDisable) {
             return;
         }
         susanMotor.set(0);
     }
 
     public void spinSusan(double speed) { // counterclockwise = negative
-        if(susanDisable){
+        if (susanDisable) {
             return;
         }
 
@@ -108,12 +113,23 @@ public class LazySusanSub extends SubsystemBase {
             zeroPosition();
         }
 
-        // susanMotor.set(expectedSpeed);
-        susanMotor.set(0);
+        susanMotor.set(expectedSpeed);
+        // susanMotor.set(0);
+    }
+
+    // public void susanPIDSpin(double wantedPos){
+    // susanController.setReference(wantedPos, CANSparkMax.ControlType.kPosition);
+    // }
+
+    public void susanEquationSpin(double wantedPos, double maxSpeed) {
+        double differenceDistance = wantedPos - susanEncoder.getPosition();
+        double speedMod = (Math.abs(differenceDistance) * 0.01333) + 0.025;// m on the linear curve
+        susanMotor.set(speedMod * maxSpeed);
+        System.out.println(speedMod * maxSpeed);
     }
 
     public void setSusanAngleCP(double wantedAngle) { // counterclockwise = negative
-        if(susanDisable){
+        if (susanDisable) {
             return;
         }
         // if (getLocation() < Maths.degreesToRotations_Susan(wantedAngle) -
@@ -126,5 +142,9 @@ public class LazySusanSub extends SubsystemBase {
         // spinSusan(0);
         // }
         susanMotor.set(0);
+    }
+
+    public double getSpeed() {
+        return susanMotor.get();
     }
 }

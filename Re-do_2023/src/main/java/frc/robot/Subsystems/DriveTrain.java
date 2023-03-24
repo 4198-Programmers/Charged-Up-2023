@@ -102,6 +102,10 @@ public class DriveTrain extends SubsystemBase {
                 return NavX.isCalibrating();
         }
 
+        public double driveVel(){
+                return frontRight.getDriveVelocity();
+        }
+
         // We are passing in a boolean so that it can easily switch from field to robot
         // orientation.
         // true is field oriented

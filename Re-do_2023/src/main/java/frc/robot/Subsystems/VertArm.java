@@ -24,6 +24,13 @@ public class VertArm extends SubsystemBase {
         verticalMotor.set(speed);
     }
 
+    public void vertEquationSpin(double wantedPos, double maxSpeed) {
+        double differenceDistance = wantedPos - verticalEncoder.getPosition();
+        double speedMod = (Math.abs(differenceDistance) * 0.4) + 0.25;// m on the linear curve
+        verticalMotor.set(speedMod * maxSpeed);
+        System.out.println(speedMod * maxSpeed);
+    }
+
     public double getSpeed() {
         return verticalMotor.get();
     }

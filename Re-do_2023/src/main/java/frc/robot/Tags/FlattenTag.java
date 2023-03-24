@@ -13,6 +13,8 @@ public class FlattenTag extends CommandBase {
     private DriveTrain swerveDrive;
     private Boolean isFinished;
     double wantedSkew;
+    double skew;
+    double rotationToWanted;
 
     public FlattenTag(PhotonVision visionSub, DriveTrain swerveDriveSub, double wantedSkew) {
         this.wantedSkew = wantedSkew;
@@ -28,12 +30,12 @@ public class FlattenTag extends CommandBase {
             isFinished = true;
             return;
         }
-        double skew = target.getSkew();
-        double rotationToWanted = Constants.WANTED_SKEW_MID - skew;
+        skew = target.getSkew();
+        rotationToWanted = Constants.WANTED_SKEW_MID - skew;
         if (rotationToWanted < -Constants.PHOTON_TOLERANCE_VALUE) {
-            swerveDrive.drive(new ChassisSpeeds(0, 0, -0.5));
-        } else if (rotationToWanted > Constants.PHOTON_TOLERANCE_VALUE) {
             swerveDrive.drive(new ChassisSpeeds(0, 0, 0.5));
+        } else if (rotationToWanted > Constants.PHOTON_TOLERANCE_VALUE) {
+            swerveDrive.drive(new ChassisSpeeds(0, 0, -0.5));
         } else {
             isFinished = true;
         }

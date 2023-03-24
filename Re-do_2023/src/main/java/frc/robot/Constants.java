@@ -47,15 +47,16 @@ public final class Constants {
                         MAX_SUSAN_RIGHT_POSITION = 34;
 
         // Joystick 1 Buttons
-        public static final int APRIL_TAG_LEFT_BUTTON = 1;
+        // public static final int APRIL_TAG_LEFT_BUTTON = 1;
         public static final int AUTO_LOCK_LEFT_BTN = 1;
         public static final int BALANCE_BUTTON = 7;
         public static final int ZERO_GYRO_BUTTON = 8;
+        public static final int RANDOM_TEST_BUTTON = 9;
         public static final int FIELD_ORIENTATION_BUTTON = 11;
         public static final int ROBOT_ORIENTATION_BUTTON = 12;
 
         // Joystick 2 Buttons
-        public static final int APRIL_TAG_RIGHT_BUTTON = 1;
+        // public static final int APRIL_TAG_RIGHT_BUTTON = 1;
         public static final int AUTO_LOCK_RIGHT_BTN = 1;
         public static final int NO_SLIP_DRIVE_BUTTON = 2;
         public static final int TEST_SUSAN_PHOTON = 7;
@@ -91,7 +92,7 @@ public final class Constants {
                         MAX_VELOCITY_METERS_PER_SECOND = 4,
                         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3,
                         VERT_SAFE_TO_SPIN_ENC_POS = 3.67, // printed at 0.5, better safe than broken
-                        AUTO_SUSAN_SPEED = 0.15,
+                        AUTO_SUSAN_SPEED = 1,
                         LEFT_PLACEMENT_ENC_POS = 6.0476,
                         VERT_MID_SHELF_PLACEMENT_ENC_MID = 6.5,
                         VERT_MID_SHELF_PLACEMENT_ENC_SIDES = 7,
@@ -100,8 +101,9 @@ public final class Constants {
                         VERT_PICKUP_POS = 2.75,
                         AUTO_ENC_OFFSET = 0.05,
                         SUSAN_180_ENC_POS = 56,
-                        INTAKE_OUT_SPEED = -0.7,
-                        INTAKE_IN_SPEED = 0.7,
+                        INTAKE_OUT_SPEED = 1,
+                        INTAKE_IN_SPEED = -1,
+                        SLOW_INTAKE_IN = -0.5,
                         AUTO_REACH_SPEED = 1,
                         VISIBLE_TAG_VERT_ENC = 4,
                         SUSAN_LEFT_FROM_TAG_ENC = 6,
@@ -109,13 +111,13 @@ public final class Constants {
 
         // Auto AprilTags Values
         public static final double DISTANCE_FROM_TAG = 0,
-                        PHOTON_TOLERANCE_VALUE = 0.05,
+                        PHOTON_TOLERANCE_VALUE = 0.5,
                         ANGLE_SKEW = 0;
 
         public static final double VERT_ARM_NO_DROP_SPEED = 0.03;
 
         // april tags constants
-        public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = 0.25,
+        public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = -1,
                         CAMERA_TO_DRIVEBASE_OFFSET = 14,
                         WANTED_DISTANCE_LEFT = 16 + CAMERA_TO_DRIVEBASE_OFFSET,
                         WANTED_DISTANCE_MID = 16 + CAMERA_TO_DRIVEBASE_OFFSET,
@@ -132,12 +134,13 @@ public final class Constants {
                         TOP_REACH_RIGHT_PLACEMENT = 4250,
                         PLACE_TOP_VERT = 8.15,
                         PLACE_MID_VERT = 7.05,
-                        MID_REACH_PLACEMENT = 0,
+                        MID_REACH_PLACEMENT = 7, //for when not moving bot
                         RIGHT_MID_PLACEMENT_SUSAN = -5.57,
                         LEFT_MID_PLACEMENT_SUSAN = 6.64,
                         RIGHT_TOP_PLACEMENT_SUSAN = -4,
                         LEFT_TOP_PLACEMENT_SUSAN = 4,
                         SUBSTATION_UP_POS_VERT = 7.92;
         public static final int SUSAN_SENSOR_CHANNEL = 0;
+        public static final double FLAT_PLACE_AUTO_DISTANCE = 3168.2961;
 
 }

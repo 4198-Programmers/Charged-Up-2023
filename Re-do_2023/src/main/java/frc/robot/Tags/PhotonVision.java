@@ -23,48 +23,11 @@ public class PhotonVision extends SubsystemBase {
         result = camera.getLatestResult();
         if (result.hasTargets()) {
             target = result.getBestTarget();
-            System.out.println("Target Data: " + target.getFiducialId());
         } else {
             target = null;
         }
         return target;
     }
 
-    public double getYaw() {
-        result = camera.getLatestResult();
-        if (result.hasTargets()) {
-            yaw = target.getYaw();
-        } else {
-            yaw = 0;
-        }
-        return yaw;
-    }
 
-    public double getPitch() {
-        result = camera.getLatestResult();
-        if (result.hasTargets()) {
-            pitch = target.getPitch();
-        } else {
-            pitch = 0;
-        }
-        return pitch;
-    }
-
-    public double getSkew() {
-        result = camera.getLatestResult();
-        if (result.hasTargets()) {
-            skew = target.getSkew();
-        } else {
-            skew = 0;
-        }
-        return this.skew;
-    }
-
-    @Override
-    public void periodic() {
-        getTarget();
-        SmartDashboard.putNumber("Pitch: ", getPitch());
-        SmartDashboard.putNumber("Yaw: ", getYaw());
-        SmartDashboard.putNumber("Skew: ", getSkew());
-    }
 }

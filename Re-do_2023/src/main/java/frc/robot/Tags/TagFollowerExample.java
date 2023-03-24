@@ -10,10 +10,10 @@ import frc.robot.Maths;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Tags.PhotonVision;
 
-public class TagFollower extends CommandBase {
+public class TagFollowerExample extends CommandBase {
     private PhotonVision vision;
     private DriveTrain swerveDrive;
-    private double wantedYaw;
+    private double wantedSpin;
     private double wantedSkew;
     private double wantedDistance;
     PhotonTrackedTarget target;
@@ -28,11 +28,11 @@ public class TagFollower extends CommandBase {
     final double cameraPitchRadians = Units.degreesToRadians(0);
     double goalRange;
 
-    public TagFollower(PhotonVision visionSub, DriveTrain swerveDriveSub, double wantedYaw, double wantedSkew,
+    public TagFollowerExample(PhotonVision visionSub, DriveTrain swerveDriveSub, double wantedSpin, double wantedSkew,
             double wantedDistance) {
         this.vision = visionSub;
         this.swerveDrive = swerveDriveSub;
-        this.wantedYaw = wantedYaw;
+        this.wantedSpin = wantedSpin;
         this.wantedSkew = wantedSkew;
         this.goalRange = Units.inchesToMeters(wantedDistance);
         addRequirements(visionSub, swerveDriveSub);
@@ -59,46 +59,40 @@ public class TagFollower extends CommandBase {
         // counterclockwise
 
         // yaw is positive to the right (the tag is to the right relative to the camera)
-        double yaw = -target.getYaw();
-        double varianceInYaw = wantedYaw - yaw;
+        double yaw = target.getYaw();
         // skew is positive when counter clockwise rotation relative to the camera
-        double skew = -target.getSkew();
-        double varianceInSkew = wantedSkew - skew;
+        double skew = target.getSkew();
         // pitch is positive when it is upwards relative to the camera
-        double pitch = -target.getPitch();
+        double pitch = target.getPitch();
         // distance increases as pitch decreases and vice versa
-        double distanceToTarget = -Maths.DistanceFromTarget(pitch);
-        double varianceInDistance = wantedDistance - distanceToTarget;
 
-        if (varianceInSkew < -0.5) {
-            omegaRadians = 0.5;
-        } else if (varianceInSkew > 0.5) {
+        if (wantedSkew < -0.5) {
+        vy = -0.5;
+        } else if (wantedSkew > 0.5) {
+        vy = 0.5;
+        } else {
+        vy = 0;
+        yFinished = true;
+        }
+
+        if (wantedDistance < -0.5) {
+        vx = -0.5;
+        } else if (wantedDistance > 0.5) {
+        vx = 0.5;
+        } else {
+        vx = 0;
+        xFinished = true;
+        }
+
+        if (yaw < wantedSpin-0.5) {
             omegaRadians = -0.5;
+        } else if (yaw > 0.5) {
+            omegaRadians = 0.5;
         } else {
             omegaRadians = 0;
             zFinished = true;
         }
 
-        if (varianceInYaw < -0.5) {
-            vy = -0.5;
-        } else if (varianceInYaw > 0.5) {
-            vy = 0.5;
-        } else {
-            vy = 0;
-            yFinished = true;
-        }
-
-        if (varianceInDistance < -0.5) {
-            vx = -0.5;
-        } else if (varianceInDistance > 0.5) {
-            vx = 0.5;
-        } else {
-            vx = 0;
-            xFinished = true;
-        }
-        String printValues = String.format("&.2f,%.2f,%.2f", yaw, skew, pitch);
-        System.out.println("yaw, skew, pitch ");
-        System.out.println(printValues);
         swerveDrive
                 .drive(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omegaRadians, swerveDrive.getGyroRotation(true)));
     }
