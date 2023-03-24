@@ -3,8 +3,6 @@ package frc.robot.Commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.Maths;
 import frc.robot.Subsystems.LazySusanSub;
 
 public class ControlSusan extends CommandBase {
@@ -28,19 +26,15 @@ public class ControlSusan extends CommandBase {
     @Override
     public void execute() {
         double wantedSpeed = speedSupplier.getAsDouble() * speedScalar;
-        if (lazySusan.getLocation() <= 80 && wantedSpeed > 0.05) {
+        if (lazySusan.getLocation() <= 80 && wantedSpeed > 0.000001) {
             lazySusan.spinSusan(wantedSpeed);
-        } else if(lazySusan.getLocation() >= -80 && wantedSpeed < -0.05){
+        } else if (lazySusan.getLocation() >= -80 && wantedSpeed < -0.00001) {
             lazySusan.spinSusan(wantedSpeed);
-        }
-                
-        else {
+        } else {
             lazySusan.spinSusan(0);
         }
-            // lazySusan.spinSusan(wantedSpeed);
-            // System.out.println(lazySusan.getLocation() + "location");
-
-
+        // lazySusan.spinSusan(wantedSpeed);
+        // System.out.println(lazySusan.getLocation() + "location");
 
     }
 

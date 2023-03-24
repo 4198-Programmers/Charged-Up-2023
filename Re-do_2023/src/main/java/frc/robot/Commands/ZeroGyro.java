@@ -3,12 +3,13 @@ package frc.robot.Commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.DriveTrain;
 
-public class zeroHeading extends CommandBase {
-    DriveTrain driveTrain;
+public class ZeroGyro extends CommandBase {
+    DriveTrain drive;
     boolean done;
 
-    public zeroHeading(DriveTrain driveTrain) {
-        this.driveTrain = driveTrain;
+    public ZeroGyro(DriveTrain driveArg) {
+        this.drive = driveArg;
+        addRequirements(driveArg);
     }
 
     @Override
@@ -18,7 +19,7 @@ public class zeroHeading extends CommandBase {
 
     @Override
     public void execute() {
-        driveTrain.zeroGyro();
+        drive.zeroGyro();
         done = true;
     }
 

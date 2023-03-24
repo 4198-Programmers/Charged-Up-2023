@@ -1,21 +1,32 @@
-// package frc.robot.Tags;
+package frc.robot.Tags;
 
-// import org.photonvision.PhotonCamera;
-// import edu.wpi.first.wpilibj2.command.CommandBase;
-// import frc.robot.Subsystems.PhotonVision;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
-// public class CheckPhotonTarget extends CommandBase{
-//     private PhotonVision vision; 
-//     public CheckPhotonTarget(PhotonVision photonVision) {
-//         super();
-//         this.vision = photonVision;
-//         addRequirements(photonVision);
-//     }
+public class CheckPhotonTarget extends CommandBase {
+    // don't think we need this
+    private PhotonVision vision;
+    boolean isFinished;
 
-//     @Override
-//     public void execute() {
-//         this.vision.getBestTarget();
-//     }
+    public CheckPhotonTarget(PhotonVision photonVision) {
+        this.vision = photonVision;
+        addRequirements(photonVision);
+    }
 
+    @Override
+    public void initialize() {
+        isFinished = false;
+    }
 
-// }
+    @Override
+    public void execute() {
+        vision.getTarget();
+        System.out.println(vision.getTarget() + "Target");
+        isFinished = true;
+    }
+
+    @Override
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+}

@@ -44,7 +44,8 @@ public class DriveTrain extends SubsystemBase {
                         // Back Right
                         new Translation2d(-Constants.DRIVETRAIN_WIDTH_METERS / 2.0,
                                         -Constants.DRIVETRAIN_LENGTH_METERS / 2.0));
-        public SwerveDriveKinematics getKinematics(){
+
+        public SwerveDriveKinematics getKinematics() {
                 return mkinematics;
         }
 
@@ -94,8 +95,20 @@ public class DriveTrain extends SubsystemBase {
                 NavX.zeroYaw();
         }
 
+        public void resetGyro(){
+                NavX.calibrate();
+        }
+        public boolean calibratingGyro(){
+                return NavX.isCalibrating();
+        }
+
+        public double driveVel(){
+                return frontRight.getDriveVelocity();
+        }
+
         // We are passing in a boolean so that it can easily switch from field to robot
         // orientation.
+        // true is field oriented
         public Rotation2d getGyroRotation(boolean fieldOrientation) { // Manually returns the gyro position as a
                                                                       // Rotation2d so that wpi can use
                 // it to do math for us
@@ -111,22 +124,32 @@ public class DriveTrain extends SubsystemBase {
                         return Rotation2d.fromDegrees(90); // This sets the front of the robot to be the front/forward
                                                            // direction at all times.
                 }
-
         }
 
-        public double BalanceDrive() {
+        public float getYaw() {
+                return (NavX.getYaw());
+        }
+
+        public float getPitch() {
                 float pitch = NavX.getPitch();
-                if (pitch > Constants.PITCH_OFFSET) {
-                        return Constants.BALANCE_SPEED;
-                } else if (pitch < -Constants.PITCH_OFFSET) {
-                        return -Constants.BALANCE_SPEED;
-                } else {
-                        return 0;
-                }
+                return pitch;
         }
 
-        public void StopDrive(){
-                ChassisSpeeds noMove = new ChassisSpeeds(0,0,0);
+        public float getXAccel() {
+                return NavX.getWorldLinearAccelX();
+        }
+
+        public float getYAccel() {
+                return NavX.getWorldLinearAccelY();
+        }
+
+        public boolean isMoving() {
+                boolean isMoving = NavX.isMoving();
+                return isMoving;
+        }
+
+        public void StopDrive() {
+                ChassisSpeeds noMove = new ChassisSpeeds(0, 0, 0);
                 drive(noMove);
         }
 
@@ -134,12 +157,8 @@ public class DriveTrain extends SubsystemBase {
                 // code to zero drive
         }
 
-        public double[] DrivePos() {
-                double[] positions = { 0, 0, 0, 0 };
-                return positions;
-        }
-
         public void drive(ChassisSpeeds speeds) { // passes in speeds to be used in periodic
+                // System.out.println(getPitch());
                 chassisSpeeds = speeds;
         }
 
@@ -151,7 +170,7 @@ public class DriveTrain extends SubsystemBase {
                 // makes sure the wheels aren't passed a speed faster than they can go
                 SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
                 // puts the gyro angle on the dashboard for debugging
-                SmartDashboard.putNumber("Gyro Angle", NavX.getAngle());
+                SmartDashboard.putNumber("Gyro Angle", NavX.getYaw());
 
                 // sets each wheel to their assigned speed from an array, this must be done in
                 // the same order as the kinematic was made

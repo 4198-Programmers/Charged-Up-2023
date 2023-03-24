@@ -24,20 +24,25 @@ public class AutoVert extends CommandBase {
 
     @Override
     public void execute() {
-        if (vertArm.getLocation() < wantedPos) {// (wantedPos - Constants.AUTO_ENC_OFFSET)
-            vertArm.moveArm(0.17);
+        if (vertArm.getLocation() < wantedPos - 0.05) {// (wantedPos - Constants.AUTO_ENC_OFFSET)
+            vertArm.vertEquationSpin(wantedPos, 0.5);
         } else if (vertArm.getLocation() > (wantedPos + 0.05)) {
-            vertArm.moveArm(-0.1);
-        } else if (vertArm.getLocation() >= wantedPos
+            vertArm.vertEquationSpin(wantedPos, -0.25);
+        } else if (vertArm.getLocation() >= wantedPos - 0.05
                 && vertArm.getLocation() <= (wantedPos + 0.05)) {
-            vertArm.moveArm(Constants.VERT_ARM_NO_DROP_SPEED);
+            vertArm.vertEquationSpin(wantedPos, Constants.VERT_ARM_NO_DROP_SPEED);
             System.out.println("Finished Vert Auto");
             isFinished = true;
         }
     }
 
     @Override
+    public void end(boolean interrupted) {
+        vertArm.moveArm(0);
+    }
+
+    @Override
     public boolean isFinished() {
-        return (isFinished);
+        return ((isFinished) || Math.abs(vertArm.getSpeed()) < 0.09);
     }
 }
