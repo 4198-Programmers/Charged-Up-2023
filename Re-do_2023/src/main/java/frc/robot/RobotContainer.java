@@ -171,7 +171,7 @@ public class RobotContainer {
   private final SequentialCommandGroup upToSubStation = new SequentialCommandGroup(new PrintCommand("Substation")
       .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.SUBSTATION_UP_POS_VERT)
           .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.SUBSTATION_REACH_POS)))
-      .andThen(new ControlArm(vertArm, () -> 0.055, 100)));
+      .andThen(new ControlArm(vertArm, () -> (modifyVertArm(stickThree.getRawAxis(1)) + 0.055), 100)));
 
   // private final SequentialCommandGroup autoPlaceThenBalance = new
   // AutoVert(vertArm, 0.25, 6)

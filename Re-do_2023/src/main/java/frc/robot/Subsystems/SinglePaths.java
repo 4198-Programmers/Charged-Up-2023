@@ -398,7 +398,7 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Low Place Drive Charge")
                                 .andThen(StraightPlaceMidPiece())
                                 .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)
-                                                .alongWith(new TimedAuto(driveTrain, 2715, 0, 1.5, 0, 0)))
+                                                .alongWith(new TimedAuto(driveTrain, 2815, 0, 1.5, 0, 0)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
                                                 .raceWith(new TimedAuto(driveTrain, 1737, 1.5, 0, 0, 0)))
                                 .andThen(new SetRobotHeading(driveTrain, 0))
@@ -425,7 +425,7 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Low Place Drive Charge")
                                 .andThen(StraightPlaceMidPiece())
                                 .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)
-                                                .alongWith(new TimedAuto(driveTrain, 2715, 0, 1.5, 0, 0)))
+                                                .alongWith(new TimedAuto(driveTrain, 2815, 0, 1.5, 0, 0)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
                                                 .raceWith(new TimedAuto(driveTrain, 1737, -1.5, 0, 0, 0)))
                                 .andThen(new SetRobotHeading(driveTrain, 0))
@@ -446,13 +446,14 @@ public class SinglePaths /* extends CommandBase */ {
                                                 .raceWith(new TimedAuto(driveTrain, 1950, 0, 1.25, 0, 0)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
                                                 .raceWith(new Balance(driveTrain)))
+                                .andThen(new Balance(driveTrain))
                                 .andThen(new SlightTurnDrive(driveTrain)));
         }
 
         private SequentialCommandGroup PlaceDriveNew() {
                 return new SequentialCommandGroup(new PrintCommand("Place Drive")
                                 .andThen(StraightPlaceMidPiece())
-                                .andThen(new TimedAuto(driveTrain, 2715, 0, 1.5, 0, 0)
+                                .andThen(new TimedAuto(driveTrain, 2815, 0, 1.5, 0, 0)
                                                 .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0))
                                                 .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0))));
                 // drive out past station
@@ -461,7 +462,7 @@ public class SinglePaths /* extends CommandBase */ {
 
         private SequentialCommandGroup JustDrive() {
                 return new SequentialCommandGroup(new PrintCommand("Just Drive")
-                                .andThen(new TimedAuto(driveTrain, 2715, 0, 1.5, 0, 0)));
+                                .andThen(new TimedAuto(driveTrain, 2815, 0, 1.5, 0, 0)));
         }
 
         // private SequentialCommandGroup PlaceDriveCharge() { // works within 15
