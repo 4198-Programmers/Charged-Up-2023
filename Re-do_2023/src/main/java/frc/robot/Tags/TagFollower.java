@@ -71,34 +71,40 @@ public class TagFollower extends CommandBase {
         double varianceInDistance = wantedDistance - distanceToTarget;
 
         if (varianceInSkew < -0.5) {
+            System.out.println("Skew Variance: " + varianceInSkew);
             omegaRadians = 0.5;
         } else if (varianceInSkew > 0.5) {
+            System.out.println("Skew Variance: " + varianceInSkew);
             omegaRadians = -0.5;
         } else {
+            System.out.println("Skew Variance: " + varianceInSkew);
             omegaRadians = 0;
             zFinished = true;
         }
 
         if (varianceInYaw < -0.5) {
+            System.out.println("Yaw Variance: " + varianceInYaw);
             vy = -0.5;
         } else if (varianceInYaw > 0.5) {
+            System.out.println("Yaw Variance: " + varianceInYaw);
             vy = 0.5;
         } else {
+            System.out.println("Yaw Variance: " + varianceInYaw);
             vy = 0;
             yFinished = true;
         }
 
         if (varianceInDistance < -0.5) {
+            System.out.println("Distance Variance: " + varianceInDistance);
             vx = -0.5;
         } else if (varianceInDistance > 0.5) {
+            System.out.println("Distance Variance: " + varianceInDistance);
             vx = 0.5;
         } else {
+            System.out.println("Distance Variance: " + varianceInDistance);
             vx = 0;
             xFinished = true;
         }
-        String printValues = String.format("&.2f,%.2f,%.2f", yaw, skew, pitch);
-        System.out.println("yaw, skew, pitch ");
-        System.out.println(printValues);
         swerveDrive
                 .drive(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omegaRadians, swerveDrive.getGyroRotation(true)));
     }

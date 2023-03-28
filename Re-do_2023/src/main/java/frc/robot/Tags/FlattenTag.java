@@ -34,6 +34,7 @@ public class FlattenTag extends CommandBase {
         rotationToWanted = Constants.WANTED_SKEW_MID - skew;
         if (rotationToWanted < -Constants.PHOTON_TOLERANCE_VALUE) {
             swerveDrive.drive(new ChassisSpeeds(0, 0, 0.5));
+            System.out.println("Skew Difference: " + rotationToWanted);
         } else if (rotationToWanted > Constants.PHOTON_TOLERANCE_VALUE) {
             swerveDrive.drive(new ChassisSpeeds(0, 0, -0.5));
         } else {
