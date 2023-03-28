@@ -6,4 +6,9 @@ public interface SteerController {
     void setReferenceAngle(double referenceAngleRadians);
 
     double getStateAngle();
+
+    double getAbsoluteCanCoderAngle();
+
+    double configMotorOffset(boolean logErrors);
+
 }

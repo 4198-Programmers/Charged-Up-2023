@@ -52,6 +52,11 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
         }
 
         @Override
+        public void deadWheelCheckMotorOffsets(){
+            steerController.configMotorOffset(false);
+        }
+
+        @Override
         public double getSteerAngle() {
             return steerController.getStateAngle();
         }

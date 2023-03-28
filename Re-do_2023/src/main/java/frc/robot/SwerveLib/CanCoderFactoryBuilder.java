@@ -1,5 +1,6 @@
 package frc.robot.SwerveLib;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
@@ -53,6 +54,11 @@ public class CanCoderFactoryBuilder {
             }
 
             return angle;
+        }
+
+        @Override
+        public ErrorCode sendLastEncoderErr(){
+            return encoder.getLastError();
         }
     }
 

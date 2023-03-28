@@ -1,5 +1,6 @@
 package frc.robot.SwerveLib;
 
+import com.ctre.phoenix.ErrorCode;
 import com.revrobotics.*;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 import static frc.robot.SwerveLib.RevUtils.checkNeoError;
@@ -118,6 +119,25 @@ public final class NeoSteerControllerFactoryBuilder {
         public double getReferenceAngle() {
             return referenceAngleRadians;
         }
+
+        @Override 
+        public double getAbsoluteCanCoderAngle(){
+            return absoluteEncoder.getAbsoluteAngle();
+        }
+
+        /*
+        * @return the absolute angle
+        */
+        @Override
+       public double configMotorOffset(boolean logErrors) {
+         double angle = absoluteEncoder.getAbsoluteAngle();
+         var angleErrorCode = absoluteEncoder.sendLastEncoderErr();
+     
+         if (angleErrorCode == ErrorCode.OK) {
+           motorEncoder.setPosition(getReferenceAngle());
+         }
+         return angle;
+       }
 
         @Override
         public void setReferenceAngle(double referenceAngleRadians) {

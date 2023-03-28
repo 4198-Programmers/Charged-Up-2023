@@ -10,10 +10,13 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Commands.AutoReach;
@@ -59,6 +62,7 @@ public class RobotContainer {
   private final SinglePaths singlePaths = new SinglePaths(mDriveTrain, vertArm, lazySusanSub, intakeSub,
       reachArmSub);
   UsbCamera cam = CameraServer.startAutomaticCapture();
+  private final Timer steerCheckTimer = new Timer();
 
   // private AutoContainer mAutoContainer = new AutoContainer(mDriveTrain,
   // lazySusanSub, pneumatics, reachArmSub, vertArm);
@@ -75,7 +79,7 @@ public class RobotContainer {
   public final SendableChooser<Integer> SideChooser = new SendableChooser<>();
   public final SendableChooser<Integer> AutoChooser = new SendableChooser<>();
 
-  // private final SequentialCommandGroup aprilTagLeft = 
+  // private final SequentialCommandGroup aprilTagLeft =
   // new TagFollower(photonVision, mDriveTrain,
   // Constants.WANTED_YAW_LEFT, Constants.WANTED_SKEW_LEFT,
   // Constants.WANTED_DISTANCE_LEFT));
@@ -85,10 +89,9 @@ public class RobotContainer {
   // Constants.WANTED_YAW_RIGHT, Constants.WANTED_SKEW_RIGHT,
   // Constants.WANTED_DISTANCE_RIGHT));
 
-  private final Command aprilTagMid = 
-  new TagFollower(photonVision, mDriveTrain,
-  Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID,
-  Constants.WANTED_DISTANCE_MID);
+  private final Command aprilTagMid = new TagFollower(photonVision, mDriveTrain,
+      Constants.WANTED_YAW_MID, Constants.WANTED_SKEW_MID,
+      Constants.WANTED_DISTANCE_MID);
 
   public RobotContainer() {
     // modifyDriveTrainSpeed(speed);
@@ -161,9 +164,11 @@ public class RobotContainer {
   // .andThen(new TimedAuto(mDriveTrain, 1000, -0.25, 0, 0))
   // .andThen(new SlightTurnDrive(mDriveTrain)));
 
-  private final Command upToSubStation = new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
-      Constants.SUBSTATION_UP_POS_VERT)
-      .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.SUBSTATION_REACH_POS));
+  private final Command upToSubStation = new SequentialCommandGroup(
+      new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+          Constants.SUBSTATION_UP_POS_VERT)
+          .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.SUBSTATION_REACH_POS))
+          .andThen(new ControlArm(vertArm, () -> (modifyVertArm(stickThree.getRawAxis(1)) + 0.055), 100)));
 
   // private final SequentialCommandGroup autoPlaceThenBalance = new
   // AutoVert(vertArm, 0.25, 6)
@@ -251,13 +256,14 @@ public class RobotContainer {
     // new JoystickButton(stickTwo, Constants.APRIL_TAG_TEST_BUTTON)
     // .whileTrue(aprilTagRight);
     new JoystickButton(stickTwo, Constants.APRIL_TAG_TEST_BUTTON)
-    .whileTrue(aprilTagMid);
+        .whileTrue(aprilTagMid);
 
     // new JoystickButton(stickTwo,
     // Constants.TEST_ZERO_DRIVE_HEADING_BUTTON).whileTrue(new
     // ZeroRobotHeading(mDriveTrain));
 
-    // new JoystickButton(stickTwo, Constants.TARGET_TEST_BUTTON).whileTrue(new CheckPhotonTarget(photonVision));
+    // new JoystickButton(stickTwo, Constants.TARGET_TEST_BUTTON).whileTrue(new
+    // CheckPhotonTarget(photonVision));
 
     new JoystickButton(stickThree, Constants.STRAIGHT_DOWN_INTAKE_BUTTON).whileTrue(
         new ControlVertStraightDown(vertArm, reachArmSub, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));
@@ -424,6 +430,12 @@ public class RobotContainer {
     double speed;
     speed = a * reachArmPosition + b * reachArmSpeed + c;
     return speed;
+  }
+
+  public void disabledWheelCheck() {
+    if (steerCheckTimer.advanceIfElapsed(1.0)) {
+      mDriveTrain.reseedSteerOffsets();
+    }
   }
 
 }

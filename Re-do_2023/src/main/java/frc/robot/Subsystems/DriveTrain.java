@@ -1,5 +1,7 @@
 package frc.robot.Subsystems;
 
+import java.util.Arrays;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -56,6 +58,7 @@ public class DriveTrain extends SubsystemBase {
         private final SwerveModule backLeft;
         private final SwerveModule backRight;
         private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0); // start at zeros just in case
+        private final SwerveModule[] swerveModulesArray;
 
         public DriveTrain() {
                 Shuffleboard.getTab("DriveTrain");
@@ -88,6 +91,8 @@ public class DriveTrain extends SubsystemBase {
                                 Constants.BACK_RIGHT_STEER,
                                 Constants.BACK_RIGHT_ENCODER,
                                 Constants.BACK_RIGHT_STEER_OFFSET);
+
+                swerveModulesArray = new SwerveModule[] { frontLeft, frontRight, backLeft, backRight };
         }
 
         public void zeroGyro() { // sets the robots current front to zero in the gyro (top of the board when
@@ -95,15 +100,20 @@ public class DriveTrain extends SubsystemBase {
                 NavX.zeroYaw();
         }
 
-        public void resetGyro(){
+        public void resetGyro() {
                 NavX.calibrate();
         }
-        public boolean calibratingGyro(){
+
+        public boolean calibratingGyro() {
                 return NavX.isCalibrating();
         }
 
-        public double driveVel(){
+        public double driveVel() {
                 return frontRight.getDriveVelocity();
+        }
+
+        public void reseedSteerOffsets(){
+                Arrays.stream(swerveModulesArray).forEach(SwerveModule::deadWheelCheckMotorOffsets);
         }
 
         // We are passing in a boolean so that it can easily switch from field to robot
