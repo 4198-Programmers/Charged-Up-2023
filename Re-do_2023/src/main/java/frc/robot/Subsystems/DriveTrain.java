@@ -129,9 +129,6 @@ public class DriveTrain extends SubsystemBase {
                 // if (NavX.isMagnetometerCalibrated()) {
                 // return Rotation2d.fromDegrees(-NavX.getFusedHeading());
                 // }
-                if (NavX.isMagnetometerCalibrated()) {
-                        System.out.println("MAGNETRO" + -NavX.getYaw() + 90);
-                }
                 if (fieldOrientation) {
                         return Rotation2d.fromDegrees(-NavX.getYaw() + 90);// -NavX.getYaw so that the wheels turn
                                                                                // in
