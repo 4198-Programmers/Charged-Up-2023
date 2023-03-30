@@ -51,7 +51,7 @@ public class DriveTrain extends SubsystemBase {
                 return mkinematics;
         }
 
-        private final AHRS NavX = new AHRS(SPI.Port.kMXP, (byte) 200); // initializes the gyro to the board port (MXP)
+        private final AHRS NavX = new AHRS(SPI.Port.kMXP, (byte) 100); // initializes the gyro to the board port (MXP)
 
         private final SwerveModule frontLeft;
         private final SwerveModule frontRight;
@@ -104,6 +104,10 @@ public class DriveTrain extends SubsystemBase {
                 NavX.calibrate();
         }
 
+        public boolean gyroConnected() {
+                return NavX.isConnected();
+        }
+
         public boolean calibratingGyro() {
                 return NavX.isCalibrating();
         }
@@ -112,7 +116,7 @@ public class DriveTrain extends SubsystemBase {
                 return frontRight.getDriveVelocity();
         }
 
-        public void reseedSteerOffsets(){
+        public void reseedSteerOffsets() {
                 Arrays.stream(swerveModulesArray).forEach(SwerveModule::deadWheelCheckMotorOffsets);
         }
 
@@ -125,11 +129,16 @@ public class DriveTrain extends SubsystemBase {
                 // if (NavX.isMagnetometerCalibrated()) {
                 // return Rotation2d.fromDegrees(-NavX.getFusedHeading());
                 // }
+                if (NavX.isMagnetometerCalibrated()) {
+                        System.out.println("MAGNETRO" + -NavX.getYaw() + 90);
+                }
                 if (fieldOrientation) {
-                        return Rotation2d.fromDegrees(-NavX.getYaw() + 90);// -NavX.getYaw so that the wheels turn in
-                                                                           // the right direction + 90 so the the front
-                                                                           // of the robot is considered the forward
-                                                                           // direction when reset.
+                        return Rotation2d.fromDegrees(-NavX.getYaw() + 90);// -NavX.getYaw so that the wheels turn
+                                                                               // in
+                                                                               // the right direction + 90 so the the
+                                                                               // front
+                                                                               // of the robot is considered the forward
+                                                                               // direction when reset.
                 } else {
                         return Rotation2d.fromDegrees(90); // This sets the front of the robot to be the front/forward
                                                            // direction at all times.

@@ -31,6 +31,7 @@ import frc.robot.Commands.ControlVertStraightDown;
 import frc.robot.Commands.DriveTrainCom;
 import frc.robot.Commands.RunIntake;
 import frc.robot.Commands.SlightTurnDrive;
+import frc.robot.Commands.StopDrive;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.Intake;
 import frc.robot.Subsystems.LazySusanSub;
@@ -39,6 +40,7 @@ import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
 import frc.robot.Subsystems.SinglePaths;
 import frc.robot.Subsystems.VertArm;
+import frc.robot.Tags.CPTagDrive;
 // import frc.robot.Subsystems.PathHolder.PathChoice;
 import frc.robot.Tags.CenterSusanPhoton;
 import frc.robot.Tags.CheckPhotonTarget;
@@ -127,22 +129,26 @@ public class RobotContainer {
   private final SequentialCommandGroup elementTopLeft = new SequentialCommandGroup( // these are bot oriented directions
       new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.PLACE_TOP_VERT)
           .alongWith(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.LEFT_TOP_PLACEMENT_SUSAN))
-          .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.TOP_REACH_LEFT_PLACEMENT)));
+          .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.TOP_REACH_LEFT_PLACEMENT))
+          .andThen(new ControlArm(vertArm, () -> (modifyVertArm(stickThree.getRawAxis(1)) + 0.075), 100)));
 
   private final SequentialCommandGroup elementMidLeft = new SequentialCommandGroup(
       new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.PLACE_MID_VERT)
           .alongWith(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.LEFT_MID_PLACEMENT_SUSAN))
-          .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.MID_REACH_PLACEMENT)));
+          .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.MID_REACH_PLACEMENT))
+          .andThen(new ControlArm(vertArm, () -> (modifyVertArm(stickThree.getRawAxis(1)) + 0.055), 100)));
 
   private final SequentialCommandGroup elementTopRight = new SequentialCommandGroup(
       new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.PLACE_TOP_VERT)
           .alongWith(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.RIGHT_TOP_PLACEMENT_SUSAN))
-          .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.TOP_REACH_RIGHT_PLACEMENT)));
+          .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.TOP_REACH_RIGHT_PLACEMENT))
+          .andThen(new ControlArm(vertArm, () -> (modifyVertArm(stickThree.getRawAxis(1)) + 0.075), 100)));
 
   private final SequentialCommandGroup elementMidRight = new SequentialCommandGroup(
       new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.PLACE_MID_VERT)
-          .alongWith(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.RIGHT_MID_PLACEMENT_SUSAN))
-          .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.MID_REACH_PLACEMENT)));
+          .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.RIGHT_MID_PLACEMENT_SUSAN)
+              .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.MID_REACH_PLACEMENT)))
+          .andThen(new ControlArm(vertArm, () -> (modifyVertArm(stickThree.getRawAxis(1)) + 0.055), 100)));
 
   // private final SequentialCommandGroup elementTopRightAuto = new
   // SequentialCommandGroup(
@@ -256,7 +262,9 @@ public class RobotContainer {
     // new JoystickButton(stickTwo, Constants.APRIL_TAG_TEST_BUTTON)
     // .whileTrue(aprilTagRight);
     new JoystickButton(stickTwo, Constants.APRIL_TAG_TEST_BUTTON)
-        .whileTrue(aprilTagMid);
+        .whileTrue(new CPTagDrive(visionSub, mDriveTrain, 0, 0, 10));
+    new JoystickButton(stickTwo, Constants.WHEEL_FIX_TEST)
+        .whileTrue(new StopDrive(mDriveTrain));
 
     // new JoystickButton(stickTwo,
     // Constants.TEST_ZERO_DRIVE_HEADING_BUTTON).whileTrue(new
@@ -272,9 +280,9 @@ public class RobotContainer {
         .whileTrue(new ControlSusan(lazySusanSub, () -> smallerModifyAxis(-stickThree.getX()), 15));
 
     new JoystickButton(stickThree, Constants.INTAKE_BUTTON)
-        .whileTrue(new RunIntake(intakeSub, 0.7));
+        .whileTrue(new RunIntake(intakeSub, Constants.INTAKE_IN_SPEED));
     new JoystickButton(stickThree, Constants.OUTTAKE_BUTTON)
-        .whileTrue(new RunIntake(intakeSub, -0.7));
+        .whileTrue(new RunIntake(intakeSub, Constants.INTAKE_OUT_SPEED));
 
     new JoystickButton(stickTwo, Constants.TEST_SUSAN_PHOTON)
         .whileTrue(new CenterSusanPhoton(visionSub, mDriveTrain, lazySusanSub, 0, 0, 1.2));
