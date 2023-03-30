@@ -405,9 +405,9 @@ public class SinglePaths /* extends CommandBase */ {
                                                 .raceWith(new TimedAuto(driveTrain, 1737, 1.5, 0, 0)))
                                 .andThen(new SetRobotHeading(driveTrain, 0))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 847, 0, -1.5, 0)))
-                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 589, 0, -1, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 1217, 0, -1.5, 0)))
+                                .andThen(new TimedAuto(driveTrain, 1000, 0, 0, 0))
+                                .andThen(new TimedAuto(driveTrain, 500, 0, -1, 0))
                                 .andThen(new Balance(driveTrain))
                                 .andThen(new SlightTurnDrive(driveTrain)));
         }
@@ -432,9 +432,9 @@ public class SinglePaths /* extends CommandBase */ {
                                                 .raceWith(new TimedAuto(driveTrain, 1737, -1.5, 0, 0)))
                                 .andThen(new SetRobotHeading(driveTrain, 0))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 847, 0, -1.5, 0)))
-                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 589, 0, -1, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 1217, 0, -1.5, 0)))
+                                .andThen(new TimedAuto(driveTrain, 1000, 0, 0, 0))
+                                .andThen(new TimedAuto(driveTrain, 500, 0, -1, 0))
                                 .andThen(new Balance(driveTrain))
                                 .andThen(new SlightTurnDrive(driveTrain)));
         }
