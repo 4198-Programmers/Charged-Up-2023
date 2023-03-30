@@ -238,16 +238,20 @@ public class RobotContainer {
     // SideChooser.addOption("Blue", 1);
 
     autoTab.add("Auto", AutoChooser);
-    AutoChooser.setDefaultOption("Middle Auto, Exit Community, Charge", 0);
-    AutoChooser.addOption("Blue Left Auto, Charge", 1);
-    AutoChooser.addOption("Just Place Right, No Taxi, No Charge", 2);
-    AutoChooser.addOption("Red Right Auto, Charge", 3);
-    AutoChooser.addOption("Blue Right Auto, Charge", 4);
-    AutoChooser.addOption("Red Left Auto, Charge", 5);
-    AutoChooser.addOption("Place + Taxi, No Charge, R/L Preferred", 6);
-    AutoChooser.addOption("Just Taxi, No Place, No Charge, R/L Only", 7);
-    AutoChooser.addOption("Middle Auto, No Exit Community, Charge", 8);
-    AutoChooser.addOption("Just Place Left, No Taxi, No Charge", 9);
+    // AutoChooser.setDefaultOption("Middle Auto, Exit Community, Charge", 0);
+    // AutoChooser.addOption("Blue Left Auto, Charge", 1);
+    // AutoChooser.addOption("Just Place Right, No Taxi, No Charge", 2);
+    // AutoChooser.addOption("Red Right Auto, Charge", 3);
+    // AutoChooser.addOption("Blue Right Auto, Charge", 4);
+    // AutoChooser.addOption("Red Left Auto, Charge", 5);
+    AutoChooser.addOption("Place + Taxi, No Charge, R/L Preferred", 0);
+    AutoChooser.addOption("Just Taxi, No Place, No Charge, R/L Only", 1);
+    AutoChooser.addOption("Just Place, Not Taxi, No Charge", 2);
+    AutoChooser.addOption("Middle Auto, No Exit Community, Charge", 3);
+    AutoChooser.addOption("Plcae, Taxi, Charge, Left", 4);
+    AutoChooser.addOption("Plcae, Taxi, Charge, Right", 5);
+    // AutoChooser.addOption("Middle Auto, No Exit Community, Charge", 8);
+    // AutoChooser.addOption("Just Place Left, No Taxi, No Charge", 9);
 
     autoTab.addFloat("Pitch", () -> mDriveTrain.getPitch());
 
@@ -290,10 +294,10 @@ public class RobotContainer {
         .whileTrue(new TagFollower(visionSub, mDriveTrain, 0, 0, 1.2));
 
     new JoystickButton(stickTwo, Constants.NO_SLIP_DRIVE_BUTTON).whileTrue(new SlightTurnDrive(mDriveTrain));
+
     new JoystickButton(stickThree, Constants.ZERO_SUSAN_BUTTON)
         .onTrue(new SequentialCommandGroup(
-            new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.VERT_SAFE_TO_SPIN_ENC_POS)
-                .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, 0))));
+            new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, 0)));
 
     // This resets the robot to field orientation and sets the current front of the
     // robot to the forward direction
