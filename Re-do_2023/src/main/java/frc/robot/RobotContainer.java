@@ -248,8 +248,8 @@ public class RobotContainer {
     AutoChooser.addOption("Just Taxi, No Place, No Charge, R/L Only", 1);
     AutoChooser.addOption("Just Place, Not Taxi, No Charge", 2);
     AutoChooser.addOption("Middle Auto, No Exit Community, Charge", 3);
-    AutoChooser.addOption("Plcae, Taxi, Charge, Left", 4);
-    AutoChooser.addOption("Plcae, Taxi, Charge, Right", 5);
+    AutoChooser.addOption("Place, Taxi, Charge, Left", 4);
+    AutoChooser.addOption("Place, Taxi, Charge, Right", 5);
     // AutoChooser.addOption("Middle Auto, No Exit Community, Charge", 8);
     // AutoChooser.addOption("Just Place Left, No Taxi, No Charge", 9);
 

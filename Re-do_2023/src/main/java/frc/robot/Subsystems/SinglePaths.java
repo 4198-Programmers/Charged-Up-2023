@@ -448,6 +448,7 @@ public class SinglePaths /* extends CommandBase */ {
                                                 .raceWith(new TimedAuto(driveTrain, 1950, 0, 1.25, 0)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
                                                 .raceWith(new Balance(driveTrain)))
+                                .andThen(new Balance(driveTrain))
                                 .andThen(new SlightTurnDrive(driveTrain)));
         }
 
