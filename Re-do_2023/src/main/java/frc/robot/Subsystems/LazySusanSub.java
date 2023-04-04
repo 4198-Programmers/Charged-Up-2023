@@ -109,9 +109,9 @@ public class LazySusanSub extends SubsystemBase {
         // Maths.degreesToRotations_Susan(-Constants.SUSAN_MAX_ANGLE) && speed < 0) {
         // expectedSpeed = 0;
         // }
-        if (getSensorValue()) {
-            zeroPosition();
-        }
+        // if (getSensorValue()) {
+        //     zeroPosition();
+        // }
 
         susanMotor.set(expectedSpeed);
         // susanMotor.set(0);

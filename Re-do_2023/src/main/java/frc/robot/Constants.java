@@ -131,16 +131,21 @@ public final class Constants {
                         WANTED_SKEW_RIGHT = 0;
         public static final double REACH_ENCODER_WHEEL_DIAMETER = 0.25,
                         REACH_ENCODER_TOLERANCE = 25,
-                        TOP_REACH_LEFT_PLACEMENT = 3535,
-                        TOP_REACH_RIGHT_PLACEMENT = 4250,
-                        PLACE_TOP_VERT = 8.15,
-                        PLACE_MID_VERT = 7.05,
+                        // TOP_REACH_LEFT_PLACEMENT = 3535,
+                        TOP_REACH_LEFT_PLACEMENT = 5050,
+                        // TOP_REACH_RIGHT_PLACEMENT = 4250,\
+                        TOP_REACH_RIGHT_PLACEMENT = 5050,
+                        PLACE_TOP_VERT = 7.83775,
+                        PLACE_MID_VERT = 6.771515,
                         MID_REACH_PLACEMENT = 7, //for when not moving bot
-                        RIGHT_MID_PLACEMENT_SUSAN = -5.57,
-                        LEFT_MID_PLACEMENT_SUSAN = 6.64,
-                        RIGHT_TOP_PLACEMENT_SUSAN = -4,
-                        LEFT_TOP_PLACEMENT_SUSAN = 4,
-                        SUBSTATION_UP_POS_VERT = 7.92;
+                        // RIGHT_MID_PLACEMENT_SUSAN = -5.57,
+                        RIGHT_MID_PLACEMENT_SUSAN = -9.4524,
+                        // LEFT_MID_PLACEMENT_SUSAN = 6.64,
+                        LEFT_MID_PLACEMENT_SUSAN = 9.4524,
+                        // RIGHT_TOP_PLACEMENT_SUSAN = -4,
+                        RIGHT_TOP_PLACEMENT_SUSAN = -6.45238,
+                        // LEFT_TOP_PLACEMENT_SUSAN = 4,
+                        LEFT_TOP_PLACEMENT_SUSAN = 6.45238,                        SUBSTATION_UP_POS_VERT = 7.92;
         public static final int SUSAN_SENSOR_CHANNEL = 0;
         public static final double FLAT_PLACE_AUTO_DISTANCE = 3168.2961;
 

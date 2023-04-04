@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -62,9 +63,10 @@ public class DriveTrain extends SubsystemBase {
 
         public DriveTrain() {
                 Shuffleboard.getTab("DriveTrain");
+                System.out.println("Initializing Drivetrain");
 
                 frontLeft = Mk4iSwerveModuleHelper.createNeo( // Create Neo is a function by SDS that will create the
-                                                              // motors and control them for us
+                                // motors and control them for us
                                 Mk4iSwerveModuleHelper.GearRatio.L2,
                                 Constants.FRONT_LEFT_DRIVE,
                                 Constants.FRONT_LEFT_STEER,
@@ -107,6 +109,7 @@ public class DriveTrain extends SubsystemBase {
         public boolean gyroConnected() {
                 return NavX.isConnected();
         }
+
 
         public boolean calibratingGyro() {
                 return NavX.isCalibrating();

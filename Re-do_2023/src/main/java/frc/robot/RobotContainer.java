@@ -96,7 +96,6 @@ public class RobotContainer {
       Constants.WANTED_DISTANCE_MID);
 
   public RobotContainer() {
-    // modifyDriveTrainSpeed(speed);
     configureBindings();
     mDriveTrain.zeroGyro();
     reachArmSub.zeroEncoder();
@@ -108,8 +107,7 @@ public class RobotContainer {
         () -> -modifyAxis(stickOne.getX()) * -DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
         () -> -modifyAxis(stickOne.getY()) * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1,
         () -> -modifyAxis(stickTwo.getX()) * -DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 1,
-        true)); // ATTENTION These values were multiplied by Oren to make the bot not die while
-                // testing the three * .5 terms should be deleted
+        true));
 
     // reachArmSub.setDefaultCommand(new ControlReach(reachArmSub, () ->
     // -stickThree.getRawAxis(1), 75)); //CHANGETOTHREE
@@ -175,6 +173,7 @@ public class RobotContainer {
           Constants.SUBSTATION_UP_POS_VERT)
           .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.SUBSTATION_REACH_POS))
           .andThen(new ControlArm(vertArm, () -> (modifyVertArm(stickThree.getRawAxis(1)) + 0.055), 100)));
+
 
   // private final SequentialCommandGroup autoPlaceThenBalance = new
   // AutoVert(vertArm, 0.25, 6)
@@ -366,6 +365,7 @@ public class RobotContainer {
   }
 
   public void initializeAuto() {
+    mDriveTrain.zeroGyro();
     // mPath.setPath(PathChooser.getSelected());
 
   }
