@@ -10,13 +10,14 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Commands.AutoReach;
 import frc.robot.Commands.AutoSusan;
@@ -28,11 +29,9 @@ import frc.robot.Commands.ControlReach;
 import frc.robot.Commands.ControlSusan;
 import frc.robot.Commands.ControlVertStraightDown;
 import frc.robot.Commands.DriveTrainCom;
-import frc.robot.Commands.HoldSusan;
 import frc.robot.Commands.RunIntake;
-import frc.robot.Commands.SetRobotHeading;
 import frc.robot.Commands.SlightTurnDrive;
-import frc.robot.Commands.TimedAuto;
+import frc.robot.Commands.StopDrive;
 import frc.robot.Subsystems.DriveTrain;
 import frc.robot.Subsystems.Intake;
 import frc.robot.Subsystems.LazySusanSub;
@@ -41,10 +40,10 @@ import frc.robot.Subsystems.Pneumatics;
 import frc.robot.Subsystems.ReachArmSub;
 import frc.robot.Subsystems.SinglePaths;
 import frc.robot.Subsystems.VertArm;
+import frc.robot.Tags.CPTagDrive;
 // import frc.robot.Subsystems.PathHolder.PathChoice;
 import frc.robot.Tags.CenterSusanPhoton;
 import frc.robot.Tags.CheckPhotonTarget;
-import frc.robot.Tags.FlattenTag;
 import frc.robot.Tags.PhotonVision;
 import frc.robot.Tags.TagFollower;
 
@@ -65,6 +64,7 @@ public class RobotContainer {
   private final SinglePaths singlePaths = new SinglePaths(mDriveTrain, vertArm, lazySusanSub, intakeSub,
       reachArmSub);
   UsbCamera cam = CameraServer.startAutomaticCapture();
+  private final Timer steerCheckTimer = new Timer();
 
   // private AutoContainer mAutoContainer = new AutoContainer(mDriveTrain,
   // lazySusanSub, pneumatics, reachArmSub, vertArm);
@@ -126,27 +126,27 @@ public class RobotContainer {
 
   private final SequentialCommandGroup elementTopLeft = new SequentialCommandGroup( // these are bot oriented directions
       new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.PLACE_TOP_VERT)
-          .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.LEFT_TOP_PLACEMENT_SUSAN)
-              .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.TOP_REACH_LEFT_PLACEMENT)))
-          .andThen(new ControlArm(vertArm, () -> 0.105, 100)));
+          .alongWith(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.LEFT_TOP_PLACEMENT_SUSAN))
+          .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.TOP_REACH_LEFT_PLACEMENT))
+          .andThen(new ControlArm(vertArm, () -> (modifyVertArm(stickThree.getRawAxis(1)) + 0.075), 100)));
 
   private final SequentialCommandGroup elementMidLeft = new SequentialCommandGroup(
       new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.PLACE_MID_VERT)
-          .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.LEFT_MID_PLACEMENT_SUSAN)
-              .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.MID_REACH_PLACEMENT)))
-          .andThen(new ControlArm(vertArm, () -> 0.055, 100)));
+          .alongWith(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.LEFT_MID_PLACEMENT_SUSAN))
+          .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.MID_REACH_PLACEMENT))
+          .andThen(new ControlArm(vertArm, () -> (modifyVertArm(stickThree.getRawAxis(1)) + 0.055), 100)));
 
   private final SequentialCommandGroup elementTopRight = new SequentialCommandGroup(
       new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.PLACE_TOP_VERT)
-          .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.RIGHT_TOP_PLACEMENT_SUSAN)
-              .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.TOP_REACH_RIGHT_PLACEMENT)))
-          .andThen(new ControlArm(vertArm, () -> 0.105, 100)));
+          .alongWith(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.RIGHT_TOP_PLACEMENT_SUSAN))
+          .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.TOP_REACH_RIGHT_PLACEMENT))
+          .andThen(new ControlArm(vertArm, () -> (modifyVertArm(stickThree.getRawAxis(1)) + 0.075), 100)));
 
   private final SequentialCommandGroup elementMidRight = new SequentialCommandGroup(
       new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.PLACE_MID_VERT)
           .andThen(new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, Constants.RIGHT_MID_PLACEMENT_SUSAN)
               .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.MID_REACH_PLACEMENT)))
-          .andThen(new ControlArm(vertArm, () -> 0.055, 100)));
+          .andThen(new ControlArm(vertArm, () -> (modifyVertArm(stickThree.getRawAxis(1)) + 0.055), 100)));
 
   // private final SequentialCommandGroup elementTopRightAuto = new
   // SequentialCommandGroup(
@@ -168,10 +168,12 @@ public class RobotContainer {
   // .andThen(new TimedAuto(mDriveTrain, 1000, -0.25, 0, 0))
   // .andThen(new SlightTurnDrive(mDriveTrain)));
 
-  private final SequentialCommandGroup upToSubStation = new SequentialCommandGroup(new PrintCommand("Substation")
-      .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, Constants.SUBSTATION_UP_POS_VERT)
-          .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.SUBSTATION_REACH_POS)))
-      .andThen(new ControlArm(vertArm, () -> (modifyVertArm(stickThree.getRawAxis(1)) + 0.055), 100)));
+  private final Command upToSubStation = new SequentialCommandGroup(
+      new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+          Constants.SUBSTATION_UP_POS_VERT)
+          .alongWith(new AutoReach(reachArmSub, Constants.AUTO_REACH_SPEED, Constants.SUBSTATION_REACH_POS))
+          .andThen(new ControlArm(vertArm, () -> (modifyVertArm(stickThree.getRawAxis(1)) + 0.055), 100)));
+
 
   // private final SequentialCommandGroup autoPlaceThenBalance = new
   // AutoVert(vertArm, 0.25, 6)
@@ -235,12 +237,20 @@ public class RobotContainer {
     // SideChooser.addOption("Blue", 1);
 
     autoTab.add("Auto", AutoChooser);
+    // AutoChooser.setDefaultOption("Middle Auto, Exit Community, Charge", 0);
+    // AutoChooser.addOption("Blue Left Auto, Charge", 1);
+    // AutoChooser.addOption("Just Place Right, No Taxi, No Charge", 2);
+    // AutoChooser.addOption("Red Right Auto, Charge", 3);
+    // AutoChooser.addOption("Blue Right Auto, Charge", 4);
+    // AutoChooser.addOption("Red Left Auto, Charge", 5);
     AutoChooser.addOption("Place + Taxi, No Charge, R/L Preferred", 0);
     AutoChooser.addOption("Just Taxi, No Place, No Charge, R/L Only", 1);
-    AutoChooser.addOption("Just Place, No Taxi, No Charge", 2);
+    AutoChooser.addOption("Just Place, Not Taxi, No Charge", 2);
     AutoChooser.addOption("Middle Auto, No Exit Community, Charge", 3);
     AutoChooser.addOption("Place, Taxi, Charge, Left", 4);
     AutoChooser.addOption("Place, Taxi, Charge, Right", 5);
+    // AutoChooser.addOption("Middle Auto, No Exit Community, Charge", 8);
+    // AutoChooser.addOption("Just Place Left, No Taxi, No Charge", 9);
 
     autoTab.addFloat("Pitch", () -> mDriveTrain.getPitch());
 
@@ -255,16 +265,16 @@ public class RobotContainer {
     // new JoystickButton(stickTwo, Constants.APRIL_TAG_TEST_BUTTON)
     // .whileTrue(aprilTagRight);
     new JoystickButton(stickTwo, Constants.APRIL_TAG_TEST_BUTTON)
-        .whileTrue(aprilTagMid);
+        .whileTrue(new CPTagDrive(visionSub, mDriveTrain, 0, 0, 10));
+    new JoystickButton(stickTwo, Constants.WHEEL_FIX_TEST)
+        .whileTrue(new StopDrive(mDriveTrain));
 
-    new JoystickButton(stickTwo,
-        Constants.TEST_ZERO_DRIVE_HEADING_BUTTON).whileTrue(new SetRobotHeading(mDriveTrain, 0));
+    // new JoystickButton(stickTwo,
+    // Constants.TEST_ZERO_DRIVE_HEADING_BUTTON).whileTrue(new
+    // ZeroRobotHeading(mDriveTrain));
 
     // new JoystickButton(stickTwo, Constants.TARGET_TEST_BUTTON).whileTrue(new
     // CheckPhotonTarget(photonVision));
-
-    // new JoystickButton(stickOne, Constants.RANDOM_TEST_BUTTON).onTrue(new
-    // TimedAuto(mDriveTrain, 1000, 0, 1, 0, 0));
 
     new JoystickButton(stickThree, Constants.STRAIGHT_DOWN_INTAKE_BUTTON).whileTrue(
         new ControlVertStraightDown(vertArm, reachArmSub, () -> modifyVertArm(stickThree.getRawAxis(1)), 100));
@@ -279,16 +289,14 @@ public class RobotContainer {
 
     new JoystickButton(stickTwo, Constants.TEST_SUSAN_PHOTON)
         .whileTrue(new CenterSusanPhoton(visionSub, mDriveTrain, lazySusanSub, 0, 0, 1.2));
-
     new JoystickButton(stickTwo, Constants.TEST_DRIVE_CENTER_PHOTON)
-        .whileTrue(new FlattenTag(visionSub, mDriveTrain, 0)
-            .andThen(new TagFollower(visionSub, mDriveTrain, 0, 0, 24)));
+        .whileTrue(new TagFollower(visionSub, mDriveTrain, 0, 0, 1.2));
 
     new JoystickButton(stickTwo, Constants.NO_SLIP_DRIVE_BUTTON).whileTrue(new SlightTurnDrive(mDriveTrain));
 
     new JoystickButton(stickThree, Constants.ZERO_SUSAN_BUTTON)
-        .whileTrue(
-            (new HoldSusan(lazySusanSub, 1, 0)));
+        .onTrue(new SequentialCommandGroup(
+            new AutoSusan(lazySusanSub, Constants.AUTO_SUSAN_SPEED, 0)));
 
     // This resets the robot to field orientation and sets the current front of the
     // robot to the forward direction
@@ -346,7 +354,7 @@ public class RobotContainer {
     // new JoystickButton(stickFour, Constants.LAZY_SUSAN_RIGHT_BUTTON)
     // .whileTrue(new ControlSusan(lazySusanSub, () -> -1, 10));
 
-    new JoystickButton(stickTwo, Constants.BALANCE_BUTTON).whileTrue(new Balance(mDriveTrain));
+    new JoystickButton(stickOne, Constants.BALANCE_BUTTON).whileTrue(new Balance(mDriveTrain));
 
     new JoystickButton(stickOne, Constants.AUTO_LOCK_LEFT_BTN).whileTrue(new ConditionalLock(mDriveTrain));
     new JoystickButton(stickTwo, Constants.AUTO_LOCK_RIGHT_BTN).whileTrue(new ConditionalLock(mDriveTrain));
@@ -434,6 +442,12 @@ public class RobotContainer {
     double speed;
     speed = a * reachArmPosition + b * reachArmSpeed + c;
     return speed;
+  }
+
+  public void disabledWheelCheck() {
+    if (steerCheckTimer.advanceIfElapsed(1.0)) {
+      mDriveTrain.reseedSteerOffsets();
+    }
   }
 
 }

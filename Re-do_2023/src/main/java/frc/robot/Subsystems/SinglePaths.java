@@ -9,8 +9,10 @@ import frc.robot.Commands.AutoRunIntake;
 import frc.robot.Commands.AutoSusan;
 import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.Balance;
+import frc.robot.Commands.RunIntake;
 import frc.robot.Commands.SlightTurnDrive;
 import frc.robot.Commands.TimedAuto;
+import frc.robot.Commands.TimedAutoPlusSpin;
 import frc.robot.Commands.SetRobotHeading;
 import frc.robot.Commands.ZeroSusan;
 import frc.robot.Commands.ZeroVert;
@@ -398,21 +400,21 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Low Place Drive Charge")
                                 .andThen(StraightPlaceMidPiece())
                                 .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)
-                                                .alongWith(new TimedAuto(driveTrain, 2815, 0, 1.5, 0, 0)))
+                                                .alongWith(new TimedAuto(driveTrain, 2815, 0, 1.5, 0)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 1737, 1.5, 0, 0, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 1737, 1.5, 0, 0)))
                                 .andThen(new SetRobotHeading(driveTrain, 0))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 847, 0, -1.5, 0, 0)))
-                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 589, 0, -1, 0, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 1217, 0, -1.5, 0)))
+                                .andThen(new TimedAuto(driveTrain, 1000, 0, 0, 0))
+                                .andThen(new TimedAuto(driveTrain, 500, 0, -1, 0))
                                 .andThen(new Balance(driveTrain))
                                 .andThen(new SlightTurnDrive(driveTrain)));
         }
 
         // private SequentialCommandGroup AutoTest() {
         // return new SequentialCommandGroup(new PrintCommand("Slow Auto")
-        // .andThen(new TimedAuto(driveTrain, 2715, 0, 1.5, 0, 0))
+        // .andThen(new TimedAuto(driveTrain, 2815, 0, 1.5, 0, 0))
         // .andThen(new TimedAuto(driveTrain, 1737, -1.5, 0, 0, 0)) // right
         // .andThen(new SetRobotHeading(driveTrain, 0))
         // .andThen(new TimedAuto(driveTrain, 847, 0, -1.5, 0, 0))
@@ -425,14 +427,14 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Low Place Drive Charge")
                                 .andThen(StraightPlaceMidPiece())
                                 .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)
-                                                .alongWith(new TimedAuto(driveTrain, 2815, 0, 1.5, 0, 0)))
+                                                .alongWith(new TimedAuto(driveTrain, 2815, 0, 1.5, 0)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 1737, -1.5, 0, 0, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 1737, -1.5, 0, 0)))
                                 .andThen(new SetRobotHeading(driveTrain, 0))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 847, 0, -1.5, 0, 0)))
-                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 589, 0, -1, 0, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 1217, 0, -1.5, 0)))
+                                .andThen(new TimedAuto(driveTrain, 1000, 0, 0, 0))
+                                .andThen(new TimedAuto(driveTrain, 500, 0, -1, 0))
                                 .andThen(new Balance(driveTrain))
                                 .andThen(new SlightTurnDrive(driveTrain)));
         }
@@ -441,9 +443,9 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Place Charge")
                                 .andThen(StraightPlaceMidPiece())
                                 .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 1000, 0, 1.25, 0, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 1000, 0, 1.25, 0)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
-                                                .raceWith(new TimedAuto(driveTrain, 1950, 0, 1.25, 0, 0)))
+                                                .raceWith(new TimedAuto(driveTrain, 1950, 0, 1.25, 0)))
                                 .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
                                                 .raceWith(new Balance(driveTrain)))
                                 .andThen(new Balance(driveTrain))
@@ -453,16 +455,41 @@ public class SinglePaths /* extends CommandBase */ {
         private SequentialCommandGroup PlaceDriveNew() {
                 return new SequentialCommandGroup(new PrintCommand("Place Drive")
                                 .andThen(StraightPlaceMidPiece())
-                                .andThen(new TimedAuto(driveTrain, 2815, 0, 1.5, 0, 0)
+                                .andThen(new TimedAuto(driveTrain, 3000, 0, 1.5, 0)
+                                                // doesn't make cable bump at 2815
                                                 .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0))
                                                 .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0))));
                 // drive out past station
+        }
 
+        private SequentialCommandGroup PlaceDrivePickup() {
+                return new SequentialCommandGroup(new PrintCommand("Place Drive")
+                                .andThen(StraightPlaceMidPiece())
+                                .andThen(new TimedAuto(driveTrain, 1000, 0, 1.5, 0)
+                                                // doesn't make cable bump at 2815
+                                                .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+                                                                Constants.VERT_PICKUP_POS))
+                                                .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)))
+                                .andThen(new TimedAutoPlusSpin(driveTrain, 1500, 0, 1.5, 0, 180)
+                                                // doesn't make cable bump at 2815
+                                                .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+                                                                Constants.VERT_PICKUP_POS))
+                                                .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)))
+                                .andThen(new TimedAuto(driveTrain, 500, 0, 1.5, 0)
+                                                // doesn't make cable bump at 2815
+                                                .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED,
+                                                                Constants.VERT_PICKUP_POS))
+                                                .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0))
+                                                .alongWith(new RunIntake(intake, Constants.INTAKE_IN_SPEED)
+                                                                .raceWith(new WaitCommand(1))))
+
+                );
         }
 
         private SequentialCommandGroup JustDrive() {
                 return new SequentialCommandGroup(new PrintCommand("Just Drive")
-                                .andThen(new TimedAuto(driveTrain, 2815, 0, 1.5, 0, 0)));
+                                .andThen(new TimedAuto(driveTrain, 3000, 0, 1.5, 0)));
+                // doesn't make the cable bump at 2815
         }
 
         // private SequentialCommandGroup PlaceDriveCharge() { // works within 15

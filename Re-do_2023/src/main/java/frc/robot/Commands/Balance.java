@@ -48,7 +48,7 @@ public class Balance extends CommandBase {
         // } else {
         // speed = 0;
         // }
-        pitchAngleDegrees = (driveTrain.getPitch() - 3.8); // because the range is -5 - 16 when it needs to be -x -> x
+        pitchAngleDegrees = driveTrain.getPitch(); 
 
         double pitchAngleRadians = pitchAngleDegrees * (Math.PI / 180.0);
         speed = Math.sin(pitchAngleRadians) * 2;

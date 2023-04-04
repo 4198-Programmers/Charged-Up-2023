@@ -1,11 +1,8 @@
 package frc.robot.Subsystems;
 
+import java.util.Arrays;
+
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper;
-import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
-import com.swervedrivespecialties.swervelib.SwerveModule;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -18,6 +15,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.SwerveLib.Mk4iSwerveModuleHelper;
+import frc.robot.SwerveLib.SdsModuleConfigurations;
+import frc.robot.SwerveLib.SwerveModule;
 
 public class DriveTrain extends SubsystemBase {
 
@@ -52,13 +52,14 @@ public class DriveTrain extends SubsystemBase {
                 return mkinematics;
         }
 
-        private final AHRS NavX = new AHRS(SPI.Port.kMXP, (byte) 200); // initializes the gyro to the board port (MXP)
+        private final AHRS NavX = new AHRS(SPI.Port.kMXP, (byte) 100); // initializes the gyro to the board port (MXP)
 
         private final SwerveModule frontLeft;
         private final SwerveModule frontRight;
         private final SwerveModule backLeft;
         private final SwerveModule backRight;
         private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0); // start at zeros just in case
+        private final SwerveModule[] swerveModulesArray;
 
         public DriveTrain() {
                 Shuffleboard.getTab("DriveTrain");
@@ -92,6 +93,8 @@ public class DriveTrain extends SubsystemBase {
                                 Constants.BACK_RIGHT_STEER,
                                 Constants.BACK_RIGHT_ENCODER,
                                 Constants.BACK_RIGHT_STEER_OFFSET);
+
+                swerveModulesArray = new SwerveModule[] { frontLeft, frontRight, backLeft, backRight };
         }
 
         public void zeroGyro() { // sets the robots current front to zero in the gyro (top of the board when
@@ -103,12 +106,21 @@ public class DriveTrain extends SubsystemBase {
                 NavX.calibrate();
         }
 
+        public boolean gyroConnected() {
+                return NavX.isConnected();
+        }
+
+
         public boolean calibratingGyro() {
                 return NavX.isCalibrating();
         }
 
         public double driveVel() {
                 return frontRight.getDriveVelocity();
+        }
+
+        public void reseedSteerOffsets() {
+                Arrays.stream(swerveModulesArray).forEach(SwerveModule::deadWheelCheckMotorOffsets);
         }
 
         // We are passing in a boolean so that it can easily switch from field to robot
@@ -121,10 +133,12 @@ public class DriveTrain extends SubsystemBase {
                 // return Rotation2d.fromDegrees(-NavX.getFusedHeading());
                 // }
                 if (fieldOrientation) {
-                        return Rotation2d.fromDegrees(-NavX.getYaw() + 90);// -NavX.getYaw so that the wheels turn in
-                                                                           // the right direction + 90 so the the front
-                                                                           // of the robot is considered the forward
-                                                                           // direction when reset.
+                        return Rotation2d.fromDegrees(-NavX.getYaw() + 90);// -NavX.getYaw so that the wheels turn
+                                                                               // in
+                                                                               // the right direction + 90 so the the
+                                                                               // front
+                                                                               // of the robot is considered the forward
+                                                                               // direction when reset.
                 } else {
                         return Rotation2d.fromDegrees(90); // This sets the front of the robot to be the front/forward
                                                            // direction at all times.
