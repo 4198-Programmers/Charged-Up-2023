@@ -98,6 +98,7 @@ public class TagFollower extends CommandBase {
                 omegaRadians = -0.5;
             } else {
                 System.out.println("Skew Variance: " + varianceInSkew);
+                System.out.println("Skew Finished");
                 omegaRadians = 0;
                 zFinished = true;
                 if (timeZEnded == -1) {
@@ -117,6 +118,7 @@ public class TagFollower extends CommandBase {
                 vy = 0.5;
             } else {
                 System.out.println("Yaw Variance: " + varianceInYaw);
+                System.out.println("Yaw Finished");
                 vy = 0;
                 yFinished = true;
                 if (timeYEnded == -1) {
@@ -136,6 +138,7 @@ public class TagFollower extends CommandBase {
                 vx = 0.5;
             } else {
                 System.out.println("Distance Variance: " + varianceInDistance);
+                System.out.println("Distance Finished");
                 vx = 0;
                 xFinished = true;
                 if (timeXEnded == -1) {

@@ -29,6 +29,7 @@ public class FlattenTag extends CommandBase {
         PhotonTrackedTarget target = vision.getTarget();
         if (target == null) {
             timeEnded = System.currentTimeMillis();
+            System.out.println("Flatten Tag No Target");
             isFinished = true;
             return;
         } else {

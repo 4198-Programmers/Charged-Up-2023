@@ -25,8 +25,8 @@ public class Balance extends CommandBase {
 
     @Override
     public void initialize() {
-        // isFinished = false;
-        // done = false;
+        isFinished = false;
+        done = false;
     }
 
     @Override
@@ -61,10 +61,8 @@ public class Balance extends CommandBase {
 
         } else {
             driveTrain.drive(new ChassisSpeeds(0, 0, 0.1));
-            if(Objects.isNull(timeEnded)) {
-                timeEnded = System.currentTimeMillis();
-            }
-            
+            timeEnded = System.currentTimeMillis();
+
         }
 
         System.out.println("Accel X" + driveTrain.getXAccel());
