@@ -1,7 +1,6 @@
 package frc.robot;
 
 import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -12,7 +11,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Subsystems.Swerve;
 
 public class SwerveModule {
   private final CANSparkMax driveMotor;
@@ -33,12 +31,9 @@ public class SwerveModule {
     int absoluteEncoderID, 
     double absoluteEncoderOffset){
     absoluteEncoder = new CANCoder(absoluteEncoderID);
+    absoluteEncoder.configAllSettings(Robot.ctreConfigs.coderConfiguration);
 
     offset = Rotation2d.fromRotations(absoluteEncoderOffset);
-
-    CANCoderConfiguration angleEncoderConfiguration = Swerve.ctreConfigs.coderConfiguration;
-    angleEncoderConfiguration.magnetOffsetDegrees = -offset.getRotations();
-    absoluteEncoder.getAllConfigs(angleEncoderConfiguration);
 
     driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
     angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
@@ -85,7 +80,7 @@ public class SwerveModule {
 
   public void resetEncoders(){
     driveEncoder.setPosition(0);
-    angleEncoder.setPosition(getState().angle.getRadians());
+    angleEncoder.setPosition(getState().angle.getRadians()- offset.getDegrees());
   }
 
   public void setDesiredState(SwerveModuleState desiredState){
