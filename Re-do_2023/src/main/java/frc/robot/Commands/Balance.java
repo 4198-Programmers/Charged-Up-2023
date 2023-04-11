@@ -1,5 +1,7 @@
 package frc.robot.Commands;
 
+import java.util.Objects;
+
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -23,8 +25,8 @@ public class Balance extends CommandBase {
 
     @Override
     public void initialize() {
-        isFinished = false;
-        done = false;
+        // isFinished = false;
+        // done = false;
     }
 
     @Override
@@ -59,7 +61,10 @@ public class Balance extends CommandBase {
 
         } else {
             driveTrain.drive(new ChassisSpeeds(0, 0, 0.1));
-            timeEnded = System.currentTimeMillis();
+            if(Objects.isNull(timeEnded)) {
+                timeEnded = System.currentTimeMillis();
+            }
+            
         }
 
         System.out.println("Accel X" + driveTrain.getXAccel());
@@ -72,7 +77,7 @@ public class Balance extends CommandBase {
     @Override
     public boolean isFinished() {
         return (Math.abs(pitchAngleDegrees) < 2 && Math.abs(driveTrain.getXAccel()) < 0.01
-                && System.currentTimeMillis() > timeEnded + 500);
+                && System.currentTimeMillis() > timeEnded + 500 && timeEnded > 0);
         // return driveTrain.BalanceDrive() == 0;
         // return false;
     }

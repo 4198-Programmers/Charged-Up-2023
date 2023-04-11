@@ -15,6 +15,7 @@ public class FlattenTag extends CommandBase {
     double wantedSkew;
     double skew;
     double rotationToWanted;
+    double timeEnded;
 
     public FlattenTag(PhotonVision visionSub, DriveTrain swerveDriveSub, double wantedSkew) {
         this.wantedSkew = wantedSkew;
@@ -27,18 +28,27 @@ public class FlattenTag extends CommandBase {
     public void execute() {
         PhotonTrackedTarget target = vision.getTarget();
         if (target == null) {
+            timeEnded = System.currentTimeMillis();
             isFinished = true;
             return;
-        }
-        skew = target.getSkew();
-        rotationToWanted = Constants.WANTED_SKEW_MID - skew;
-        if (rotationToWanted < -Constants.PHOTON_TOLERANCE_VALUE) {
-            swerveDrive.drive(new ChassisSpeeds(0, 0, 0.5));
-            System.out.println("Skew Difference: " + rotationToWanted);
-        } else if (rotationToWanted > Constants.PHOTON_TOLERANCE_VALUE) {
-            swerveDrive.drive(new ChassisSpeeds(0, 0, -0.5));
         } else {
-            isFinished = true;
+            skew = target.getSkew();
+            rotationToWanted = Constants.WANTED_SKEW_MID - skew;
+            if (rotationToWanted < -Constants.PHOTON_TOLERANCE_VALUE) {
+                timeEnded = -1;
+                swerveDrive.drive(new ChassisSpeeds(0, 0, 0.5));
+                System.out.println("Skew Difference: " + rotationToWanted);
+            } else if (rotationToWanted > Constants.PHOTON_TOLERANCE_VALUE) {
+                timeEnded = -1;
+                swerveDrive.drive(new ChassisSpeeds(0, 0, -0.5));
+            } else {
+                isFinished = true;
+                System.out.println("Flatten Finished " + isFinished);
+                if (timeEnded == -1) {
+                    timeEnded = System.currentTimeMillis();
+                }
+
+            }
         }
     }
 

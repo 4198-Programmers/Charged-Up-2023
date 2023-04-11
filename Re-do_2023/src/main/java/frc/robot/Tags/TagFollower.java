@@ -1,5 +1,7 @@
 package frc.robot.Tags;
 
+import java.util.Objects;
+
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -27,6 +29,9 @@ public class TagFollower extends CommandBase {
     final double targetHeightMeters = Units.inchesToMeters(18);
     final double cameraPitchRadians = Units.degreesToRadians(0);
     double goalRange;
+    double timeXEnded;
+    double timeYEnded;
+    double timeZEnded;
 
     public TagFollower(PhotonVision visionSub, DriveTrain swerveDriveSub, double wantedYaw, double wantedSkew,
             double wantedDistance) {
@@ -50,68 +55,109 @@ public class TagFollower extends CommandBase {
         target = vision.getTarget();
 
         if (target == null) {
+            System.out.println("No Tag");
             xFinished = true;
             yFinished = true;
             zFinished = true;
+            timeXEnded = System.currentTimeMillis();
+            timeYEnded = System.currentTimeMillis();
+            timeZEnded = System.currentTimeMillis();
             return;
-        }
-        // for Chassis Speeds, +vx is foreward, +vy is right, and +omegaRadians is
-        // counterclockwise
-
-        // yaw is positive to the right (the tag is to the right relative to the camera)
-        double yaw = -target.getYaw();
-        double varianceInYaw = wantedYaw - yaw;
-        // skew is positive when counter clockwise rotation relative to the camera
-        double skew = -target.getSkew();
-        double varianceInSkew = wantedSkew - skew;
-        // pitch is positive when it is upwards relative to the camera
-        double pitch = -target.getPitch();
-        // distance increases as pitch decreases and vice versa
-        double distanceToTarget = -Maths.DistanceFromTarget(pitch);
-        double varianceInDistance = wantedDistance - distanceToTarget;
-
-        if (varianceInSkew < -0.5) {
-            System.out.println("Skew Variance: " + varianceInSkew);
-            omegaRadians = 0.5;
-        } else if (varianceInSkew > 0.5) {
-            System.out.println("Skew Variance: " + varianceInSkew);
-            omegaRadians = -0.5;
         } else {
-            System.out.println("Skew Variance: " + varianceInSkew);
-            omegaRadians = 0;
-            zFinished = true;
+            // for Chassis Speeds, +vx is foreward, +vy is right, and +omegaRadians is
+            // counterclockwise
+
+            // yaw is positive to the right (the tag is to the right relative to the camera)
+            double yaw = -target.getYaw();
+            double varianceInYaw = wantedYaw - yaw;
+            // skew is positive when counter clockwise rotation relative to the camera
+            double skew = -target.getSkew();
+            double varianceInSkew = wantedSkew - skew;
+            // pitch is positive when it is upwards relative to the camera
+            double pitch = -target.getPitch();
+            // distance increases as pitch decreases and vice versa
+            double distanceToTarget = -Maths.DistanceFromTarget(pitch);
+            double varianceInDistance = wantedDistance - distanceToTarget;
+            int basis = 1;
+
+            switch(basis){
+                case 1:
+                System.out.println("f");
+                break;
+            }
+
+            if (varianceInSkew < -0.5) {
+                System.out.println("Skew Variance: " + varianceInSkew);
+                zFinished = false;
+                timeZEnded = -1;
+                omegaRadians = 0.5;
+            } else if (varianceInSkew > 0.5) {
+                System.out.println("Skew Variance: " + varianceInSkew);
+                zFinished = false;
+                timeZEnded = -1;
+                omegaRadians = -0.5;
+            } else {
+                System.out.println("Skew Variance: " + varianceInSkew);
+                omegaRadians = 0;
+                zFinished = true;
+                if (timeZEnded == -1) {
+                    this.timeZEnded = System.currentTimeMillis();
+                }
+            }
+
+            if (varianceInYaw < -0.5) {
+                System.out.println("Yaw Variance: " + varianceInYaw);
+                timeYEnded = -1;
+                yFinished = false;
+                vy = -0.5;
+            } else if (varianceInYaw > 0.5) {
+                System.out.println("Yaw Variance: " + varianceInYaw);
+                yFinished = false;
+                timeYEnded = -1;
+                vy = 0.5;
+            } else {
+                System.out.println("Yaw Variance: " + varianceInYaw);
+                vy = 0;
+                yFinished = true;
+                if (timeYEnded == -1) {
+                    this.timeYEnded = System.currentTimeMillis();
+                }
+            }
+
+            if (varianceInDistance < -0.5) {
+                System.out.println("Distance Variance: " + varianceInDistance);
+                xFinished = false;
+                timeXEnded = -1;
+                vx = -0.5;
+            } else if (varianceInDistance > 0.5) {
+                System.out.println("Distance Variance: " + varianceInDistance);
+                xFinished = false;
+                timeXEnded = -1;
+                vx = 0.5;
+            } else {
+                System.out.println("Distance Variance: " + varianceInDistance);
+                vx = 0;
+                xFinished = true;
+                if (timeXEnded == -1) {
+                    this.timeXEnded = System.currentTimeMillis();
+                }
+            }
+            swerveDrive
+                    .drive(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omegaRadians,
+                            swerveDrive.getGyroRotation(true)));
         }
 
-        if (varianceInYaw < -0.5) {
-            System.out.println("Yaw Variance: " + varianceInYaw);
-            vy = -0.5;
-        } else if (varianceInYaw > 0.5) {
-            System.out.println("Yaw Variance: " + varianceInYaw);
-            vy = 0.5;
-        } else {
-            System.out.println("Yaw Variance: " + varianceInYaw);
-            vy = 0;
-            yFinished = true;
-        }
-
-        if (varianceInDistance < -0.5) {
-            System.out.println("Distance Variance: " + varianceInDistance);
-            vx = -0.5;
-        } else if (varianceInDistance > 0.5) {
-            System.out.println("Distance Variance: " + varianceInDistance);
-            vx = 0.5;
-        } else {
-            System.out.println("Distance Variance: " + varianceInDistance);
-            vx = 0;
-            xFinished = true;
-        }
-        swerveDrive
-                .drive(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omegaRadians, swerveDrive.getGyroRotation(true)));
     }
 
     @Override
     public boolean isFinished() {
-        return zFinished && yFinished && xFinished;
+        return zFinished && yFinished && xFinished && System.currentTimeMillis() > timeZEnded + 500
+                && System.currentTimeMillis() > timeYEnded + 500 && System.currentTimeMillis() > timeXEnded + 500
+                && timeXEnded > 0 && timeYEnded > 0 && timeZEnded > 0;
     }
 
+    @Override
+    public void end(boolean interrupted) {
+        swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, swerveDrive.getGyroRotation(true)));
+    }
 }
