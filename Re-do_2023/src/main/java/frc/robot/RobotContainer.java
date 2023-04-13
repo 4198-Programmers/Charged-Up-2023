@@ -284,7 +284,7 @@ public class RobotContainer {
 
     new JoystickButton(stickTwo, Constants.TEST_DRIVE_CENTER_PHOTON)
         .whileTrue(new FlattenTag(visionSub, mDriveTrain, 0)
-            .andThen(new TagFollower(visionSub, mDriveTrain, 0, 0, 24)));
+            .andThen(new TagFollower(visionSub, mDriveTrain, 0, 0, 1)));
 
     new JoystickButton(stickTwo, Constants.NO_SLIP_DRIVE_BUTTON).whileTrue(new SlightTurnDrive(mDriveTrain));
 

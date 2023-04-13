@@ -117,7 +117,9 @@ public final class Constants {
         public static final double VERT_ARM_NO_DROP_SPEED = 0.03;
 
         // april tags constants
-        public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = -1,
+        public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = -0.25,
+                        CAMERA_HEIGHT = 0.5207,
+                        APRIL_TAG_HEIGHT = 0.46355,
                         CAMERA_TO_DRIVEBASE_OFFSET = 14,
                         WANTED_DISTANCE_LEFT = 16 + CAMERA_TO_DRIVEBASE_OFFSET,
                         WANTED_DISTANCE_MID = 16 + CAMERA_TO_DRIVEBASE_OFFSET,
