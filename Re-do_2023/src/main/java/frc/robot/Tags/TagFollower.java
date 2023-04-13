@@ -48,6 +48,9 @@ public class TagFollower extends CommandBase {
         xFinished = false;
         yFinished = false;
         zFinished = false;
+        vx = 0;
+        vy = 0;
+        omegaRadians = 0;
     }
 
     @Override
@@ -68,22 +71,22 @@ public class TagFollower extends CommandBase {
             // counterclockwise
 
             // yaw is positive to the right (the tag is to the right relative to the camera)
-            double yaw = -target.getYaw();
+            double yaw = target.getYaw();
             double varianceInYaw = wantedYaw - yaw;
             // skew is positive when counter clockwise rotation relative to the camera
-            double skew = -target.getSkew();
+            double skew = target.getSkew();
             double varianceInSkew = wantedSkew - skew;
             // pitch is positive when it is upwards relative to the camera
-            double pitch = -target.getPitch();
+            double pitch = target.getPitch();
             // distance increases as pitch decreases and vice versa
-            double distanceToTarget = -Maths.DistanceFromTarget(pitch);
+            double distanceToTarget = Maths.DistanceFromTarget(pitch);
             double varianceInDistance = wantedDistance - distanceToTarget;
             int basis = 1;
 
-            switch(basis){
+            switch (basis) {
                 case 1:
-                System.out.println("f");
-                break;
+                    System.out.println("");
+                    break;
             }
 
             if (varianceInSkew < -0.5) {
@@ -110,17 +113,20 @@ public class TagFollower extends CommandBase {
                 System.out.println("Yaw Variance: " + varianceInYaw);
                 timeYEnded = -1;
                 yFinished = false;
-                vy = -0.5;
+                vx = -0.5;
+                System.out.println(vy);
             } else if (varianceInYaw > 0.5) {
                 System.out.println("Yaw Variance: " + varianceInYaw);
                 yFinished = false;
                 timeYEnded = -1;
-                vy = 0.5;
+                vx = 0.5;
+                System.out.println(vy);
             } else {
                 System.out.println("Yaw Variance: " + varianceInYaw);
                 System.out.println("Yaw Finished");
-                vy = 0;
+                vx = 0;
                 yFinished = true;
+                System.out.println(vy);
                 if (timeYEnded == -1) {
                     this.timeYEnded = System.currentTimeMillis();
                 }
@@ -130,17 +136,20 @@ public class TagFollower extends CommandBase {
                 System.out.println("Distance Variance: " + varianceInDistance);
                 xFinished = false;
                 timeXEnded = -1;
-                vx = -0.5;
+                vy = -0.5;
+                System.out.println(vx);
             } else if (varianceInDistance > 0.5) {
                 System.out.println("Distance Variance: " + varianceInDistance);
                 xFinished = false;
                 timeXEnded = -1;
-                vx = 0.5;
+                vy = 0.5;
+                System.out.println(vx);
             } else {
                 System.out.println("Distance Variance: " + varianceInDistance);
                 System.out.println("Distance Finished");
-                vx = 0;
+                vy = 0;
                 xFinished = true;
+                System.out.println(vy);
                 if (timeXEnded == -1) {
                     this.timeXEnded = System.currentTimeMillis();
                 }
