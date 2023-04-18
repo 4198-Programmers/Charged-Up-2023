@@ -76,9 +76,9 @@ public class TagFollower extends CommandBase {
             // pitch is positive when it is upwards relative to the camera
             double pitch = target.getPitch();
             // distance increases as pitch decreases and vice versa
-            double distanceToTarget = (PhotonUtils.calculateDistanceToTargetMeters(Constants.CAMERA_HEIGHT,
-                    Constants.APRIL_TAG_HEIGHT, 0, Units.degreesToRadians(pitch))) * -1;
-            // Maths.DistanceFromTarget(pitch);
+            double distanceToTarget = Maths.distanceFromTargetRegression(pitch);
+            // (PhotonUtils.calculateDistanceToTargetMeters(Constants.CAMERA_HEIGHT,
+            // Constants.APRIL_TAG_HEIGHT, 0, Units.degreesToRadians(pitch))) * -1;
             double varianceInDistance = wantedDistance - distanceToTarget;
             int basis = 1;
 
@@ -131,7 +131,7 @@ public class TagFollower extends CommandBase {
                 }
             }
 
-            if (varianceInDistance < -0.01) {
+            if (varianceInDistance < -2) {
                 System.out.println("Current Distance: " + distanceToTarget);
                 System.out.println("Wanted Distance: " + wantedDistance);
                 System.out.println("Pitch: " + pitch);
@@ -140,7 +140,7 @@ public class TagFollower extends CommandBase {
                 timeYEnded = -1;
                 vy = -0.5;
                 System.out.println(vy);
-            } else if (varianceInDistance > 0.01) {
+            } else if (varianceInDistance > 2) {
                 System.out.println("Current Distance" + distanceToTarget);
                 System.out.println("Wanted Distance" + wantedDistance);
                 System.out.println("Pitch: " + pitch);
@@ -162,8 +162,10 @@ public class TagFollower extends CommandBase {
                     this.timeYEnded = System.currentTimeMillis();
                 }
             }
+
             swerveDrive
-                    .drive(ChassisSpeeds.fromFieldRelativeSpeeds(vx * 0.5, vy * (Math.abs(varianceInDistance)), omegaRadians * 0.5,
+                    .drive(ChassisSpeeds.fromFieldRelativeSpeeds(vx * 0.5, vy * 0.5,
+                            omegaRadians * 0.5,
                             swerveDrive.getGyroRotation(true)));
         }
 

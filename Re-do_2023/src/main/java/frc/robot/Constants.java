@@ -59,7 +59,7 @@ public final class Constants {
         // public static final int APRIL_TAG_RIGHT_BUTTON = 1;
         public static final int AUTO_LOCK_RIGHT_BTN = 1;
         public static final int NO_SLIP_DRIVE_BUTTON = 2;
-        public static final int TEST_SUSAN_PHOTON = 7;
+        public static final int TEST_DRIVE_RIGHT_BUTTON = 7;
         public static final int TEST_DRIVE_CENTER_PHOTON = 8;
         public static final int TEST_ZERO_DRIVE_HEADING_BUTTON = 9;
         public static final int APRIL_TAG_TEST_BUTTON = 11;
@@ -117,8 +117,8 @@ public final class Constants {
         public static final double VERT_ARM_NO_DROP_SPEED = 0.03;
 
         // april tags constants
-        public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = -0.25,
-                        CAMERA_HEIGHT = 0.5207,
+        public static final double CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE = -3,
+                        CAMERA_HEIGHT = 0.51435,
                         APRIL_TAG_HEIGHT = 0.46355,
                         CAMERA_TO_DRIVEBASE_OFFSET = 14,
                         WANTED_DISTANCE_LEFT = 16 + CAMERA_TO_DRIVEBASE_OFFSET,
@@ -129,7 +129,11 @@ public final class Constants {
                         WANTED_YAW_RIGHT = -WANTED_YAW_LEFT,
                         WANTED_SKEW_LEFT = 0,
                         WANTED_SKEW_MID = 0,
-                        WANTED_SKEW_RIGHT = 0;
+                        WANTED_SKEW_RIGHT = 0,
+                        REGRESSION_A_VALUE = 3.39574,
+                        REGRESSION_H_VALUE = 4.41543,
+                        REGRESSION_K_VALUE = 6.57836;
+
         public static final double REACH_ENCODER_WHEEL_DIAMETER = 0.25,
                         REACH_ENCODER_TOLERANCE = 25,
                         TOP_REACH_LEFT_PLACEMENT = 3535,

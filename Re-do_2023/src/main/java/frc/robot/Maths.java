@@ -15,4 +15,9 @@ public class Maths {
         double distanceToTarget = Constants.CAMERA_TO_APRILTAG_HEIGHT_DIFFERENCE/Math.tan(Math.toRadians(pitch));
         return distanceToTarget;
     }
+
+    public static double distanceFromTargetRegression(double pitch) {
+        double distanceToTarget = Math.pow(Constants.REGRESSION_A_VALUE, (pitch + Constants.REGRESSION_H_VALUE)) + Constants.REGRESSION_K_VALUE;
+        return distanceToTarget;
+    }
 }

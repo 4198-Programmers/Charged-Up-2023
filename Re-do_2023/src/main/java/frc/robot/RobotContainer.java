@@ -279,12 +279,17 @@ public class RobotContainer {
     new JoystickButton(stickThree, Constants.OUTTAKE_BUTTON)
         .whileTrue(new RunIntake(intakeSub, Constants.INTAKE_OUT_SPEED));
 
-    new JoystickButton(stickTwo, Constants.TEST_SUSAN_PHOTON)
-        .whileTrue(new CenterSusanPhoton(visionSub, mDriveTrain, lazySusanSub, 0, 0, 1.2));
+    // new JoystickButton(stickTwo, 7)
+    // .whileTrue(new CenterSusanPhoton(visionSub, mDriveTrain, lazySusanSub, 0, 0,
+    // 1.2));
 
     new JoystickButton(stickTwo, Constants.TEST_DRIVE_CENTER_PHOTON)
         .whileTrue(new FlattenTag(visionSub, mDriveTrain, 0)
-            .andThen(new TagFollower(visionSub, mDriveTrain, 0, 0, 1)));
+            .andThen(new TagFollower(visionSub, mDriveTrain, 0, 0, 24)));
+
+    new JoystickButton(stickTwo, Constants.TEST_DRIVE_RIGHT_BUTTON)
+        .whileTrue(new TagFollower(visionSub, mDriveTrain, 10.056, 0, 16)
+            .andThen(new TagFollower(visionSub, mDriveTrain, 10.056, 0, 5)));
 
     new JoystickButton(stickTwo, Constants.NO_SLIP_DRIVE_BUTTON).whileTrue(new SlightTurnDrive(mDriveTrain));
 
@@ -348,7 +353,7 @@ public class RobotContainer {
     // new JoystickButton(stickFour, Constants.LAZY_SUSAN_RIGHT_BUTTON)
     // .whileTrue(new ControlSusan(lazySusanSub, () -> -1, 10));
 
-    new JoystickButton(stickTwo, Constants.BALANCE_BUTTON).whileTrue(new Balance(mDriveTrain));
+    new JoystickButton(stickOne, Constants.BALANCE_BUTTON).whileTrue(new Balance(mDriveTrain));
 
     new JoystickButton(stickOne, Constants.AUTO_LOCK_LEFT_BTN).whileTrue(new ConditionalLock(mDriveTrain));
     new JoystickButton(stickTwo, Constants.AUTO_LOCK_RIGHT_BTN).whileTrue(new ConditionalLock(mDriveTrain));

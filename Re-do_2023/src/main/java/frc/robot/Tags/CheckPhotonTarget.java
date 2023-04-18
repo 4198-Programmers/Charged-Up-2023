@@ -20,7 +20,8 @@ public class CheckPhotonTarget extends CommandBase {
     @Override
     public void execute() {
         vision.getTarget();
-        System.out.println(vision.getTarget() + "Target");
+        System.out.println("Pitch: " + vision.getTarget().getPitch());
+        System.out.println("Yaw: " + vision.getTarget().getYaw());
         isFinished = true;
     }
 
