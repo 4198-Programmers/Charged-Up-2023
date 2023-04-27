@@ -41,4 +41,5 @@ public class AutoSusan extends CommandBase {
         return (lazySusanSub.susanDisable || (lazySusanSub.getLocation() >= wantedPos - 0.05
                 && lazySusanSub.getLocation() <= wantedPos +0.05));
     }
-}
+
+    }

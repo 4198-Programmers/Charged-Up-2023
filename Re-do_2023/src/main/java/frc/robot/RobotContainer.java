@@ -47,6 +47,7 @@ import frc.robot.Tags.CheckPhotonTarget;
 import frc.robot.Tags.FlattenTag;
 import frc.robot.Tags.PhotonVision;
 import frc.robot.Tags.TagFollower;
+import frc.robot.Tags.TagFollowerExample;
 
 public class RobotContainer {
   private final Joystick stickOne = new Joystick(0);
@@ -279,13 +280,11 @@ public class RobotContainer {
     new JoystickButton(stickThree, Constants.OUTTAKE_BUTTON)
         .whileTrue(new RunIntake(intakeSub, Constants.INTAKE_OUT_SPEED));
 
-    // new JoystickButton(stickTwo, 7)
-    // .whileTrue(new CenterSusanPhoton(visionSub, mDriveTrain, lazySusanSub, 0, 0,
-    // 1.2));
-
+    // new JoystickButton(stickTwo, Constants.TEST_DRIVE_CENTER_PHOTON)
+    // .whileTrue(new FlattenTag(visionSub, mDriveTrain, 0)
+    // .andThen(new TagFollower(visionSub, mDriveTrain, 0, 0, 24)));
     new JoystickButton(stickTwo, Constants.TEST_DRIVE_CENTER_PHOTON)
-        .whileTrue(new FlattenTag(visionSub, mDriveTrain, 0)
-            .andThen(new TagFollower(visionSub, mDriveTrain, 0, 0, 24)));
+        .whileTrue(new TagFollowerExample(visionSub, mDriveTrain, lazySusanSub, 0, 0, 50, 0));
 
     new JoystickButton(stickTwo, Constants.TEST_DRIVE_RIGHT_BUTTON)
         .whileTrue(new TagFollower(visionSub, mDriveTrain, 10.056, 0, 16)

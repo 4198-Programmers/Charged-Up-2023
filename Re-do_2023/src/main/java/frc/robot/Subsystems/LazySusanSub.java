@@ -99,6 +99,7 @@ public class LazySusanSub extends SubsystemBase {
             return;
         }
 
+
         double expectedSpeed = speed * susanDirectionToggle;
         // System.out.println(getLocation() + "susan");
 

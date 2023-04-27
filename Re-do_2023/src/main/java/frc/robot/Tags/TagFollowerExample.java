@@ -1,5 +1,6 @@
 package frc.robot.Tags;
 
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -8,41 +9,47 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Maths;
 import frc.robot.Subsystems.DriveTrain;
+import frc.robot.Subsystems.LazySusanSub;
 import frc.robot.Tags.PhotonVision;
 
 public class TagFollowerExample extends CommandBase {
     private PhotonVision vision;
     private DriveTrain swerveDrive;
+    LazySusanSub lazySusanSub;
     private double wantedSpin;
-    private double wantedSkew;
+    private double wantedTranslation;
     private double wantedDistance;
     PhotonTrackedTarget target;
-    private boolean xFinished;
-    private boolean yFinished;
-    private boolean zFinished;
+    private boolean isFinished;
     double vx = 0;
     double vy = 0;
     double omegaRadians = 0;
-    final double cameraHeightMeters = Units.inchesToMeters(19);
-    final double targetHeightMeters = Units.inchesToMeters(18);
-    final double cameraPitchRadians = Units.degreesToRadians(0);
-    double goalRange;
+    double photonDistance;
+    double cameraAngle;
+    double cameraTranslation;
+    double gyroRotation;
+    double wantedDriveAngle;
+    double vySpeedSet;
+    double vxSpeedSet;
+    double vzSpeedSet;
 
-    public TagFollowerExample(PhotonVision visionSub, DriveTrain swerveDriveSub, double wantedSpin, double wantedSkew,
-            double wantedDistance) {
+    public TagFollowerExample(PhotonVision visionSub, DriveTrain swerveDriveSub, LazySusanSub lazySusanSub,
+            double wantedSpin,
+            double wantedTranslation,
+            double wantedDistance, double wantedDriveAngle) {
         this.vision = visionSub;
         this.swerveDrive = swerveDriveSub;
         this.wantedSpin = wantedSpin;
-        this.wantedSkew = wantedSkew;
-        this.goalRange = Units.inchesToMeters(wantedDistance);
-        addRequirements(visionSub, swerveDriveSub);
+        this.wantedTranslation = wantedTranslation;
+        this.wantedDistance = wantedDistance;
+        this.wantedDriveAngle = wantedDriveAngle;
+        this.lazySusanSub = lazySusanSub;
+        addRequirements(visionSub, swerveDriveSub, lazySusanSub);
     }
 
     @Override
     public void initialize() {
-        xFinished = false;
-        yFinished = false;
-        zFinished = false;
+        isFinished = false;
     }
 
     @Override
@@ -50,48 +57,70 @@ public class TagFollowerExample extends CommandBase {
         target = vision.getTarget();
 
         if (target == null) {
-            xFinished = true;
-            yFinished = true;
-            zFinished = true;
+            isFinished = true;
             return;
         }
-        // for Chassis Speeds, +vx is foreward, +vy is right, and +omegaRadians is
-        // counterclockwise
+        // photon vision's distance math didn't work
 
-        // yaw is positive to the right (the tag is to the right relative to the camera)
-        double yaw = target.getYaw();
-        // skew is positive when counter clockwise rotation relative to the camera
-        double skew = target.getSkew();
-        // pitch is positive when it is upwards relative to the camera
-        double pitch = target.getPitch();
-        // distance increases as pitch decreases and vice versa
+        photonDistance = Maths.distanceFromTargetBasedArea(target.getArea());
+        //consistently off my about 3.5 inches
+        cameraAngle = target.getSkew();
+        cameraTranslation = target.getYaw() / 2.5168; // 1 unit in Yaw is about 2.5 inches
+        gyroRotation = swerveDrive.getYaw();
+        vySpeedSet = 0.75 * Maths.distancePhotonSpeedCalc(Math.abs(wantedDistance - photonDistance));
+        vxSpeedSet = 1.25 * Maths.translateAndSpinPhotonSpeedCalc(Math.abs(wantedTranslation - cameraTranslation));
+        vzSpeedSet = Maths.translateAndSpinPhotonSpeedCalc(Math.abs(wantedSpin - gyroRotation));
+        // adjusting equation isn't small enough, just trying to get functional
+        // absolute for an easier equation, direction set later
 
-        if (wantedSkew < -0.5) {
-        vy = -0.5;
-        } else if (wantedSkew > 0.5) {
-        vy = 0.5;
+        if (photonDistance > (wantedDistance + 1)) {// 1 for tolerance
+            // vy = -0.5;
+            vy = -vySpeedSet;
+        } else if (photonDistance < (wantedDistance - 1)) {
+            // vy = 0.5;
+            vy = vySpeedSet;
         } else {
-        vy = 0;
-        yFinished = true;
+            vy = 0;
         }
 
-        if (wantedDistance < -0.5) {
-        vx = -0.5;
-        } else if (wantedDistance > 0.5) {
-        vx = 0.5;
-        } else {
-        vx = 0;
-        xFinished = true;
-        }
+        // if (cameraAngle > (wantedSpin + 0.17453)) {
+        // omegaRadians = 0.5;
+        // } else if (cameraAngle < (wantedSpin - 0.17453)) {
+        // omegaRadians = -0.5;
+        // } else {
+        // omegaRadians = 0;
+        // } //get skew seems to not be working, forcing my hand
 
-        if (yaw < wantedSpin-0.5) {
-            omegaRadians = -0.5;
-        } else if (yaw > 0.5) {
-            omegaRadians = 0.5;
+        if (gyroRotation < wantedDriveAngle - 2) {
+            omegaRadians = vzSpeedSet;
+        } else if (gyroRotation > wantedDriveAngle + 2) {
+            omegaRadians = -vzSpeedSet;
         } else {
             omegaRadians = 0;
-            zFinished = true;
         }
+
+        if (lazySusanSub.getLocation() < 1.95 && lazySusanSub.getLocation() <= 80) {
+            // values have 0.05 tolerance, center of camera is 2 degrees off of robot arm
+            // center
+            lazySusanSub.susanEquationSpin(0, Constants.AUTO_SUSAN_SPEED);
+        } else if (lazySusanSub.getLocation() > 2.05 && lazySusanSub.getLocation() >= -80) {
+            lazySusanSub.susanEquationSpin(0, -Constants.AUTO_SUSAN_SPEED);
+        } else {
+            lazySusanSub.spinSusan(0);
+        }
+
+        if (cameraTranslation > (wantedTranslation + 1)) {// 2 for tolerance
+            vx = -vxSpeedSet;
+        } else if (cameraTranslation < (wantedTranslation - 1)) {
+            vx = vxSpeedSet;
+        } else {
+            vx = 0;
+        }
+
+        System.out.println("speed " + vxSpeedSet);
+
+        System.out.println(wantedTranslation + " Wanted");
+        System.out.println(cameraTranslation + " Translation");
 
         swerveDrive
                 .drive(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, omegaRadians, swerveDrive.getGyroRotation(true)));
@@ -99,7 +128,7 @@ public class TagFollowerExample extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return zFinished && yFinished && xFinished;
+        return false;
     }
 
 }

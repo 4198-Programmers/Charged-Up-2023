@@ -14,9 +14,6 @@ public class PhotonVision extends SubsystemBase {
     PhotonPipelineResult result;
 
     PhotonTrackedTarget target;
-    double skew;
-    double yaw;
-    double pitch;
     double fiducialId;
 
     public PhotonTrackedTarget getTarget() {
@@ -26,6 +23,8 @@ public class PhotonVision extends SubsystemBase {
         } else {
             target = null;
         }
+
+
         return target;
     }
 
