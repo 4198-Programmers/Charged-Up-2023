@@ -31,7 +31,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    m_robotContainer.disabledWheelCheck();
   }
 
   @Override
@@ -40,7 +39,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     m_robotContainer.initializeAuto();
 
     if (m_autonomousCommand != null) {
