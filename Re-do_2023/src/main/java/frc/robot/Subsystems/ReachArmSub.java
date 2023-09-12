@@ -18,7 +18,7 @@ public class ReachArmSub extends SubsystemBase {
     }
 
     public void moveReach(double speed) {
-        // System.out.println(encoder.getDistance() +"Reach");
+        //System.out.println(encoder.getDistance() +"Reach");
         reachMotor.set(speed);
     }
 
