@@ -1,5 +1,9 @@
 package frc.robot;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+
 public final class Constants {
         // Drive Train Values
         public static final double DRIVETRAIN_WIDTH_METERS = 0.62;
@@ -149,4 +153,54 @@ public final class Constants {
         public static final int SUSAN_SENSOR_CHANNEL = 0;
         public static final double FLAT_PLACE_AUTO_DISTANCE = 3168.2961;
 
+        class ModuleConstants{
+
+            public static final double kDrivingEncoderPositionFactor = 0;
+            public static final double kDrivingEncoderVelocityFactor = 0;
+            public static final double kTurningEncoderPositionFactor = 0;
+            public static final double kTurningEncoderVelocityFactor = 0;
+            public static final boolean kTurningEncoderInverted = false;
+            public static final double kTurningEncoderPositionPIDMinInput = 0;
+            public static final double kTurningEncoderPositionPIDMaxInput = 0;
+            public static final double kDrivingP = 0;
+            public static final double kDrivingI = 0;
+            public static final double kDrivingD = 0;
+            public static final double kDrivingFF = 0;
+            public static final double kDrivingMinOutput = 0;
+            public static final double kDrivingMaxOutput = 0;
+            public static final double kTurningP = 0;
+            public static final double kTurningI = 0;
+            public static final double kTurningD = 0;
+            public static final double kTurningFF = 0;
+            public static final double kTurningMinOutput = 0;
+            public static final double kTurningMaxOutput = 0;
+            public static final IdleMode kDrivingMotorIdleMode = null;
+            public static final IdleMode kTurningMotorIdleMode = null;
+            public static final int kDrivingMotorCurrentLimit = 0;
+            public static final int kTurningMotorCurrentLimit = 0;
+
+        }
+        class DriveConstants{
+
+            public static final int kFrontLeftDrivingCanId = 0;
+            public static final int kFrontLeftTurningCanId = 0;
+            public static final double kFrontLeftChassisAngularOffset = 0;
+            public static final int kFrontRightDrivingCanId = 0;
+            public static final int kFrontRightTurningCanId = 0;
+            public static final double kFrontRightChassisAngularOffset = 0;
+            public static final int kRearLeftDrivingCanId = 0;
+            public static final int kRearLeftTurningCanId = 0;
+            public static final double kBackLeftChassisAngularOffset = 0;
+            public static final int kRearRightDrivingCanId = 0;
+            public static final int kRearRightTurningCanId = 0;
+            public static final double kBackRightChassisAngularOffset = 0;
+            public static final double kMagnitudeSlewRate = 0;
+            public static final double kRotationalSlewRate = 0;
+            public static final SwerveDriveKinematics kDriveKinematics = null;
+            public static final double kDirectionSlewRate = 0;
+            public static final double kMaxSpeedMetersPerSecond = 0;
+            public static final double kMaxAngularSpeed = 0;
+            public static final boolean kGyroReversed = false;
+
+        }
 }
