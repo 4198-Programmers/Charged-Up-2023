@@ -126,7 +126,8 @@ public class SinglePaths /* extends CommandBase */ {
                                 // SpitDriveChargeLeftNoCable(),
                                 // SpitDriveChargeRightNoCable(),
                                 MidPlaceDriveChargeLeft(),
-                                MidPlaceDriveChargeRight()
+                                MidPlaceDriveChargeRight(),
+                                JustCharge()
                                 // AutoTest(),
                                 // PlaceDriveCharge()
                 };
@@ -448,6 +449,13 @@ public class SinglePaths /* extends CommandBase */ {
                                                 .raceWith(new Balance(driveTrain)))
                                 .andThen(new SlightTurnDrive(driveTrain)));
         }
+        private SequentialCommandGroup JustCharge() { // works within 15 seconds
+                return new SequentialCommandGroup(new PrintCommand("Just Charge")
+                                .andThen(new TimedAuto(driveTrain, 1250, 0, 1.25, 0, 0))
+                                .andThen(new Balance(driveTrain))
+                                .andThen(new SlightTurnDrive(driveTrain)));
+        }
+
 
         private SequentialCommandGroup PlaceDriveNew() {
                 return new SequentialCommandGroup(new PrintCommand("Place Drive")

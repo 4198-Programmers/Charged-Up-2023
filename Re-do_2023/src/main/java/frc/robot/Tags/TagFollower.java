@@ -64,7 +64,7 @@ public class TagFollower extends CommandBase {
             timeZEnded = System.currentTimeMillis();
             return;
         } else {
-            // for Chassis Speeds, +vx is foreward, +vy is right, and +omegaRadians is
+            // for Chassis Speeds, +vx is forward, +vy is right, and +omegaRadians is
             // counterclockwise
 
             // yaw is positive to the right (the tag is to the right relative to the camera)

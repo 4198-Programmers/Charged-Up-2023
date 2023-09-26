@@ -244,6 +244,7 @@ public class RobotContainer {
     AutoChooser.addOption("Middle Auto, No Exit Community, Charge", 3);
     AutoChooser.addOption("Place, Taxi, Charge, Left", 4);
     AutoChooser.addOption("Place, Taxi, Charge, Right", 5);
+    AutoChooser.addOption("Middle Auto, Just Charge, not Placement", 6);
 
     autoTab.addFloat("Pitch", () -> mDriveTrain.getPitch());
 
@@ -356,6 +357,8 @@ public class RobotContainer {
     new JoystickButton(stickTwo, Constants.AUTO_LOCK_RIGHT_BTN).whileTrue(new ConditionalLock(mDriveTrain));
 
     new JoystickButton(stickTwo, Constants.APRIL_TAG_TEST_BUTTON).whileTrue(new CheckPhotonTarget(photonVision));
+
+    new JoystickButton(stickOne, 5).onTrue(new ZeroGyro(mDriveTrain));
     // new JoystickButton(stickTwo,
     // Constants.CHANGE_DRIVE_SPEED_BUTTON).whileTrue(modifyDriveTrainSpeed(1));
   }
