@@ -1,5 +1,7 @@
 package frc.robot.SwerveDrive;
 
+import java.util.Objects;
+
 public class ModuleConfiguration {
     private final double wheelDiameter;
     private final double driveReduction;
@@ -79,6 +81,33 @@ public boolean equals(Object o){
     if(o == null || getClass() != o.getClass()) return false;
 
     ModuleConfiguration that = (ModuleConfiguration) o;
-    return Double.compare(that.getWheelDiameter(), getWheelDiameter()) == 0 &&
+    return Double.compare(that.getWheelDiameter(), getWheelDiameter()) == 0 && 
+        Double.compare(that.getDriveReduction(), getDriveReduction()) == 0 &&
+        isDriveInverted() == that.isDriveInverted() &&
+        Double.compare(that.getSteerReduction(), that.getSteerReduction()) == 0 &&
+        isSteerInverted() == that.isSteerInverted();
+}
+
+@Override
+public int hashCode() {
+    return Objects.hash(
+        getWheelDiameter(),
+        getDriveReduction(),
+        isDriveInverted(),
+        getSteerReduction(),
+        isSteerInverted()
+    );
+}
+
+//converts the module configuration into a string
+@Override
+public String toString() {
+    return "ModuleConfiguration(" +
+        "wheelDiameter=" + wheelDiameter +
+        ", driveReduction=" + driveReduction +
+        ", driveInverted=" + driveInverted + 
+        ", steerReduction=" + steerReduction +
+        ", steerInverted=" + steerInverted +
+        ')';
 }
 }
