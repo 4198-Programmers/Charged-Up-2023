@@ -27,7 +27,7 @@ public class Swerve extends SubsystemBase {
   private final SwerveModule backLeft = Mod2.module;
   private final SwerveModule backRight = Mod3.module;
 
-  private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+  private final AHRS gyro = new AHRS(SPI.Port.kMXP, (byte) 200);
   private final SwerveModulePosition[] positions = new SwerveModulePosition[]{
     frontLeft.getPosition(),
     frontRight.getPosition(),
@@ -36,8 +36,14 @@ public class Swerve extends SubsystemBase {
   };
   private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getRotation2d(), positions);
 
-  public void zeroHeading(){
-    gyro.reset();
+  public void zeroGyro(){
+    gyro.zeroYaw();
+  }
+  public void resetGyro(){
+    gyro.calibrate();
+  }
+  public boolean calibratingGyro(){
+    return gyro.isCalibrating();
   }
 
   public double getHeading(){
@@ -46,6 +52,15 @@ public class Swerve extends SubsystemBase {
 
   public Rotation2d getRotation2d(){
     return Rotation2d.fromDegrees(getHeading() - (45/360));
+  }
+
+  public Rotation2d getGyroRotation(boolean fieldOrientation){
+    if (fieldOrientation){
+      return Rotation2d.fromDegrees(gyro.getYaw());
+    }
+    else{
+      return Rotation2d.fromDegrees(0);
+    }
   }
 
   public Pose2d getPose(){
@@ -101,7 +116,7 @@ public class Swerve extends SubsystemBase {
       SmartDashboard.putNumber("Front Left Angle", frontLeft.getAbsoluteEncoderPosition());
       SmartDashboard.putNumber("Front Right Angle", frontRight.getAbsoluteEncoderPosition());
       SmartDashboard.putNumber("Back Left Angle", backLeft.getAbsoluteEncoderPosition());
-      SmartDashboard.putNumber("Back Right Anglr", backRight.getAbsoluteEncoderPosition());
+      SmartDashboard.putNumber("Back Right Angle", backRight.getAbsoluteEncoderPosition());
       
   }
 }

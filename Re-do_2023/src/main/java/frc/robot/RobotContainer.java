@@ -72,6 +72,7 @@ public class RobotContainer {
     placementLevelChooser = new SendableChooser<>();
     placementSideChooser = new SendableChooser<>();
     balanceChooser = new SendableChooser<>();
+    swerve.zeroGyro();
 
     swerve.setDefaultCommand(new TeleopSwerve(swerve, 
     () -> modifyAxis(stickOne.getX()) * 0.3, 

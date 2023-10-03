@@ -43,11 +43,7 @@ public class TeleopSwerve extends CommandBase {
   angleSpeed = angleLimiter.calculate(angleSpeed) * AutoConstants.kMaxSpeedMetersPerSecond;
 
   ChassisSpeeds chassisSpeeds;
-  if(fieldOrientedFunction.get()){
-    chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, angleSpeed, swerve.getRotation2d());
-  }else{
-    chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, angleSpeed);
-  }
+  chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, angleSpeed, swerve.getGyroRotation(fieldOrientedFunction.get()));
   SwerveModuleState[] moduleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(chassisSpeeds);
   swerve.setModuleStates(moduleStates);
   
