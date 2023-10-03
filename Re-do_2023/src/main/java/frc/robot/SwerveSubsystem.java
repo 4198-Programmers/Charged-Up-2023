@@ -2,9 +2,11 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.SwerveDrive.SwerveModule;
@@ -33,16 +35,40 @@ public class SwerveSubsystem extends SubsystemBase{
 /**The gyro */
     private final AHRS NavX = new AHRS(SPI.Port.kMXP);
 
-    //the swerve modules
-    private final SwerveModule frontLeft;
-    private final SwerveModule frontRight;
-    private final SwerveModule backLeft;
-    private final SwerveModule backRight;
-
-    //start at zero to make sure nothing happens
-    private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0, 0, 0);
-
-    public SwerveSubsystem(){
-        frontLeft = 
+    /**Chassis Speeds - These take joystick values and translates them into speeds for the robot. */
+    ChassisSpeeds speeds = new ChassisSpeeds(0, 0, 0);
+/**This passes in speeds to be used in periodic to set the speed */
+    public void drive(ChassisSpeeds speeds){
+        this.speeds = speeds;
     }
+
+    public Rotation2d getRotation(boolean fieldOriented){
+        if(fieldOriented){
+            return Rotation2d.fromDegrees(NavX.getYaw());
+        }
+        else{
+            return Rotation2d.fromDegrees(0);
+        }
+    }
+/** Takes the current angle and the wanted angle and returns
+ * the new optimized state that can be used as a setpoint.
+ */
+    public SwerveModuleState optimizeState(SwerveModuleState state, Rotation2d currentAngle){
+        return SwerveModuleState.optimize(state, currentAngle);
+    }
+
+    public void stopSpeed(){
+        speeds = new ChassisSpeeds(0, 0, 0);
+    }
+    @Override
+    public void periodic() {
+        SwerveModuleState[] moduleStates = swerveKinematics.toSwerveModuleStates(speeds);
+        SwerveModuleState frontLeft = moduleStates[0];
+        SwerveModuleState frontRight = moduleStates[1];
+        SwerveModuleState backLeft = moduleStates[2];
+        SwerveModuleState backRight = moduleStates[3];
+    }
+
+
+
 }
