@@ -10,5 +10,6 @@ public final class Constants {
     public static final double AngleEncoderRotationToRadian = 0;
     public static final double AngleEncdoerRPMToRadPerSec = 0;
     public static final double Angle = 0;
+    public static final double MAX_SPEED_METERS_PER_SECOND = 0;
     
 }
