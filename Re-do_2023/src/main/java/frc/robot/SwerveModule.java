@@ -1,6 +1,6 @@
 package frc.robot;
 
-import com.revrobotics.AnalogInput;
+import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -24,7 +24,7 @@ public class SwerveModule {
     We need the analog input because when the robot gets turned off, it 
     looses the relative encoder values.
      */
-    private final AnalogInput absoluteEncoder;
+    private final CANCoder absoluteEncoder;
     private final boolean absoluteEncoderReversed;
     //We need to get offsets because the readings will be "wrong"
     //from what is supposed to be the front.
@@ -36,7 +36,7 @@ public class SwerveModule {
             angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
             absoluteEncoderOffsetRad = absoluteEncoderOffset;
             this.absoluteEncoderReversed = absoluteEncoderReversed;
-            absoluteEncoder = new AnalogInput(absoluteEncoderID);
+            absoluteEncoder = new CANCoder(absoluteEncoderID);
 
             driveMotor.setInverted(driveMotorReversed);
             angleMotor.setInverted(anglemotorReversed);
