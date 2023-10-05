@@ -7,8 +7,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**This makes each swerve module */
 public class SwerveModule {
@@ -18,7 +18,32 @@ public class SwerveModule {
     //initializing the relative encoders for each motor
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder angleEncoder;
+    /*
+    This class handles the feedback loop calculation for the user, as
+    well as offering methods for returning the error, setting tolerances,
+    and checking if the control loop has reached its setpoint within the specific
+    tolerances.
 
+    Starting with kP is a good idea, mainly because it is the most intuitive, 
+    it will scale your output proportionally to your error. Start with a very small value. 
+    In general, kP shouldn’t be greater than 1/(max error) because this would attempt to drive 
+    your output to max power. This is relative of course to how you normalize your inputs/outputs, 
+    but unless you are doing something special, make sure you follow this rule.
+
+    My preferred method of tuning is to keep a small kP, and slowly dial it up until I am close 
+    to my goal but not quite there. Then I slowly increment kI. The reason I do this is because 
+    it can be shown mathematically that any value of kI will drive your steady state error to 0. 
+    This does not mean that you should choose kI poorly, as there is a variety of stability issues 
+    you can cause with a big kI.
+
+    I don’t use kD very often, but this is more preference. You can basically do the “opposite” of my approach 
+    - tune kP until a little overshoot and then up kD to decrease it.
+    */
+    /**
+     * kp - the proportional coefficient; have the effect of reducing the rise time and will reduce ,but never eliminate.<p>
+     * ki - the integral coefficient; the effect of eliminating the steady-state error, but it may make the transient response worse<p>
+     * kd - the derivative coefficient; the effect of increasing the stability of the system, reducing the overshoot, and improving the transient response
+     */
     private final PIDController anglePIDController;
     /*
     We need the analog input because when the robot gets turned off, it 
@@ -44,13 +69,13 @@ public class SwerveModule {
             driveEncoder = driveMotor.getEncoder();
             angleEncoder = angleMotor.getEncoder();
 
-            driveEncoder.setPositionConversionFactor(Constants.DriveEcoderRotationToMeter);
-            driveEncoder.setVelocityConversionFactor(Constants.DriveEncoderRPMToMeterPerSec);
+            // driveEncoder.setPositionConversionFactor(Constants.DriveEcoderRotationToMeter);
+            // driveEncoder.setVelocityConversionFactor(Constants.DriveEncoderRPMToMeterPerSec);
 
-            angleEncoder.setPositionConversionFactor(Constants.AngleEncoderRotationToRadian);
-            angleEncoder.setVelocityConversionFactor(Constants.AngleEncdoerRPMToRadPerSec);
-
-            anglePIDController = new PIDController(Constants.Angle, 0, 0);
+            // angleEncoder.setPositionConversionFactor(Constants.AngleEncoderRotationToRadian);
+            // angleEncoder.setVelocityConversionFactor(Constants.AngleEncoderRPMToRadPerSec);
+            
+            anglePIDController = new PIDController(Constants.kp, 0, 0);
             anglePIDController.enableContinuousInput(-Math.PI, Math.PI);
         }
         public double getDrivePosition(){
@@ -71,11 +96,9 @@ public class SwerveModule {
 
         public double getAbsoluteEncoderRad(){
             /*
-            to get the absolute in total value we'll need to divide
-            its voltage reading by the voltage that we're supplying it
-            that gives us how many percent of a full rotation it is reading
+            gets the absolute position of the robot positon.
             */
-            double angle = absoluteEncoder.getVoltage() / RobotController.getVoltage5V();
+            double angle = absoluteEncoder.getAbsolutePosition();
             //Multiply it by 2PI to convert to radians.
             angle*=2.0*Math.PI;
             //Subtract offset to get the actual wheel angles.
@@ -99,7 +122,11 @@ public class SwerveModule {
             state = SwerveModuleState.optimize(state, getState().angle);
             driveMotor.set(state.speedMetersPerSecond / Constants.MAX_SPEED_METERS_PER_SECOND);
             angleMotor.set(anglePIDController.calculate(getAnglePosition(), state.angle.getRadians()));
-            SmartDashboard.putString("Swerve[" + absoluteEncoder.getChannel() + "]", state.toString());
+            SmartDashboard.putString("Swerve[" + absoluteEncoder.getDeviceID() + "]", state.toString());
+        }
+
+        public SwerveModulePosition getPosition(){
+            return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAnglePosition()));
         }
 
     public void stop(){
