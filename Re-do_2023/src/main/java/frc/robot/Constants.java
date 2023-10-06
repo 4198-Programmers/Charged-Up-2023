@@ -10,7 +10,7 @@ public final class Constants {
     public static final int Z_AXIS = 2;
     public static final int SLIDER = 3;
 
-
+    //Robot dimensions
     public static final double DRIVE_TRAIN_WIDTH = 0.62;
     public static final double DRIVE_TRAIN_LENGTH = 0.62;
 
