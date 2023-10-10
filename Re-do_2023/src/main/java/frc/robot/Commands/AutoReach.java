@@ -27,13 +27,14 @@ public class AutoReach extends CommandBase {
 
     @Override
     public void execute() {
-        // if (System.currentTimeMillis() - startTime < timeRun) {// (wantedPos -
+        // if (System.currentTimeMillis() - startTaime < timeRun) {// (wantedPos -
         // Constants.AUTO_ENC_OFFSET)
         // reachArm.moveReach(speed);
         // } else {
         // reachArm.moveReach(0);
         // isFinished = true;
         // }
+        System.out.println("REACH POS: " + reachArm.getPosition());
         if (reachArm.getPosition() < wantedPos + Constants.REACH_ENCODER_TOLERANCE
                 && reachArm.getPosition() > wantedPos - Constants.REACH_ENCODER_TOLERANCE) {
             reachArm.moveReach(0);
@@ -44,7 +45,6 @@ public class AutoReach extends CommandBase {
             reachArm.moveReach(-speed);
         }
 
-        System.out.println(reachArm.getPosition());
     }
 
     @Override

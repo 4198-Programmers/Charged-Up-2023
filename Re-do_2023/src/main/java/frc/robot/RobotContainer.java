@@ -239,12 +239,13 @@ public class RobotContainer {
 
     autoTab.add("Auto", AutoChooser);
     AutoChooser.addOption("Place + Taxi, No Charge, R/L Preferred", 0);
-    AutoChooser.addOption("Just Taxi, No Place, No Charge, R/L Only", 1);
-    AutoChooser.addOption("Just Place, No Taxi, No Charge", 2);
-    AutoChooser.addOption("Middle Auto, No Exit Community, Charge", 3);
-    AutoChooser.addOption("Place, Taxi, Charge, Left", 4);
-    AutoChooser.addOption("Place, Taxi, Charge, Right", 5);
-    AutoChooser.addOption("Middle Auto, Just Charge, not Placement", 6);
+    AutoChooser.addOption("Place, Taxi, Corral", 1);
+    AutoChooser.addOption("Just Taxi, No Place, No Charge, R/L Only", 2);
+    AutoChooser.addOption("Just Place, No Taxi, No Charge", 3);
+    AutoChooser.addOption("Middle Auto, No Exit Community, Charge", 4);
+    AutoChooser.addOption("Place, Taxi, Charge, Left", 5);
+    AutoChooser.addOption("Place, Taxi, Charge, Right", 6);
+    AutoChooser.addOption("Middle Auto, Just Charge, not Placement", 7);
 
     autoTab.addFloat("Pitch", () -> mDriveTrain.getPitch());
 

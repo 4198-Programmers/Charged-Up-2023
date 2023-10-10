@@ -27,7 +27,7 @@ public class ControlReach extends CommandBase {
     public void execute() {
         reach.moveReach(speedSupplier.getAsDouble() * speedScalar);
         // System.out.println("Reach Arm Speed: " + reach.getSpeed());
-        // System.out.println("Reach Arm Position: " + reach.getPosition());
+        System.out.println("Reach Arm Position: " + reach.getPosition());
 
 
     }

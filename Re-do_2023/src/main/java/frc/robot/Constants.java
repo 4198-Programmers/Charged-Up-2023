@@ -92,7 +92,7 @@ public final class Constants {
         public static final double AUTO_VERT_SPEED = 0.75,
                         MAX_VELOCITY_METERS_PER_SECOND = 4,
                         MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3,
-                        VERT_SAFE_TO_SPIN_ENC_POS = 3.67, // printed at 0.5, better safe than broken
+                        VERT_SAFE_TO_SPIN_ENC_POS = 3.8, // printed at 0.5, better safe than broken
                         AUTO_SUSAN_SPEED = 1,
                         LEFT_PLACEMENT_ENC_POS = 6.0476,
                         VERT_MID_SHELF_PLACEMENT_ENC_MID = 6.5,
@@ -141,13 +141,13 @@ public final class Constants {
                         TOP_REACH_RIGHT_PLACEMENT = 4250,
                         PLACE_TOP_VERT = 8.15,
                         PLACE_MID_VERT = 7.05,
-                        MID_REACH_PLACEMENT = 7, //for when not moving bot
+                        MID_REACH_PLACEMENT = 7.5, //for when not moving bot
                         RIGHT_MID_PLACEMENT_SUSAN = -5.57,
                         LEFT_MID_PLACEMENT_SUSAN = 6.64,
                         RIGHT_TOP_PLACEMENT_SUSAN = -4,
                         LEFT_TOP_PLACEMENT_SUSAN = 4,
                         SUBSTATION_UP_POS_VERT = 7.92;
         public static final int SUSAN_SENSOR_CHANNEL = 0;
-        public static final double FLAT_PLACE_AUTO_DISTANCE = 3168.2961;
+        public static final double FLAT_PLACE_AUTO_DISTANCE = 2682;
 
 }
