@@ -2,8 +2,11 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,8 +48,20 @@ public class SwerveSubsystem extends SubsystemBase{
         Constants.BACK_RIGHT_ABSOLUTE_ENCODER_ID, 
         Constants.BACK_RIGHT_ENCODER_OFFSET, 
         Constants.BACK_RIGHT_ABSOLUTE_ENCODER_REVERSED);
-
+//Creating the gyro. This tells us which way is forward relative to the field, not robot
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    private final Pose2d startingPose = new Pose2d();
+
+//Creating odometry for the robot. This is mostly used for auto.
+    private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(
+        Constants.swerveKinematics, 
+        getRotation2d(), 
+        new SwerveModulePosition[]{
+        frontLeft.getPosition(),
+        frontRight.getPosition(),
+        backLeft.getPosition(),
+        backRight.getPosition()}, 
+        startingPose);
     public SwerveSubsystem(){
         new Thread(() ->{
             try{
@@ -54,13 +69,15 @@ public class SwerveSubsystem extends SubsystemBase{
             }catch (Exception e){}
         }).start();
     }
+    //This resets the gyro and sets the front of the robot to be forward
     public void zeroHeading(){
         gyro.reset();
     }
+    //Tells us where the robot is currently facing
     public double getHeading(){
         return Math.IEEEremainder(gyro.getAngle(), 360);
     }
-
+    //Creates a Rotation2d of the current angle
     public Rotation2d getRotation2d(){
         return Rotation2d.fromDegrees(getHeading());
     }
@@ -68,19 +85,23 @@ public class SwerveSubsystem extends SubsystemBase{
     public void periodic() {
         SmartDashboard.putNumber("Robot Heading", getHeading());
     }
-
+    //Sets the speeds to zero
     public void stopModules(){
         frontLeft.stop();
         frontRight.stop();
         backLeft.stop();
         backRight.stop();
     }
-
+    //Tells the robot to update the states
     public void setModuleStates(SwerveModuleState[] desiredStates){
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.MAX_SPEED_METERS_PER_SECOND);
         frontLeft.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
+    }
+
+    public Pose2d getPose(){
+        return odometer.getPoseMeters();
     }
 }

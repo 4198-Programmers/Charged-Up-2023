@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -51,18 +52,21 @@ public class SwerveModule {
      */
     private final CANCoder absoluteEncoder;
     private final boolean absoluteEncoderReversed;
-    //We need to get offsets because the readings will be "wrong"
-    //from what is supposed to be the front.
-    private final double absoluteEncoderOffsetRad;
+    /*
+    We need to get offsets because the readings will be "wrong"
+    from what is supposed to be the front.
+    */
 
     public SwerveModule(int driveMotorID, int angleMotorID, boolean driveMotorReversed, boolean anglemotorReversed,
         int absoluteEncoderID, double absoluteEncoderOffset, boolean absoluteEncoderReversed){
             driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
             angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
-            absoluteEncoderOffsetRad = absoluteEncoderOffset;
             this.absoluteEncoderReversed = absoluteEncoderReversed;
             absoluteEncoder = new CANCoder(absoluteEncoderID);
-
+            //everything in degrees
+            absoluteEncoder.configMagnetOffset(absoluteEncoderOffset);
+            absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
+            //Will curently not be inverted
             driveMotor.setInverted(driveMotorReversed);
             angleMotor.setInverted(anglemotorReversed);
             
@@ -77,6 +81,8 @@ public class SwerveModule {
             
             anglePIDController = new PIDController(Constants.kp, 0, 0);
             anglePIDController.enableContinuousInput(-Math.PI, Math.PI);
+
+
         }
         public double getDrivePosition(){
             return driveEncoder.getPosition();
@@ -96,13 +102,12 @@ public class SwerveModule {
 
         public double getAbsoluteEncoderRad(){
             /*
-            gets the absolute position of the robot positon.
+            gets the angle of the robot modules
             */
             double angle = absoluteEncoder.getAbsolutePosition();
             //Multiply it by 2PI to convert to radians.
             angle*=2.0*Math.PI;
             //Subtract offset to get the actual wheel angles.
-            angle-=absoluteEncoderOffsetRad;
             return angle * (absoluteEncoderReversed ? -1 : 1);
         }
 
@@ -126,7 +131,7 @@ public class SwerveModule {
         }
 
         public SwerveModulePosition getPosition(){
-            return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAnglePosition()));
+            return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAbsoluteEncoderRad()));
         }
 
     public void stop(){
