@@ -79,9 +79,8 @@ public class SwerveModule {
             // angleEncoder.setPositionConversionFactor(Constants.AngleEncoderRotationToRadian);
             // angleEncoder.setVelocityConversionFactor(Constants.AngleEncoderRPMToRadPerSec);
             
-            anglePIDController = new PIDController(Constants.kp, 0, 0);
+            anglePIDController = new PIDController(Constants.kp, Constants.ki, Constants.kd);
             anglePIDController.enableContinuousInput(-Math.PI, Math.PI);
-
 
         }
         public double getDrivePosition(){
