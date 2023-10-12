@@ -72,11 +72,10 @@ public class SwerveModule {
             driveEncoder = driveMotor.getEncoder();
             angleEncoder = angleMotor.getEncoder();
 
-            // driveEncoder.setPositionConversionFactor(Constants.DriveEcoderRotationToMeter);
-            // driveEncoder.setVelocityConversionFactor(Constants.DriveEncoderRPMToMeterPerSec);
-
-            // angleEncoder.setPositionConversionFactor(Constants.AngleEncoderRotationToRadian);
-            // angleEncoder.setVelocityConversionFactor(Constants.AngleEncoderRPMToRadPerSec);
+            driveEncoder.setPositionConversionFactor(Constants.DRIVE_ECODER_ROTATIONS_TO_METERS);
+            driveEncoder.setVelocityConversionFactor(Constants.DRIVE_ENCODER_RPM_TO_METERS_PER_SEC);
+            angleEncoder.setPositionConversionFactor(Constants.ANGLE_ENCODER_ROTATIONS_TO_RAD);
+            angleEncoder.setVelocityConversionFactor(Constants.ANGLE_ENCODER_RPM_TO_RAD_PER_SEC);
             
             anglePIDController = new PIDController(Constants.kp, Constants.ki, Constants.kd);
             anglePIDController.enableContinuousInput(-Math.PI, Math.PI);

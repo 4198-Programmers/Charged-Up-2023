@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
 
 public final class Constants {
     //Axis
@@ -30,11 +31,13 @@ public final class Constants {
         //Back Right
         new Translation2d(DRIVE_TRAIN_WIDTH / 2.0, DRIVE_TRAIN_LENGTH / 2.0)
     );
-    
-    // public static final double DriveEcoderRotationToMeter = 0;
-    // public static final double DriveEncoderRPMToMeterPerSec = 0;
-    // public static final double AngleEncoderRotationToRadian = 0;
-    // public static final double AngleEncoderRPMToRadPerSec = 0;
+    public static final double WHEEL_DIAMERTER_METERS = Units.inchesToMeters(6);
+    public static final double DRIVE_MOTOR_GEAR_RATIO = 1/2; //2 is just a standin for now.
+    public static final double ANGLE_MOTOR_GEAR_RATIO = 1/2;
+    public static final double DRIVE_ECODER_ROTATIONS_TO_METERS = (14/50) * (27/17) * (15/45);//DRIVE_MOTOR_GEAR_RATIO * Math.PI * WHEEL_DIAMERTER_METERS;
+    public static final double ANGLE_ENCODER_ROTATIONS_TO_RAD = (14/50) * (10/60);//ANGLE_MOTOR_GEAR_RATIO * 2 * Math.PI;
+    public static final double DRIVE_ENCODER_RPM_TO_METERS_PER_SEC = DRIVE_ECODER_ROTATIONS_TO_METERS / 60;
+    public static final double ANGLE_ENCODER_RPM_TO_RAD_PER_SEC = ANGLE_ENCODER_ROTATIONS_TO_RAD / 60;
 
     public static final double kp = 0.01;
     public static final double ki = 0;

@@ -24,9 +24,9 @@ public class RobotContainer {
     pipeline.setDouble(0);
     swerveSubsystem.setDefaultCommand(new SwerveDriveCommand(
       swerveSubsystem, 
-      () -> stickOne.getRawAxis(Constants.X_AXIS), 
-      () -> stickOne.getRawAxis(Constants.Y_AXIS), 
-      () -> stickTwo.getRawAxis(Constants.X_AXIS), 
+      () -> modifyAxis(stickOne.getRawAxis(Constants.X_AXIS)), 
+      () -> modifyAxis(stickOne.getRawAxis(Constants.Y_AXIS)), 
+      () -> modifyAxis(stickTwo.getRawAxis(Constants.X_AXIS)), 
       () -> true));
   }
 
