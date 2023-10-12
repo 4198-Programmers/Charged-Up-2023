@@ -2,11 +2,8 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,18 +47,7 @@ public class SwerveSubsystem extends SubsystemBase{
         Constants.BACK_RIGHT_ABSOLUTE_ENCODER_REVERSED);
 //Creating the gyro. This tells us which way is forward relative to the field, not robot
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    private final Pose2d startingPose = new Pose2d();
 
-//Creating odometry for the robot. This is mostly used for auto.
-    private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(
-        Constants.swerveKinematics, 
-        getRotation2d(), 
-        new SwerveModulePosition[]{
-        frontLeft.getPosition(),
-        frontRight.getPosition(),
-        backLeft.getPosition(),
-        backRight.getPosition()}, 
-        startingPose);
     public SwerveSubsystem(){
         new Thread(() ->{
             try{
@@ -99,9 +85,5 @@ public class SwerveSubsystem extends SubsystemBase{
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
-    }
-
-    public Pose2d getPose(){
-        return odometer.getPoseMeters();
     }
 }
