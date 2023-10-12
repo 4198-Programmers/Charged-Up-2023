@@ -287,7 +287,7 @@ public final class AutoContainer {
     }
 
     public CommandBase initializeCommand(){
-        return new SequentialCommandGroup(new InstantCommand(() -> swerve.zeroHeading()), new InstantCommand(() -> vertArm.ZeroArm()), new InstantCommand(() -> lazySusanSub.zeroPosition()));
+        return new SequentialCommandGroup(new InstantCommand(() -> swerve.zeroGyro()), new InstantCommand(() -> vertArm.ZeroArm()), new InstantCommand(() -> lazySusanSub.zeroPosition()));
     }
 
     public CommandBase prepElementPlacementCommand(){
