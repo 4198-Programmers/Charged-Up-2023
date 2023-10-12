@@ -36,9 +36,9 @@ public final class Constants {
     // public static final double AngleEncoderRotationToRadian = 0;
     // public static final double AngleEncoderRPMToRadPerSec = 0;
 
-    public static final double kp = 0.1;
+    public static final double kp = 0.01;
     public static final double ki = 0;
-    public static final double kd = 0.2;
+    public static final double kd = 0.01;
     public static final double MAX_SPEED_METERS_PER_SECOND = 5880.0 / 60.0; //max of 5880 rotations per second
     public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = MAX_SPEED_METERS_PER_SECOND / Math.hypot(DRIVE_TRAIN_WIDTH / 2.0, DRIVE_TRAIN_LENGTH / 2.0);
     public static final double DRIVE_MAX_ACCELERATION_PER_SECOND = MAX_SPEED_METERS_PER_SECOND / 60;
