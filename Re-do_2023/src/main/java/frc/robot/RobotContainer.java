@@ -44,6 +44,27 @@ public class RobotContainer {
     // mPath.setPath(PathChooser.getSelected());
 
   }
+
+  private static double deadband(double value, double deadband) {
+    if(Math.abs(value) > deadband) {
+      if(value > 0.0) {
+        return (value - deadband) / (1.0 - deadband);
+      } else {
+        return (value + deadband) / (1.0 - deadband);
+      }
+    } else {
+      return 0.0;
+    }
+  }
+
+  private static double modifyAxis(double value) {
+    //deadband the value
+    value = deadband(value, 0.1);
+    //square the axis?
+    value = Math.copySign(value * value, value);
+    
+    return value;
+  }
 //3493.45
 
 
