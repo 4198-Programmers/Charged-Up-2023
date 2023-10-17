@@ -119,7 +119,8 @@ public class SinglePaths /* extends CommandBase */ {
                                 // PlaceDriveChargeRightCable(), // right and left are driver based
                                 // PlaceDriveChargeLeftCable(),
                                 PlaceDriveNew(),
-                                CorralAuto(),
+                                CorralAutoBlue(),
+                                CorralAutoRed(),
                                 JustDrive(),
                                 JustPlace(),
                                 PlaceCharge(),
@@ -476,15 +477,23 @@ public class SinglePaths /* extends CommandBase */ {
  * Places the game piece, then moves back to taxi and corral a new game piece. 
  * @return
  */
-        private SequentialCommandGroup CorralAuto() {
+        private SequentialCommandGroup CorralAutoBlue() {
                 return new SequentialCommandGroup(new PrintCommand("Place Drive")
                                 .andThen(StraightPlaceMidPiece())
                                 .andThen(new TimedAuto(driveTrain, 2715, 0, 1.5, 0, 0)
                                         .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)))
-                                        .andThen(new TimedAuto(driveTrain, 500, -1.5, 1.5, -2, 0)
+                                        .andThen(new TimedAuto(driveTrain, 750, -1.0, 1.0, -2, 0)
                                         .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0))));
         }
 
+        private SequentialCommandGroup CorralAutoRed() {
+                return new SequentialCommandGroup(new PrintCommand("Place Drive")
+                                .andThen(StraightPlaceMidPiece())
+                                .andThen(new TimedAuto(driveTrain, 2715, 0, 1.5, 0, 0)
+                                        .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)))
+                                        .andThen(new TimedAuto(driveTrain, 750, 1.0, 1.0, 2, 0)
+                                        .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0))));
+        }
         // private SequentialCommandGroup PlaceDriveCharge() { // works within 15
         // seconds
         // return new SequentialCommandGroup(new PrintCommand("Place Drive Charge")

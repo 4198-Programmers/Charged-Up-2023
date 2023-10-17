@@ -238,14 +238,18 @@ public class RobotContainer {
     // SideChooser.addOption("Blue", 1);
 
     autoTab.add("Auto", AutoChooser);
-    AutoChooser.addOption("Place + Taxi, No Charge, R/L Preferred", 0);
-    AutoChooser.addOption("Place, Taxi, Corral", 1);
-    AutoChooser.addOption("Just Taxi, No Place, No Charge, R/L Only", 2);
-    AutoChooser.addOption("Just Place, No Taxi, No Charge", 3);
-    AutoChooser.addOption("Middle Auto, No Exit Community, Charge", 4);
-    AutoChooser.addOption("Place, Taxi, Charge, Left", 5);
-    AutoChooser.addOption("Place, Taxi, Charge, Right", 6);
-    AutoChooser.addOption("Middle Auto, Just Charge, not Placement", 7);
+    //If the names of the autos don't say they do it, they don't do it.
+    AutoChooser.addOption("Place Mid + Taxi, R/L Preferred", 0);
+    AutoChooser.addOption("Place Mid, Taxi, Corral, Blue", 1);
+    AutoChooser.addOption("Place Mid, Taxi, Corral, Red", 2);
+    AutoChooser.addOption("Just Taxi, No Place, R/L Only", 3);
+    AutoChooser.addOption("Just Place Mid", 4);
+    AutoChooser.addOption("Middle Auto, Charge", 5);
+    AutoChooser.addOption("Place Mid, Taxi, Charge, Left", 6);
+    AutoChooser.addOption("Place Mid, Taxi, Charge, Right", 7);
+    AutoChooser.addOption("Middle Auto, Just Charge", 8);
+    AutoChooser.addOption("Low Place + Taxi", 9);
+    AutoChooser.addOption("Low Place + Charge", 10);
 
     autoTab.addFloat("Pitch", () -> mDriveTrain.getPitch());
 

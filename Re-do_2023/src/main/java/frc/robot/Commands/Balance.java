@@ -53,7 +53,7 @@ public class Balance extends CommandBase {
         pitchAngleDegrees = (driveTrain.getPitch() - 3.8); // because the range is -5 - 16 when it needs to be -x -> x
 
         double pitchAngleRadians = pitchAngleDegrees * (Math.PI / 180.0);
-        speed = Math.sin(pitchAngleRadians) * 2;
+        speed = Math.sin(pitchAngleRadians) * 2.75;
 
         if (Math.abs(pitchAngleDegrees) > 2 || driveTrain.getXAccel() > 0.01) {
 
@@ -75,7 +75,7 @@ public class Balance extends CommandBase {
     @Override
     public boolean isFinished() {
         return (Math.abs(pitchAngleDegrees) < 2 && Math.abs(driveTrain.getXAccel()) < 0.01
-                && System.currentTimeMillis() > timeEnded + 500 && timeEnded > 0);
+                && System.currentTimeMillis() > timeEnded + 750 && timeEnded > 0);
         // return driveTrain.BalanceDrive() == 0;
         // return false;
     }

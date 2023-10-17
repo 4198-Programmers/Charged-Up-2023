@@ -21,7 +21,7 @@ public final class Constants {
         public static final int BACK_LEFT_DRIVE = 5,
                         BACK_LEFT_STEER = 6,
                         BACK_LEFT_ENCODER = 9;
-        public static final double BACK_LEFT_STEER_OFFSET = -Math.toRadians(272.4609451619576);
+        public static final double BACK_LEFT_STEER_OFFSET = -Math.toRadians(269.4609451619576);
 
         // Back Right Swerve Values
         public static final int BACK_RIGHT_DRIVE = 2,
@@ -141,7 +141,7 @@ public final class Constants {
                         TOP_REACH_RIGHT_PLACEMENT = 4250,
                         PLACE_TOP_VERT = 8.15,
                         PLACE_MID_VERT = 7.05,
-                        MID_REACH_PLACEMENT = 7.5, //for when not moving bot
+                        MID_REACH_PLACEMENT = 7.3, //for when not moving bot
                         RIGHT_MID_PLACEMENT_SUSAN = -5.57,
                         LEFT_MID_PLACEMENT_SUSAN = 6.64,
                         RIGHT_TOP_PLACEMENT_SUSAN = -4,
