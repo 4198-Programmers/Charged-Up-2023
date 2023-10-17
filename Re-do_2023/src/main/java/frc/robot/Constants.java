@@ -47,7 +47,7 @@ public final class Constants {
     public static final double DRIVE_FF = 0;
     public static final double DRIVE_MIN_OUTPUT = -1;
     public static final double DRIVE_MAX_OUTPUT = 1;
-    public static final IdleMode DRIVE_MOTOR_IDLE_MODE = IdleMode.kCoast;
+    public static final IdleMode DRIVE_MOTOR_IDLE_MODE = IdleMode.kBrake;
     public static final int DRIVE_MOTOR_CURRENT_LIMIT = 1;
     public static final double MAGNITUDE_SLEW_RATE = 1;
 
@@ -66,7 +66,7 @@ public final class Constants {
     public static final double ANGLE_FF = 0;
     public static final double ANGLE_MIN_OUTPUT = -1;
     public static final double ANGLE_MAX_OUTPUT = 1;
-    public static final IdleMode ANGLE_MOTOR_IDLE_MODE = IdleMode.kCoast;
+    public static final IdleMode ANGLE_MOTOR_IDLE_MODE = IdleMode.kBrake;
     public static final int ANGLE_MOTOR_CURRENT_LIMIT = 1;
     public static final double ROTATIONAL_SLEW_RATE = 1;
 
