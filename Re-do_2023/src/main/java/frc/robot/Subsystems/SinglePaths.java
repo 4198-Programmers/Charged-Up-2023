@@ -9,11 +9,9 @@ import frc.robot.Commands.AutoRunIntake;
 import frc.robot.Commands.AutoSusan;
 import frc.robot.Commands.AutoVert;
 import frc.robot.Commands.Balance;
+import frc.robot.Commands.SetRobotHeading;
 import frc.robot.Commands.SlightTurnDrive;
 import frc.robot.Commands.TimedAuto;
-import frc.robot.Commands.SetRobotHeading;
-import frc.robot.Commands.ZeroSusan;
-import frc.robot.Commands.ZeroVert;
 
 public class SinglePaths /* extends CommandBase */ {
         private DriveTrain driveTrain;
@@ -129,9 +127,9 @@ public class SinglePaths /* extends CommandBase */ {
                                 // SpitDriveChargeRightNoCable(),
                                 MidPlaceDriveChargeLeft(),
                                 MidPlaceDriveChargeRight(),
-                                JustCharge()
-                                // AutoTest(),
-                                // PlaceDriveCharge()
+                                JustCharge(),
+                                // LowPlaceBalance(),
+                                LowPlaceTaxi()
                 };
         }
 
@@ -494,7 +492,16 @@ public class SinglePaths /* extends CommandBase */ {
                                         .andThen(new TimedAuto(driveTrain, 750, 1.0, 1.0, 2, 0)
                                         .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0))));
         }
-        // private SequentialCommandGroup PlaceDriveCharge() { // works within 15
+        
+        private SequentialCommandGroup LowPlaceTaxi() {
+                return new SequentialCommandGroup(new PrintCommand("Low Place Taxi Auto")
+                                .andThen(HotPotatoPieceDrop())
+                                .andThen(new TimedAuto(driveTrain, 2715, 0, 1.5, 0, 0)
+                                        .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)))
+                                        .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)));
+        }
+
+// private SequentialCommandGroup PlaceDriveCharge() { // works within 15
         // seconds
         // return new SequentialCommandGroup(new PrintCommand("Place Drive Charge")
         // .andThen(StraightPlaceMidPiece())
