@@ -1,7 +1,10 @@
 package frc.robot;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
@@ -32,20 +35,48 @@ public final class Constants {
         new Translation2d(DRIVE_TRAIN_WIDTH / 2.0, DRIVE_TRAIN_LENGTH / 2.0)
     );
     public static final double WHEEL_DIAMERTER_METERS = Units.inchesToMeters(6);
+    //Drive Motor Constants
     public static final double DRIVE_MOTOR_GEAR_RATIO = 1/2; //2 is just a standin for now.
+    public static final double DRIVE_ENCODER_ROTATIONS_TO_METERS = (14/50) * (27/17) * (15/45);//DRIVE_MOTOR_GEAR_RATIO * Math.PI * WHEEL_DIAMERTER_METERS;
+    public static final double DRIVE_ENCODER_RPM_TO_METERS_PER_SEC = DRIVE_ENCODER_ROTATIONS_TO_METERS / 60;
+    public static final double MAX_SPEED_METERS_PER_SECOND = 5880.0 / 60.0; //max of 5880 rotations per second
+    public static final double DRIVE_MAX_ACCELERATION_PER_SECOND = MAX_SPEED_METERS_PER_SECOND / 60;
+    public static final double DRIVE_KP = 1;
+    public static final double DRIVE_KI = 0;
+    public static final double DRIVE_KD = 0;
+    public static final double DRIVE_FF = 0;
+    public static final double DRIVE_MIN_OUTPUT = -1;
+    public static final double DRIVE_MAX_OUTPUT = 1;
+    public static final IdleMode DRIVE_MOTOR_IDLE_MODE = IdleMode.kCoast;
+    public static final int DRIVE_MOTOR_CURRENT_LIMIT = 1;
+    public static final double MAGNITUDE_SLEW_RATE = 1;
+
+    //Angle Motor Constants
     public static final double ANGLE_MOTOR_GEAR_RATIO = 1/2;
-    public static final double DRIVE_ECODER_ROTATIONS_TO_METERS = (14/50) * (27/17) * (15/45);//DRIVE_MOTOR_GEAR_RATIO * Math.PI * WHEEL_DIAMERTER_METERS;
     public static final double ANGLE_ENCODER_ROTATIONS_TO_RAD = (14/50) * (10/60);//ANGLE_MOTOR_GEAR_RATIO * 2 * Math.PI;
-    public static final double DRIVE_ENCODER_RPM_TO_METERS_PER_SEC = DRIVE_ECODER_ROTATIONS_TO_METERS / 60;
     public static final double ANGLE_ENCODER_RPM_TO_RAD_PER_SEC = ANGLE_ENCODER_ROTATIONS_TO_RAD / 60;
+    public static final boolean ANGLE_MOTOR_ENCODER_REVERSED = false;
+    public static final double ANGLE_ENCODER_POSITION_MIN_INPUT = -1;
+    public static final double ANGLE_ENCODER_POSITION_MAX_INPUT = 1;
+    public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = MAX_SPEED_METERS_PER_SECOND / Math.hypot(DRIVE_TRAIN_WIDTH / 2.0, DRIVE_TRAIN_LENGTH / 2.0);
+    public static final double ANGULAR_MAX_ACCELERATION_PER_SECOND = MAX_ANGULAR_SPEED_RADIANS_PER_SECOND / 60;
+    public static final double ANGLE_KP = 1;
+    public static final double ANGLE_KI = 0;
+    public static final double ANGLE_KD = 0;
+    public static final double ANGLE_FF = 0;
+    public static final double ANGLE_MIN_OUTPUT = -1;
+    public static final double ANGLE_MAX_OUTPUT = 1;
+    public static final IdleMode ANGLE_MOTOR_IDLE_MODE = IdleMode.kCoast;
+    public static final int ANGLE_MOTOR_CURRENT_LIMIT = 1;
+    public static final double ROTATIONAL_SLEW_RATE = 1;
+
+    public static final boolean CANCODER_INVERT = false;
+
+
 
     public static final double kp = 0.01;
     public static final double ki = 0;
     public static final double kd = 0.01;
-    public static final double MAX_SPEED_METERS_PER_SECOND = 5880.0 / 60.0; //max of 5880 rotations per second
-    public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = MAX_SPEED_METERS_PER_SECOND / Math.hypot(DRIVE_TRAIN_WIDTH / 2.0, DRIVE_TRAIN_LENGTH / 2.0);
-    public static final double DRIVE_MAX_ACCELERATION_PER_SECOND = MAX_SPEED_METERS_PER_SECOND / 60;
-    public static final double ANGULAR_MAX_ACCELERATION_PER_SECOND = MAX_ANGULAR_SPEED_RADIANS_PER_SECOND / 60;
     public static final double DEADBAND = 0.1;
 
     //Front left module constants
@@ -80,5 +111,10 @@ public final class Constants {
     public static final int BACK_RIGHT_ABSOLUTE_ENCODER_ID = 10;
     public static final double BACK_RIGHT_ENCODER_OFFSET = 0;
     public static final boolean BACK_RIGHT_ABSOLUTE_ENCODER_REVERSED = false;
-
+    public static final double DIRECTION_SLEW_RATE = 0;
+    public static final boolean GYRO_INVERTED = false;
+    public static double kPXController;
+    public static double kPYController;
+    public static double kPThetaController;
+    public static Constraints kThetaControllerConstraints;
 }

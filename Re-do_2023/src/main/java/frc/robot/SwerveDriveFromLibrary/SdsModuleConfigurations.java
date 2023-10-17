@@ -1,4 +1,4 @@
-package frc.robot.SwerveDrive;
+package frc.robot.SwerveDriveFromLibrary;
 /**Configures the module to match what we are using for the wheels. */
 public class SdsModuleConfigurations {
     

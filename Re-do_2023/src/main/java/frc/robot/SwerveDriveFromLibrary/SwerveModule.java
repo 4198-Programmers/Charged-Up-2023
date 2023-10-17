@@ -1,4 +1,4 @@
-package frc.robot.SwerveDrive;
+package frc.robot.SwerveDriveFromLibrary;
 
 public interface SwerveModule {
     double getDriveVelocity();

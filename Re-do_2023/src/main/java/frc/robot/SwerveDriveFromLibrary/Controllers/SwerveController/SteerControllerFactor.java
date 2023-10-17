@@ -1,7 +1,7 @@
-package frc.robot.SwerveDrive.Controllers.SwerveController;
+package frc.robot.SwerveDriveFromLibrary.Controllers.SwerveController;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
-import frc.robot.SwerveDrive.ModuleConfiguration;
+import frc.robot.SwerveDriveFromLibrary.ModuleConfiguration;
 
 @FunctionalInterface
 /**Makes the Steer Controller */

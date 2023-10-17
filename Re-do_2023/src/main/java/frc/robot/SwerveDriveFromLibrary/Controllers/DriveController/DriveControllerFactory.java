@@ -1,7 +1,7 @@
-package frc.robot.SwerveDrive.Controllers.DriveController;
+package frc.robot.SwerveDriveFromLibrary.Controllers.DriveController;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
-import frc.robot.SwerveDrive.ModuleConfiguration;
+import frc.robot.SwerveDriveFromLibrary.ModuleConfiguration;
 
 @FunctionalInterface
 /** Creates the drive controller */
