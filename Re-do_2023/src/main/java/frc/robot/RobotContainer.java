@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 public class RobotContainer {
-  private final Joystick stickOne = new Joystick(0);
-  private final Joystick stickTwo = new Joystick(1);
-  private final Joystick stickThree = new Joystick(2);
+  private final Joystick stickOne = new Joystick(Constants.PORT_ZERO);
+  private final Joystick stickTwo = new Joystick(Constants.PORT_ONE);
+  private final Joystick stickThree = new Joystick(Constants.PORT_TWO);
 
   public RobotContainer() {
     configureBindings();
