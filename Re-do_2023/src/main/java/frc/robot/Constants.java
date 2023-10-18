@@ -53,5 +53,6 @@ public final class Constants {
     public static final double BACK_RIGHT_Y_FROM_CENTER = 0;
     public static final int BACK_RIGHT_MODULE_NUMBER = 0;
     public static final double DRIVE_MAX_SPEED = 0;
+    public static final double ANGLE_SPEED = 0;
 
 }

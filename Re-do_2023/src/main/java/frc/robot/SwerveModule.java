@@ -117,7 +117,10 @@ public class SwerveModule {
     public SwerveModuleState getOptimizedDesiredState(SwerveModuleState desiredState){
         return SwerveModuleState.optimize(desiredState, getRotation2d());
     }
+    public void setState(double driveSpeed, double angle){
+        
+    }
     public void setDesiredState(SwerveModuleState desiredState){
-        desiredState = CTREModuleState.optimize(desiredState, getRotation2d());
+        desiredState = SwerveModuleState.optimize(desiredState, getRotation2d());
     }
 }
