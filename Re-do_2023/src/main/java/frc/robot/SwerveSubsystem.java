@@ -103,14 +103,29 @@ public class SwerveSubsystem extends SubsystemBase{
             return Rotation2d.fromDegrees(0);
         }
     }
+
+    public void setModuleStates(SwerveModuleState[] desiredStates){
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.DRIVE_MAX_SPEED);
+        frontLeft.setDesiredState(desiredStates[Constants.FRONT_LEFT_MODULE_NUMBER]);
+        frontRight.setDesiredState(desiredStates[Constants.FRONT_RIGHT_MODULE_NUMBER]);
+        backLeft.setDesiredState(desiredStates[Constants.BACK_LEFT_MODULE_NUMBER]);
+        backRight.setDesiredState(desiredStates[Constants.BACK_RIGHT_MODULE_NUMBER]);
+
+    }
 //Drive Function
     public void drive(double x, double y, double z, boolean fieldOriented){
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, z, getGyroRotation(fieldOriented));
+        SwerveModuleState[] moduleStates = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
+        setModuleStates(moduleStates);
     }
 
     @Override
     public void periodic() {
         SwerveModuleState[] states = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
         swerveKinematics.desaturateWheelSpeeds(states, Constants.DRIVE_MAX_SPEED);
+        frontLeft.setStateSpeedAndAngle(states[Constants.FRONT_LEFT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.FRONT_LEFT_MODULE_NUMBER].angle);
+        frontRight.setStateSpeedAndAngle(states[Constants.FRONT_RIGHT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.FRONT_RIGHT_MODULE_NUMBER].angle);
+        backLeft.setStateSpeedAndAngle(states[Constants.BACK_LEFT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.BACK_LEFT_MODULE_NUMBER].angle);
+        backRight.setStateSpeedAndAngle(states[Constants.BACK_RIGHT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.BACK_RIGHT_MODULE_NUMBER].angle);
     }
 }

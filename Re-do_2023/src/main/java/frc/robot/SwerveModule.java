@@ -24,6 +24,8 @@ public class SwerveModule {
     private RelativeEncoder angleEncoder;
     //Cancoder
     private CANCoder canCoder;
+    private Rotation2d stateAngle;
+    private double stateSpeed;
     //PIDController
     /**
      * This implements a PID Control loop. <p>
@@ -74,6 +76,9 @@ public class SwerveModule {
     public void setDriveSpeed(double speed){
         driveMotor.set(speed);
     }
+    public double getStateSpeed(){
+        return stateSpeed;
+    }
 
 //Angle Motor Functions
     public double getAngleSpeed(){
@@ -88,17 +93,12 @@ public class SwerveModule {
     public Rotation2d getRotation2d(){
         return Rotation2d.fromDegrees(getAbsolutePosition());
     }
+    public Rotation2d getStateAngle(){
+        return stateAngle;
+    }
 
-    public void setAngleSpeed(double speed, double wantedAngle){
-        double expectedSpeed = speed;
-        if(getAbsolutePosition() > (wantedAngle + Constants.ANGLE_TOLERANCE)){
-            expectedSpeed = -speed;
-        }else if(getAbsolutePosition() < (wantedAngle - Constants.ANGLE_TOLERANCE)){
-            expectedSpeed = speed;
-        }else{
-            expectedSpeed = 0;
-        }
-        angleMotor.set(expectedSpeed);
+    public void setAngleSpeed(double speed){
+        angleMotor.set(speed);
     }
 
 //Other Functions
@@ -109,18 +109,29 @@ public class SwerveModule {
         return new Translation2d(xFromCenter, yFromCenter);
     }
     public SwerveModulePosition getSwerveModulePosition(){
-        return new SwerveModulePosition(getDrivePosition(), getRotation2d());
+        return new SwerveModulePosition(getDrivePosition(), getStateAngle());
     }
     public SwerveModuleState getState(){
-        return new SwerveModuleState(getDriveSpeed(), getRotation2d());
+        return new SwerveModuleState(getStateSpeed(), getStateAngle());
     }
     public SwerveModuleState getOptimizedDesiredState(SwerveModuleState desiredState){
-        return SwerveModuleState.optimize(desiredState, getRotation2d());
-    }
-    public void setState(double driveSpeed, double angle){
-        
+        return SwerveModuleState.optimize(desiredState, getStateAngle());
     }
     public void setDesiredState(SwerveModuleState desiredState){
-        desiredState = SwerveModuleState.optimize(desiredState, getRotation2d());
+        if(Math.abs(desiredState.speedMetersPerSecond) < 0.001){
+            stop();
+            return;
+        }
+        desiredState = SwerveModuleState.optimize(desiredState, getStateAngle());
+        driveMotor.set(desiredState.speedMetersPerSecond);
+        angleMotor.set(angleController.calculate(getStateAngle().getRadians(), desiredState.angle.getRadians()));
+    }
+    public void setStateSpeedAndAngle(double speed, Rotation2d angle){
+        stateSpeed = speed;
+        stateAngle = angle;
+    }
+    public void stop(){
+        setDriveSpeed(0);
+        setAngleSpeed(0);
     }
 }
