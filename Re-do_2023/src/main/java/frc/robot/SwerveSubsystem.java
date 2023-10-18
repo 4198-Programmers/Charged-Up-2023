@@ -28,8 +28,8 @@ public class SwerveSubsystem extends SubsystemBase{
     public SwerveDriveKinematics getKinematics(){
         return swerveKinematics;
     }
-    private final ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0, 0, 0);
-    private final SwerveModule[] swerveModules;
+    private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0, 0, 0);
+    private SwerveModule[] swerveModules;
 
     public SwerveSubsystem(){
         frontLeft = new SwerveModule(
@@ -102,6 +102,10 @@ public class SwerveSubsystem extends SubsystemBase{
         }else{
             return Rotation2d.fromDegrees(0);
         }
+    }
+//Drive Function
+    public void drive(double x, double y, double z, boolean fieldOriented){
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, z, getGyroRotation(fieldOriented));
     }
 
     @Override

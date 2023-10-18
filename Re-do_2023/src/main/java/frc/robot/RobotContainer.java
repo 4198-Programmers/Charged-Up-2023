@@ -12,15 +12,24 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 public class RobotContainer {
+//Joystics
   private final Joystick stickOne = new Joystick(Constants.PORT_ZERO);
   private final Joystick stickTwo = new Joystick(Constants.PORT_ONE);
   private final Joystick stickThree = new Joystick(Constants.PORT_TWO);
-
+//Subsystems
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public RobotContainer() {
     configureBindings();
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     NetworkTableEntry pipeline = table.getEntry("pipeline");
     pipeline.setDouble(0);
+
+    swerveSubsystem.setDefaultCommand(new SwerveDrive(
+      swerveSubsystem, 
+      () -> modifyAxis(stickOne.getRawAxis(Constants.X_AXIS)), 
+      () -> modifyAxis(stickOne.getRawAxis(Constants.Y_AXIS)), 
+      () -> modifyAxis(stickTwo.getRawAxis(Constants.X_AXIS)), 
+      true));
 
   }
 
