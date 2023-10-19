@@ -24,11 +24,15 @@ public class RobotContainer {
     NetworkTableEntry pipeline = table.getEntry("pipeline");
     pipeline.setDouble(0);
 
+    /*
+     * There is a deadband in the drive function itself, 
+     * so it does not need a deadband here.
+     */
     swerveSubsystem.setDefaultCommand(new SwerveDrive(
       swerveSubsystem, 
-      () -> modifyAxis(stickOne.getRawAxis(Constants.X_AXIS)), 
-      () -> modifyAxis(stickOne.getRawAxis(Constants.Y_AXIS)), 
-      () -> modifyAxis(stickTwo.getRawAxis(Constants.X_AXIS)), 
+      () -> stickOne.getRawAxis(Constants.X_AXIS), 
+      () -> stickOne.getRawAxis(Constants.Y_AXIS), 
+      () -> stickTwo.getRawAxis(Constants.X_AXIS), 
       true));
 
   }
@@ -43,26 +47,5 @@ public class RobotContainer {
 
   public void initializeAuto() {
 
-  }
-
-  private static double deadband(double value, double deadband) {
-    if(Math.abs(value) > deadband) {
-      if(value > 0.0) {
-        return (value - deadband) / (1.0 - deadband);
-      } else {
-        return (value + deadband) / (1.0 - deadband);
-      }
-    } else {
-      return 0.0;
-    }
-  }
-
-  private static double modifyAxis(double value) {
-    //deadband the value
-    value = deadband(value, 0.1);
-    //square the axis?
-    value = Math.copySign(value * value, value);
-    
-    return value;
   }
 }

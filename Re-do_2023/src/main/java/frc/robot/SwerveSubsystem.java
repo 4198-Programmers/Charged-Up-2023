@@ -22,6 +22,10 @@ public class SwerveSubsystem extends SubsystemBase{
     SwerveModule backLeft;
     SwerveModule backRight;
 //Make the Gyro
+/*
+ * The first parameter is the port that is being used
+ * The second parameter is the update rate in Hertz
+ */
     private AHRS gyro = new AHRS(SPI.Port.kMXP, (byte) 100);
     
 //Make the SwerveKinematics
@@ -31,16 +35,39 @@ public class SwerveSubsystem extends SubsystemBase{
         backLeft.translationFromCenter(),
         backRight.translationFromCenter()
     );
+    /**
+     * This returns the kinematics
+     * @return swerveKinematics
+     */
     public SwerveDriveKinematics getKinematics(){
         return swerveKinematics;
     }
+    /*
+     * This creates the Chassis speeds, which are originally set to 0 to prevent any problems
+     */
     private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0, 0, 0);
+    /*
+     * This makes an array of the swerveModules to help set speeds and angles
+     * This allows us to use the Chassis speeds to update the states
+     */
     private SwerveModule[] swerveModules;
+    /*
+     * This makes an array of the swerveModulePositions to use it in odometry 
+     */
     private SwerveModulePosition[] swerveModulePositions;
+    /*
+     * This is used during auto to tell the robot where it is and where it needs to go to.
+     */
     private SwerveDriveOdometry odometry;
 
     public SwerveSubsystem(){
+        /*
+         * Makes a new tab to organize the Swerve Drive values from the rest of the other values
+         */
         Shuffleboard.getTab("Swerve Drive");
+        /*
+         * We are now intializing the constants for the swerve modules
+         */
         frontLeft = new SwerveModule(
         Constants.FRONT_LEFT_DRIVE_MOTOR_ID, 
         Constants.FRONT_LEFT_ANGLE_MOTOR_ID, 
@@ -74,44 +101,122 @@ public class SwerveSubsystem extends SubsystemBase{
         Constants.BACK_RIGHT_Y_FROM_CENTER,
         Constants.BACK_RIGHT_MODULE_NUMBER);
 
+        /*
+         * We are now puting the swerve modules in the array
+         */
         swerveModules = new SwerveModule[]{frontLeft, frontRight, backLeft, backRight};
+        /*
+         * We are now putting the swerve module positions in their array
+         */
         swerveModulePositions = new SwerveModulePosition[]{
             frontLeft.getSwerveModulePosition(),
             frontRight.getSwerveModulePosition(),
             backLeft.getSwerveModulePosition(),
             backRight.getSwerveModulePosition()
         };
+        /*
+         * This is setting up the initial odometry.
+         * The initial pose2d is not known.
+         */
         odometry = new SwerveDriveOdometry(swerveKinematics, getGyroRotation(true), swerveModulePositions, new Pose2d(0, 0, new Rotation2d(0, 0)));
     }
 //Gryo functions
+/**
+ * Yaw - It is a measure of rotation around the Z Axis (which is perpendicular to the earth).
+ * @return The current yaw value in degrees (-180 to 180).
+ */
     public float getYaw(){
         return gyro.getYaw();
     }
+/**
+ * Pitch - It is a measure of rotation around the X Axis.
+ * @return The current pitch value in degrees (-180 to 180).
+ */
     public float getPitch(){
         return gyro.getPitch();
     }
+/**
+ * World linear acceleration refers to raw acceleration data, 
+ * which has had the gravity component removed, 
+ * and which has been rotated to the same reference frame 
+ * as the current yaw value. The resulting value represents 
+ * the current acceleration in the x-axis of the body 
+ * (e.g., the robot) on which the sensor is mounted.
+ * @return Current world linear acceleration in the X-axis (in G).
+ */
     public float getXAcceleration(){
         return gyro.getWorldLinearAccelX();
     }
+/**
+ * World linear acceleration refers to raw acceleration data, 
+ * which has had the gravity component removed, 
+ * and which has been rotated to the same reference frame 
+ * as the current yaw value. The resulting value represents 
+ * the current acceleration in the Y-axis of the body 
+ * (e.g., the robot) on which the sensor is mounted.
+ * @return Current world linear acceleration in the Y-axis (in G).
+ */
     public float getYAcceleration(){
         return gyro.getWorldLinearAccelY();
     }
+/**
+ * Indicates if the sensor is currently detecting motion, 
+ * based upon the X and Y-axis world linear acceleration values. 
+ * If the sum of the absolute values of the X and Y axis exceed 
+ * a "motion threshold", the motion state is indicated.
+ * @return Returns true if the sensor is currently detecting motion.
+ */
     public boolean isMoving(){
         return gyro.isMoving();
     }
+/**
+ * Sets the user-specified yaw offset to the current yaw value reported by the sensor.<p>
+ * This user-specified yaw offset is automatically subtracted 
+ * from subsequent yaw values reported by the getYaw() method. 
+ * NOTE: This method has no effect if the sensor is currently 
+ * calibrating, since resetting the yaw will interfere with the
+ *  calibration process.
+ */
     public void zeroGyro(){
         gyro.zeroYaw();
     }
+/**
+ * Calibrate the gyro. It's important to make sure that the 
+ * robot is not moving while the calibration is in progress,
+ *  this is typically done when the robot is first turned on 
+ * while it's sitting at rest before the match starts.
+ */
     public void resetGyro(){
         gyro.calibrate();
     }
+/**
+ * Indicates whether the sensor is currently connected to the 
+ * host computer. A connection is considered established 
+ * whenever communication with the sensor has occurred recently.
+ * @return Returns true if a valid update has been recently received from the sensor.
+ */
     public boolean gyroConnected(){
         return gyro.isConnected();
     }
+/**
+ * Returns true if the sensor is currently performing automatic 
+ * gyro/accelerometer calibration. Automatic calibration occurs 
+ * when the sensor is initially powered on, during which time the 
+ * sensor should be held still, with the Z-axis pointing up 
+ * (perpendicular to the earth).
+ * @return Returns true if the sensor is currently automatically 
+ * calibrating the gyro and accelerometer sensors.
+ */
     public boolean calibratingGyro(){
         return gyro.isCalibrating();
     }
-
+/**
+ * The return depends on if the robot is field oriented  or robot oriented<p>
+ * If it is field oriented, the return is based on the yaw of the gyro.<p>
+ * If it is robot oriented, the return will always have the fron of the robot be forward.<p>
+ * @param fieldOriented This is a boolean value of whether or not the robot is field oriented or not.
+ * @return the Rotation2d of the robot.
+ */
     public Rotation2d getGyroRotation(boolean fieldOriented){
         if(fieldOriented){
             return Rotation2d.fromDegrees(gyro.getYaw());
@@ -119,7 +224,10 @@ public class SwerveSubsystem extends SubsystemBase{
             return Rotation2d.fromDegrees(0);
         }
     }
-
+/**
+ * This is used to set the module states of all the modules to set their speeds
+ * @param desiredStates This is the desire state
+ */
     public void setModuleStates(SwerveModuleState[] desiredStates){
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.DRIVE_MAX_SPEED);
         frontLeft.setDesiredState(desiredStates[Constants.FRONT_LEFT_MODULE_NUMBER]);
@@ -129,6 +237,23 @@ public class SwerveSubsystem extends SubsystemBase{
 
     }
 //Drive Function
+/**
+ * This uses joystick inputs, converts them to chassis speeds and use that to set the drive and angle motor speeds <p>
+ * <pre>
+ * Robot Orientation
+ *              +x
+ *          _________
+ *          |       |
+ *    +y    |       |   -y
+ *          |       |
+ *          |_______|
+ *              -x
+ * </pre>
+ * @param x The value used for the x value of the robot.
+ * @param y The value used for the y value of the robot.
+ * @param z The value used for the z value of the robot.
+ * @param fieldOriented if the robot is field oriented or not.
+ */
     public void drive(double x, double y, double z, boolean fieldOriented){
         SlewRateLimiter xyLimiter = new SlewRateLimiter(Constants.DRIVE_MAX_ACCELERATION);
         SlewRateLimiter zLimiter = new SlewRateLimiter(Constants.ANGULAR_MAX_ACCELERATION);
@@ -147,6 +272,12 @@ public class SwerveSubsystem extends SubsystemBase{
         setModuleStates(moduleStates);
     }
 
+    /*
+     * This constantly updates the values of the swerve modules
+     * This takes the current states of the periodic and uses them to find 
+     * the drivespeed and the angle of each swerve module.
+     * It also puts the angles of the modueles (in degreees) in the Shuffleboard.
+     */
     @Override
     public void periodic() {
         SwerveModuleState[] states = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
