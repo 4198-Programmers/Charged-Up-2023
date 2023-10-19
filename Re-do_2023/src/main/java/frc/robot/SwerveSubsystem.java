@@ -11,6 +11,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveSubsystem extends SubsystemBase{
@@ -38,6 +40,7 @@ public class SwerveSubsystem extends SubsystemBase{
     private SwerveDriveOdometry odometry;
 
     public SwerveSubsystem(){
+        Shuffleboard.getTab("Swerve Drive");
         frontLeft = new SwerveModule(
         Constants.FRONT_LEFT_DRIVE_MOTOR_ID, 
         Constants.FRONT_LEFT_ANGLE_MOTOR_ID, 
@@ -153,5 +156,9 @@ public class SwerveSubsystem extends SubsystemBase{
         frontRight.set(states[Constants.FRONT_RIGHT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.FRONT_RIGHT_MODULE_NUMBER].angle.getDegrees());
         backLeft.set(states[Constants.BACK_LEFT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.BACK_LEFT_MODULE_NUMBER].angle.getDegrees());
         backRight.set(states[Constants.BACK_RIGHT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.BACK_RIGHT_MODULE_NUMBER].angle.getDegrees());
+        SmartDashboard.putNumber("Front Left Angle", frontLeft.getAbsoluteAngle());
+        SmartDashboard.putNumber("Front Right Angle", frontRight.getAbsoluteAngle());
+        SmartDashboard.putNumber("Back Left Angle", backLeft.getAbsoluteAngle());
+        SmartDashboard.putNumber("Back Right Angle", backRight.getAbsoluteAngle());
     }
 }

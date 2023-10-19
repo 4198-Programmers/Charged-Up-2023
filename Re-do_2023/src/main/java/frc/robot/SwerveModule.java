@@ -36,7 +36,8 @@ public class SwerveModule {
     private PIDController angleController;
     //Module Number
     private int moduleNumber;
-    //offset
+    //CANCoder
+    CANCoder canCoder;
     //Cancoder configs
     private CANCoderConfiguration configs;
     //X and Y from center
@@ -48,7 +49,7 @@ public class SwerveModule {
 
         driveEncoder = driveMotor.getEncoder();
 
-        CANCoder canCoder = new CANCoder(canCoderID);
+        canCoder = new CANCoder(canCoderID);
         configs = new CANCoderConfiguration();
         configs.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
         configs.sensorDirection = Constants.CANCODER_INVERTED;
@@ -80,6 +81,9 @@ public class SwerveModule {
 //Angle Motor Functions
     public double getAngle(){
         return angle;
+    }
+    public double getAbsoluteAngle(){
+        return canCoder.getAbsolutePosition();
     }
 
 //Other Functions
