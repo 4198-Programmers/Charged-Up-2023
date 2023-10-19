@@ -21,7 +21,6 @@ public class SwerveModule {
     private CANSparkMax angleMotor;
     //Relative Encoders
     private RelativeEncoder driveEncoder;
-    private RelativeEncoder angleEncoder;
 
     private double driveSpeed;
     private double angle;
@@ -48,7 +47,6 @@ public class SwerveModule {
         angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
 
         driveEncoder = driveMotor.getEncoder();
-        angleEncoder = angleMotor.getEncoder();
 
         CANCoder canCoder = new CANCoder(canCoderID);
         configs = new CANCoderConfiguration();

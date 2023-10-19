@@ -3,9 +3,12 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,6 +34,8 @@ public class SwerveSubsystem extends SubsystemBase{
     }
     private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0, 0, 0);
     private SwerveModule[] swerveModules;
+    private SwerveModulePosition[] swerveModulePositions;
+    private SwerveDriveOdometry odometry;
 
     public SwerveSubsystem(){
         frontLeft = new SwerveModule(
@@ -67,6 +72,13 @@ public class SwerveSubsystem extends SubsystemBase{
         Constants.BACK_RIGHT_MODULE_NUMBER);
 
         swerveModules = new SwerveModule[]{frontLeft, frontRight, backLeft, backRight};
+        swerveModulePositions = new SwerveModulePosition[]{
+            frontLeft.getSwerveModulePosition(),
+            frontRight.getSwerveModulePosition(),
+            backLeft.getSwerveModulePosition(),
+            backRight.getSwerveModulePosition()
+        };
+        odometry = new SwerveDriveOdometry(swerveKinematics, getGyroRotation(true), swerveModulePositions, new Pose2d(0, 0, new Rotation2d(0, 0)));
     }
 //Gryo functions
     public float getYaw(){
