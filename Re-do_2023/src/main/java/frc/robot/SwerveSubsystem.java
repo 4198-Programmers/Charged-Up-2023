@@ -3,12 +3,9 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -54,11 +51,12 @@ public class SwerveSubsystem extends SubsystemBase{
     /*
      * This makes an array of the swerveModulePositions to use it in odometry 
      */
-    private SwerveModulePosition[] swerveModulePositions;
+    //private SwerveModulePosition[] swerveModulePositions;
     /*
      * This is used during auto to tell the robot where it is and where it needs to go to.
      */
-    private SwerveDriveOdometry odometry;
+    //private SwerveDriveOdometry odometry;
+    boolean fieldOriented;
 
     public SwerveSubsystem(){
         /*
@@ -108,17 +106,18 @@ public class SwerveSubsystem extends SubsystemBase{
         /*
          * We are now putting the swerve module positions in their array
          */
-        swerveModulePositions = new SwerveModulePosition[]{
-            frontLeft.getSwerveModulePosition(),
-            frontRight.getSwerveModulePosition(),
-            backLeft.getSwerveModulePosition(),
-            backRight.getSwerveModulePosition()
-        };
+        // swerveModulePositions = new SwerveModulePosition[]{
+        //     frontLeft.getSwerveModulePosition(),
+        //     frontRight.getSwerveModulePosition(),
+        //     backLeft.getSwerveModulePosition(),
+        //     backRight.getSwerveModulePosition()
+        // };
         /*
          * This is setting up the initial odometry.
          * The initial pose2d is not known.
          */
-        odometry = new SwerveDriveOdometry(swerveKinematics, getGyroRotation(true), swerveModulePositions, new Pose2d(0, 0, new Rotation2d(0, 0)));
+       //odometry = new SwerveDriveOdometry(swerveKinematics, getGyroRotation(true), swerveModulePositions, new Pose2d(0, 0, new Rotation2d(0, 0)));
+        zeroGyro();
     }
 //Gryo functions
 /**
@@ -241,13 +240,13 @@ public class SwerveSubsystem extends SubsystemBase{
  * This uses joystick inputs, converts them to chassis speeds and use that to set the drive and angle motor speeds <p>
  * <pre>
  * Robot Orientation
- *              +x
+ *          +x(front)
  *          _________
  *          |       |
- *    +y    |       |   -y
+ *+y(right) |       | -y(left)
  *          |       |
  *          |_______|
- *              -x
+ *           -x(back)
  * </pre>
  * @param x The value used for the x value of the robot.
  * @param y The value used for the y value of the robot.
@@ -270,7 +269,15 @@ public class SwerveSubsystem extends SubsystemBase{
 
         SwerveModuleState[] moduleStates = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
         setModuleStates(moduleStates);
+        this.fieldOriented = fieldOriented;
     }
+
+    // public Pose2d getPose(){
+    //     return odometry.getPoseMeters();
+    // }
+    // public void resetOdometry(Pose2d pose){
+    //     odometry.resetPosition(getGyroRotation(fieldOriented), swerveModulePositions, pose);
+    // }
 
     /*
      * This constantly updates the values of the swerve modules
@@ -282,6 +289,7 @@ public class SwerveSubsystem extends SubsystemBase{
     public void periodic() {
         SwerveModuleState[] states = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
         swerveKinematics.desaturateWheelSpeeds(states, Constants.DRIVE_MAX_SPEED);
+        //odometry.update(getGyroRotation(fieldOriented), swerveModulePositions);
 
         frontLeft.set(states[Constants.FRONT_LEFT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.FRONT_LEFT_MODULE_NUMBER].angle.getDegrees());
         frontRight.set(states[Constants.FRONT_RIGHT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.FRONT_RIGHT_MODULE_NUMBER].angle.getDegrees());
