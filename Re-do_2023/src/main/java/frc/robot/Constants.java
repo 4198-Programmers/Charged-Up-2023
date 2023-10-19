@@ -6,7 +6,7 @@ public final class Constants {
     public static final int PORT_ONE = 1;
     public static final int PORT_TWO = 2;
 
-    public static final double DEADBAND = 0;
+    public static final double DEADBAND = 0.1;
 
 //Axis on the Joysticks
     public static final int X_AXIS = 0;
@@ -24,7 +24,7 @@ public final class Constants {
 
 //Angle Motor Constants
     public static final double ANGULAR_MAX_SPEED = 5880/60;
-    public static final double ANGULAR_MAX_ACCELERATION = 0;
+    public static final double ANGULAR_MAX_ACCELERATION = ANGULAR_MAX_SPEED / 60;
 
 //Drive Motor Constants
     public static final double DRIVE_MAX_SPEED = 5880/60;
