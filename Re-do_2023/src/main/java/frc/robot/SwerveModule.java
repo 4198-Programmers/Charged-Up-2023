@@ -22,10 +22,9 @@ public class SwerveModule {
     //Relative Encoders
     private RelativeEncoder driveEncoder;
     private RelativeEncoder angleEncoder;
-    //Cancoder
-    private CANCoder canCoder;
-    private Rotation2d stateAngle;
-    private double stateSpeed;
+
+    private double driveSpeed;
+    private double angle;
     //PIDController
     /**
      * This implements a PID Control loop. <p>
@@ -51,13 +50,14 @@ public class SwerveModule {
         driveEncoder = driveMotor.getEncoder();
         angleEncoder = angleMotor.getEncoder();
 
-        canCoder = new CANCoder(canCoderID);
+        CANCoder canCoder = new CANCoder(canCoderID);
         configs = new CANCoderConfiguration();
         configs.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
         configs.sensorDirection = Constants.CANCODER_INVERTED;
         configs.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
         configs.sensorTimeBase = SensorTimeBase.PerSecond;
         configs.magnetOffsetDegrees = angleOffset;
+        canCoder.configAllSettings(configs);
 
         angleController = new PIDController(Constants.ANGLE_KP, Constants.ANGLE_KI, Constants.ANGLE_KD);
         angleController.enableContinuousInput(-Math.PI, Math.PI);
@@ -66,39 +66,22 @@ public class SwerveModule {
         this.yFromCenter = yFromCenter;
         this.moduleNumber = moduleNumber;
     }
+
+    public void set(double driveSpeed, double angle){
+        this.driveSpeed = driveSpeed;
+        this.angle = angle;
+    }
 //Drive Motor Functions
     public double getDriveSpeed(){
-        return driveMotor.get();
+        return driveSpeed;
     }
     public double getDrivePosition(){
         return driveEncoder.getPosition();
     }
-    public void setDriveSpeed(double speed){
-        driveMotor.set(speed);
-    }
-    public double getStateSpeed(){
-        return stateSpeed;
-    }
 
 //Angle Motor Functions
-    public double getAngleSpeed(){
-        return angleMotor.get();
-    }
-    public double getAnglePosition(){
-        return angleEncoder.getPosition();
-    }
-    public double getAbsolutePosition(){
-        return canCoder.getAbsolutePosition();
-    }
-    public Rotation2d getRotation2d(){
-        return Rotation2d.fromDegrees(getAbsolutePosition());
-    }
-    public Rotation2d getStateAngle(){
-        return stateAngle;
-    }
-
-    public void setAngleSpeed(double speed){
-        angleMotor.set(speed);
+    public double getAngle(){
+        return angle;
     }
 
 //Other Functions
@@ -109,29 +92,26 @@ public class SwerveModule {
         return new Translation2d(xFromCenter, yFromCenter);
     }
     public SwerveModulePosition getSwerveModulePosition(){
-        return new SwerveModulePosition(getDrivePosition(), getStateAngle());
+        return new SwerveModulePosition(getDrivePosition(), Rotation2d.fromDegrees(getAngle()));
     }
     public SwerveModuleState getState(){
-        return new SwerveModuleState(getStateSpeed(), getStateAngle());
+        return new SwerveModuleState(getDriveSpeed(), Rotation2d.fromDegrees(getAngle()));
     }
     public SwerveModuleState getOptimizedDesiredState(SwerveModuleState desiredState){
-        return SwerveModuleState.optimize(desiredState, getStateAngle());
+        return SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(getAngle()));
     }
     public void setDesiredState(SwerveModuleState desiredState){
         if(Math.abs(desiredState.speedMetersPerSecond) < 0.001){
             stop();
             return;
         }
-        desiredState = SwerveModuleState.optimize(desiredState, getStateAngle());
+        desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(getAngle()));
         driveMotor.set(desiredState.speedMetersPerSecond);
-        angleMotor.set(angleController.calculate(getStateAngle().getRadians(), desiredState.angle.getRadians()));
-    }
-    public void setStateSpeedAndAngle(double speed, Rotation2d angle){
-        stateSpeed = speed;
-        stateAngle = angle;
+        angleMotor.set(angleController.calculate(getAngle(), desiredState.angle.getDegrees()));
+        angle = desiredState.angle.getDegrees();
     }
     public void stop(){
-        setDriveSpeed(0);
-        setAngleSpeed(0);
+        driveMotor.set(0);
+        angleMotor.set(0);
     }
 }

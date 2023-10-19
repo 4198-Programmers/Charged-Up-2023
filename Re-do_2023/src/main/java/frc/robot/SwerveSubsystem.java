@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -114,7 +115,19 @@ public class SwerveSubsystem extends SubsystemBase{
     }
 //Drive Function
     public void drive(double x, double y, double z, boolean fieldOriented){
+        SlewRateLimiter xyLimiter = new SlewRateLimiter(Constants.DRIVE_MAX_ACCELERATION);
+        SlewRateLimiter zLimiter = new SlewRateLimiter(Constants.ANGULAR_MAX_ACCELERATION);
+
+        x = Math.abs(x) > Constants.DEADBAND ? x : 0.0;
+        y = Math.abs(y) > Constants.DEADBAND ? y : 0.0;
+        z = Math.abs(z) > Constants.DEADBAND ? z : 0.0;
+
+        x = xyLimiter.calculate(x) * Constants.DRIVE_MAX_SPEED;
+        y = xyLimiter.calculate(y) * Constants.DRIVE_MAX_SPEED;
+        z = zLimiter.calculate(z) * Constants.ANGULAR_MAX_SPEED;
+
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, z, getGyroRotation(fieldOriented));
+
         SwerveModuleState[] moduleStates = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
         setModuleStates(moduleStates);
     }
@@ -123,9 +136,10 @@ public class SwerveSubsystem extends SubsystemBase{
     public void periodic() {
         SwerveModuleState[] states = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
         swerveKinematics.desaturateWheelSpeeds(states, Constants.DRIVE_MAX_SPEED);
-        frontLeft.setStateSpeedAndAngle(states[Constants.FRONT_LEFT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.FRONT_LEFT_MODULE_NUMBER].angle);
-        frontRight.setStateSpeedAndAngle(states[Constants.FRONT_RIGHT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.FRONT_RIGHT_MODULE_NUMBER].angle);
-        backLeft.setStateSpeedAndAngle(states[Constants.BACK_LEFT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.BACK_LEFT_MODULE_NUMBER].angle);
-        backRight.setStateSpeedAndAngle(states[Constants.BACK_RIGHT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.BACK_RIGHT_MODULE_NUMBER].angle);
+
+        frontLeft.set(states[Constants.FRONT_LEFT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.FRONT_LEFT_MODULE_NUMBER].angle.getDegrees());
+        frontRight.set(states[Constants.FRONT_RIGHT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.FRONT_RIGHT_MODULE_NUMBER].angle.getDegrees());
+        backLeft.set(states[Constants.BACK_LEFT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.BACK_LEFT_MODULE_NUMBER].angle.getDegrees());
+        backRight.set(states[Constants.BACK_RIGHT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.BACK_RIGHT_MODULE_NUMBER].angle.getDegrees());
     }
 }
