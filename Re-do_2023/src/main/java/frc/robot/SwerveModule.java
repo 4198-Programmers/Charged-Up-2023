@@ -65,11 +65,6 @@ public class SwerveModule {
         this.yFromCenter = yFromCenter;
         this.moduleNumber = moduleNumber;
     }
-
-    public void set(double driveSpeed, double angle){
-        this.driveSpeed = driveSpeed;
-        this.angle = angle;
-    }
 //Drive Motor Functions
     public double getDriveSpeed(){
         return driveSpeed;
@@ -87,6 +82,10 @@ public class SwerveModule {
     }
 
 //Other Functions
+    public void set(double driveSpeed, double angle){
+        this.driveSpeed = driveSpeed;
+        this.angle = angle;
+    }
     public int getModuleNumber(){
         return moduleNumber;
     }
