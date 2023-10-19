@@ -27,7 +27,9 @@ public class SwerveModule {
     //PIDController
     /**
      * This implements a PID Control loop. <p>
-     * A PID(Proportional-Integral-Derivative) control loop is used in a closed control feedback loop to regulate a process, such as the motion of a motor or the flow through a valve.<p>
+     * A PID(Proportional-Integral-Derivative) control loop is used 
+     * in a closed control feedback loop to regulate a process, 
+     * such as the motion of a motor or the flow through a valve.<p>
      * kp - The proportional coefficient<p>
      * ki - The integral coefficient <p>
      * kd - The derivative coefficient <p>
@@ -50,12 +52,15 @@ public class SwerveModule {
     /*These just make it easier to get the translation2d later */
     private double xFromCenter;
     private double yFromCenter;
-    public SwerveModule(int driveMotorID, int angleMotorID, int canCoderID, double angleOffset, double xFromCenter, double yFromCenter, int moduleNumber){
+    public SwerveModule(int driveMotorID, int angleMotorID, int canCoderID, 
+    double angleOffset, double xFromCenter, double yFromCenter, int moduleNumber){
+        //Creating the motors
         driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
         angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
-
+        //Getting the relative encoder for the drive motor
         driveEncoder = driveMotor.getEncoder();
 
+        //Creating the CANCoder and setting up its configurations
         canCoder = new CANCoder(canCoderID);
         configs = new CANCoderConfiguration();
         //Sets the sensor range to 0-360, which is the default
@@ -69,6 +74,7 @@ public class SwerveModule {
         configs.magnetOffsetDegrees = angleOffset;
         canCoder.configAllSettings(configs);
 
+        //Creating the PIDController
         angleController = new PIDController(Constants.ANGLE_KP, Constants.ANGLE_KI, Constants.ANGLE_KD);
         angleController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -86,7 +92,7 @@ public class SwerveModule {
         return driveSpeed;
     }
 /**
- * This gets the position (used to Auto possibly)
+ * This gets the position (used in Auto possibly)
 * @return Drive Position
 */
     public double getDrivePosition(){
@@ -146,6 +152,7 @@ public class SwerveModule {
     }
     /**
      * This is what is used to set the motor speeds in relation to the wanted state
+     * We use this during the drive command to tell the motors what to do.
      * @param desiredState This is the desired state found by using the wanted angle and drivespeed
      */
     public void setDesiredState(SwerveModuleState desiredState){
