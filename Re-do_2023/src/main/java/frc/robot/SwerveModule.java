@@ -18,13 +18,22 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 public class SwerveModule {
     //Motors
     private CANSparkMax driveMotor;
+        private RelativeEncoder driveEncoder;
     private CANSparkMax angleMotor;
-    //Relative Encoders
-    private RelativeEncoder driveEncoder;
-
+    //Constants gotten from the SwerveModuleStates
     private double driveSpeed;
-    private double angle;
-    //PIDController
+    private Rotation2d angle;
+    //Module number for the states array
+    private int moduleNumber;
+    /**CANCoder: <p>
+     * This will be used to get the absolute position of the angle motor
+     * and to set the initial position.
+     */
+    CANCoder canCoder;
+    /**CANCoder configs: <p>
+     * This makes sure that the CANCoder is set up the way that we want it to be.
+     */
+    private CANCoderConfiguration configs;
     /**
      * This implements a PID Control loop. <p>
      * A PID(Proportional-Integral-Derivative) control loop is used 
@@ -36,41 +45,35 @@ public class SwerveModule {
      * period - The period between controller updates in seconds. Must be non-zero and positive (defalut is 0.02 seconds)
      */
     private PIDController angleController;
-    //Module Number for the Module States array
-    private int moduleNumber;
-    //CANCoder
-    /**This will be used to get the absolute position of the angle motor
-     * and to set the initial position.
-     */
-    CANCoder canCoder;
-    //Cancoder configs
-    /**This makes sure that the CANCoder is set up
-     * the way that we want it to be.
-     */
-    private CANCoderConfiguration configs;
-    //X and Y from center
-    /*These just make it easier to get the translation2d later */
+    /*X and Y from center:
+    These just make it easier to get the translation2d later */
     private double xFromCenter;
     private double yFromCenter;
-    public SwerveModule(int driveMotorID, int angleMotorID, int canCoderID, 
+    /**
+     * Makes the Swerve Module
+     * @param driveMotorID The ID of the drive motor
+     * @param angleMotorID The ID of the angle motor
+     * @param cancoderID The ID of the CANCoder
+     * @param angleOffset The angle offset of the CANCoder
+     * @param xFromCenter The x position of the module in relation to the center of the robot
+     * @param yFromCenter The y posiiton of the module in relation to the center of the robot
+     * @param moduleNumber The module number of the module in the SwerveModuleStates array
+     */
+    public SwerveModule(int driveMotorID, int angleMotorID, int cancoderID, 
     double angleOffset, double xFromCenter, double yFromCenter, int moduleNumber){
-        //Creating the motors
+        //Create the motors
         driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
+            driveEncoder = driveMotor.getEncoder();
         angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
-        //Getting the relative encoder for the drive motor
-        driveEncoder = driveMotor.getEncoder();
 
-        //Creating the CANCoder and setting up its configurations
-        canCoder = new CANCoder(canCoderID);
+        //Create the cancoder
+        canCoder = new CANCoder(cancoderID);
+        //Set up the configs
         configs = new CANCoderConfiguration();
-        //Sets the sensor range to 0-360, which is the default
         configs.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
-        //Indicates if the sensor is backwards
         configs.sensorDirection = Constants.CANCODER_INVERTED;
-        //When the robot is first turned on, it turns the wheel to 0.
         configs.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
         configs.sensorTimeBase = SensorTimeBase.PerSecond;
-        //This sets the offset
         configs.magnetOffsetDegrees = angleOffset;
         canCoder.configAllSettings(configs);
 
@@ -78,98 +81,111 @@ public class SwerveModule {
         angleController = new PIDController(Constants.ANGLE_KP, Constants.ANGLE_KI, Constants.ANGLE_KD);
         angleController.enableContinuousInput(-Math.PI, Math.PI);
 
+        //Creating the Constants
         this.xFromCenter = xFromCenter;
         this.yFromCenter = yFromCenter;
         this.moduleNumber = moduleNumber;
     }
-//Drive Motor Functions
-/**
- * This gets the driveSpeed that is continuously updated through the periodic
- * in SwerveSubsystem
- * @return The driveSpeed
+/*
+ * Things to alter the Swerve Module
  */
-    public double getDriveSpeed(){
-        return driveSpeed;
-    }
-/**
- * This gets the position (used in Auto possibly)
-* @return Drive Position
-*/
-    public double getDrivePosition(){
-        return driveEncoder.getPosition();
-    }
-
-//Angle Motor Functions
-/**
- * This gets the Angle in degress that gets updated through the periodic
- * in SwerveSubsystem
- * @return The angle in degrees
- */
-    public double getAngle(){
-        return angle;
-    }
-    public double getAbsoluteAngle(){
-        return canCoder.getAbsolutePosition();
-    }
-
-//Other Functions
-/**
- * This takes the updates from the periodic
- * @param driveSpeed This is what the drive speed is gotten from the desired state
- * @param angle This is what the angle is gotten from the desired state
- */
-    public void set(double driveSpeed, double angle){
+    /**
+    * This takes the updates from the periodic
+    * @param driveSpeed This is what the drive speed is gotten from the desired state
+    * @param angle This is what the angle is gotten from the desired state
+    */
+    public void set(double driveSpeed, Rotation2d angle){
         this.driveSpeed = driveSpeed;
         this.angle = angle;
     }
     /**
-     * This just makes things more organized and understandable
-     * @return The module number for each
-     */
-    public int getModuleNumber(){
-        return moduleNumber;
-    }
-    /**
-     * This sets up the translation2d of each wheel module
-     * @return The translation2d from the center
-     */
-    public Translation2d translationFromCenter(){
-        return new Translation2d(xFromCenter, yFromCenter);
-    }
-    /**
-     * SwerveModulePosition - The position of each swerve module using the drive position and the angle
-     * @return The SwerveModulePosition
-     */
-    public SwerveModulePosition getSwerveModulePosition(){
-        return new SwerveModulePosition(getDrivePosition(), Rotation2d.fromDegrees(getAngle()));
-    }
-    /**
-     * SwerveModuleState - represents the state of each module using the drivespeed and the current angle
-     * @return The current SwerveModuleState
-     */
-    public SwerveModuleState getState(){
-        return new SwerveModuleState(getDriveSpeed(), Rotation2d.fromDegrees(getAngle()));
-    }
-    /**
-     * This is what is used to set the motor speeds in relation to the wanted state
-     * We use this during the drive command to tell the motors what to do.
-     * @param desiredState This is the desired state found by using the wanted angle and drivespeed
-     */
+    * This is what is used to set the motor speeds in relation to the wanted state
+    * We use this during the drive command to tell the motors what to do.
+    * @param desiredState This is the desired state found by using the wanted angle and drivespeed
+    */
     public void setDesiredState(SwerveModuleState desiredState){
         if(Math.abs(desiredState.speedMetersPerSecond) < 0.001){
             stop();
             return;
         }
-        desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(getAngle()));
+        desiredState = SwerveModuleState.optimize(desiredState, angle);
         driveMotor.set(desiredState.speedMetersPerSecond);
-        angleMotor.set(angleController.calculate(getAngle(), desiredState.angle.getDegrees()));
-        angle = desiredState.angle.getDegrees();
+        angleMotor.set(angleController.calculate(getAngleDegress(), desiredState.angle.getDegrees()));
+        angle = desiredState.angle;
+        driveSpeed = desiredState.speedMetersPerSecond;
     }
     /**
-     * This stops the wheels from moving once the drivespeed is close enough to zero.
-     */
+    * This stops the wheels from moving once the drivespeed is close enough to zero.
+    */
     public void stop(){
         driveMotor.set(0);
         angleMotor.set(0);
+    }
+
+/*
+ * Things to get from the Swerve Module
+ */
+//Drive Funcitons
+    /**
+     * Uses the drivespeed from the periodic in the SwerveSubsystem.
+     * @return The driveSpeed
+     */
+    public double getDriveSpeed(){
+        return driveSpeed;
+    }
+    /**
+     * Uses the DriveEncoder to get the position of the robot
+     * @return The DrivePosition
+     */
+    public double getDrivePosition(){
+        return driveEncoder.getPosition();
+    }
+//Angle Functions
+    public Rotation2d getAngle(){
+        return angle;
+    }
+    public double getAngleDegress(){
+        return angle.getDegrees();
+    }
+    public double getAngleRadians(){
+        return angle.getRadians();
+    }
+    public double getAngleRotations(){
+        return angle.getRotations();
+    }
+//CANCoder function
+    public double getAbsolutePosition(){
+        return canCoder.getAbsolutePosition();
+    }
+//Module Function
+    /**
+    * This just makes things more organized and understandable
+    * @return The module number for each
+    */
+    public int getModuleNumber(){
+        return moduleNumber;
+    }
+//Translation2d From Center
+    /**
+    * This sets up the translation2d of each wheel module
+    * @return The translation2d from the center
+    */
+    public Translation2d locationOfModule(){
+        return new Translation2d(xFromCenter, yFromCenter);
+    }
+//SwerveModule Functions 
+    /**
+    * SwerveModuleState - represents the state of each module using the drivespeed and the current angle
+    * @return The current SwerveModuleState
+    */
+    public SwerveModuleState getState(){
+        return new SwerveModuleState(driveSpeed, angle);
+    }
+    /**
+    * SwerveModulePosition - The position of each swerve module using the drive position and the angle
+    * @return The SwerveModulePosition
+    */
+    public SwerveModulePosition getSwerveModulePosition(){
+        return new SwerveModulePosition(getDrivePosition(), angle);
     }
 }
