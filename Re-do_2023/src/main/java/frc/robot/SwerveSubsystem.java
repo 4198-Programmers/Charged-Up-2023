@@ -288,7 +288,7 @@ public class SwerveSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
         SwerveModuleState[] states = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
-        swerveKinematics.desaturateWheelSpeeds(states, Constants.DRIVE_MAX_SPEED);
+        SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.DRIVE_MAX_SPEED);
         //odometry.update(getGyroRotation(fieldOriented), swerveModulePositions);
 
         frontLeft.set(states[Constants.FRONT_LEFT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.FRONT_LEFT_MODULE_NUMBER].angle.getDegrees());
