@@ -25,12 +25,7 @@ public class SwerveSubsystem extends SubsystemBase{
     private AHRS gyro = new AHRS(SPI.Port.kMXP, (byte) 100);
     
 /* Make the SwerveKinematics */
-    private final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
-        frontLeft.locationOfModule(),
-        frontRight.locationOfModule(),
-        backLeft.locationOfModule(),
-        backRight.locationOfModule()
-    );
+    private final SwerveDriveKinematics swerveKinematics;
     /**
      * This returns the kinematics
      * @return swerveKinematics
@@ -89,6 +84,13 @@ public class SwerveSubsystem extends SubsystemBase{
         Constants.BACK_RIGHT_X_FROM_CENTER, 
         Constants.BACK_RIGHT_Y_FROM_CENTER,
         Constants.BACK_RIGHT_MODULE_NUMBER);
+        
+        swerveKinematics = new SwerveDriveKinematics(
+        frontLeft.locationOfModule(),
+        frontRight.locationOfModule(),
+        backLeft.locationOfModule(),
+        backRight.locationOfModule()
+    );
 
         /* We are now puting the swerve modules in the array */
         swerveModules = new SwerveModule[]{frontLeft, frontRight, backLeft, backRight};
