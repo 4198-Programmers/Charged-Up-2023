@@ -129,7 +129,8 @@ public class SinglePaths /* extends CommandBase */ {
                                 MidPlaceDriveChargeRight(),
                                 JustCharge(),
                                 // LowPlaceBalance(),
-                                LowPlaceTaxi()
+                                LowPlaceTaxi(),
+                                LowPlaceBalance()
                 };
         }
 
@@ -449,6 +450,7 @@ public class SinglePaths /* extends CommandBase */ {
                                                 .alongWith(new Balance(driveTrain)))
                                 .andThen(new SlightTurnDrive(driveTrain)));
         }
+
         private SequentialCommandGroup JustCharge() { // works within 15 seconds
                 return new SequentialCommandGroup(new PrintCommand("Just Charge")
                                 .andThen(new TimedAuto(driveTrain, 1250, 0, 1.25, 0, 0))
@@ -456,13 +458,12 @@ public class SinglePaths /* extends CommandBase */ {
                                 .andThen(new SlightTurnDrive(driveTrain)));
         }
 
-
         private SequentialCommandGroup PlaceDriveNew() {
                 return new SequentialCommandGroup(new PrintCommand("Place Drive")
                                 .andThen(StraightPlaceMidPiece())
                                 .andThen(new TimedAuto(driveTrain, 2715, 0, 1.5, 0, 0)
-                                        .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)))
-                                        .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)));
+                                                .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)))
+                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)));
                 // drive out past station
 
         }
@@ -471,37 +472,51 @@ public class SinglePaths /* extends CommandBase */ {
                 return new SequentialCommandGroup(new PrintCommand("Just Drive")
                                 .andThen(new TimedAuto(driveTrain, 2715, 0, 1.5, 0, 0)));
         }
-/**
- * Places the game piece, then moves back to taxi and corral a new game piece. 
- * @return
- */
+
+        /**
+         * Places the game piece, then moves back to taxi and corral a new game piece.
+         * 
+         * @return
+         */
         private SequentialCommandGroup CorralAutoBlue() {
                 return new SequentialCommandGroup(new PrintCommand("Place Drive")
                                 .andThen(StraightPlaceMidPiece())
                                 .andThen(new TimedAuto(driveTrain, 2715, 0, 1.5, 0, 0)
-                                        .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)))
-                                        .andThen(new TimedAuto(driveTrain, 750, -1.0, 1.0, -2, 0)
-                                        .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0))));
+                                                .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)))
+                                .andThen(new TimedAuto(driveTrain, 750, -1.0, 1.0, -2, 0)
+                                                .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0))));
         }
 
         private SequentialCommandGroup CorralAutoRed() {
                 return new SequentialCommandGroup(new PrintCommand("Place Drive")
                                 .andThen(StraightPlaceMidPiece())
                                 .andThen(new TimedAuto(driveTrain, 2715, 0, 1.5, 0, 0)
-                                        .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)))
-                                        .andThen(new TimedAuto(driveTrain, 750, 1.0, 1.0, 2, 0)
-                                        .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0))));
+                                                .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)))
+                                .andThen(new TimedAuto(driveTrain, 750, 1.0, 1.0, 2, 0)
+                                                .alongWith(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0))));
         }
-        
+
         private SequentialCommandGroup LowPlaceTaxi() {
                 return new SequentialCommandGroup(new PrintCommand("Low Place Taxi Auto")
                                 .andThen(HotPotatoPieceDrop())
                                 .andThen(new TimedAuto(driveTrain, 2715, 0, 1.5, 0, 0)
-                                        .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)))
-                                        .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)));
+                                                .alongWith(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)))
+                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)));
         }
 
-// private SequentialCommandGroup PlaceDriveCharge() { // works within 15
+        private SequentialCommandGroup LowPlaceBalance() { // works within 15 seconds
+                return new SequentialCommandGroup(new PrintCommand("Place Charge")
+                                .andThen(HotPotatoPieceDrop())
+                                .andThen(new AutoReach(reachArm, Constants.AUTO_REACH_SPEED, 0)
+                                                .alongWith(new TimedAuto(driveTrain, 1000, 0, 1.25, 0, 0)))
+                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
+                                                .alongWith(new TimedAuto(driveTrain, 1950, 0, 1.25, 0, 0)))
+                                .andThen(new AutoVert(vertArm, Constants.AUTO_VERT_SPEED, 0)
+                                                .alongWith(new Balance(driveTrain)))
+                                .andThen(new SlightTurnDrive(driveTrain)));
+        }
+
+        // private SequentialCommandGroup PlaceDriveCharge() { // works within 15
         // seconds
         // return new SequentialCommandGroup(new PrintCommand("Place Drive Charge")
         // .andThen(StraightPlaceMidPiece())

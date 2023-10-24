@@ -250,6 +250,7 @@ public class RobotContainer {
     AutoChooser.addOption("Middle Auto, Just Charge", 8);
     AutoChooser.addOption("Low Place + Taxi", 9);
     AutoChooser.addOption("Low Place + Charge", 10);
+    AutoChooser.addOption("Low Place + Balance", 11);
 
     autoTab.addFloat("Pitch", () -> mDriveTrain.getPitch());
 
