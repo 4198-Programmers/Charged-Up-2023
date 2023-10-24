@@ -130,7 +130,7 @@ public class SinglePaths /* extends CommandBase */ {
                                 JustCharge(),
                                 // LowPlaceBalance(),
                                 LowPlaceTaxi(),
-                                LowPlaceBalance()
+                                LowPlaceBalance(),
                 };
         }
 
