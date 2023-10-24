@@ -90,20 +90,15 @@ public class SwerveModule {
  * Things to alter the Swerve Module
  */
     /**
-    * This takes the updates from the periodic
-    * @param driveSpeed This is what the drive speed is gotten from the desired state
-    * @param angle This is what the angle is gotten from the desired state
-    */
-    public void set(double driveSpeed, Rotation2d angle){
-        this.driveSpeed = driveSpeed;
-        this.angle = angle;
-    }
-    /**
     * This is what is used to set the motor speeds in relation to the wanted state
     * We use this during the drive command to tell the motors what to do.
+    * @param driveSpeed Gets the speed from the periodic
+    * @param angle Gets the angle from the periodic
     * @param desiredState This is the desired state found by using the wanted angle and drivespeed
     */
-    public void setDesiredState(SwerveModuleState desiredState){
+    public void set(SwerveModuleState desiredState, double driveSpeed, Rotation2d angle){
+        this.driveSpeed = driveSpeed;
+        this.angle = angle;
         if(Math.abs(desiredState.speedMetersPerSecond) < 0.001){
             stop();
             return;

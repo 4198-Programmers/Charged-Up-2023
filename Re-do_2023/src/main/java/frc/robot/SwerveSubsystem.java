@@ -208,18 +208,6 @@ public class SwerveSubsystem extends SubsystemBase{
             return Rotation2d.fromDegrees(0);
         }
     }
-    /**
-     * This is used to set the module states of all the modules to set their speeds
-     * @param desiredStates This is the desire state
-     */
-    public void setModuleStates(SwerveModuleState[] desiredStates){
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.DRIVE_MAX_SPEED);
-        frontLeft.setDesiredState(desiredStates[Constants.FRONT_LEFT_MODULE_NUMBER]);
-        frontRight.setDesiredState(desiredStates[Constants.FRONT_RIGHT_MODULE_NUMBER]);
-        backLeft.setDesiredState(desiredStates[Constants.BACK_LEFT_MODULE_NUMBER]);
-        backRight.setDesiredState(desiredStates[Constants.BACK_RIGHT_MODULE_NUMBER]);
-
-    }
 //Drive Function
     /**
     * This uses joystick inputs, converts them to chassis speeds and use that to set the drive and angle motor speeds <p>
@@ -251,9 +239,6 @@ public class SwerveSubsystem extends SubsystemBase{
         z = zLimiter.calculate(z) * Constants.ANGULAR_MAX_SPEED;
 
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, z, getGyroRotation(fieldOriented));
-
-        SwerveModuleState[] moduleStates = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
-        setModuleStates(moduleStates);
         this.fieldOriented = fieldOriented;
     }
 
@@ -275,11 +260,22 @@ public class SwerveSubsystem extends SubsystemBase{
         SwerveModuleState[] states = swerveKinematics.toSwerveModuleStates(chassisSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.DRIVE_MAX_SPEED);
         //odometry.update(getGyroRotation(fieldOriented), swerveModulePositions);
-
-        frontLeft.set(states[Constants.FRONT_LEFT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.FRONT_LEFT_MODULE_NUMBER].angle);
-        frontRight.set(states[Constants.FRONT_RIGHT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.FRONT_RIGHT_MODULE_NUMBER].angle);
-        backLeft.set(states[Constants.BACK_LEFT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.BACK_LEFT_MODULE_NUMBER].angle);
-        backRight.set(states[Constants.BACK_RIGHT_MODULE_NUMBER].speedMetersPerSecond, states[Constants.BACK_RIGHT_MODULE_NUMBER].angle);
+        frontLeft.set(
+            states[Constants.FRONT_LEFT_MODULE_NUMBER],
+            states[Constants.FRONT_LEFT_MODULE_NUMBER].speedMetersPerSecond, 
+            states[Constants.FRONT_LEFT_MODULE_NUMBER].angle);
+        frontRight.set(
+            states[Constants.FRONT_RIGHT_MODULE_NUMBER], 
+            states[Constants.FRONT_RIGHT_MODULE_NUMBER].speedMetersPerSecond, 
+            states[Constants.FRONT_RIGHT_MODULE_NUMBER].angle);
+        backLeft.set(
+            states[Constants.BACK_LEFT_MODULE_NUMBER], 
+            states[Constants.BACK_LEFT_MODULE_NUMBER].speedMetersPerSecond, 
+            states[Constants.BACK_LEFT_MODULE_NUMBER].angle);
+        backRight.set(
+            states[Constants.BACK_RIGHT_MODULE_NUMBER], 
+            states[Constants.BACK_RIGHT_MODULE_NUMBER].speedMetersPerSecond, 
+            states[Constants.BACK_RIGHT_MODULE_NUMBER].angle);
 
         SmartDashboard.putNumber("Front Left Angle", frontLeft.getAngleDegress());
         SmartDashboard.putNumber("Front Right Angle", frontRight.getAngleDegress());
