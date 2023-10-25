@@ -18,13 +18,14 @@ public final class Constants {
     public static final boolean CANCODER_INVERTED = false;
 
 //PIDController Constants
-    public static final double ANGLE_KP = 0.02;
+    public static final double ANGLE_KP = 0.1;
     public static final double ANGLE_KI = 0;
     public static final double ANGLE_KD = 0.1;
 
 //Angle Motor Constants
     public static final double ANGULAR_MAX_SPEED = 5880/60;
     public static final double ANGULAR_MAX_ACCELERATION = ANGULAR_MAX_SPEED / 60;
+    public static final double ANGLE_GEAR_RATIO = 150/7;
 
 //Drive Motor Constants
     public static final double DRIVE_MAX_SPEED = 5880/60;

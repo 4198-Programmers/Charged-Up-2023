@@ -20,6 +20,7 @@ public class SwerveModule {
     private CANSparkMax driveMotor;
         private RelativeEncoder driveEncoder;
     private CANSparkMax angleMotor;
+        private RelativeEncoder angleEncoder;
     //Constants gotten from the SwerveModuleStates
     private double driveSpeed;
     private Rotation2d angle;
@@ -65,6 +66,7 @@ public class SwerveModule {
         driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
             driveEncoder = driveMotor.getEncoder();
         angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
+            angleEncoder = angleMotor.getEncoder();
 
         //Create the cancoder
         canCoder = new CANCoder(cancoderID);
@@ -72,7 +74,7 @@ public class SwerveModule {
         configs = new CANCoderConfiguration();
         configs.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
         configs.sensorDirection = Constants.CANCODER_INVERTED;
-        configs.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
+        configs.initializationStrategy = SensorInitializationStrategy.BootToZero;
         configs.sensorTimeBase = SensorTimeBase.PerSecond;
         configs.magnetOffsetDegrees = angleOffset;
         canCoder.configAllSettings(configs);
@@ -85,6 +87,8 @@ public class SwerveModule {
         this.xFromCenter = xFromCenter;
         this.yFromCenter = yFromCenter;
         this.moduleNumber = moduleNumber;
+
+        angleEncoder.setPositionConversionFactor(Constants.ANGLE_GEAR_RATIO);
     }
 /*
  * Things to alter the Swerve Module
@@ -96,18 +100,22 @@ public class SwerveModule {
     * @param angle Gets the angle from the periodic
     * @param desiredState This is the desired state found by using the wanted angle and drivespeed
     */
-    public void set(SwerveModuleState desiredState, double driveSpeed, Rotation2d angle){
+    public void set(double driveSpeed, Rotation2d angle){
         this.driveSpeed = driveSpeed;
         this.angle = angle;
+    }
+    public void setAngleSpeed(double currentAngleDegrees, double wantedAngleDegrees){
+        double speed = 0;
+    }
+
+    public void setDesiredState(SwerveModuleState desiredState){
         if(Math.abs(desiredState.speedMetersPerSecond) < 0.001){
             stop();
             return;
         }
         desiredState = SwerveModuleState.optimize(desiredState, angle);
         driveMotor.set(desiredState.speedMetersPerSecond);
-        angleMotor.set(angleController.calculate(getAngleDegress(), desiredState.angle.getDegrees()));
-        angle = desiredState.angle;
-        driveSpeed = desiredState.speedMetersPerSecond;
+        angleMotor.set(angleController.calculate(getAbsolutePosition(), desiredState.angle.getDegrees()));
     }
     /**
     * This stops the wheels from moving once the drivespeed is close enough to zero.
