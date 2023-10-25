@@ -43,6 +43,9 @@ public class MathSwerveModule {
 
     public void setDriveSpeed(double x, double y){
         double speed = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        if(Math.abs(speed) <= 0.01){
+            speed = 0;
+        }
         driveMotor.set(speed);
     }
     public double getDriveSpeed(){
