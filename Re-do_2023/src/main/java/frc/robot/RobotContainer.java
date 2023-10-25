@@ -17,7 +17,7 @@ public class RobotContainer {
   private final Joystick stickTwo = new Joystick(Constants.PORT_ONE);
   private final Joystick stickThree = new Joystick(Constants.PORT_TWO);
 //Subsystems
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final MathSwerveSubsystem swerveSubsystem = new MathSwerveSubsystem();
   public RobotContainer() {
     configureBindings();
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -28,7 +28,7 @@ public class RobotContainer {
      * There is a deadband in the drive function itself, 
      * so it does not need a deadband here.
      */
-    swerveSubsystem.setDefaultCommand(new SwerveDrive(
+    swerveSubsystem.setDefaultCommand(new MathSwerveDrive(
       swerveSubsystem, 
       () -> stickOne.getRawAxis(Constants.X_AXIS), 
       () -> stickOne.getRawAxis(Constants.Y_AXIS), 
