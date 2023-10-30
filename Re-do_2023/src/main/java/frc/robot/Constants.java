@@ -22,14 +22,20 @@ public final class Constants {
     public static final double ANGLE_KI = 0;
     public static final double ANGLE_KD = 0.1;
 
+//Motor Constant
+    public static final double MAX_NUMBER_OF_ROTATIONS = 5880;
 //Angle Motor Constants
     public static final double ANGULAR_MAX_SPEED = 5880/60;
     public static final double ANGULAR_MAX_ACCELERATION = ANGULAR_MAX_SPEED / 60;
     public static final double ANGLE_GEAR_RATIO = 150/7;
+    public static final boolean ANGLE_MOTOR_INVERTED = false;
 
 //Drive Motor Constants
     public static final double DRIVE_MAX_SPEED = 5880/60;
     public static final double DRIVE_MAX_ACCELERATION = DRIVE_MAX_SPEED / 60;
+    public static final double DRIVE_GEAR_RATIO = 1;
+    public static final double DRIVE_WHEEL_CIRCUMFERENCE = 1;
+    public static final boolean DRIVE_MOTOR_INVERTED = false;
 
 //Robot Dimensions
     public static final double ROBOT_BASE_WIDTH_METERS = 0.62;
