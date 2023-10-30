@@ -3,10 +3,10 @@ package frc.robot.AttemptTwo;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+import com.ctre.phoenix.sensors.SensorTimeBase;
 
 public class CTREConfigs {
-    public CANCoderConfiguration canCoderConfig;
-
+    public static CANCoderConfiguration canCoderConfig;
     public CTREConfigs(){
         canCoderConfig = new CANCoderConfiguration();
 

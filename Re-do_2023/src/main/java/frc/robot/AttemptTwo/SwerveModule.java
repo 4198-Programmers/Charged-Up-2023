@@ -1,8 +1,10 @@
 package frc.robot.AttemptTwo;
 
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -22,6 +24,7 @@ public class SwerveModule {
     private CANCoder angleEncoder;
     private double lastAngle;
     private PIDController angleController;
+    private SparkMaxPIDController angleMaxPIDController;
     private RelativeEncoder angleRelativeEncoder;
     private RelativeEncoder driveRelativeEncoder;
 
@@ -38,6 +41,7 @@ public class SwerveModule {
 
         lastAngle = getState().angle.getDegrees();
         angleController = new PIDController(Constants.ANGLE_KP, Constants.ANGLE_KI, Constants.ANGLE_KD);
+        angleMaxPIDController = angleMotor.getPIDController();
 
         angleRelativeEncoder = angleMotor.getEncoder();
         driveRelativeEncoder = driveMotor.getEncoder();
@@ -63,10 +67,14 @@ public class SwerveModule {
 
     private void configAngleEncoder(){
         angleEncoder.configFactoryDefault();
-        angleEncoder.configAllSettings(CTREConfigs.swerveCanCoderConfig);
+        angleEncoder.configAllSettings(CTREConfigs.canCoderConfig);
     }
 
     private void configAngleMotor(){
+        angleMaxPIDController.setP(Constants.ANGLE_KP);
+        angleMaxPIDController.setI(Constants.ANGLE_KI);
+        angleMaxPIDController.setD(Constants.ANGLE_KD);
+        angleMaxPIDController.setFF(Constants.ANGLE_FF);
         angleMotor.setInverted(Constants.ANGLE_MOTOR_INVERTED);
         resetToAbsolute();
     }

@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.AttemptOne.SwerveDrive;
 import frc.robot.AttemptOne.SwerveSubsystem;
+import frc.robot.AttemptTwo.Swerve;
+import frc.robot.AttemptTwo.TeleopSwerve;
 
 public class RobotContainer {
 //Joystics
@@ -19,7 +21,7 @@ public class RobotContainer {
   private final Joystick stickTwo = new Joystick(Constants.PORT_ONE);
   private final Joystick stickThree = new Joystick(Constants.PORT_TWO);
 //Subsystems
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final Swerve swerveSubsystem = new Swerve();
   public RobotContainer() {
     configureBindings();
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -30,12 +32,12 @@ public class RobotContainer {
      * There is a deadband in the drive function itself, 
      * so it does not need a deadband here.
      */
-    swerveSubsystem.setDefaultCommand(new SwerveDrive(
-      swerveSubsystem, 
-      () -> stickOne.getRawAxis(Constants.X_AXIS), 
-      () -> stickOne.getRawAxis(Constants.Y_AXIS), 
-      () -> stickTwo.getRawAxis(Constants.X_AXIS), 
-      true));
+    boolean fieldRelative = true;
+    boolean openLoop = true;
+    swerveSubsystem.setDefaultCommand(new TeleopSwerve(
+      swerveSubsystem, () -> stickOne.getX(), 
+      () -> stickOne.getY(), 
+      () -> stickTwo.getX(), fieldRelative, openLoop));
 
   }
 
