@@ -36,18 +36,18 @@ public class Swerve extends SubsystemBase{
         swerveOdometry = new SwerveDriveOdometry(Constants.SWERVE_DRIVE_KINEMATICS, getYaw(), getModulePositions());
     }
 
-    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop){
+    public void drive(double xSpeed, double ySpeed, double rotation, boolean fieldRelative, boolean isOpenLoop){
         SwerveModuleState[] swerveModuleStates = 
         Constants.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(
             fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                translation.getX(), 
-                translation.getY(),
+                xSpeed, 
+                ySpeed,
                 rotation,
                 getYaw()
                 )
                 : new ChassisSpeeds(
-                    translation.getX(),
-                    translation.getY(),
+                    xSpeed,
+                    ySpeed,
                     rotation)
                 );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DRIVE_MAX_SPEED);

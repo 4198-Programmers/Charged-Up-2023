@@ -22,6 +22,7 @@ public class RobotContainer {
   private final Joystick stickThree = new Joystick(Constants.PORT_TWO);
 //Subsystems
   private final Swerve swerveSubsystem = new Swerve();
+  //private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public RobotContainer() {
     configureBindings();
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -35,10 +36,14 @@ public class RobotContainer {
     boolean fieldRelative = true;
     boolean openLoop = true;
     swerveSubsystem.setDefaultCommand(new TeleopSwerve(
-      swerveSubsystem, () -> stickOne.getX(), 
-      () -> stickOne.getY(), 
-      () -> stickTwo.getX(), fieldRelative, openLoop));
+      swerveSubsystem, () -> stickOne.getRawAxis(Constants.X_AXIS), 
+      () -> stickOne.getRawAxis(Constants.Y_AXIS), 
+      () -> stickTwo.getRawAxis(Constants.X_AXIS), fieldRelative, openLoop));
 
+    // swerveSubsystem.setDefaultCommand(new SwerveDrive(swerveSubsystem, 
+    // () -> stickOne.getRawAxis(Constants.X_AXIS), 
+    // () -> stickOne.getRawAxis(Constants.Y_AXIS), 
+    // () -> stickTwo.getRawAxis(Constants.X_AXIS), true));
   }
 
 

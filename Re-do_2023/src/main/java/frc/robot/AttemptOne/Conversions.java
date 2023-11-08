@@ -1,4 +1,4 @@
-package frc.robot.AttemptTwo.lib;
+package frc.robot.AttemptOne;
 
 import frc.robot.Constants;
 
@@ -11,8 +11,8 @@ public class Conversions {
      * @param gearRatio Gear Ratio between Neo and Mechanism
      * @return Degrees of Rotation of Mechanism
      */
-    public static double neoToDegrees(double counts, double angle_gear_ratio) {
-        return counts * (360.0 / (angle_gear_ratio * maxNumberOfRotations));
+    public static double neoToDegrees(double counts) {
+        return counts * (360.0 / (angleGearRatio * maxNumberOfRotations));
     }
 
     /**
@@ -20,8 +20,8 @@ public class Conversions {
      * @param gearRatio Gear Ratio between neo and Mechanism
      * @return Neo Counts
      */
-    public static double degreesToNeo(double degrees, double angle_gear_ratio) {
-        double ticks =  degrees / (360.0 / (angle_gear_ratio * maxNumberOfRotations));
+    public static double degreesToNeo(double degrees) {
+        double ticks =  degrees / (360.0 / (angleGearRatio * maxNumberOfRotations));
         return ticks;
     }
 

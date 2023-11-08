@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.robot.AttemptTwo.lib.SwerveModuleConstants;
 
@@ -22,9 +23,9 @@ public final class Constants {
     public static final boolean CANCODER_INVERTED = false;
 
 //PIDController Constants
-    public static final double ANGLE_KP = 0.1;
+    public static final double ANGLE_KP = 0.6;
     public static final double ANGLE_KI = 0;
-    public static final double ANGLE_KD = 0.1;
+    public static final double ANGLE_KD = 12;
     public static final double ANGLE_FF = 0;
 
 //Motor Constant
@@ -108,6 +109,16 @@ public final class Constants {
         BACK_RIGHT_ANGLE_MOTOR_ID, 
         BACK_RIGHT_CANCODER_ID, 
         BACK_RIGHT_ANGLE_OFFSET);
-    public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = null;
-    public static final boolean INVERTED_GYRO = null;
+    public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(
+        new Translation2d(FRONT_LEFT_X_FROM_CENTER, FRONT_LEFT_Y_FROM_CENTER),
+        new Translation2d(FRONT_RIGHT_X_FROM_CENTER, FRONT_RIGHT_Y_FROM_CENTER),
+        new Translation2d(BACK_LEFT_X_FROM_CENTER, BACK_LEFT_Y_FROM_CENTER),
+        new Translation2d(BACK_RIGHT_X_FROM_CENTER, BACK_RIGHT_Y_FROM_CENTER
+        )
+    );
+    public static final boolean INVERTED_GYRO = false;
+    public static final int DRIVE_WHEEL_REDUCTION = 0;
+    public static final double DRIVE_WHEEL_DIAMETER = 0;
+    public static final double ANGLE_REDUCTION = 0;
+    public static final int NEO_ROUNDS_PER_MINUTE = 0;
 }

@@ -116,7 +116,7 @@ public class SwerveModule {
         }
         desiredState = SwerveModuleState.optimize(desiredState, angle);
         driveMotor.set(desiredState.speedMetersPerSecond);
-        angleMotor.set(angleController.calculate(getAbsolutePosition(), desiredState.angle.getDegrees()));
+        angleMotor.set(angleController.calculate(getAbsolutePosition(), Conversions.degreesToNeo(desiredState.angle.getDegrees())));
     }
     /**
     * This stops the wheels from moving once the drivespeed is close enough to zero.

@@ -9,7 +9,6 @@ import frc.robot.Constants;
 public class TeleopSwerve extends CommandBase{
     
     private double rotation;
-    private Translation2d translation;
     private boolean fieldRelative;
     private boolean openLoop;
 
@@ -37,8 +36,7 @@ public class TeleopSwerve extends CommandBase{
         xSpeed = (Math.abs(xSpeed)) < Constants.DEADBAND ? 0 : xSpeed;
         zSpeed = (Math.abs(zSpeed)) < Constants.DEADBAND ? 0 : zSpeed;
 
-        translation = new Translation2d(ySpeed, xSpeed).times(Constants.DRIVE_MAX_SPEED);
         rotation = zSpeed * Constants.ANGULAR_MAX_SPEED;
-        swerveSubsystem.drive(translation, rotation, fieldRelative, openLoop);
+        swerveSubsystem.drive(xSpeed, ySpeed, rotation, fieldRelative, openLoop);
     }
 }
