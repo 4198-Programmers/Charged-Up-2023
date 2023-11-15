@@ -10,10 +10,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.AttemptOne.SwerveDrive;
-import frc.robot.AttemptOne.SwerveSubsystem;
-import frc.robot.AttemptTwo.Swerve;
-import frc.robot.AttemptTwo.TeleopSwerve;
+import frc.robot.AttemptFour.SwerveDrive;
+import frc.robot.AttemptFour.SwerveSubsystem;
 
 public class RobotContainer {
 //Joystics
@@ -21,8 +19,9 @@ public class RobotContainer {
   private final Joystick stickTwo = new Joystick(Constants.PORT_ONE);
   private final Joystick stickThree = new Joystick(Constants.PORT_TWO);
 //Subsystems
-  private final Swerve swerveSubsystem = new Swerve();
+  //private final Swerve swerveSubsystem = new Swerve();
   //private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public RobotContainer() {
     configureBindings();
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -33,12 +32,19 @@ public class RobotContainer {
      * There is a deadband in the drive function itself, 
      * so it does not need a deadband here.
      */
-    boolean fieldRelative = true;
-    boolean openLoop = true;
-    swerveSubsystem.setDefaultCommand(new TeleopSwerve(
-      swerveSubsystem, () -> stickOne.getRawAxis(Constants.X_AXIS), 
+
+     swerveSubsystem.setDefaultCommand(new SwerveDrive(
+      swerveSubsystem, 
+      () -> stickOne.getRawAxis(Constants.X_AXIS), 
       () -> stickOne.getRawAxis(Constants.Y_AXIS), 
-      () -> stickTwo.getRawAxis(Constants.X_AXIS), fieldRelative, openLoop));
+      () -> stickTwo.getRawAxis(Constants.X_AXIS), 
+      () -> true));
+    // boolean fieldRelative = true;
+    // boolean openLoop = true;
+    // swerveSubsystem.setDefaultCommand(new TeleopSwerve(
+    //   swerveSubsystem, () -> stickOne.getRawAxis(Constants.X_AXIS), 
+    //   () -> stickOne.getRawAxis(Constants.Y_AXIS), 
+    //   () -> stickTwo.getRawAxis(Constants.X_AXIS), fieldRelative, openLoop));
 
     // swerveSubsystem.setDefaultCommand(new SwerveDrive(swerveSubsystem, 
     // () -> stickOne.getRawAxis(Constants.X_AXIS), 

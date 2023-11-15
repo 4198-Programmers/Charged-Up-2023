@@ -2,12 +2,8 @@ package frc.robot.AttemptThree;
 
 import edu.wpi.first.math.controller.PIDController;
 
-/**
- * Hold the PIDF and Integral Zone values for a PID.
- */
-public class PIDFConfig
-{
-
+public class PIDFConfig {
+    
   /**
    * Proportional Gain for PID.
    */

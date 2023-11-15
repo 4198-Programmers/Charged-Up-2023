@@ -1,12 +1,7 @@
 package frc.robot.AttemptThree;
 
-/**
- * Class to hold the minimum and maximum input or output of the PIDF.
- */
-public class PIDFRange
-{
-
-  /**
+public class PIDFRange {
+    /**
    * Minimum value.
    */
   public double min = -1;
@@ -14,4 +9,5 @@ public class PIDFRange
    * Maximum value.
    */
   public double max = 1;
+
 }
