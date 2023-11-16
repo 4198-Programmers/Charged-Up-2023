@@ -92,4 +92,20 @@ public class SwerveModule {
         angleMotor.set(angleOutput);
         driveMotor.set(optimizedState.speedMetersPerSecond);
     }
+
+    /**
+     * Get Module Angle
+     */
+    public double getAngle(){
+        return getState().angle.getDegrees();
+    }
+    /**
+     * Get Module Drive Speed
+     */
+    public double getDriveSpeed(){
+        return getState().speedMetersPerSecond;
+    }
+    public double getAngleSpeed(){
+        return angleEncoder.getVelocity();
+    }
 }

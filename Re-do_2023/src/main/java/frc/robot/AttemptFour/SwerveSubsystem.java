@@ -9,6 +9,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.AttemptFour.Constants.SwerveConstants.BackLeftModuleConstants;
 import frc.robot.AttemptFour.Constants.SwerveConstants.BackRightModuleConstants;
@@ -20,7 +22,7 @@ public class SwerveSubsystem extends SubsystemBase{
 
     private final SwerveModule frontLeftModule, frontRightModule, backLeftModule, backRightModule;
     private SwerveDriveOdometry odometry;
-
+    public ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
     public SwerveSubsystem(){
         frontLeftModule = new SwerveModule(
             FrontLeftModuleConstants.DRIVE_MOTOR_ID, 
@@ -51,6 +53,10 @@ public class SwerveSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
         odometry.update(gyro.getRotation2d(), getModulePositions());
+        driveTab.addNumber("Front Left Angle", () -> frontLeftModule.getAngle());
+        driveTab.addNumber("Front Right Angle", () -> frontRightModule.getAngle());
+        driveTab.addNumber("Back Left Angle", () -> backLeftModule.getAngle());
+        driveTab.addNumber("Back Right Angle", () -> backRightModule.getAngle());
     }
 
     /**
@@ -118,7 +124,7 @@ public class SwerveSubsystem extends SubsystemBase{
         return odometry.getPoseMeters();
     }
     /**
-     * Set robot pos
+     * Set robot pose
      * @param pose robot pose
      */
     public void setPose(Pose2d pose){
