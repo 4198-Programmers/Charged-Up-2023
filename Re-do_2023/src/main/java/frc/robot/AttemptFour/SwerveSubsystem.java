@@ -10,7 +10,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.AttemptFour.Constants.SwerveConstants;
 import frc.robot.AttemptFour.Constants.SwerveConstants.BackLeftModuleConstants;
 import frc.robot.AttemptFour.Constants.SwerveConstants.BackRightModuleConstants;
 import frc.robot.AttemptFour.Constants.SwerveConstants.FrontLeftModuleConstants;
@@ -47,7 +46,7 @@ public class SwerveSubsystem extends SubsystemBase{
             BackRightModuleConstants.ANGLE_ENCODER_ID, 
             BackRightModuleConstants.ANGLE_OFFSET_DEGREES);
 
-        odometry = new SwerveDriveOdometry(SwerveConstants.SWERVE_DRIVE_KINEMATICS, gyro.getRotation2d(), getModulePositions());
+        odometry = new SwerveDriveOdometry(Constants.SWERVE_DRIVE_KINEMATICS, gyro.getRotation2d(), getModulePositions());
     }
     @Override
     public void periodic() {
@@ -64,9 +63,9 @@ public class SwerveSubsystem extends SubsystemBase{
     public void drive(double xSpeed, double ySpeed, double zSpeed, boolean fieldOriented){
         SwerveModuleState[] states = null;
         if(fieldOriented){
-            states = SwerveConstants.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zSpeed, gyro.getRotation2d()));
+            states = Constants.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zSpeed, gyro.getRotation2d()));
         }else{
-            states = SwerveConstants.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(xSpeed, ySpeed, zSpeed));
+            states = Constants.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(xSpeed, ySpeed, zSpeed));
         }
         setModuleStates(states);
     }
