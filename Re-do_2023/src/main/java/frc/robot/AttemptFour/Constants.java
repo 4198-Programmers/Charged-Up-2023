@@ -80,4 +80,6 @@ public final class Constants {
         
     public static final double DEADBAND = 0.2;
 
+    public static final double ANGLE_SPEED_DEADBAND = 0.1;
+
 }
