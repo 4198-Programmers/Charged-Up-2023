@@ -177,8 +177,6 @@ public class SwerveModule {
                 }
             }
         }
-        
-
         speed = Math.abs(speed) > Constants.ANGLE_SPEED_DEADBAND ? speed : 0;
         return speed;
     }
