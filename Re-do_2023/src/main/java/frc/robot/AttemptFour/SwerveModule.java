@@ -39,7 +39,7 @@ public class SwerveModule {
         driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
         driveEncoder = driveMotor.getEncoder();
 
-        angleMotor = new CANSparkMax(angleEncoderID, MotorType.kBrushless);
+        angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
 
         angleEncoder = new WPI_CANCoder(angleEncoderID);
 
@@ -87,8 +87,12 @@ public class SwerveModule {
      * @param state module state
      */
     public void setState(SwerveModuleState state){
-        SwerveModuleState optimizedState = SwerveModuleState.optimize(state, getState().angle);
-        double angleOutput = anglePID.calculate(getState().angle.getDegrees(), optimizedState.angle.getDegrees());
+        SwerveModuleState optimizedState = state;//SwerveModuleState.optimize(state, getState().angle);
+        System.out.println("Wanted Angle: "+optimizedState.angle.getDegrees());
+        System.out.println("Current Angle: "+ getAngle());
+        //double angleOutput = anglePID.calculate(getState().angle.getDegrees(), optimizedState.angle.getDegrees());
+        double angleOutput = setAngle(optimizedState.angle.getDegrees(), getAngle());
+       // System.out.println("Angle Output: " + angleOutput);
         angleMotor.set(angleOutput);
         driveMotor.set(optimizedState.speedMetersPerSecond);
     }
@@ -97,7 +101,7 @@ public class SwerveModule {
      * Get Module Angle
      */
     public double getAngle(){
-        return getState().angle.getDegrees();
+        return angleEncoder.getAbsolutePosition();
     }
     /**
      * Get Module Drive Speed
@@ -108,4 +112,81 @@ public class SwerveModule {
     public double getAngleSpeed(){
         return angleEncoder.getVelocity();
     }
+
+    public double setAngle(double wantedAngle, double currentAngle){
+        double angleDiff = Math.abs(wantedAngle - currentAngle);
+        double speed = (1 - (angleDiff/360)) / 4;
+        wantedAngle = wantedAngle == -180 ? 180: wantedAngle;
+        currentAngle = currentAngle == -180 ? 180 : currentAngle;
+        if(angleDiff < 180){
+            if(wantedAngle > 0){
+                if(currentAngle > 0){
+                    speed *= 1;
+                }else{
+                    speed *= 1;
+                }
+            }else{
+                if(currentAngle > 0){
+                    speed *= 1;
+                }else{
+                    speed *= 1;
+                }
+            }
+        }else{
+            if(wantedAngle > 0){
+                if(currentAngle > 0){
+                    speed *= 1;
+                }else{
+                    speed *= 1;
+                }
+            }else{
+                if(currentAngle > 0){
+                    speed *= 1;
+                }else{
+                    speed *= 1;
+                }
+            }
+        }
+        
+
+        speed = Math.abs(speed) > Constants.DEADBAND ? speed : 0;
+        return speed;
+    }
+
+    public static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
+    double targetAngle = placeInAppropriate0To360Scope(currentAngle.getDegrees(), desiredState.angle.getDegrees());
+    double targetSpeed = desiredState.speedMetersPerSecond;
+    double delta = targetAngle - currentAngle.getDegrees();
+    if (Math.abs(delta) > 90){
+        targetSpeed = -targetSpeed;
+        targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
+    }        
+    return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
+  }
+
+     private static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
+      double lowerBound;
+      double upperBound;
+      double lowerOffset = scopeReference % 360;
+      if (lowerOffset >= 0) {
+          lowerBound = scopeReference - lowerOffset;
+          upperBound = scopeReference + (360 - lowerOffset);
+      } else {
+          upperBound = scopeReference - lowerOffset;
+          lowerBound = scopeReference - (360 + lowerOffset);
+      }
+      while (newAngle < lowerBound) {
+
+          newAngle += 360;
+      }
+      while (newAngle > upperBound) {
+          newAngle -= 360;
+      }
+      if (newAngle - scopeReference > 180) {
+          newAngle -= 360;
+      } else if (newAngle - scopeReference < -180) {
+          newAngle += 360;
+      }
+      return newAngle;
+  }
 }

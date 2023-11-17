@@ -1,13 +1,13 @@
-package frc.robot.AttemptThree;
+// package frc.robot.AttemptThree;
 
-public class PIDFRange {
-    /**
-   * Minimum value.
-   */
-  public double min = -1;
-  /**
-   * Maximum value.
-   */
-  public double max = 1;
+// public class PIDFRange {
+//     /**
+//    * Minimum value.
+//    */
+//   public double min = -1;
+//   /**
+//    * Maximum value.
+//    */
+//   public double max = 1;
 
-}
+// }

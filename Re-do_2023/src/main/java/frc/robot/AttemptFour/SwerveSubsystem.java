@@ -53,10 +53,15 @@ public class SwerveSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
         odometry.update(gyro.getRotation2d(), getModulePositions());
-        driveTab.addNumber("Front Left Angle", () -> frontLeftModule.getAngle());
-        driveTab.addNumber("Front Right Angle", () -> frontRightModule.getAngle());
-        driveTab.addNumber("Back Left Angle", () -> backLeftModule.getAngle());
-        driveTab.addNumber("Back Right Angle", () -> backRightModule.getAngle());
+        // driveTab.addNumber("Front Left Angle", () -> frontLeftModule.getAngle());
+        // driveTab.addNumber("Front Right Angle", () -> frontRightModule.getAngle());
+        // driveTab.addNumber("Back Left Angle", () -> backLeftModule.getAngle());
+        // driveTab.addNumber("Back Right Angle", () -> backRightModule.getAngle());
+        // System.out.println("Front Left Angle: " + frontLeftModule.getPosition());
+        // System.out.println("Front Right Angle: " + frontRightModule.getPosition());
+        // System.out.println("Back Left Angle: " + backLeftModule.getPosition());
+        // System.out.println("Back Right Angle: " + backRightModule.getPosition());
+        //System.out.println("Angle: " +  backLeftModule.getAngle());
     }
 
     /**
@@ -73,6 +78,7 @@ public class SwerveSubsystem extends SubsystemBase{
         }else{
             states = Constants.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(xSpeed, ySpeed, zSpeed));
         }
+        //System.out.println("Angle: " + states[0].angle.getDegrees());
         setModuleStates(states);
     }
 

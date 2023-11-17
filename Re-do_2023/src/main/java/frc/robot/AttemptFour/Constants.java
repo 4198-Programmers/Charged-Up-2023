@@ -9,9 +9,9 @@ public final class Constants {
         //ANGLE CONSTANTS
         public static final boolean ANGLE_MOTOR_INVERTED = false;
         public static final boolean ANGLE_ENCODER_DIRECTION = false;
-        public static final double ANGLE_KP = 0;
+        public static final double ANGLE_KP = 0.00001;
         public static final double ANGLE_KI = 0;
-        public static final double ANGLE_KD = 0;
+        public static final double ANGLE_KD = 500;
 
         //DRIVE CONSTANTS
         public static final double DRIVE_WHEEL_DIAMETER = 1;
@@ -76,6 +76,8 @@ public final class Constants {
             new Translation2d(FRONT_RIGHT_X_LOCATION, FRONT_RIGHT_Y_LOCATION),
             new Translation2d(BACK_LEFT_X_LOCATION, BACK_LEFT_Y_LOCATION),
             new Translation2d(BACK_RIGHT_X_LOCATION, BACK_RIGHT_Y_LOCATION)
-        );        
+        ); 
+        
+    public static final double DEADBAND = 0.2;
 
 }

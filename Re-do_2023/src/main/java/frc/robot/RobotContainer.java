@@ -35,9 +35,9 @@ public class RobotContainer {
 
      swerveSubsystem.setDefaultCommand(new SwerveDrive(
       swerveSubsystem, 
-      () -> stickOne.getRawAxis(Constants.X_AXIS), 
-      () -> stickOne.getRawAxis(Constants.Y_AXIS), 
-      () -> stickTwo.getRawAxis(Constants.X_AXIS), 
+      () -> stickOne.getX(), 
+      () -> stickOne.getY(), 
+      () -> stickTwo.getX(), 
       () -> true));
     // boolean fieldRelative = true;
     // boolean openLoop = true;
