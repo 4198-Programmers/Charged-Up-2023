@@ -8,7 +8,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -26,7 +25,7 @@ public class SwerveModule {
     private WPI_CANCoder angleEncoder;
 
     //Initializing angle PID Controller
-    private PIDController anglePID;
+    //private PIDController anglePID;
 
     /**
      * Swerve Module 
@@ -56,8 +55,8 @@ public class SwerveModule {
         angleEncoder.configSensorDirection(SwerveConstants.ANGLE_ENCODER_DIRECTION);
         angleEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 
-        anglePID = new PIDController(SwerveConstants.ANGLE_KP, SwerveConstants.ANGLE_KI, SwerveConstants.ANGLE_KD);
-        anglePID.enableContinuousInput(-180, 180);
+        // anglePID = new PIDController(SwerveConstants.ANGLE_KP, SwerveConstants.ANGLE_KI, SwerveConstants.ANGLE_KD);
+        // anglePID.enableContinuousInput(-180, 180);
 
         driveMotor.enableVoltageCompensation(Constants.VOLTAGE_COMPENSATION);
         driveMotor.setIdleMode(IdleMode.kBrake);
@@ -89,10 +88,10 @@ public class SwerveModule {
      */
     public void setState(SwerveModuleState state){
         SwerveModuleState optimizedState = state;//SwerveModuleState.optimize(state, getState().angle);
-        System.out.println("Wanted Angle: "+optimizedState.angle.getDegrees());
+        System.out.println("Wanted Angle: " + optimizedState.angle.getDegrees());
         System.out.println("Current Angle: "+ getAngle());
         //double angleOutput = anglePID.calculate(getState().angle.getDegrees(), optimizedState.angle.getDegrees());
-        double angleOutput = setAngle(optimizedState.angle.getDegrees(), getAngle());
+        double angleOutput = setAngleSpeed(optimizedState.angle.getDegrees(), getAngle());
         System.out.println("Speed: " + angleOutput);
        // System.out.println("Angle Output: " + angleOutput);
         angleMotor.set(angleOutput);
@@ -115,7 +114,7 @@ public class SwerveModule {
         return angleEncoder.getVelocity();
     }
 
-    public double setAngle(double wantedAngle, double currentAngle){
+    public double setAngleSpeed(double wantedAngle, double currentAngle){
         double angleDiff = Math.abs(wantedAngle - currentAngle);
         double speed = (1 - (angleDiff/360)) / 4;
         wantedAngle = wantedAngle == -180 ? 180: wantedAngle;
