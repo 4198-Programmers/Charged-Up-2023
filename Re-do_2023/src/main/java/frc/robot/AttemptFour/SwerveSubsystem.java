@@ -61,7 +61,7 @@ public class SwerveSubsystem extends SubsystemBase{
         // System.out.println("Front Right Angle: " + frontRightModule.getPosition());
         // System.out.println("Back Left Angle: " + backLeftModule.getPosition());
         // System.out.println("Back Right Angle: " + backRightModule.getPosition());
-        //System.out.println("Angle: " +  backLeftModule.getAngle());
+        //System.out.println("Current Angle: " +  backLeftModule.getAngle());
     }
 
     /**
@@ -78,7 +78,9 @@ public class SwerveSubsystem extends SubsystemBase{
         }else{
             states = Constants.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(xSpeed, ySpeed, zSpeed));
         }
-        //System.out.println("Angle: " + states[0].angle.getDegrees());
+        System.out.println("Back Left Wanted Angle: " + states[0].angle.getDegrees());
+        System.out.println("Back Left Current Angle: " + backLeftModule.getAngle());
+        System.out.println("Back Left Speed: " + backLeftModule.setAngleSpeed(states[0].angle.getDegrees(), backLeftModule.getAngle()));
         setModuleStates(states);
     }
 

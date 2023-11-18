@@ -88,11 +88,11 @@ public class SwerveModule {
      */
     public void setState(SwerveModuleState state){
         SwerveModuleState optimizedState = state;//SwerveModuleState.optimize(state, getState().angle);
-        System.out.println("Wanted Angle: " + optimizedState.angle.getDegrees());
-        System.out.println("Current Angle: "+ getAngle());
+        // System.out.println("Wanted Angle: " + optimizedState.angle.getDegrees());
+        // System.out.println("Current Angle: "+ getAngle());
         //double angleOutput = anglePID.calculate(getState().angle.getDegrees(), optimizedState.angle.getDegrees());
         double angleOutput = setAngleSpeed(optimizedState.angle.getDegrees(), getAngle());
-        System.out.println("Speed: " + angleOutput);
+        //System.out.println("Speed: " + angleOutput);
        // System.out.println("Angle Output: " + angleOutput);
         angleMotor.set(angleOutput);
         driveMotor.set(optimizedState.speedMetersPerSecond);
@@ -184,7 +184,7 @@ public class SwerveModule {
             }else{
                 speed *= -1;
             }
-        }else if(wantedAngle >= 0 && currentAngle <0){
+        }else if(wantedAngle >= 0 && currentAngle < 0){
             if(angleDiff <= 180){
                 speed *= 1;
             }else{
