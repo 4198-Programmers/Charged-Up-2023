@@ -1,6 +1,7 @@
 package frc.robot.AttemptFour;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.sensors.CANCoderSimCollection;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax;
@@ -63,7 +64,6 @@ public class SwerveModule {
 
         driveEncoder.setVelocityConversionFactor(SwerveConstants.DRIVE_VELOCITY_CONVERSION_FACTOR);
         driveEncoder.setPositionConversionFactor(SwerveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
-
     }
 
     /**
@@ -119,6 +119,38 @@ public class SwerveModule {
         double speed = (1 - (angleDiff/360)) / 4;
         wantedAngle = wantedAngle == -180 ? 180: wantedAngle;
         currentAngle = currentAngle == -180 ? 180 : currentAngle;
+        if(wantedAngle >= 0 && currentAngle >= 0){
+            if(wantedAngle > currentAngle){
+                speed *= 1;
+            }else{
+                speed *= -1;
+            }
+        }else if(wantedAngle >= 0 && currentAngle < 0){
+            if(angleDiff <= 180){
+                speed *= 1;
+            }else{
+                speed *= -1;
+            }
+        }else if(wantedAngle < 0 && currentAngle >= 0){
+            if(angleDiff <= 180){
+                speed *= -1;
+            }else{
+                speed *= 1;
+            }
+        }else if(wantedAngle < 0 && currentAngle < 0){
+            if(wantedAngle > currentAngle){
+                speed *= 1;
+            }else{
+                speed *= -1;
+            }
+        }
+        speed = Math.abs(speed) > Constants.ANGLE_SPEED_DEADBAND ? speed : 0;
+        return speed;
+    }
+}
+
+
+
         // if(angleDiff <= 180){
         //     if(wantedAngle >= 0){
         //         if(currentAngle >= 0){
@@ -176,34 +208,3 @@ public class SwerveModule {
         //     ){
         //     speed *= -1;
         // }
-
-
-        if(wantedAngle >= 0 && currentAngle >= 0){
-            if(wantedAngle > currentAngle){
-                speed *= 1;
-            }else{
-                speed *= -1;
-            }
-        }else if(wantedAngle >= 0 && currentAngle < 0){
-            if(angleDiff <= 180){
-                speed *= 1;
-            }else{
-                speed *= -1;
-            }
-        }else if(wantedAngle < 0 && currentAngle >= 0){
-            if(angleDiff <= 180){
-                speed *= -1;
-            }else{
-                speed *= 1;
-            }
-        }else if(wantedAngle < 0 && currentAngle < 0){
-            if(wantedAngle > currentAngle){
-                speed *= 1;
-            }else{
-                speed *= -1;
-            }
-        }
-        speed = Math.abs(speed) > Constants.ANGLE_SPEED_DEADBAND ? speed : 0;
-        return speed;
-    }
-}
