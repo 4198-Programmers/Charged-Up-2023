@@ -118,31 +118,31 @@ public class SwerveModule {
         double speed = (1 - (angleDiff/360)) / 4;
         wantedAngle = wantedAngle == -180 ? 180: wantedAngle;
         currentAngle = currentAngle == -180 ? 180 : currentAngle;
-        if(wantedAngle >= 0 && currentAngle >= 0){
-            if(wantedAngle > currentAngle){
-                speed *= 1;
-            }else{
-                speed *= -1;
-            }
-        }else if(wantedAngle >= 0 && currentAngle < 0){
-            if(angleDiff <= 180){
-                speed *= 1;
-            }else{
-                speed *= -1;
-            }
-        }else if(wantedAngle < 0 && currentAngle >= 0){
-            if(angleDiff <= 180){
-                speed *= -1;
-            }else{
-                speed *= 1;
-            }
-        }else if(wantedAngle < 0 && currentAngle < 0){
-            if(wantedAngle > currentAngle){
-                speed *= 1;
-            }else{
-                speed *= -1;
-            }
-        }
+        // if(wantedAngle >= 0 && currentAngle >= 0){
+        //     if(wantedAngle > currentAngle){
+        //         speed *= 1;
+        //     }else{
+        //         speed *= -1;
+        //     }
+        // }else if(wantedAngle >= 0 && currentAngle < 0){
+        //     if(angleDiff <= 180){
+        //         speed *= 1;
+        //     }else{
+        //         speed *= -1;
+        //     }
+        // }else if(wantedAngle < 0 && currentAngle >= 0){
+        //     if(angleDiff <= 180){
+        //         speed *= -1;
+        //     }else{
+        //         speed *= 1;
+        //     }
+        // }else if(wantedAngle < 0 && currentAngle < 0){
+        //     if(wantedAngle > currentAngle){
+        //         speed *= 1;
+        //     }else{
+        //         speed *= -1;
+        //     }
+        // }
         speed = Math.abs(speed) > Constants.ANGLE_SPEED_DEADBAND ? speed : 0;
         return speed;
     }
