@@ -23,45 +23,54 @@ public class SwerveSubsystem extends SubsystemBase{
     private final SwerveModule frontLeftModule, frontRightModule, backLeftModule, backRightModule;
     private SwerveDriveOdometry odometry;
     public ShuffleboardTab driveTab = Shuffleboard.getTab("Drive");
+
+    private final SwerveModule[] modules;
     public SwerveSubsystem(){
         frontLeftModule = new SwerveModule(
+            FrontLeftModuleConstants.NAME,
+            FrontLeftModuleConstants.MODULE_NUMBER,
             FrontLeftModuleConstants.DRIVE_MOTOR_ID, 
             FrontLeftModuleConstants.ANGLE_MOTOR_ID, 
             FrontLeftModuleConstants.ANGLE_ENCODER_ID, 
             FrontLeftModuleConstants.ANGLE_OFFSET_DEGREES);
 
         frontRightModule = new SwerveModule(
+            FrontRightModuleConstants.NAME,
+            FrontRightModuleConstants.MODULE_NUMBER,
             FrontRightModuleConstants.DRIVE_MOTOR_ID, 
             FrontRightModuleConstants.ANGLE_MOTOR_ID, 
             FrontRightModuleConstants.ANGLE_ENCODER_ID, 
             FrontRightModuleConstants.ANGLE_OFFSET_DEGREES);
 
         backLeftModule = new SwerveModule(
+            BackLeftModuleConstants.NAME,
+            BackLeftModuleConstants.MODULE_NUMBER,
             BackLeftModuleConstants.DRIVE_MOTOR_ID, 
             BackLeftModuleConstants.ANGLE_MOTOR_ID, 
             BackLeftModuleConstants.ANGLE_ENCODER_ID, 
             BackLeftModuleConstants.ANGLE_OFFSET_DEGREES);
 
         backRightModule = new SwerveModule(
+            BackRightModuleConstants.NAME,
+            BackRightModuleConstants.MODULE_NUMBER,
             BackRightModuleConstants.DRIVE_MOTOR_ID, 
             BackRightModuleConstants.ANGLE_MOTOR_ID, 
             BackRightModuleConstants.ANGLE_ENCODER_ID, 
             BackRightModuleConstants.ANGLE_OFFSET_DEGREES);
 
         odometry = new SwerveDriveOdometry(Constants.SWERVE_DRIVE_KINEMATICS, gyro.getRotation2d(), getModulePositions());
+
+        modules = new SwerveModule[]{frontLeftModule, frontRightModule, backLeftModule, backRightModule};
+
+        for(SwerveModule module : modules){
+            driveTab.addNumber(module.getName() + " Drive Speed:", () -> module.getDriveSpeed());
+            driveTab.addNumber(module.getName() + " Angle Speed:", () -> module.getAngleSpeed());
+            driveTab.addNumber(module.getName() + " Current Angle:", () -> module.getAngle());
+        }
     }
     @Override
     public void periodic() {
         odometry.update(gyro.getRotation2d(), getModulePositions());
-        // driveTab.addNumber("Front Left Angle", () -> frontLeftModule.getAngle());
-        // driveTab.addNumber("Front Right Angle", () -> frontRightModule.getAngle());
-        // driveTab.addNumber("Back Left Angle", () -> backLeftModule.getAngle());
-        // driveTab.addNumber("Back Right Angle", () -> backRightModule.getAngle());
-        // System.out.println("Front Left Angle: " + frontLeftModule.getPosition());
-        // System.out.println("Front Right Angle: " + frontRightModule.getPosition());
-        // System.out.println("Back Left Angle: " + backLeftModule.getPosition());
-        // System.out.println("Back Right Angle: " + backRightModule.getPosition());
-        //System.out.println("Current Angle: " +  backLeftModule.getAngle());
     }
 
     /**
@@ -82,6 +91,15 @@ public class SwerveSubsystem extends SubsystemBase{
         System.out.println("Back Left Optimized Wanted Angle: " + SwerveModuleState.optimize(states[0], backLeftModule.getState().angle));
         System.out.println("Back Left Current Angle: " + backLeftModule.getAngle());
         System.out.println("Back Left Speed: " + backLeftModule.getAngleSpeed());
+
+        for(SwerveModule module : modules){
+            System.out.println(module.getName() + " Drive Speed: " + module.getDriveSpeed());
+            System.out.println(module.getName() + " Angle Speed: " + module.getAngleSpeed());
+            System.out.println(module.getName() + " Current Angle: " + module.getAngle());
+            System.out.println(module.getName() + " Wanted Angle: " + states[module.getModuleNumber()].angle.getDegrees());
+            System.out.println(module.getName() + " Optimized Wanted Angle: " + SwerveModuleState.optimize(states[module.getModuleNumber()], module.getState().angle));
+
+        }
         setModuleStates(states);
     }
 

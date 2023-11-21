@@ -27,6 +27,9 @@ public class SwerveModule {
     //Initializing angle PID Controller
     //private PIDController anglePID;
 
+
+    private String swerveModuleName;
+    private int moduleNumber;
     /**
      * Swerve Module 
      * @param driveMotorID CAN ID of the drive motor
@@ -34,7 +37,7 @@ public class SwerveModule {
      * @param angleEncoderID CAN ID of the angle encoder(CANCoder)
      * @param angleOffsetDegrees Angle Encoder Offset
      */
-    public SwerveModule(int driveMotorID, int angleMotorID, int angleEncoderID, double angleOffsetDegrees){
+    public SwerveModule(String swerveModuleName, int moduleNumber,int driveMotorID, int angleMotorID, int angleEncoderID, double angleOffsetDegrees){
         driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
         driveEncoder = driveMotor.getEncoder();
 
@@ -63,6 +66,19 @@ public class SwerveModule {
 
         driveEncoder.setVelocityConversionFactor(SwerveConstants.DRIVE_VELOCITY_CONVERSION_FACTOR);
         driveEncoder.setPositionConversionFactor(SwerveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
+
+        this.swerveModuleName = swerveModuleName;
+        this.moduleNumber = moduleNumber;
+    }
+    /**
+     * Returns the module name
+     * @return module name
+     */
+    public String getName(){
+        return swerveModuleName;
+    }
+    public int getModuleNumber(){
+        return moduleNumber;
     }
 
     /**
