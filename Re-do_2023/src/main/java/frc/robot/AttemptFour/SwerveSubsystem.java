@@ -1,6 +1,5 @@
 package frc.robot.AttemptFour;
 
-import com.ctre.phoenix.sensors.CANCoderSimCollection;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -80,6 +79,7 @@ public class SwerveSubsystem extends SubsystemBase{
             states = Constants.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(xSpeed, ySpeed, zSpeed));
         }
         System.out.println("Back Left Wanted Angle: " + states[0].angle.getDegrees());
+        System.out.println("Back Left Optimized Wanted Angle: " + SwerveModuleState.optimize(states[0], backLeftModule.getState().angle));
         System.out.println("Back Left Current Angle: " + backLeftModule.getAngle());
         System.out.println("Back Left Speed: " + backLeftModule.getAngleSpeed());
         setModuleStates(states);

@@ -19,7 +19,7 @@ public class SwerveDrive extends CommandBase{
     }
     @Override
     public void execute() {
-        double xSpeed =Math.abs( xSupplier.get()) > Constants.DEADBAND ? xSupplier.get() : 0;
+        double xSpeed = Math.abs( xSupplier.get()) > Constants.DEADBAND ? xSupplier.get() : 0;
         double ySpeed = Math.abs(ySupplier.get()) > Constants.DEADBAND ? ySupplier.get() : 0;
         double zSpeed = Math.abs(zSupplier.get()) > Constants.DEADBAND ? zSupplier.get() : 0;
         // System.out.println("XSpeed:" + xSpeed);

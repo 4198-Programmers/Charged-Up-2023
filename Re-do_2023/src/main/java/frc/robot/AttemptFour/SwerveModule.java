@@ -1,7 +1,6 @@
 package frc.robot.AttemptFour;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.CANCoderSimCollection;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax;
@@ -87,7 +86,7 @@ public class SwerveModule {
      * @param state module state
      */
     public void setState(SwerveModuleState state){
-        SwerveModuleState optimizedState = state;//SwerveModuleState.optimize(state, getState().angle);
+        SwerveModuleState optimizedState = SwerveModuleState.optimize(state, getState().angle);
         // System.out.println("Wanted Angle: " + optimizedState.angle.getDegrees());
         // System.out.println("Current Angle: "+ getAngle());
         //double angleOutput = anglePID.calculate(getState().angle.getDegrees(), optimizedState.angle.getDegrees());
@@ -148,9 +147,6 @@ public class SwerveModule {
         return speed;
     }
 }
-
-
-
         // if(angleDiff <= 180){
         //     if(wantedAngle >= 0){
         //         if(currentAngle >= 0){
