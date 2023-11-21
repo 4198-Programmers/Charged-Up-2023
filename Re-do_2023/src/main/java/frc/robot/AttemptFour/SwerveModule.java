@@ -86,7 +86,7 @@ public class SwerveModule {
      * @param state module state
      */
     public void setState(SwerveModuleState state){
-        SwerveModuleState optimizedState = state;//SwerveModuleState.optimize(state, getState().angle);
+        SwerveModuleState optimizedState = SwerveModuleState.optimize(state, getState().angle);
         // System.out.println("Wanted Angle: " + optimizedState.angle.getDegrees());
         // System.out.println("Current Angle: "+ getAngle());
         //double angleOutput = anglePID.calculate(getState().angle.getDegrees(), optimizedState.angle.getDegrees());
