@@ -87,10 +87,6 @@ public class SwerveSubsystem extends SubsystemBase{
         }else{
             states = Constants.SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(xSpeed, ySpeed, zSpeed));
         }
-        System.out.println("Back Left Wanted Angle: " + states[0].angle.getDegrees());
-        System.out.println("Back Left Optimized Wanted Angle: " + SwerveModuleState.optimize(states[0], backLeftModule.getState().angle));
-        System.out.println("Back Left Current Angle: " + backLeftModule.getAngle());
-        System.out.println("Back Left Speed: " + backLeftModule.getAngleSpeed());
 
         for(SwerveModule module : modules){
             System.out.println(module.getName() + " Drive Speed: " + module.getDriveSpeed());
