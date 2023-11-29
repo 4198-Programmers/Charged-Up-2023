@@ -8,6 +8,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -25,7 +27,7 @@ public class SwerveModule {
     private WPI_CANCoder angleEncoder;
 
     //Initializing angle PID Controller
-    //private PIDController anglePID;
+    private PIDController anglePID;
 
 
     private String swerveModuleName;
@@ -58,8 +60,9 @@ public class SwerveModule {
         angleEncoder.configSensorDirection(SwerveConstants.ANGLE_ENCODER_DIRECTION);
         angleEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
 
-        // anglePID = new PIDController(SwerveConstants.ANGLE_KP, SwerveConstants.ANGLE_KI, SwerveConstants.ANGLE_KD);
-        // anglePID.enableContinuousInput(-180, 180);
+        anglePID = new PIDController(SwerveConstants.ANGLE_KP, SwerveConstants.ANGLE_KI, SwerveConstants.ANGLE_KD);
+        anglePID.enableContinuousInput(-180, 180);
+        anglePID.setIntegratorRange(-1, 1);
 
         driveMotor.enableVoltageCompensation(Constants.VOLTAGE_COMPENSATION);
         driveMotor.setIdleMode(IdleMode.kBrake);
@@ -105,7 +108,7 @@ public class SwerveModule {
         SwerveModuleState optimizedState = SwerveModuleState.optimize(state, getState().angle);
         // System.out.println("Wanted Angle: " + optimizedState.angle.getDegrees());
         // System.out.println("Current Angle: "+ getAngle());
-        //double angleOutput = anglePID.calculate(getState().angle.getDegrees(), optimizedState.angle.getDegrees());
+        //double angleOutput = MathUtil.clamp(anglePID.calculate(getState().angle.getDegrees(), optimizedState.angle.getDegrees()), -0.5, 0.5);
         double angleOutput = setAngleSpeed(optimizedState.angle.getDegrees(), getAngle());
         //System.out.println("Speed: " + angleOutput);
        // System.out.println("Angle Output: " + angleOutput);
@@ -131,7 +134,7 @@ public class SwerveModule {
 
     public double setAngleSpeed(double wantedAngle, double currentAngle){
         double angleDiff = Math.abs(wantedAngle - currentAngle);
-        double speed = (1 - (angleDiff/360)) / 4;
+        double speed = ((angleDiff/360))/4;
         wantedAngle = wantedAngle == -180 ? 180: wantedAngle;
         currentAngle = currentAngle == -180 ? 180 : currentAngle;
         if(wantedAngle >= 0 && currentAngle >= 0){
@@ -148,9 +151,9 @@ public class SwerveModule {
             }
         }else if(wantedAngle < 0 && currentAngle >= 0){
             if(angleDiff <= 180){
-                speed *= -1;
-            }else{
                 speed *= 1;
+            }else{
+                speed *= -1;
             }
         }else if(wantedAngle < 0 && currentAngle < 0){
             if(wantedAngle > currentAngle){
@@ -159,64 +162,11 @@ public class SwerveModule {
                 speed *= -1;
             }
         }
+/*
+ * Make sure to add positive high wanted with negative current.
+ * Add positive high current with negative wanted.
+ */
         speed = Math.abs(speed) > Constants.ANGLE_SPEED_DEADBAND ? speed : 0;
         return speed;
     }
 }
-        // if(angleDiff <= 180){
-        //     if(wantedAngle >= 0){
-        //         if(currentAngle >= 0){
-        //             if(wantedAngle >= currentAngle){
-        //                 /*  angleDiff < 180; wantedAngle > 0; currentAngle > 0; wantedAngle > currentAngle */
-        //                 speed *= 1;
-        //             }else{
-        //                 /*  angleDiff < 180; wantedAngle > 0; currentAngle > 0; wantedAngle < currentAngle */
-        //                 speed *= -1;
-        //             }
-        //         }else{
-        //             /*  angleDiff < 180; wantedAngle > 0; currentAngle < 0 */
-        //             speed *= 1;
-        //         }
-        //     }else{
-        //         if(currentAngle >= 0){
-        //             /*  angleDiff < 180; wantedAngle < 0; currentAngle > 0 */
-        //             speed *= -1;
-        //         }
-        //     }
-        // }else{
-        //     if(wantedAngle >= 0){
-        //         if(currentAngle <= 0){
-        //             /*  angleDiff > 180; wantedAngle > 0; currentAngle < 0 */
-        //             speed *= -1;
-        //         }
-        //     }else{
-        //         if(currentAngle >= 0){
-        //             /*  angleDiff > 180; wantedAngle < 0; currentAngle > 0 */
-        //             speed *= 1;
-        //         }else{
-        //             if(wantedAngle < currentAngle){
-        //                 /*  wantedAngle < 0; currentAngle < 0; wantedAngle < currentAngle */
-        //                 speed *= -1;
-        //             }else{
-        //                 /*  wantedAngle < 0; currentAngle < 0; currentAngle < wantedAngle */
-        //                 speed *= 1;
-        //             }
-        //         }
-        //     }
-        // }
-        // if(
-        //     (angleDiff < 180 && wantedAngle > 0 && currentAngle > 0 && wantedAngle > currentAngle) ||
-        //     (angleDiff < 180 && wantedAngle > 0 && currentAngle < 0) ||
-        //     (angleDiff > 180 && wantedAngle < 0 && currentAngle > 0) ||
-        //     (wantedAngle < 0 && currentAngle < 0 && currentAngle < wantedAngle)
-        //     ){
-        //     speed *= 1;
-        // }else 
-        // if(
-        //     (angleDiff < 180 && wantedAngle > 0 && currentAngle > 0 && wantedAngle < currentAngle) ||
-        //     (angleDiff > 180 && wantedAngle > 0 && currentAngle < 0) ||
-        //     (angleDiff < 180 && wantedAngle < 0 && currentAngle > 0) ||
-        //     (wantedAngle < 0 && currentAngle < 0 && wantedAngle < currentAngle)
-        //     ){
-        //     speed *= -1;
-        // }

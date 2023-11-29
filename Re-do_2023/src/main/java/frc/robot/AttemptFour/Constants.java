@@ -9,7 +9,7 @@ public final class Constants {
         //ANGLE CONSTANTS
         public static final boolean ANGLE_MOTOR_INVERTED = false;
         public static final boolean ANGLE_ENCODER_DIRECTION = false;
-        public static final double ANGLE_KP = 0.00001;
+        public static final double ANGLE_KP = 3000;
         public static final double ANGLE_KI = 0;
         public static final double ANGLE_KD = 500;
 
@@ -88,6 +88,6 @@ public final class Constants {
         
     public static final double DEADBAND = 0.2;
 
-    public static final double ANGLE_SPEED_DEADBAND = 0.1;
+    public static final double ANGLE_SPEED_DEADBAND = 0.001;
 
 }

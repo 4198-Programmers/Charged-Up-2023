@@ -63,10 +63,11 @@ public class SwerveSubsystem extends SubsystemBase{
         modules = new SwerveModule[]{frontLeftModule, frontRightModule, backLeftModule, backRightModule};
 
         for(SwerveModule module : modules){
-            driveTab.addNumber(module.getName() + " Drive Speed:", () -> module.getDriveSpeed());
-            driveTab.addNumber(module.getName() + " Angle Speed:", () -> module.getAngleSpeed());
+            // driveTab.addNumber(module.getName() + " Drive Speed:", () -> module.getDriveSpeed());
+            // driveTab.addNumber(module.getName() + " Angle Speed:", () -> module.getAngleSpeed());
             driveTab.addNumber(module.getName() + " Current Angle:", () -> module.getAngle());
         }
+        driveTab.addNumber("Gyro", () -> gyro.getRotation2d().getDegrees());
     }
     @Override
     public void periodic() {
